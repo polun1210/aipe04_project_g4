@@ -1,0 +1,8 @@
+{
+  "job_id": "ext-job-0001",
+  "product_id": "a1000000-0000-4000-8000-000000000001",
+  "source_images": [
+    { "image_id": "img-01", "quality_status": "accepted", "reject_reason": null },
+    { "image_id": "img-02", "quality_status": "rejected", "reject_reason": "glare" }
+  ]
+}

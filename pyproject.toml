@@ -1,0 +1,29 @@
+[project]
+name = "aipe04-final-project"
+version = "0.1.0"
+description = "補對了嗎？— AI 個人化營養補充評估系統（第一版）"
+requires-python = ">=3.12"
+# 系統執行時需要的套件。各模組需要的套件由負責人在自己的分支用 `uv add` 加入。
+dependencies = [
+    "pydantic>=2.7",
+]
+
+# 只在開發時用、成品不需要的工具。
+[dependency-groups]
+dev = [
+    "pytest>=8",
+    "ruff>=0.6",
+]
+
+[tool.uv]
+# `uv sync` 預設安裝 dev 群組，組員下載後不必額外加參數。
+default-groups = ["dev"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+
+[tool.ruff.lint]
+# 只抓真正的錯誤（語法錯誤、沒用到的 import、未定義的名稱等），不管風格。
+# 不寫這行的話，新版 ruff 預設會啟用很多風格規則，一次跳出一堆建議。
+select = ["E4", "E7", "E9", "F"]

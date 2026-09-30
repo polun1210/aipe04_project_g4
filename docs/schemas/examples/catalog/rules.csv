@@ -1,0 +1,3 @@
+rule_id,condition_type,condition_code,ingredient_code,ingredient_form_codes,interaction_type,requires_supplement_intake,severity,requires_professional_review,advice_code,separation_hours,reason_zh,citation_ids,evidence_tier,status,curated_by,reviewed_by,reviewed_at,curation_note
+R-0012,drug_class,statin,red_yeast_rice,,pharmacodynamic,true,priority,true,consult_before_combining,,紅麴所含成分與此類藥物的作用機轉相同，併用可能增加肌肉不良反應的風險,cit-0001,待建表規範定義,draft,組員A,,,格式範例，不是覆核結果
+R-0003,drug_class,ppi,vitamin_b12,,drug_affects_nutrient,false,attention,false,inform_provider,,長期使用此類胃藥可能降低維生素B12的吸收,cit-0002,待建表規範定義,draft,組員A,,,格式範例，不是覆核結果

@@ -1,0 +1,13 @@
+[
+  {
+    "product_id": "a1000000-0000-4000-8000-000000000001",
+    "field_path": "nutrients.r04.per_serving",
+    "correction_type": "modified",
+    "model_value": "2.4",
+    "corrected_value": "6.0",
+    "ocr_version": "paddleocr-x.y",
+    "rule_layer_version": "label-rules-v1",
+    "synonym_table_version": "syn-2026w40",
+    "corrected_at": "2026-09-29T09:20:11+08:00"
+  }
+]

@@ -1,0 +1,21 @@
+# Python 執行時自動產生的暫存
+__pycache__/
+*.pyc
+
+# 每個人本機自己建立的虛擬環境（用 `uv sync` 產生，不進 git）
+.venv/
+
+# 工具的快取
+.pytest_cache/
+.ruff_cache/
+
+# 密鑰與環境變數（API key 絕不進 repo）。範本檔 .env.example 可以進。
+.env
+.env.*
+!.env.example
+
+# 作業系統與編輯器產生的雜訊
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

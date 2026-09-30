@@ -1,0 +1,17 @@
+code,category,display_name_zh,standard_unit,accepted_units,synonyms,ul_scope
+calcium,target_nutrient,鈣,mg,mg,鈣|Calcium,total_intake
+magnesium,target_nutrient,鎂,mg,mg,鎂|Magnesium,supplement_only
+iron,target_nutrient,鐵,mg,mg,鐵|Iron,supplement_only
+zinc,target_nutrient,鋅,mg,mg,鋅|Zinc,total_intake
+potassium,target_nutrient,鉀,mg,mg,鉀|Potassium,
+vitamin_d,target_nutrient,維生素 D,ug,ug|iu,維生素D|維生素D3|維他命D|Vitamin D,total_intake
+vitamin_e,target_nutrient,維生素 E,mg_ate,mg_ate|mg|iu,維生素E|維他命E|Vitamin E,total_intake
+vitamin_b12,target_nutrient,維生素 B12,ug,ug,維生素B12|維他命B12|Vitamin B12,
+folate,target_nutrient,葉酸,ug,ug,葉酸|Folic acid,total_intake
+niacin,target_nutrient,菸鹼素,mg_ne,mg_ne|mg,菸鹼素|菸鹼酸|菸鹼醯胺|Niacin,total_intake
+vitamin_c,target_nutrient,維生素 C,mg,mg,維生素C|維他命C|Vitamin C,total_intake
+vitamin_b6,target_nutrient,維生素 B6,mg,mg,維生素B6|維他命B6|Vitamin B6,total_intake
+selenium,target_nutrient,硒,ug,ug,硒|Selenium,total_intake
+red_yeast_rice,allowed_ingredient,紅麴,,,紅麴|紅麴菌發酵米|Monascus|red yeast rice|monacolin K,
+glucosamine,allowed_ingredient,葡萄糖胺,,,葡萄糖胺|胺基葡萄糖|Glucosamine,
+omega_3,allowed_ingredient,魚油 n-3,,,魚油|EPA|DHA|Omega-3|n-3 脂肪酸,

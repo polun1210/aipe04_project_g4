@@ -1,0 +1,22 @@
+{
+  "basic_profile": { "age": 72, "sex": "male" },
+  "conditions": {
+    "selected": ["hypertension", "dyslipidemia"],
+    "none_selected": false
+  },
+  "drugs": {
+    "selected": [
+      { "active_ingredient_code": "hydrochlorothiazide" },
+      { "active_ingredient_code": "losartan" },
+      { "active_ingredient_code": "atorvastatin" },
+      { "active_ingredient_code": "esomeprazole" },
+      { "active_ingredient_code": "magnesium_oxide", "dose_mg": 250, "times_per_day": 2 }
+    ],
+    "none_selected": false
+  },
+  "product_ids": [
+    "a1000000-0000-4000-8000-000000000001",
+    "a1000000-0000-4000-8000-000000000002",
+    "a1000000-0000-4000-8000-000000000003"
+  ]
+}

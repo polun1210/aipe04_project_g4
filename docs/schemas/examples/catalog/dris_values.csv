@@ -1,0 +1,6 @@
+nutrient_code,sex,age_band,reference_type,reference_value,ul_value,unit
+calcium,male,71+,ai,1000,2500,mg
+vitamin_d,male,71+,ai,15,50,ug
+magnesium,male,71+,rda,350,350,mg
+vitamin_b12,male,71+,rda,2.4,,ug
+potassium,male,71+,ai,2800,,mg

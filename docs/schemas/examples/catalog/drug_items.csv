@@ -1,0 +1,7 @@
+active_ingredient_code,display_name_zh,english_name,drug_class_codes,common_tradenames_tw,related_conditions,requires_dose
+hydrochlorothiazide,氫氯噻嗪,Hydrochlorothiazide,thiazide_diuretic,Dichlotride,hypertension,false
+losartan,洛沙坦,Losartan,acei_arb,可悅您,hypertension,false
+losartan_hydrochlorothiazide,洛沙坦＋氫氯噻嗪（複方）,Losartan + Hydrochlorothiazide,acei_arb|thiazide_diuretic,Hyzaar,hypertension,false
+atorvastatin,阿托伐他汀,Atorvastatin,statin,立普妥,dyslipidemia,false
+esomeprazole,埃索美拉唑,Esomeprazole,ppi,耐適恩,,false
+magnesium_oxide,氧化鎂,Magnesium oxide,antacid_laxative,氧化鎂錠,,true

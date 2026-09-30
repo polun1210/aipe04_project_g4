@@ -1,0 +1,15 @@
+{
+  "product_name": "綜合維他命錠",
+  "serving_info": { "serving_size": 1, "dose_unit": "tablet" },
+  "user_intake": { "frequency_type": "daily", "times_per_day": 1, "amount_per_time": 1 },
+  "nutrients": [
+    { "row_id": "r01", "standard_code": "vitamin_d", "scope_status": "in_scope", "per_serving": 10, "unit": "ug" },
+    { "row_id": "r02", "standard_code": "calcium", "scope_status": "in_scope", "nutrient_form_code": "calcium_carbonate", "per_serving": 200, "unit": "mg", "stated_elemental_amount": 200 },
+    { "row_id": "r03", "standard_code": "magnesium", "scope_status": "in_scope", "per_serving": 100, "unit": "mg" },
+    { "row_id": "r04", "standard_code": "vitamin_b12", "scope_status": "in_scope", "per_serving": 6.0, "unit": "ug" },
+    { "row_id": "r05", "standard_code": null, "scope_status": "out_of_scope", "per_serving": 800, "unit": "ug" },
+    { "row_id": "r06", "standard_code": null, "scope_status": "out_of_scope" },
+    { "row_id": "r07", "standard_code": null, "scope_status": "out_of_scope" },
+    { "row_id": "r08", "standard_code": null, "scope_status": "unresolved" }
+  ]
+}

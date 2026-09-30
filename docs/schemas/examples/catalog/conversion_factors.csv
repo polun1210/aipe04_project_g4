@@ -1,0 +1,4 @@
+nutrient_code,from_unit,to_unit,factor,applies_to_form,source
+vitamin_d,iu,ug,0.025,all,DRIs 第八版總表註記 1μg = 40 I.U.
+vitamin_e,iu,mg_ate,0.67,all,DRIs 採 NRC 1989 α-TE 體系（見 docs/dris-reference-notes.md）
+vitamin_e,mg,mg_ate,0.91,d_alpha_tocopheryl_acetate,NRC 1989；建表前回查原文

@@ -1,0 +1,101 @@
+{
+  "case_id": "c0000000-0000-4000-8000-000000000001",
+  "user_id": "b0000000-0000-4000-8000-000000000001",
+  "created_at": "2026-09-29T09:25:00+08:00",
+  "decision_data_version": "seed-2026w40.1",
+  "basic_profile": { "age": 72, "sex": "male", "age_band": "71+" },
+  "conditions": { "selected": ["hypertension", "dyslipidemia"], "none_selected": false },
+  "drugs": {
+    "selected": [
+      { "active_ingredient_code": "hydrochlorothiazide", "display_name_zh": "氫氯噻嗪", "drug_class_codes": ["thiazide_diuretic"] },
+      { "active_ingredient_code": "losartan", "display_name_zh": "洛沙坦", "drug_class_codes": ["acei_arb"] },
+      { "active_ingredient_code": "atorvastatin", "display_name_zh": "阿托伐他汀", "drug_class_codes": ["statin"] },
+      { "active_ingredient_code": "esomeprazole", "display_name_zh": "埃索美拉唑", "drug_class_codes": ["ppi"] },
+      { "active_ingredient_code": "magnesium_oxide", "display_name_zh": "氧化鎂", "drug_class_codes": ["antacid_laxative"], "dose_mg": 250, "times_per_day": 2 }
+    ],
+    "none_selected": false
+  },
+  "supplements": [
+    {
+      "product_id": "a1000000-0000-4000-8000-000000000001",
+      "product_name": "綜合維他命錠",
+      "serving_info": { "serving_size": 1, "dose_unit": "tablet" },
+      "user_intake": {
+        "frequency_type": "daily", "times_per_day": 1, "amount_per_time": 1,
+        "is_quantifiable": true,
+        "units_per_day_peak": 1, "units_per_day_average": 1,
+        "servings_per_day_peak": 1, "servings_per_day_average": 1
+      },
+      "nutrients": [
+        { "row_id": "r01", "raw_name": "維生素D", "display_name_zh": "維生素 D", "standard_code": "vitamin_d", "scope_status": "in_scope", "label_section": "nutrition_table", "nutrient_form_code": null,
+          "per_serving": 10, "unit": "ug", "amount_per_serving_standard": 10, "standard_unit": "ug", "elemental_basis": "not_applicable",
+          "peak_daily_amount": 10, "average_daily_amount": 10, "ul_applicable": true },
+        { "row_id": "r02", "raw_name": "鈣(碳酸鈣)", "display_name_zh": "鈣", "standard_code": "calcium", "scope_status": "in_scope", "label_section": "nutrition_table", "nutrient_form_code": "calcium_carbonate",
+          "per_serving": 200, "unit": "mg", "amount_per_serving_standard": 200, "standard_unit": "mg", "elemental_basis": "label_stated",
+          "peak_daily_amount": 200, "average_daily_amount": 200, "ul_applicable": true },
+        { "row_id": "r03", "raw_name": "鎂", "display_name_zh": "鎂", "standard_code": "magnesium", "scope_status": "in_scope", "label_section": "nutrition_table", "nutrient_form_code": null,
+          "per_serving": 100, "unit": "mg", "amount_per_serving_standard": 100, "standard_unit": "mg", "elemental_basis": "label_stated",
+          "peak_daily_amount": 100, "average_daily_amount": 100, "ul_applicable": true },
+        { "row_id": "r04", "raw_name": "維生素B12", "display_name_zh": "維生素 B12", "standard_code": "vitamin_b12", "scope_status": "in_scope", "label_section": "nutrition_table", "nutrient_form_code": null,
+          "per_serving": 6.0, "unit": "ug", "amount_per_serving_standard": 6.0, "standard_unit": "ug", "elemental_basis": "not_applicable",
+          "peak_daily_amount": 6.0, "average_daily_amount": 6.0, "ul_applicable": false },
+        { "row_id": "r05", "raw_name": "維生素A", "display_name_zh": null, "standard_code": null, "scope_status": "out_of_scope", "label_section": "nutrition_table", "nutrient_form_code": null,
+          "per_serving": 800, "unit": "ug", "amount_per_serving_standard": null, "standard_unit": null, "elemental_basis": "not_applicable",
+          "peak_daily_amount": null, "average_daily_amount": null, "ul_applicable": false },
+        { "row_id": "r06", "raw_name": "葉黃素(金盞花萃取物)", "display_name_zh": null, "standard_code": null, "scope_status": "out_of_scope", "label_section": "ingredient_list", "nutrient_form_code": null,
+          "per_serving": null, "unit": null, "amount_per_serving_standard": null, "standard_unit": null, "elemental_basis": "not_applicable",
+          "peak_daily_amount": null, "average_daily_amount": null, "ul_applicable": false },
+        { "row_id": "r07", "raw_name": "硬脂酸鎂", "display_name_zh": null, "standard_code": null, "scope_status": "out_of_scope", "label_section": "ingredient_list", "nutrient_form_code": null,
+          "per_serving": null, "unit": null, "amount_per_serving_standard": null, "standard_unit": null, "elemental_basis": "not_applicable",
+          "peak_daily_amount": null, "average_daily_amount": null, "ul_applicable": false },
+        { "row_id": "r08", "raw_name": "海藻鈣粉", "display_name_zh": null, "standard_code": null, "scope_status": "unresolved", "label_section": "ingredient_list", "nutrient_form_code": null,
+          "per_serving": null, "unit": null, "amount_per_serving_standard": null, "standard_unit": null, "elemental_basis": "unknown",
+          "peak_daily_amount": null, "average_daily_amount": null, "ul_applicable": false }
+      ],
+      "verified_at": "2026-09-29T09:21:40+08:00",
+      "extraction_meta": { "ocr_version": "paddleocr-x.y", "rule_layer_version": "label-rules-v1", "synonym_table_version": "syn-2026w40", "extracted_at": "2026-09-29T09:14:02+08:00" }
+    },
+    {
+      "product_id": "a1000000-0000-4000-8000-000000000002",
+      "product_name": "檸檬酸鈣＋D3",
+      "serving_info": { "serving_size": 2, "dose_unit": "tablet" },
+      "user_intake": {
+        "frequency_type": "daily", "times_per_day": 1, "amount_per_time": 2,
+        "is_quantifiable": true,
+        "units_per_day_peak": 2, "units_per_day_average": 2,
+        "servings_per_day_peak": 1, "servings_per_day_average": 1
+      },
+      "nutrients": [
+        { "row_id": "r01", "raw_name": "檸檬酸鈣", "display_name_zh": "鈣", "standard_code": "calcium", "scope_status": "in_scope", "label_section": "nutrition_table", "nutrient_form_code": "calcium_citrate",
+          "per_serving": 2000, "unit": "mg", "amount_per_serving_standard": 420, "standard_unit": "mg",
+          "elemental_basis": "estimated", "compound_code": "calcium_citrate", "elemental_ratio": 0.21,
+          "peak_daily_amount": 420, "average_daily_amount": 420, "ul_applicable": true },
+        { "row_id": "r02", "raw_name": "維生素D3", "display_name_zh": "維生素 D", "standard_code": "vitamin_d", "scope_status": "in_scope", "label_section": "nutrition_table", "nutrient_form_code": null,
+          "per_serving": 1000, "unit": "iu", "amount_per_serving_standard": 25, "standard_unit": "ug",
+          "conversion": { "from_unit": "iu", "to_unit": "ug", "factor": 0.025, "applies_to_form": "all", "source": "DRIs 第八版總表註記 1μg = 40 I.U." },
+          "elemental_basis": "not_applicable",
+          "peak_daily_amount": 25, "average_daily_amount": 25, "ul_applicable": true }
+      ],
+      "verified_at": "2026-09-29T09:23:05+08:00",
+      "extraction_meta": { "ocr_version": "paddleocr-x.y", "rule_layer_version": "label-rules-v1", "synonym_table_version": "syn-2026w40", "extracted_at": "2026-09-29T09:16:30+08:00" }
+    },
+    {
+      "product_id": "a1000000-0000-4000-8000-000000000003",
+      "product_name": "紅麴膠囊",
+      "serving_info": { "serving_size": 1, "dose_unit": "capsule" },
+      "user_intake": {
+        "frequency_type": "daily", "times_per_day": 2, "amount_per_time": 1,
+        "is_quantifiable": true,
+        "units_per_day_peak": 2, "units_per_day_average": 2,
+        "servings_per_day_peak": 2, "servings_per_day_average": 2
+      },
+      "nutrients": [
+        { "row_id": "r01", "raw_name": "紅麴菌發酵米", "display_name_zh": "紅麴", "standard_code": "red_yeast_rice", "scope_status": "in_scope", "label_section": "ingredient_list", "nutrient_form_code": null,
+          "per_serving": null, "unit": null, "amount_per_serving_standard": null, "standard_unit": null, "elemental_basis": "not_applicable",
+          "peak_daily_amount": null, "average_daily_amount": null, "ul_applicable": false }
+      ],
+      "verified_at": "2026-09-29T09:24:12+08:00",
+      "extraction_meta": { "ocr_version": "paddleocr-x.y", "rule_layer_version": "label-rules-v1", "synonym_table_version": "syn-2026w40", "extracted_at": "2026-09-29T09:18:44+08:00" }
+    }
+  ]
+}

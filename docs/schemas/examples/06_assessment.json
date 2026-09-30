@@ -1,0 +1,107 @@
+{
+  "case_id": "c0000000-0000-4000-8000-000000000001",
+  "decision_data_version": "seed-2026w40.1",
+  "duplicates": [
+    { "ingredient_code": "calcium",
+      "source_product_ids": ["a1000000-0000-4000-8000-000000000001", "a1000000-0000-4000-8000-000000000002"],
+      "total_peak_intake": 620, "total_average_intake": 620, "unit": "mg", "basis": "estimated" },
+    { "ingredient_code": "vitamin_d",
+      "source_product_ids": ["a1000000-0000-4000-8000-000000000001", "a1000000-0000-4000-8000-000000000002"],
+      "total_peak_intake": 35, "total_average_intake": 35, "unit": "ug", "basis": "not_applicable" }
+  ],
+  "relevant_nutrients": [
+    { "nutrient_code": "calcium", "is_supplemented": true, "triggered_by_drug": true,
+      "peak_intake_from_supplements": 620, "average_intake_from_supplements": 620, "intake_from_drugs": null,
+      "unit": "mg", "basis": "estimated",
+      "recommended_total_intake": { "reference_type": "ai", "value": 1000 },
+      "ul": { "ul_value": 2500, "ratio": 0.248, "exceeded": false, "scope": "total_intake", "phrasing": "percent_total_intake" } },
+    { "nutrient_code": "vitamin_d", "is_supplemented": true, "triggered_by_drug": false,
+      "peak_intake_from_supplements": 35, "average_intake_from_supplements": 35, "intake_from_drugs": null,
+      "unit": "ug", "basis": "not_applicable",
+      "recommended_total_intake": { "reference_type": "ai", "value": 15 },
+      "ul": { "ul_value": 50, "ratio": 0.7, "exceeded": false, "scope": "total_intake", "phrasing": "percent_total_intake" } },
+    { "nutrient_code": "magnesium", "is_supplemented": true, "triggered_by_drug": true,
+      "peak_intake_from_supplements": 100, "average_intake_from_supplements": 100, "intake_from_drugs": 301.6,
+      "unit": "mg", "basis": "label_stated",
+      "recommended_total_intake": { "reference_type": "rda", "value": 350 },
+      "ul": { "ul_value": 350, "ratio": 0.286, "exceeded": false, "scope": "supplement_only", "phrasing": "percent_supplement_only" } },
+    { "nutrient_code": "vitamin_b12", "is_supplemented": true, "triggered_by_drug": true,
+      "peak_intake_from_supplements": 6.0, "average_intake_from_supplements": 6.0, "intake_from_drugs": null,
+      "unit": "ug", "basis": "not_applicable",
+      "recommended_total_intake": { "reference_type": "rda", "value": 2.4 },
+      "ul": null },
+    { "nutrient_code": "potassium", "is_supplemented": false, "triggered_by_drug": true,
+      "peak_intake_from_supplements": 0, "average_intake_from_supplements": 0, "intake_from_drugs": null,
+      "unit": "mg", "basis": "not_applicable",
+      "recommended_total_intake": { "reference_type": "ai", "value": 2800 },
+      "ul": null }
+  ],
+  "interactions": [
+    { "ingredient_code": "red_yeast_rice", "severity": "priority", "requires_professional_review": true,
+      "user_has_supplement": true, "matched_product_ids": ["a1000000-0000-4000-8000-000000000003"],
+      "triggers": [
+        { "rule_id": "R-0012", "condition_type": "drug_class", "condition_code": "statin",
+          "interaction_type": "pharmacodynamic", "severity": "priority", "advice_code": "consult_before_combining",
+          "separation_hours": null, "reason_zh": "紅麴所含成分與此類藥物的作用機轉相同，併用可能增加肌肉不良反應的風險",
+          "citation_ids": ["cit-0001"] }
+      ] },
+    { "ingredient_code": "calcium", "severity": "attention", "requires_professional_review": false,
+      "user_has_supplement": true,
+      "matched_product_ids": ["a1000000-0000-4000-8000-000000000001", "a1000000-0000-4000-8000-000000000002"],
+      "triggers": [
+        { "rule_id": "R-0020", "condition_type": "drug_class", "condition_code": "thiazide_diuretic",
+          "interaction_type": "pharmacodynamic", "severity": "attention", "advice_code": "consult_before_combining",
+          "separation_hours": null, "reason_zh": "此類利尿劑會減少鈣從尿液排出，併用鈣補充劑可能使血鈣偏高",
+          "citation_ids": ["cit-0003"] },
+        { "rule_id": "R-0005", "condition_type": "drug_class", "condition_code": "ppi",
+          "interaction_type": "drug_affects_nutrient", "severity": "info", "advice_code": "inform_provider",
+          "separation_hours": null, "reason_zh": "長期使用此類胃藥可能降低鈣的吸收",
+          "citation_ids": ["cit-0004"] }
+      ] },
+    { "ingredient_code": "magnesium", "severity": "attention", "requires_professional_review": false,
+      "user_has_supplement": true, "matched_product_ids": ["a1000000-0000-4000-8000-000000000001"],
+      "triggers": [
+        { "rule_id": "R-0004", "condition_type": "drug_class", "condition_code": "ppi",
+          "interaction_type": "drug_affects_nutrient", "severity": "attention", "advice_code": "inform_provider",
+          "separation_hours": null, "reason_zh": "長期使用此類胃藥可能造成血中鎂濃度下降",
+          "citation_ids": ["cit-0005"] },
+        { "rule_id": "R-0018", "condition_type": "drug_class", "condition_code": "thiazide_diuretic",
+          "interaction_type": "drug_affects_nutrient", "severity": "info", "advice_code": "inform_provider",
+          "separation_hours": null, "reason_zh": "此類利尿劑可能增加鎂的流失",
+          "citation_ids": ["cit-0006"] }
+      ] },
+    { "ingredient_code": "vitamin_b12", "severity": "attention", "requires_professional_review": false,
+      "user_has_supplement": true, "matched_product_ids": ["a1000000-0000-4000-8000-000000000001"],
+      "triggers": [
+        { "rule_id": "R-0003", "condition_type": "drug_class", "condition_code": "ppi",
+          "interaction_type": "drug_affects_nutrient", "severity": "attention", "advice_code": "inform_provider",
+          "separation_hours": null, "reason_zh": "長期使用此類胃藥可能降低維生素B12的吸收",
+          "citation_ids": ["cit-0002"] }
+      ] },
+    { "ingredient_code": "potassium", "severity": "info", "requires_professional_review": false,
+      "user_has_supplement": false, "matched_product_ids": [],
+      "triggers": [
+        { "rule_id": "R-0021", "condition_type": "drug_class", "condition_code": "acei_arb",
+          "interaction_type": "drug_affects_nutrient", "severity": "info", "advice_code": "inform_provider",
+          "separation_hours": null, "reason_zh": "此類降血壓藥可能使血中鉀濃度上升，使用含鉀補充劑或低鈉鹽前應先諮詢",
+          "citation_ids": ["cit-0007"] },
+        { "rule_id": "R-0019", "condition_type": "drug_class", "condition_code": "thiazide_diuretic",
+          "interaction_type": "drug_affects_nutrient", "severity": "info", "advice_code": "inform_provider",
+          "separation_hours": null, "reason_zh": "此類利尿劑可能增加鉀的流失",
+          "citation_ids": ["cit-0008"] }
+      ] }
+  ],
+  "disclosures": {
+    "covered_known_conditions": ["hypertension", "t2dm", "dyslipidemia", "chronic_arthritis", "chronic_insomnia"],
+    "covered_drug_classes": ["thiazide_diuretic", "acei_arb", "ccb", "biguanide", "insulin", "sglt2", "statin", "ezetimibe", "cox2_inhibitor", "acetaminophen", "glucosamine_rx", "bzd_zdrug", "melatonin_rx", "ppi", "h2ra", "antacid_laxative"],
+    "covered_nutrients": ["calcium", "magnesium", "iron", "zinc", "potassium", "vitamin_d", "vitamin_e", "vitamin_b12", "folate", "niacin", "vitamin_c", "vitamin_b6", "selenium"],
+    "known_conditions_none": false,
+    "drugs_none": false,
+    "healthy_population_caveat": true,
+    "peak_same_day_assumption": false,
+    "out_of_scope_ingredients": ["維生素A", "葉黃素(金盞花萃取物)", "硬脂酸鎂"],
+    "unresolved_ingredients": ["海藻鈣粉"],
+    "uncovered_common_drugs": ["DPP-4 抑制劑", "磺醯脲類", "傳統 NSAIDs", "抗凝血劑與抗血小板藥", "骨質疏鬆用藥"],
+    "drug_source_not_counted": ["calcium", "magnesium", "iron"]
+  }
+}

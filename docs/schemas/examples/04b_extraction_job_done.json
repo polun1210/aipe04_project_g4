@@ -1,0 +1,88 @@
+{
+  "job_id": "ext-job-0001",
+  "status": "done",
+  "error": null,
+  "result": {
+    "product_id": "a1000000-0000-4000-8000-000000000001",
+    "product_name": "綜合維他命錠",
+    "source_images": [
+      { "image_id": "img-01", "quality_status": "accepted", "reject_reason": null },
+      { "image_id": "img-02", "quality_status": "rejected", "reject_reason": "glare" }
+    ],
+    "serving_info": {
+      "serving_size": 1,
+      "dose_unit": "tablet",
+      "source_image_id": "img-01",
+      "bbox": { "x": 168, "y": 496, "width": 302, "height": 44 },
+      "extraction_confidence": 0.97
+    },
+    "label_suggested_intake": {
+      "raw_text": "每日1次，每次1錠",
+      "amount_per_time": 1,
+      "times_per_day": 1
+    },
+    "nutrients": [
+      {
+        "row_id": "r01", "raw_name": "維生素D", "label_section": "nutrition_table",
+        "source_image_id": "img-01", "bbox": { "x": 168, "y": 792, "width": 520, "height": 40 },
+        "extraction_confidence": 0.96,
+        "standard_code": "vitamin_d", "scope_status": "in_scope",
+        "per_serving": 10, "unit": "ug"
+      },
+      {
+        "row_id": "r02", "raw_name": "鈣(碳酸鈣)", "label_section": "nutrition_table",
+        "source_image_id": "img-01", "bbox": { "x": 168, "y": 836, "width": 544, "height": 40 },
+        "extraction_confidence": 0.93,
+        "standard_code": "calcium", "scope_status": "in_scope",
+        "nutrient_form_raw": "碳酸鈣", "nutrient_form_code": "calcium_carbonate",
+        "per_serving": 200, "unit": "mg", "stated_elemental_amount": 200
+      },
+      {
+        "row_id": "r03", "raw_name": "鎂", "label_section": "nutrition_table",
+        "source_image_id": "img-01", "bbox": { "x": 168, "y": 880, "width": 468, "height": 40 },
+        "extraction_confidence": 0.95,
+        "standard_code": "magnesium", "scope_status": "in_scope",
+        "per_serving": 100, "unit": "mg"
+      },
+      {
+        "row_id": "r04", "raw_name": "維生素B12", "label_section": "nutrition_table",
+        "source_image_id": "img-01", "bbox": { "x": 168, "y": 924, "width": 536, "height": 40 },
+        "extraction_confidence": 0.62,
+        "standard_code": "vitamin_b12", "scope_status": "in_scope",
+        "per_serving": 2.4, "unit": "ug", "requires_user_input": true
+      },
+      {
+        "row_id": "r05", "raw_name": "維生素A", "label_section": "nutrition_table",
+        "source_image_id": "img-01", "bbox": { "x": 168, "y": 748, "width": 552, "height": 40 },
+        "extraction_confidence": 0.94,
+        "standard_code": null, "scope_status": "out_of_scope",
+        "per_serving": 800, "unit": "ug"
+      },
+      {
+        "row_id": "r06", "raw_name": "葉黃素(金盞花萃取物)", "label_section": "ingredient_list",
+        "source_image_id": "img-01", "bbox": { "x": 168, "y": 1420, "width": 604, "height": 40 },
+        "extraction_confidence": 0.87,
+        "standard_code": null, "scope_status": "out_of_scope",
+        "nutrient_form_raw": "金盞花萃取物"
+      },
+      {
+        "row_id": "r07", "raw_name": "硬脂酸鎂", "label_section": "ingredient_list",
+        "source_image_id": "img-01", "bbox": { "x": 168, "y": 1464, "width": 300, "height": 40 },
+        "extraction_confidence": 0.90,
+        "standard_code": null, "scope_status": "out_of_scope"
+      },
+      {
+        "row_id": "r08", "raw_name": "海藻鈣粉", "label_section": "ingredient_list",
+        "source_image_id": "img-01", "bbox": { "x": 480, "y": 1464, "width": 240, "height": 40 },
+        "extraction_confidence": 0.88,
+        "standard_code": null, "scope_status": "unresolved", "requires_user_input": true
+      }
+    ],
+    "extraction_meta": {
+      "ocr_version": "paddleocr-x.y",
+      "rule_layer_version": "label-rules-v1",
+      "synonym_table_version": "syn-2026w40",
+      "extracted_at": "2026-09-29T09:14:02+08:00"
+    }
+  }
+}

@@ -1,0 +1,6 @@
+condition_code,display_name_zh,backend_name,sort_order
+hypertension,高血壓,高血壓（Hypertension）,1
+t2dm,第二型糖尿病,第二型糖尿病（Type 2 Diabetes Mellitus）,2
+dyslipidemia,高血脂（膽固醇或三酸甘油酯偏高）,血脂異常（Dyslipidemia）,3
+chronic_arthritis,慢性關節炎／長期關節疼痛,慢性關節炎（Chronic Arthritis）,4
+chronic_insomnia,慢性失眠,慢性失眠症（Chronic Insomnia）,5

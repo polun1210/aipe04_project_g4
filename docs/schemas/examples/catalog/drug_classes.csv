@@ -1,0 +1,17 @@
+drug_class_code,display_name_zh,plain_description_zh,role,menu_group
+thiazide_diuretic,Thiazide 類利尿劑,幫助身體排出多餘鹽分與水分的降血壓藥,rule_bearing,hypertension
+acei_arb,ACEI／ARB 降血壓藥,放鬆血管來降血壓的藥（名稱常以「普利」「沙坦」結尾）,rule_bearing,hypertension
+ccb,鈣離子阻斷劑,放鬆血管來降血壓的藥（名稱常以「地平」結尾）,coverage_only,hypertension
+biguanide,雙胍類降血糖藥,最常用的第一線糖尿病口服藥,rule_bearing,t2dm
+insulin,胰島素,注射型的降血糖藥,rule_bearing,t2dm
+sglt2,SGLT2 抑制劑,讓糖分從尿液排出的降血糖藥,coverage_only,t2dm
+statin,Statin 類降血脂藥,減少肝臟製造膽固醇的降血脂藥（名稱常以「他汀」結尾）,rule_bearing,dyslipidemia
+ezetimibe,膽固醇吸收抑制劑,減少腸道吸收膽固醇的降血脂藥,coverage_only,dyslipidemia
+cox2_inhibitor,COX-2 選擇性抑制劑,較少傷胃的止痛消炎藥,rule_bearing,chronic_arthritis
+acetaminophen,Acetaminophen 止痛藥,普拿疼這一類的止痛退燒藥,coverage_only,chronic_arthritis
+glucosamine_rx,處方葡萄糖胺,醫師開立的葡萄糖胺關節用藥,rule_bearing,chronic_arthritis
+bzd_zdrug,BZD 與 Z-drugs 安眠藥,常見的處方安眠鎮靜藥,coverage_only,chronic_insomnia
+melatonin_rx,褪黑激素製劑,醫師開立的褪黑激素緩釋錠,coverage_only,chronic_insomnia
+ppi,質子幫浦抑制劑（PPI）,強力抑制胃酸的胃藥（名稱常以「拉唑」結尾）,rule_bearing,gastrointestinal
+h2ra,H2 受體拮抗劑,抑制胃酸的胃藥（名稱常以「替丁」結尾）,rule_bearing,gastrointestinal
+antacid_laxative,含鈣／含鎂制酸劑與軟便劑,中和胃酸的胃藥以及氧化鎂這類軟便劑,rule_bearing,gastrointestinal

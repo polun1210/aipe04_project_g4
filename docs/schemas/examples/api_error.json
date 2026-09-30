@@ -1,0 +1,7 @@
+{
+  "error": {
+    "code": "validation_error",
+    "message": "送出的資料有欄位需要修正",
+    "details": ["drugs：必須作答：勾選項目，或勾「以上皆無」"]
+  }
+}

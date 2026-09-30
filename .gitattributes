@@ -1,0 +1,2 @@
+# 統一換算行尾：不管在 Windows 或 Mac 編輯，存進 git 的一律是 LF，避免整份檔案被誤判為「都改過」
+* text=auto eol=lf
