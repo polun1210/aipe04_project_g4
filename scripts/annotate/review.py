@@ -14,6 +14,37 @@ from pathlib import Path
 
 IMAGE_SUFFIXES = (".jpg", ".jpeg", ".png", ".webp")
 
+# 頁面上只顯示中文；匯出的 CSV 仍用原始代碼，後續工具才讀得懂
+FIELD_ZH = {
+    "row": "這一列存不存在",
+    "raw_name": "名稱",
+    "per_serving": "每份含量",
+    "unit": "單位",
+    "percent_dv": "每日參考值百分比（%）",
+    "stated_elemental_amount": "標示寫明的元素量（例如「含純鈣50mg」的 50）",
+    "label_section": "出現在哪個區塊",
+    "serving_size": "每一份量（幾粒／幾錠）",
+    "dose_unit": "劑型（粒、錠…）",
+}
+VALUE_ZH = {
+    "unit": {"mg": "毫克 mg", "ug": "微克 μg", "g": "公克 g", "kcal": "大卡 kcal", "iu": "IU 國際單位",
+             "mg_ate": "毫克 α-TE", "mg_ne": "毫克 NE", "other": "其他單位"},
+    "label_section": {"nutrition_table": "營養標示表", "per_unit_note": "每份／每粒含量說明",
+                      "ingredient_list": "成分欄", "front": "正面宣傳文字", "other": "其他"},
+    "dose_unit": {"capsule": "膠囊", "tablet": "錠", "softgel": "軟膠囊", "gummy": "軟糖", "sachet": "包",
+                  "scoop": "匙", "ml": "毫升", "drop": "滴", "g": "公克"},
+}
+
+
+def _zh_field(field: str) -> str:
+    return FIELD_ZH.get(field, field)
+
+
+def _zh_value(field: str, value: str) -> str:
+    if value in ("", "null"):
+        return "（沒寫）"
+    return VALUE_ZH.get(field, {}).get(value, value)
+
 
 def _read(path: Path) -> list[dict[str, str]]:
     with path.open(encoding="utf-8-sig", newline="") as fh:
@@ -63,14 +94,14 @@ def _section(image_id: str, src: str, count: dict, names: list[str], items: dict
     e = html.escape
     a, b = names
     dis_rows = "".join(
-        f"<tr><td>{e(r['row'])}</td><td>{e(r['field'])}</td>"
-        f"<td><button data-pick='{i}' data-side='{e(a)}'>{e(r[a])}</button></td>"
-        f"<td><button data-pick='{i}' data-side='{e(b)}'>{e(r[b])}</button></td>"
+        f"<tr><td>{e(r['row'])}</td><td>{e(_zh_field(r['field']))}</td>"
+        f"<td><button data-pick='{i}' data-value='{e(r[a])}'>{e(_zh_value(r['field'], r[a]))}</button></td>"
+        f"<td><button data-pick='{i}' data-value='{e(r[b])}'>{e(_zh_value(r['field'], r[b]))}</button></td>"
         f"<td><input data-dis='{i}' placeholder='點左邊的值，或自己填'></td></tr>"
         for i, r in items["dis"]
     )
     spot_rows = "".join(
-        f"<tr><td>{e(r['row'])}</td><td>{e(r['field'])}</td><td>{e(r['value'])}</td>"
+        f"<tr><td>{e(r['row'])}</td><td>{e(_zh_field(r['field']))}</td><td>{e(_zh_value(r['field'], r['value']))}</td>"
         f"<td class='{e(r['reason'])}'>{'全查' if r['reason'] == 'high_risk' else '隨機'}</td>"
         f"<td><label><input type='radio' name='s{i}' value='對' data-spot='{i}'>對</label> "
         f"<label><input type='radio' name='s{i}' value='錯' data-spot='{i}'>錯</label></td></tr>"
@@ -85,9 +116,9 @@ def _section(image_id: str, src: str, count: dict, names: list[str], items: dict
     <p class="count">列數：{e(a)} {e(count[a])} 列、{e(b)} {e(count[b])} 列；照片上實際
       <input data-count="{e(image_id)}" size="4"> 列（營養標示每一列＋成分欄每一項）</p>
     <h3>不一致（{len(items['dis'])}）：選對的那邊，都不對就自己填；整列多出來的填「刪除」</h3>
-    <table><tr><th>列</th><th>欄位</th><th>{e(a)}</th><th>{e(b)}</th><th>裁決</th></tr>{dis_rows}</table>
-    <h3>抽查（{len(items['spot'])}）：兩邊一致的值，看照片判斷對錯</h3>
-    <table><tr><th>列</th><th>欄位</th><th>值</th><th></th><th>判斷</th></tr>{spot_rows}</table>
+    <table><tr><th>成分（列）</th><th>要確認的項目</th><th>{e(a)} 讀成</th><th>{e(b)} 讀成</th><th>裁決</th></tr>{dis_rows}</table>
+    <h3>抽查（{len(items['spot'])}）：兩個 AI 讀到一樣的值，看照片判斷它對不對</h3>
+    <table><tr><th>成分（列）</th><th>要確認的項目</th><th>兩個 AI 都讀成</th><th></th><th>照片上是不是這樣？</th></tr>{spot_rows}</table>
   </div>
 </section>"""
 
@@ -133,10 +164,10 @@ document.querySelectorAll("[data-dis]").forEach(el => {
   el.oninput = () => { state.dis[el.dataset.dis] = el.value; mark(el.dataset.dis); save(); };
 });
 function mark(i) {
-  document.querySelectorAll(`[data-pick='${i}']`).forEach(b => b.classList.toggle("on", b.textContent === state.dis[i]));
+  document.querySelectorAll(`[data-pick='${i}']`).forEach(b => b.classList.toggle("on", b.dataset.value === state.dis[i]));
 }
 document.querySelectorAll("[data-pick]").forEach(b => {
-  b.onclick = () => { const i = b.dataset.pick; state.dis[i] = b.textContent; document.querySelector(`[data-dis='${i}']`).value = b.textContent; mark(i); save(); };
+  b.onclick = () => { const i = b.dataset.pick; state.dis[i] = b.dataset.value; document.querySelector(`[data-dis='${i}']`).value = b.dataset.value; mark(i); save(); };
 });
 Object.keys(state.dis).forEach(mark);
 document.querySelectorAll("[data-spot]").forEach(r => {

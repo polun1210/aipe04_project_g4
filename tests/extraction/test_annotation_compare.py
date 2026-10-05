@@ -258,3 +258,11 @@ def test_對照頁以CSV已填的值為初始值(report, tmp_path):
     page = build_review(out, tmp_path)
     assert "r.adjudicated" in page and "r.actual_rows" in page  # 已裁決的結果不會在匯出時被空白蓋掉
 
+
+def test_對照頁的欄位與代碼以中文顯示(report, tmp_path):
+    out = tmp_path / "comparison"
+    write_outputs(report, out)
+    page = build_review(out, tmp_path)
+    assert "每份含量" in page and "微克 μg" in page and "每一份量（幾粒／幾錠）" in page and "膠囊" in page
+    assert "data-value='ug'" in page  # 匯出仍用原始代碼
+
