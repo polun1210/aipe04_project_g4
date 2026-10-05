@@ -59,8 +59,17 @@ def _find_image(images: Path, image_id: str) -> Path | None:
     return None
 
 
-def build_review(comparison: Path, images: Path, notes: dict[str, str] | None = None) -> str:
-    """讀 compare 的輸出，回傳對照頁 HTML。notes：照片編號 → 要特別提醒裁決者的話。"""
+def build_review(
+    comparison: Path,
+    images: Path,
+    notes: dict[str, str] | None = None,
+    skip_random: set[str] | None = None,
+) -> str:
+    """讀 compare 的輸出，回傳對照頁 HTML。
+
+    notes：照片編號 → 要特別提醒裁決者的話。
+    skip_random：這些照片的隨機抽查項目不顯示（只做高風險全查）；跳過的項目匯出時 verdict 留空，stats 不計入。
+    """
     disagreements = _read(comparison / "disagreements.csv")
     spot_checks = _read(comparison / "spot_checks.csv")
     row_counts = _read(comparison / "row_counts.csv")
@@ -69,7 +78,13 @@ def build_review(comparison: Path, images: Path, notes: dict[str, str] | None = 
     by_image: dict[str, dict[str, list]] = defaultdict(lambda: {"dis": [], "spot": []})
     for i, row in enumerate(disagreements):
         by_image[row["image_id"]]["dis"].append((i, row))
+    skipped = []
     for i, row in enumerate(spot_checks):
+        if row["reason"] == "random" and row["image_id"] in (skip_random or set()):
+            skipped.append(i)
+            by_image[row["image_id"]].setdefault("skipped", 0)
+            by_image[row["image_id"]]["skipped"] += 1
+            continue
         by_image[row["image_id"]]["spot"].append((i, row))
 
     sections = []
@@ -84,6 +99,7 @@ def build_review(comparison: Path, images: Path, notes: dict[str, str] | None = 
         "disagreements": disagreements,
         "spot_checks": spot_checks,
         "row_counts": row_counts,
+        "skipped": skipped,
     }
     return _PAGE.replace("{{SECTIONS}}", "\n".join(sections)).replace(
         "{{DATA}}", json.dumps(data, ensure_ascii=False).replace("</", "<\\/")
@@ -108,6 +124,8 @@ def _section(image_id: str, src: str, count: dict, names: list[str], items: dict
         for i, r in items["spot"]
     )
     note_html = f"<p class='note'>⚠ {e(note)}</p>" if note else ""
+    skipped = items.get("skipped", 0)
+    skipped_html = f"<p class='skip'>另有隨機抽查 {skipped} 項本次跳過（只做全查）</p>" if skipped else ""
     return f"""
 <section id="{e(image_id)}">
   <div class="img"><img src="{e(src)}" alt="{e(image_id)}" onclick="this.classList.toggle('zoom')"></div>
@@ -118,7 +136,7 @@ def _section(image_id: str, src: str, count: dict, names: list[str], items: dict
     <h3>不一致（{len(items['dis'])}）：選對的那邊，都不對就自己填；整列多出來的填「刪除」</h3>
     <table><tr><th>成分（列）</th><th>要確認的項目</th><th>{e(a)} 讀成</th><th>{e(b)} 讀成</th><th>裁決</th></tr>{dis_rows}</table>
     <h3>抽查（{len(items['spot'])}）：兩個 AI 讀到一樣的值，看照片判斷它對不對</h3>
-    <table><tr><th>成分（列）</th><th>要確認的項目</th><th>兩個 AI 都讀成</th><th></th><th>照片上是不是這樣？</th></tr>{spot_rows}</table>
+    <table><tr><th>成分（列）</th><th>要確認的項目</th><th>兩個 AI 都讀成</th><th></th><th>照片上是不是這樣？</th></tr>{spot_rows}</table>{skipped_html}
   </div>
 </section>"""
 
@@ -137,6 +155,7 @@ td, th { border:1px solid var(--line); padding:3px 6px; vertical-align:top; word
 button { font:inherit; text-align:left; cursor:pointer; background:#fff; border:1px solid #bbb; border-radius:4px; }
 button.on { background:#dff5ea; border-color:var(--accent); }
 td.high_risk { color:var(--warn); }
+.skip { color:#777; }
 .note { background:#fff4e0; padding:6px 8px; border-left:4px solid var(--warn); }
 #progress { font-weight:600; }
 @media (max-width:800px) { section { grid-template-columns:1fr; } .img img { position:static; } }
@@ -155,9 +174,10 @@ DATA.spot_checks.forEach((r, i) => { if (!state.spot[i] && r.verdict) state.spot
 DATA.row_counts.forEach(r => { if (!state.count[r.image_id] && r.actual_rows) state.count[r.image_id] = r.actual_rows; });
 const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} progress(); };
 function progress() {
-  const d = Object.values(state.dis).filter(v => v).length, s = Object.keys(state.spot).length, c = Object.values(state.count).filter(v => v).length;
+  const d = Object.values(state.dis).filter(v => v).length, c = Object.values(state.count).filter(v => v).length;
+  const skip = new Set(DATA.skipped), s = Object.keys(state.spot).filter(i => !skip.has(Number(i))).length;
   document.getElementById("progress").textContent =
-    `不一致 ${d}/${DATA.disagreements.length}　抽查 ${s}/${DATA.spot_checks.length}　列數 ${c}/${DATA.row_counts.length}`;
+    `不一致 ${d}/${DATA.disagreements.length}　抽查 ${s}/${DATA.spot_checks.length - DATA.skipped.length}　列數 ${c}/${DATA.row_counts.length}`;
 }
 document.querySelectorAll("[data-dis]").forEach(el => {
   el.value = state.dis[el.dataset.dis] || "";

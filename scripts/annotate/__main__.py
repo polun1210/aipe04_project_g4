@@ -71,7 +71,7 @@ def cmd_stats(args: argparse.Namespace) -> int:
 
 def cmd_review(args: argparse.Namespace) -> int:
     out = args.comparison / "review.html"
-    out.write_text(build_review(args.comparison, args.images), encoding="utf-8")
+    out.write_text(build_review(args.comparison, args.images, skip_random=set(args.skip_random or [])), encoding="utf-8")
     print(f"已寫出 {out}；用瀏覽器打開，填完按「匯出」，把三個 CSV 放回 {args.comparison}")
     return 0
 
@@ -104,6 +104,7 @@ def main(argv: list[str] | None = None) -> int:
     review = sub.add_parser("review", help="產生人工裁決與抽查用的對照頁（HTML）")
     review.add_argument("--comparison", type=Path, default=Path("data/annotations/comparison"))
     review.add_argument("--images", type=Path, default=Path("data/images"))
+    review.add_argument("--skip-random", nargs="+", metavar="IMAGE_ID", help="這些照片只做全查，隨機抽查項目跳過")
     review.set_defaults(func=cmd_review)
 
     args = parser.parse_args(argv)

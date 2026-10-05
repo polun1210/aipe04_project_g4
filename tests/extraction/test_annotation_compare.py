@@ -266,3 +266,11 @@ def test_對照頁的欄位與代碼以中文顯示(report, tmp_path):
     assert "每份含量" in page and "微克 μg" in page and "每一份量（幾粒／幾錠）" in page and "膠囊" in page
     assert "data-value='ug'" in page  # 匯出仍用原始代碼
 
+
+def test_指定照片的隨機抽查可以跳過只做全查(report, tmp_path):
+    out = tmp_path / "comparison"
+    write_outputs(report, out)
+    page = build_review(out, tmp_path, skip_random={"p01-img01"})
+    assert "隨機</td>" not in page and "全查</td>" in page
+    assert "另有隨機抽查 4 項本次跳過" in page
+
