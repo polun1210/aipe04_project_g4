@@ -1,0 +1,417 @@
+{
+  "image_id": "p11-img01",
+  "engine_version": "cloud_vision/document_text_detection/builtin/stable",
+  "blocks": [
+    {
+      "text": "營養標示與成分",
+      "bbox": {
+        "x": 256,
+        "y": 169,
+        "width": 487,
+        "height": 70
+      },
+      "confidence": 0.9739
+    },
+    {
+      "text": "Richvita.",
+      "bbox": {
+        "x": 814,
+        "y": 180,
+        "width": 56,
+        "height": 13
+      },
+      "confidence": 0.8156
+    },
+    {
+      "text": "D3",
+      "bbox": {
+        "x": 790,
+        "y": 208,
+        "width": 76,
+        "height": 62
+      },
+      "confidence": 0.643
+    },
+    {
+      "text": "有酵维生素D№",
+      "bbox": {
+        "x": 805,
+        "y": 277,
+        "width": 44,
+        "height": 7
+      },
+      "confidence": 0.5706
+    },
+    {
+      "text": "&",
+      "bbox": {
+        "x": 851,
+        "y": 217,
+        "width": 36,
+        "height": 39
+      },
+      "confidence": 0.5508
+    },
+    {
+      "text": "80010",
+      "bbox": {
+        "x": 869,
+        "y": 259,
+        "width": 22,
+        "height": 9
+      },
+      "confidence": 0.7296
+    },
+    {
+      "text": "營養標示",
+      "bbox": {
+        "x": 191,
+        "y": 358,
+        "width": 106,
+        "height": 26
+      },
+      "confidence": 0.9877
+    },
+    {
+      "text": "「每一份量1錠",
+      "bbox": {
+        "x": 35,
+        "y": 388,
+        "width": 161,
+        "height": 26
+      },
+      "confidence": 0.7427
+    },
+    {
+      "text": "|本包裝含60份",
+      "bbox": {
+        "x": 34,
+        "y": 417,
+        "width": 166,
+        "height": 26
+      },
+      "confidence": 0.3839
+    },
+    {
+      "text": "維生素D",
+      "bbox": {
+        "x": 38,
+        "y": 522,
+        "width": 96,
+        "height": 25
+      },
+      "confidence": 0.9637
+    },
+    {
+      "text": "鋅",
+      "bbox": {
+        "x": 36,
+        "y": 554,
+        "width": 30,
+        "height": 28
+      },
+      "confidence": 0.9774
+    },
+    {
+      "text": "每份",
+      "bbox": {
+        "x": 207,
+        "y": 482,
+        "width": 50,
+        "height": 25
+      },
+      "confidence": 0.9924
+    },
+    {
+      "text": "每日參考",
+      "bbox": {
+        "x": 341,
+        "y": 443,
+        "width": 102,
+        "height": 35
+      },
+      "confidence": 0.9879
+    },
+    {
+      "text": "值百分比",
+      "bbox": {
+        "x": 340,
+        "y": 472,
+        "width": 103,
+        "height": 35
+      },
+      "confidence": 0.8298
+    },
+    {
+      "text": "20微克(800IU) 200%",
+      "bbox": {
+        "x": 176,
+        "y": 520,
+        "width": 265,
+        "height": 34
+      },
+      "confidence": 0.8737
+    },
+    {
+      "text": "0.023毫克",
+      "bbox": {
+        "x": 142,
+        "y": 555,
+        "width": 112,
+        "height": 26
+      },
+      "confidence": 0.9799
+    },
+    {
+      "text": "0.24毫克",
+      "bbox": {
+        "x": 156,
+        "y": 588,
+        "width": 100,
+        "height": 25
+      },
+      "confidence": 0.9642
+    },
+    {
+      "text": "0.06毫克",
+      "bbox": {
+        "x": 156,
+        "y": 621,
+        "width": 101,
+        "height": 24
+      },
+      "confidence": 0.9819
+    },
+    {
+      "text": "0.007毫克",
+      "bbox": {
+        "x": 143,
+        "y": 652,
+        "width": 111,
+        "height": 27
+      },
+      "confidence": 0.9797
+    },
+    {
+      "text": "*參考值未訂定",
+      "bbox": {
+        "x": 38,
+        "y": 694,
+        "width": 167,
+        "height": 25
+      },
+      "confidence": 0.9066
+    },
+    {
+      "text": "品名:利捷維有酵維生素D3錠 內容量:60錠",
+      "bbox": {
+        "x": 470,
+        "y": 357,
+        "width": 499,
+        "height": 28
+      },
+      "confidence": 0.5337
+    },
+    {
+      "text": "食用方式:每日1錠,餐後食用,一日請勿超",
+      "bbox": {
+        "x": 470,
+        "y": 385,
+        "width": 500,
+        "height": 28
+      },
+      "confidence": 0.9469
+    },
+    {
+      "text": "過1錠,多食無益。內容物名稱:微結晶狀a-",
+      "bbox": {
+        "x": 469,
+        "y": 414,
+        "width": 500,
+        "height": 28
+      },
+      "confidence": 0.9173
+    },
+    {
+      "text": "纖維素、美國AES發酵物[大豆發酵物(大豆發",
+      "bbox": {
+        "x": 466,
+        "y": 437,
+        "width": 502,
+        "height": 39
+      },
+      "confidence": 0.8884
+    },
+    {
+      "text": "酵萃取物、氧化鎂、乳酸鈣、葡萄糖酸鋅、葡",
+      "bbox": {
+        "x": 467,
+        "y": 465,
+        "width": 500,
+        "height": 40
+      },
+      "confidence": 0.7269
+    },
+    {
+      "text": "萄糖酸錳)]、維生素D3[辛烯基丁二酸鈉澱粉",
+      "bbox": {
+        "x": 469,
+        "y": 500,
+        "width": 506,
+        "height": 29
+      },
+      "confidence": 0.9549
+    },
+    {
+      "text": "、蔗糖、L-抗壞血酸鈉(抗氧化劑)、中鏈三酸",
+      "bbox": {
+        "x": 479,
+        "y": 523,
+        "width": 489,
+        "height": 38
+      },
+      "confidence": 0.9112
+    },
+    {
+      "text": "0% 甘油酯、二氧化矽、DL-a-生育醇(抗氧化劑)、",
+      "bbox": {
+        "x": 404,
+        "y": 557,
+        "width": 562,
+        "height": 29
+      },
+      "confidence": 0.8803
+    },
+    {
+      "text": "0% 維生素D3]、二氧化矽、硬脂酸鎂。過敏原資",
+      "bbox": {
+        "x": 403,
+        "y": 585,
+        "width": 566,
+        "height": 29
+      },
+      "confidence": 0.9449
+    },
+    {
+      "text": "0% 訊:本產品含有大豆及其製品。該生產線亦",
+      "bbox": {
+        "x": 403,
+        "y": 611,
+        "width": 566,
+        "height": 33
+      },
+      "confidence": 0.9496
+    },
+    {
+      "text": "* 有處理甲殼類、芒果、花生、牛奶、蛋、堅果類",
+      "bbox": {
+        "x": 432,
+        "y": 644,
+        "width": 543,
+        "height": 28
+      },
+      "confidence": 0.4494
+    },
+    {
+      "text": "、芝麻、含麩質之穀物、大豆、魚類與亞硫酸",
+      "bbox": {
+        "x": 478,
+        "y": 672,
+        "width": 491,
+        "height": 27
+      },
+      "confidence": 0.923
+    },
+    {
+      "text": "鹽類製品的產品。保存條件:請置於陰涼乾",
+      "bbox": {
+        "x": 470,
+        "y": 700,
+        "width": 498,
+        "height": 27
+      },
+      "confidence": 0.9583
+    },
+    {
+      "text": "燥處,開瓶後請旋緊瓶蓋,開封後請於六個月內食用完畢。有效日期:如包裝所示(",
+      "bbox": {
+        "x": 26,
+        "y": 729,
+        "width": 944,
+        "height": 28
+      },
+      "confidence": 0.9662
+    },
+    {
+      "text": "西元年/月/日)。保存期間:2年。注意事項:請置於嬰幼兒不易取得之處。重大疾病",
+      "bbox": {
+        "x": 27,
+        "y": 757,
+        "width": 942,
+        "height": 28
+      },
+      "confidence": 0.747
+    },
+    {
+      "text": "服用藥物者、或是計劃接受藥物治療者、或孕乳婦應請教醫師或醫療專業人員後再",
+      "bbox": {
+        "x": 27,
+        "y": 786,
+        "width": 941,
+        "height": 28
+      },
+      "confidence": 0.9531
+    },
+    {
+      "text": "食用。統一藥品股份有限公司。地址:台北市松山區東興路8號7樓。",
+      "bbox": {
+        "x": 26,
+        "y": 811,
+        "width": 758,
+        "height": 28
+      },
+      "confidence": 0.9723
+    },
+    {
+      "text": "服務專線:0800-000-070,9:00-18:00(週一到週日)",
+      "bbox": {
+        "x": 26,
+        "y": 843,
+        "width": 561,
+        "height": 28
+      },
+      "confidence": 0.9723
+    },
+    {
+      "text": "原產地:台灣。",
+      "bbox": {
+        "x": 26,
+        "y": 872,
+        "width": 164,
+        "height": 27
+      },
+      "confidence": 0.9772
+    },
+    {
+      "text": "A662IG31/S1302 8食品",
+      "bbox": {
+        "x": 671,
+        "y": 868,
+        "width": 289,
+        "height": 38
+      },
+      "confidence": 0.6875
+    },
+    {
+      "text": "HDPE",
+      "bbox": {
+        "x": 835,
+        "y": 902,
+        "width": 21,
+        "height": 7
+      },
+      "confidence": 0.978
+    }
+  ],
+  "reading": null
+}

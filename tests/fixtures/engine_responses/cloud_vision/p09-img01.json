@@ -1,0 +1,497 @@
+{
+  "image_id": "p09-img01",
+  "engine_version": "cloud_vision/document_text_detection/builtin/stable",
+  "blocks": [
+    {
+      "text": "區克補",
+      "bbox": {
+        "x": 312,
+        "y": 31,
+        "width": 273,
+        "height": 138
+      },
+      "confidence": 0.2676
+    },
+    {
+      "text": "4124-23",
+      "bbox": {
+        "x": 719,
+        "y": 25,
+        "width": 74,
+        "height": 16
+      },
+      "confidence": 0.9948
+    },
+    {
+      "text": "品名:",
+      "bbox": {
+        "x": 329,
+        "y": 109,
+        "width": 64,
+        "height": 27
+      },
+      "confidence": 0.9882
+    },
+    {
+      "text": "營養標示",
+      "bbox": {
+        "x": 361,
+        "y": 160,
+        "width": 275,
+        "height": 31
+      },
+      "confidence": 0.9836
+    },
+    {
+      "text": "錠",
+      "bbox": {
+        "x": 573,
+        "y": 105,
+        "width": 44,
+        "height": 33
+      },
+      "confidence": 0.9523
+    },
+    {
+      "text": "每一份量1錠",
+      "bbox": {
+        "x": 222,
+        "y": 202,
+        "width": 143,
+        "height": 23
+      },
+      "confidence": 0.8914
+    },
+    {
+      "text": "本包裝含60份",
+      "bbox": {
+        "x": 222,
+        "y": 231,
+        "width": 177,
+        "height": 24
+      },
+      "confidence": 0.9608
+    },
+    {
+      "text": "每份",
+      "bbox": {
+        "x": 454,
+        "y": 264,
+        "width": 47,
+        "height": 21
+      },
+      "confidence": 0.9925
+    },
+    {
+      "text": "每日參考值百分比",
+      "bbox": {
+        "x": 585,
+        "y": 264,
+        "width": 193,
+        "height": 22
+      },
+      "confidence": 0.9684
+    },
+    {
+      "text": "維生素B1",
+      "bbox": {
+        "x": 222,
+        "y": 302,
+        "width": 105,
+        "height": 22
+      },
+      "confidence": 0.9885
+    },
+    {
+      "text": "維生素B2",
+      "bbox": {
+        "x": 220,
+        "y": 336,
+        "width": 111,
+        "height": 22
+      },
+      "confidence": 0.9863
+    },
+    {
+      "text": "維生素B6",
+      "bbox": {
+        "x": 220,
+        "y": 370,
+        "width": 111,
+        "height": 21
+      },
+      "confidence": 0.9533
+    },
+    {
+      "text": "14.6毫克",
+      "bbox": {
+        "x": 404,
+        "y": 301,
+        "width": 108,
+        "height": 25
+      },
+      "confidence": 0.9788
+    },
+    {
+      "text": "1043%",
+      "bbox": {
+        "x": 673,
+        "y": 303,
+        "width": 87,
+        "height": 19
+      },
+      "confidence": 0.9887
+    },
+    {
+      "text": "10毫克",
+      "bbox": {
+        "x": 430,
+        "y": 335,
+        "width": 82,
+        "height": 24
+      },
+      "confidence": 0.9792
+    },
+    {
+      "text": "625%",
+      "bbox": {
+        "x": 688,
+        "y": 337,
+        "width": 72,
+        "height": 18
+      },
+      "confidence": 0.9952
+    },
+    {
+      "text": "維生素B12",
+      "bbox": {
+        "x": 221,
+        "y": 403,
+        "width": 126,
+        "height": 22
+      },
+      "confidence": 0.9887
+    },
+    {
+      "text": "6.1毫克",
+      "bbox": {
+        "x": 420,
+        "y": 369,
+        "width": 94,
+        "height": 23
+      },
+      "confidence": 0.9614
+    },
+    {
+      "text": "12微克",
+      "bbox": {
+        "x": 430,
+        "y": 403,
+        "width": 83,
+        "height": 22
+      },
+      "confidence": 0.9799
+    },
+    {
+      "text": "381%",
+      "bbox": {
+        "x": 688,
+        "y": 372,
+        "width": 72,
+        "height": 18
+      },
+      "confidence": 0.9904
+    },
+    {
+      "text": "500%",
+      "bbox": {
+        "x": 688,
+        "y": 404,
+        "width": 72,
+        "height": 20
+      },
+      "confidence": 0.9895
+    },
+    {
+      "text": "維生素C",
+      "bbox": {
+        "x": 220,
+        "y": 435,
+        "width": 94,
+        "height": 24
+      },
+      "confidence": 0.9659
+    },
+    {
+      "text": "500毫克",
+      "bbox": {
+        "x": 411,
+        "y": 436,
+        "width": 103,
+        "height": 23
+      },
+      "confidence": 0.9895
+    },
+    {
+      "text": "500%",
+      "bbox": {
+        "x": 689,
+        "y": 437,
+        "width": 71,
+        "height": 20
+      },
+      "confidence": 0.9878
+    },
+    {
+      "text": "維生素E",
+      "bbox": {
+        "x": 220,
+        "y": 469,
+        "width": 92,
+        "height": 24
+      },
+      "confidence": 0.9579
+    },
+    {
+      "text": "20.1毫克x-TE(30IU) 155%",
+      "bbox": {
+        "x": 403,
+        "y": 471,
+        "width": 358,
+        "height": 25
+      },
+      "confidence": 0.4499
+    },
+    {
+      "text": "菸鹼素",
+      "bbox": {
+        "x": 220,
+        "y": 503,
+        "width": 77,
+        "height": 24
+      },
+      "confidence": 0.9823
+    },
+    {
+      "text": "100毫克 NE",
+      "bbox": {
+        "x": 412,
+        "y": 504,
+        "width": 140,
+        "height": 23
+      },
+      "confidence": 0.9448
+    },
+    {
+      "text": "556%",
+      "bbox": {
+        "x": 688,
+        "y": 506,
+        "width": 73,
+        "height": 19
+      },
+      "confidence": 0.9899
+    },
+    {
+      "text": "葉酸",
+      "bbox": {
+        "x": 221,
+        "y": 538,
+        "width": 49,
+        "height": 23
+      },
+      "confidence": 0.9767
+    },
+    {
+      "text": "400微克",
+      "bbox": {
+        "x": 412,
+        "y": 538,
+        "width": 100,
+        "height": 22
+      },
+      "confidence": 0.9804
+    },
+    {
+      "text": "100%",
+      "bbox": {
+        "x": 690,
+        "y": 540,
+        "width": 70,
+        "height": 18
+      },
+      "confidence": 0.9964
+    },
+    {
+      "text": "泛酸",
+      "bbox": {
+        "x": 221,
+        "y": 570,
+        "width": 50,
+        "height": 24
+      },
+      "confidence": 0.9919
+    },
+    {
+      "text": "20毫克",
+      "bbox": {
+        "x": 429,
+        "y": 571,
+        "width": 85,
+        "height": 23
+      },
+      "confidence": 0.9891
+    },
+    {
+      "text": "400%",
+      "bbox": {
+        "x": 688,
+        "y": 572,
+        "width": 72,
+        "height": 21
+      },
+      "confidence": 0.9897
+    },
+    {
+      "text": "生物素",
+      "bbox": {
+        "x": 221,
+        "y": 605,
+        "width": 76,
+        "height": 23
+      },
+      "confidence": 0.9838
+    },
+    {
+      "text": "45微克",
+      "bbox": {
+        "x": 429,
+        "y": 605,
+        "width": 84,
+        "height": 22
+      },
+      "confidence": 0.9851
+    },
+    {
+      "text": "150%",
+      "bbox": {
+        "x": 689,
+        "y": 606,
+        "width": 72,
+        "height": 19
+      },
+      "confidence": 0.9944
+    },
+    {
+      "text": "成分:抗壞血酸(維生素C)97%(維生素C、羥丙基甲基",
+      "bbox": {
+        "x": 215,
+        "y": 646,
+        "width": 572,
+        "height": 25
+      },
+      "confidence": 0.9268
+    },
+    {
+      "text": "纖維素)、微結晶狀纖維素、菸鹼醯胺99.5%(菸鹼醯胺",
+      "bbox": {
+        "x": 215,
+        "y": 677,
+        "width": 571,
+        "height": 25
+      },
+      "confidence": 0.9512
+    },
+    {
+      "text": "、二氧化矽)、乙酸dl-e-生育醇酯(維生素E)50%(維生",
+      "bbox": {
+        "x": 223,
+        "y": 708,
+        "width": 563,
+        "height": 25
+      },
+      "confidence": 0.5933
+    },
+    {
+      "text": "素E、麥芽糊精、辛烯基丁二酸鈉澱粉、二氧化矽)、聚",
+      "bbox": {
+        "x": 215,
+        "y": 739,
+        "width": 572,
+        "height": 24
+      },
+      "confidence": 0.915
+    },
+    {
+      "text": "乙烯聚吡咯烷酮、本多酸鈣、聚乙烯醇、硝酸硫胺明(",
+      "bbox": {
+        "x": 216,
+        "y": 770,
+        "width": 571,
+        "height": 23
+      },
+      "confidence": 0.9326
+    },
+    {
+      "text": "維生素B1)、核黃素(維生素B2)、二氧化鈦、滑石粉、",
+      "bbox": {
+        "x": 215,
+        "y": 800,
+        "width": 564,
+        "height": 25
+      },
+      "confidence": 0.9618
+    },
+    {
+      "text": "鹽酸吡哆辛(維生素B6)、二氧化矽、生物素1%(磷酸氫",
+      "bbox": {
+        "x": 216,
+        "y": 832,
+        "width": 571,
+        "height": 24
+      },
+      "confidence": 0.918
+    },
+    {
+      "text": "鈣、生物素)、硬脂酸鎂、食用黃色五號鋁麗基、氰鈷",
+      "bbox": {
+        "x": 215,
+        "y": 862,
+        "width": 571,
+        "height": 24
+      },
+      "confidence": 0.9154
+    },
+    {
+      "text": "胺明(維生素B12)1%(辛烯基丁二酸鈉澱粉、檸檬酸鈉",
+      "bbox": {
+        "x": 216,
+        "y": 893,
+        "width": 570,
+        "height": 25
+      },
+      "confidence": 0.9615
+    },
+    {
+      "text": "、檸檬酸、二氧化矽、維生素B12)、喹啉黃鋁麗基、",
+      "bbox": {
+        "x": 224,
+        "y": 924,
+        "width": 554,
+        "height": 24
+      },
+      "confidence": 0.8839
+    },
+    {
+      "text": "卵磷脂、葉酸、玉米糖膠、食用藍色二號鋁麗基。",
+      "bbox": {
+        "x": 215,
+        "y": 956,
+        "width": 515,
+        "height": 23
+      },
+      "confidence": 0.9354
+    }
+  ],
+  "reading": null
+}

@@ -1,0 +1,497 @@
+{
+  "image_id": "p01-img01",
+  "engine_version": "cloud_vision/document_text_detection/builtin/stable",
+  "blocks": [
+    {
+      "text": "穀保",
+      "bbox": {
+        "x": 11,
+        "y": 1656,
+        "width": 69,
+        "height": 69
+      },
+      "confidence": 0.6727
+    },
+    {
+      "text": "OHALEONT",
+      "bbox": {
+        "x": 516,
+        "y": 799,
+        "width": 102,
+        "height": 65
+      },
+      "confidence": 0.6579
+    },
+    {
+      "text": "EON 品名:挺立 葡萄糖胺強力錠",
+      "bbox": {
+        "x": 551,
+        "y": 726,
+        "width": 700,
+        "height": 121
+      },
+      "confidence": 0.3597
+    },
+    {
+      "text": "營養標示",
+      "bbox": {
+        "x": 910,
+        "y": 811,
+        "width": 167,
+        "height": 48
+      },
+      "confidence": 0.9858
+    },
+    {
+      "text": "每一份量 3 錠",
+      "bbox": {
+        "x": 661,
+        "y": 879,
+        "width": 205,
+        "height": 55
+      },
+      "confidence": 0.8534
+    },
+    {
+      "text": "老街溪",
+      "bbox": {
+        "x": 258,
+        "y": 1469,
+        "width": 274,
+        "height": 268
+      },
+      "confidence": 0.4738
+    },
+    {
+      "text": "|維生素B1",
+      "bbox": {
+        "x": 656,
+        "y": 1027,
+        "width": 115,
+        "height": 41
+      },
+      "confidence": 0.6449
+    },
+    {
+      "text": "維生素B6",
+      "bbox": {
+        "x": 670,
+        "y": 1063,
+        "width": 108,
+        "height": 38
+      },
+      "confidence": 0.8894
+    },
+    {
+      "text": "維生素B12",
+      "bbox": {
+        "x": 671,
+        "y": 1101,
+        "width": 112,
+        "height": 36
+      },
+      "confidence": 0.9782
+    },
+    {
+      "text": "維生素D",
+      "bbox": {
+        "x": 672,
+        "y": 1140,
+        "width": 95,
+        "height": 34
+      },
+      "confidence": 0.9687
+    },
+    {
+      "text": "本包裝含 50 份",
+      "bbox": {
+        "x": 663,
+        "y": 918,
+        "width": 205,
+        "height": 52
+      },
+      "confidence": 0.9098
+    },
+    {
+      "text": "3毫克",
+      "bbox": {
+        "x": 940,
+        "y": 1014,
+        "width": 90,
+        "height": 36
+      },
+      "confidence": 0.9877
+    },
+    {
+      "text": "3.15毫克",
+      "bbox": {
+        "x": 894,
+        "y": 1050,
+        "width": 137,
+        "height": 41
+      },
+      "confidence": 0.9914
+    },
+    {
+      "text": "9微克",
+      "bbox": {
+        "x": 942,
+        "y": 1091,
+        "width": 89,
+        "height": 33
+      },
+      "confidence": 0.9586
+    },
+    {
+      "text": "每份",
+      "bbox": {
+        "x": 957,
+        "y": 963,
+        "width": 72,
+        "height": 33
+      },
+      "confidence": 0.9928
+    },
+    {
+      "text": "每日參考值百分比",
+      "bbox": {
+        "x": 1100,
+        "y": 959,
+        "width": 243,
+        "height": 34
+      },
+      "confidence": 0.9835
+    },
+    {
+      "text": "214%",
+      "bbox": {
+        "x": 1269,
+        "y": 1014,
+        "width": 72,
+        "height": 28
+      },
+      "confidence": 0.9862
+    },
+    {
+      "text": "197%",
+      "bbox": {
+        "x": 1274,
+        "y": 1053,
+        "width": 67,
+        "height": 24
+      },
+      "confidence": 0.9821
+    },
+    {
+      "text": "375%",
+      "bbox": {
+        "x": 1275,
+        "y": 1092,
+        "width": 68,
+        "height": 22
+      },
+      "confidence": 0.9864
+    },
+    {
+      "text": "6.75微克(270IU)",
+      "bbox": {
+        "x": 897,
+        "y": 1128,
+        "width": 250,
+        "height": 39
+      },
+      "confidence": 0.9366
+    },
+    {
+      "text": "68%",
+      "bbox": {
+        "x": 1291,
+        "y": 1129,
+        "width": 53,
+        "height": 23
+      },
+      "confidence": 0.9907
+    },
+    {
+      "text": "維生素E",
+      "bbox": {
+        "x": 672,
+        "y": 1178,
+        "width": 95,
+        "height": 29
+      },
+      "confidence": 0.9676
+    },
+    {
+      "text": "24.1毫克a-TE(36IU)",
+      "bbox": {
+        "x": 898,
+        "y": 1164,
+        "width": 305,
+        "height": 41
+      },
+      "confidence": 0.8374
+    },
+    {
+      "text": "185%",
+      "bbox": {
+        "x": 1278,
+        "y": 1166,
+        "width": 66,
+        "height": 23
+      },
+      "confidence": 0.9861
+    },
+    {
+      "text": "˙菸鹼素",
+      "bbox": {
+        "x": 663,
+        "y": 1214,
+        "width": 88,
+        "height": 36
+      },
+      "confidence": 0.4824
+    },
+    {
+      "text": "25.5毫克NE",
+      "bbox": {
+        "x": 899,
+        "y": 1207,
+        "width": 178,
+        "height": 37
+      },
+      "confidence": 0.9726
+    },
+    {
+      "text": "142%",
+      "bbox": {
+        "x": 1279,
+        "y": 1201,
+        "width": 65,
+        "height": 28
+      },
+      "confidence": 0.9875
+    },
+    {
+      "text": "鈣",
+      "bbox": {
+        "x": 672,
+        "y": 1251,
+        "width": 30,
+        "height": 31
+      },
+      "confidence": 0.9859
+    },
+    {
+      "text": "360毫克",
+      "bbox": {
+        "x": 908,
+        "y": 1248,
+        "width": 131,
+        "height": 33
+      },
+      "confidence": 0.9916
+    },
+    {
+      "text": "30%",
+      "bbox": {
+        "x": 1296,
+        "y": 1240,
+        "width": 52,
+        "height": 25
+      },
+      "confidence": 0.9937
+    },
+    {
+      "text": "其他成分(每份)",
+      "bbox": {
+        "x": 864,
+        "y": 1306,
+        "width": 284,
+        "height": 43
+      },
+      "confidence": 0.9673
+    },
+    {
+      "text": "【葡萄糖胺",
+      "bbox": {
+        "x": 666,
+        "y": 1364,
+        "width": 119,
+        "height": 38
+      },
+      "confidence": 0.5696
+    },
+    {
+      "text": "750毫克",
+      "bbox": {
+        "x": 910,
+        "y": 1364,
+        "width": 130,
+        "height": 39
+      },
+      "confidence": 0.9944
+    },
+    {
+      "text": "國際",
+      "bbox": {
+        "x": 1472,
+        "y": 939,
+        "width": 232,
+        "height": 174
+      },
+      "confidence": 0.9194
+    },
+    {
+      "text": "豬軟骨素硫酸鈉 150毫克",
+      "bbox": {
+        "x": 676,
+        "y": 1400,
+        "width": 364,
+        "height": 41
+      },
+      "confidence": 0.9448
+    },
+    {
+      "text": "成分:檸檬酸鈣、葡萄糖胺鹽酸鹽、豬軟骨素硫酸鈉、羧甲基澱",
+      "bbox": {
+        "x": 675,
+        "y": 1444,
+        "width": 688,
+        "height": 50
+      },
+      "confidence": 0.4662
+    },
+    {
+      "text": "「粉鈉(甘醇酸澱粉鈉)、微結晶狀a-纖維素、聚乙烯醇、羥丙基甲",
+      "bbox": {
+        "x": 663,
+        "y": 1475,
+        "width": 699,
+        "height": 49
+      },
+      "confidence": 0.8893
+    },
+    {
+      "text": "「基纖維素、硬脂酸鎂、乙酸d-a-生育醇酯(維生素E)、菸鹼醯胺、、",
+      "bbox": {
+        "x": 663,
+        "y": 1510,
+        "width": 712,
+        "height": 50
+      },
+      "confidence": 0.7147
+    },
+    {
+      "text": "「 二氧化鈦、聚乙二醇、滑石粉、二氧化矽、鹽酸吡哆辛(維生素",
+      "bbox": {
+        "x": 663,
+        "y": 1541,
+        "width": 703,
+        "height": 53
+      },
+      "confidence": 0.2876
+    },
+    {
+      "text": "|Be)、硝酸硫胺明(維生素B,硝酸噻胺)、膽鈣化醇(維生素D3)(辛烯",
+      "bbox": {
+        "x": 664,
+        "y": 1570,
+        "width": 705,
+        "height": 56
+      },
+      "confidence": 0.2775
+    },
+    {
+      "text": "「基丁二酸鈉澱粉、蔗糖、L-抗壞血酸鈉(抗氧化劑)、中鏈三酸甘|",
+      "bbox": {
+        "x": 663,
+        "y": 1602,
+        "width": 719,
+        "height": 60
+      },
+      "confidence": 0.7389
+    },
+    {
+      "text": "「鐵(黃)、氰鈷胺明(維生素B12)(辛烯基丁二酸鈉澱粉、檸檬酸鈉、",
+      "bbox": {
+        "x": 664,
+        "y": 1671,
+        "width": 702,
+        "height": 60
+      },
+      "confidence": 0.8958
+    },
+    {
+      "text": "| 檸檬酸、二氧化矽、維生素B12)、氧化鐵(黑)。",
+      "bbox": {
+        "x": 664,
+        "y": 1703,
+        "width": 504,
+        "height": 60
+      },
+      "confidence": 0.7254
+    },
+    {
+      "text": "| 油酯、二氧化矽、生育醇(維生素E)(抗氧化劑)、維生素D3)、氧化 |",
+      "bbox": {
+        "x": 663,
+        "y": 1635,
+        "width": 720,
+        "height": 62
+      },
+      "confidence": 0.7831
+    },
+    {
+      "text": "批號:",
+      "bbox": {
+        "x": 668,
+        "y": 1778,
+        "width": 84,
+        "height": 54
+      },
+      "confidence": 0.9573
+    },
+    {
+      "text": "有效日期:",
+      "bbox": {
+        "x": 663,
+        "y": 1862,
+        "width": 159,
+        "height": 71
+      },
+      "confidence": 0.9832
+    },
+    {
+      "text": "FD238",
+      "bbox": {
+        "x": 920,
+        "y": 1814,
+        "width": 204,
+        "height": 52
+      },
+      "confidence": 0.9937
+    },
+    {
+      "text": "2026.11.20",
+      "bbox": {
+        "x": 923,
+        "y": 1887,
+        "width": 337,
+        "height": 61
+      },
+      "confidence": 0.9841
+    },
+    {
+      "text": "150",
+      "bbox": {
+        "x": 540,
+        "y": 1816,
+        "width": 82,
+        "height": 80
+      },
+      "confidence": 0.8626
+    }
+  ],
+  "reading": null
+}
