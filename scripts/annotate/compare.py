@@ -8,8 +8,9 @@
 - 數值與文字欄位：完全一致率（κ 不適用連續數值）。名稱以全形轉半形、去空白後比較。
 - κ 只說明兩個模型「彼此多一致」，不代表正確；正確率要靠人工抽查估計（見 stats）。
 
-抽查名單：兩邊一致的欄位中，高風險欄位（每一份量、劑型、單位、%、元素量）全部列入；
-其他欄位以固定亂數種子隨機抽 sample_rate 比例（無條件進位），同一份輸入一定產生同一份名單。
+抽查名單：兩邊一致、而且兩邊都有填值的高風險欄位（每一份量、劑型、單位、%、元素量）全部列入；
+兩邊都填空白的高風險欄位（例如成分欄賦形劑沒有單位）和其他欄位一起，以固定亂數種子隨機抽
+sample_rate 比例（無條件進位），同一份輸入一定產生同一份名單。
 
 列數核對：抽查只看「兩邊都有」的欄位，兩個模型都漏掉（或都多出）的列不會出現在任何清單。
 因此每張照片列出兩邊的列數，由人工填照片上實際的列數；實際列數比兩邊都多或都少，就要回去看那張照片。
@@ -196,13 +197,14 @@ def _count(items: list[FieldComparison]) -> tuple[int, int]:
 
 def _spot_checks(fields: list[FieldComparison], seed: int, sample_rate: float) -> list[SpotCheck]:
     agreed = [f for f in fields if f.agree]
-    others = [i for i, f in enumerate(agreed) if not f.high_risk]
+    full = {i for i, f in enumerate(agreed) if f.high_risk and f.a is not None}  # 兩邊一致，a 有值即兩邊都有值
+    others = [i for i in range(len(agreed)) if i not in full]
     k = math.ceil(sample_rate * len(others))
     picked = set(random.Random(seed).sample(others, k))
     return [
-        SpotCheck(f, "high_risk" if f.high_risk else "random")
+        SpotCheck(f, "high_risk" if i in full else "random")
         for i, f in enumerate(agreed)
-        if f.high_risk or i in picked
+        if i in full or i in picked
     ]
 
 

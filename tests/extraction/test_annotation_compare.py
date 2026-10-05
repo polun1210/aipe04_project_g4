@@ -134,15 +134,22 @@ def test_只有一方標註的照片不比對並列出():
 # ── 抽查名單 ───────────────────────────────────────────────────────
 
 
-def test_一致的高風險欄位全部列入抽查(report):
-    # 每一份量 2 ＋ unit 一致 3 ＋ percent_dv 4 ＋ 元素量 4 = 13
+def test_一致且有值的高風險欄位全部列入抽查(report):
+    # 每一份量 2 ＋ unit 一致 3 ＋ percent_dv 有值 2 ＋ 元素量有值 1 = 8
     high = [s for s in report.spot_checks if s.reason == "high_risk"]
-    assert len(high) == 13
+    assert len(high) == 8
+    assert all(s.item.a is not None for s in high)
+
+
+def test_兩邊都空白的高風險欄位改為隨機抽查(report):
+    # percent_dv 兩邊空白 2 ＋ 元素量兩邊空白 3 = 5，不在全查名單
+    blank_high = [s for s in report.spot_checks if s.item.high_risk and s.item.a is None]
+    assert all(s.reason == "random" for s in blank_high)
 
 
 def test_其他欄位依比例無條件進位抽查(report):
-    # 一致的非高風險欄位：名稱 4 ＋ 每份含量 3 ＋ 區塊 4 = 11，20% → 2.2 → 3
-    assert sum(s.reason == "random" for s in report.spot_checks) == 3
+    # 名稱 4 ＋ 每份含量 3 ＋ 區塊 4 ＋ 兩邊空白的高風險欄位 5 = 16，20% → 3.2 → 4
+    assert sum(s.reason == "random" for s in report.spot_checks) == 4
 
 
 def test_不一致的欄位不列入抽查(report):
@@ -176,7 +183,7 @@ def test_輸出不一致清單與抽查名單供人工填寫(report, tmp_path):
     with (tmp_path / "disagreements.csv").open(encoding="utf-8-sig") as fh:
         assert len(list(csv.DictReader(fh))) == 2
     with (tmp_path / "spot_checks.csv").open(encoding="utf-8-sig") as fh:
-        assert len(list(csv.DictReader(fh))) == 16
+        assert len(list(csv.DictReader(fh))) == 12  # 高風險全查 8 ＋ 隨機 4
     assert "0.500" in (tmp_path / "summary.md").read_text(encoding="utf-8")
 
 
