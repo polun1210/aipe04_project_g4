@@ -122,9 +122,23 @@ def _observe_reading(result: EngineResult, latency_ms: float | None) -> Observat
 
 
 def map_unit(raw: str | None) -> Unit | None:
+    """標示上的單位寫法很多：「毫克」「毫克mg」「微克(270IU)」「毫克a-TE(36IU)」「毫克mg NE」。
+
+    先去掉括號內的換算說明，再認 α-TE／NE 這類營養素專用單位，最後取開頭的基本單位（長的先比）。
+    """
     if raw is None:
         return None
-    return _UNIT_MAP.get(compact(raw).lower(), Unit.OTHER)
+    text = strip_parenthetical(raw).lower().replace("α", "a")
+    if text in _UNIT_MAP:
+        return _UNIT_MAP[text]
+    if text.endswith(("a-te", "ate")):
+        return Unit.MG_ATE
+    if text.endswith("ne"):
+        return Unit.MG_NE
+    for key in sorted(_UNIT_MAP, key=len, reverse=True):
+        if text.startswith(key):
+            return _UNIT_MAP[key]
+    return Unit.OTHER
 
 
 def score(result: EngineResult, gold_rows: list[NutrientDraft], gold_serving: float | None) -> GoldScore:

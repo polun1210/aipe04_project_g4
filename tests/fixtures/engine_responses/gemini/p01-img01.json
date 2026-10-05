@@ -1,0 +1,292 @@
+{
+  "image_id": "p01-img01",
+  "engine_version": "gemini/gemini-3.5-flash-lite/prompt-g1",
+  "blocks": [
+    {
+      "text": "營養標示",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "其他成分(每份)",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "成分",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "每一份量 3 錠",
+      "bbox": {
+        "x": 660,
+        "y": 884,
+        "width": 199,
+        "height": 45
+      },
+      "confidence": null
+    },
+    {
+      "text": "維生素B1 3毫克 214%",
+      "bbox": {
+        "x": 669,
+        "y": 1019,
+        "width": 677,
+        "height": 40
+      },
+      "confidence": null
+    },
+    {
+      "text": "維生素B6 3.15毫克 197%",
+      "bbox": {
+        "x": 669,
+        "y": 1061,
+        "width": 676,
+        "height": 43
+      },
+      "confidence": null
+    },
+    {
+      "text": "維生素B12 9微克 375%",
+      "bbox": {
+        "x": 667,
+        "y": 1099,
+        "width": 678,
+        "height": 45
+      },
+      "confidence": null
+    },
+    {
+      "text": "維生素D 6.75微克(270IU) 68%",
+      "bbox": {
+        "x": 667,
+        "y": 1142,
+        "width": 678,
+        "height": 40
+      },
+      "confidence": null
+    },
+    {
+      "text": "維生素E 24.1毫克a-TE(36IU) 185%",
+      "bbox": {
+        "x": 667,
+        "y": 1182,
+        "width": 678,
+        "height": 43
+      },
+      "confidence": null
+    },
+    {
+      "text": "菸鹼素 25.5毫克NE 142%",
+      "bbox": {
+        "x": 671,
+        "y": 1225,
+        "width": 674,
+        "height": 42
+      },
+      "confidence": null
+    },
+    {
+      "text": "鈣 360毫克 30%",
+      "bbox": {
+        "x": 671,
+        "y": 1267,
+        "width": 674,
+        "height": 40
+      },
+      "confidence": null
+    },
+    {
+      "text": "葡萄糖胺 750毫克",
+      "bbox": {
+        "x": 674,
+        "y": 1369,
+        "width": 364,
+        "height": 33
+      },
+      "confidence": null
+    },
+    {
+      "text": "豬軟骨素硫酸鈉 150毫克",
+      "bbox": {
+        "x": 672,
+        "y": 1404,
+        "width": 366,
+        "height": 36
+      },
+      "confidence": null
+    },
+    {
+      "text": "成分：檸檬酸鈣、葡萄糖胺鹽酸鹽、豬軟骨素硫酸鈉、羧甲基澱粉鈉(甘醇酸澱粉鈉)、微結晶狀a-纖維素、聚乙烯醇、羥丙基甲基纖維素、硬脂酸鎂、乙酸d-a-生育醇酯(維生素E)、菸鹼醯胺、二氧化鈦、聚乙二醇、滑石粉、二氧化矽、鹽酸吡哆辛(維生素B6)、硝酸硫胺明(維生素B1)、硝酸噻哪胺)、膽鈣化醇(維生素D3)(辛烯基丁二酸澱粉、蔗糖、L-抗壞血酸鈉(抗氧化劑)、中鏈三酸甘油酯、二氧化矽、生育醇(維生素E)(抗氧化劑)、維生素D3)、氧化鐵(黃)、氰鈷胺明(維生素B12)(辛烯基丁二酸澱粉、檸檬酸鈉、檸檬酸、二氧化矽、維生素B12)、氧化鐵(黑)。",
+      "bbox": {
+        "x": 672,
+        "y": 1449,
+        "width": 701,
+        "height": 293
+      },
+      "confidence": null
+    }
+  ],
+  "reading": {
+    "serving": {
+      "raw_text": "每一份量 3 錠",
+      "serving_size": 3.0,
+      "dose_unit_raw": "錠",
+      "bbox": {
+        "x": 660,
+        "y": 884,
+        "width": 199,
+        "height": 45
+      }
+    },
+    "rows": [
+      {
+        "raw_text": "維生素B1 3毫克 214%",
+        "raw_name": "維生素B1",
+        "amount": 3.0,
+        "unit_raw": "毫克",
+        "percent_dv": 214.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 669,
+          "y": 1019,
+          "width": 677,
+          "height": 40
+        }
+      },
+      {
+        "raw_text": "維生素B6 3.15毫克 197%",
+        "raw_name": "維生素B6",
+        "amount": 3.15,
+        "unit_raw": "毫克",
+        "percent_dv": 197.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 669,
+          "y": 1061,
+          "width": 676,
+          "height": 43
+        }
+      },
+      {
+        "raw_text": "維生素B12 9微克 375%",
+        "raw_name": "維生素B12",
+        "amount": 9.0,
+        "unit_raw": "微克",
+        "percent_dv": 375.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 667,
+          "y": 1099,
+          "width": 678,
+          "height": 45
+        }
+      },
+      {
+        "raw_text": "維生素D 6.75微克(270IU) 68%",
+        "raw_name": "維生素D",
+        "amount": 6.75,
+        "unit_raw": "微克(270IU)",
+        "percent_dv": 68.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 667,
+          "y": 1142,
+          "width": 678,
+          "height": 40
+        }
+      },
+      {
+        "raw_text": "維生素E 24.1毫克a-TE(36IU) 185%",
+        "raw_name": "維生素E",
+        "amount": 24.1,
+        "unit_raw": "毫克a-TE(36IU)",
+        "percent_dv": 185.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 667,
+          "y": 1182,
+          "width": 678,
+          "height": 43
+        }
+      },
+      {
+        "raw_text": "菸鹼素 25.5毫克NE 142%",
+        "raw_name": "菸鹼素",
+        "amount": 25.5,
+        "unit_raw": "毫克NE",
+        "percent_dv": 142.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 671,
+          "y": 1225,
+          "width": 674,
+          "height": 42
+        }
+      },
+      {
+        "raw_text": "鈣 360毫克 30%",
+        "raw_name": "鈣",
+        "amount": 360.0,
+        "unit_raw": "毫克",
+        "percent_dv": 30.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 671,
+          "y": 1267,
+          "width": 674,
+          "height": 40
+        }
+      },
+      {
+        "raw_text": "葡萄糖胺 750毫克",
+        "raw_name": "葡萄糖胺",
+        "amount": 750.0,
+        "unit_raw": "毫克",
+        "percent_dv": null,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 674,
+          "y": 1369,
+          "width": 364,
+          "height": 33
+        }
+      },
+      {
+        "raw_text": "豬軟骨素硫酸鈉 150毫克",
+        "raw_name": "豬軟骨素硫酸鈉",
+        "amount": 150.0,
+        "unit_raw": "毫克",
+        "percent_dv": null,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 672,
+          "y": 1404,
+          "width": 366,
+          "height": 36
+        }
+      },
+      {
+        "raw_text": "成分：檸檬酸鈣、葡萄糖胺鹽酸鹽、豬軟骨素硫酸鈉、羧甲基澱粉鈉(甘醇酸澱粉鈉)、微結晶狀a-纖維素、聚乙烯醇、羥丙基甲基纖維素、硬脂酸鎂、乙酸d-a-生育醇酯(維生素E)、菸鹼醯胺、二氧化鈦、聚乙二醇、滑石粉、二氧化矽、鹽酸吡哆辛(維生素B6)、硝酸硫胺明(維生素B1)、硝酸噻哪胺)、膽鈣化醇(維生素D3)(辛烯基丁二酸澱粉、蔗糖、L-抗壞血酸鈉(抗氧化劑)、中鏈三酸甘油酯、二氧化矽、生育醇(維生素E)(抗氧化劑)、維生素D3)、氧化鐵(黃)、氰鈷胺明(維生素B12)(辛烯基丁二酸澱粉、檸檬酸鈉、檸檬酸、二氧化矽、維生素B12)、氧化鐵(黑)。",
+        "raw_name": "檸檬酸鈣、葡萄糖胺鹽酸鹽、豬軟骨素硫酸鈉、羧甲基澱粉鈉(甘醇酸澱粉鈉)、微結晶狀a-纖維素、聚乙烯醇、羥丙基甲基纖維素、硬脂酸鎂、乙酸d-a-生育醇酯(維生素E)、菸鹼醯胺、二氧化鈦、聚乙二醇、滑石粉、二氧化矽、鹽酸吡哆辛(維生素B6)、硝酸硫胺明(維生素B1)、硝酸噻哪胺)、膽鈣化醇(維生素D3)(辛烯基丁二酸澱粉、蔗糖、L-抗壞血酸鈉(抗氧化劑)、中鏈三酸甘油酯、二氧化矽、生育醇(維生素E)(抗氧化劑)、維生素D3)、氧化鐵(黃)、氰鈷胺明(維生素B12)(辛烯基丁二酸澱粉、檸檬酸鈉、檸檬酸、二氧化矽、維生素B12)、氧化鐵(黑)",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 672,
+          "y": 1449,
+          "width": 701,
+          "height": 293
+        }
+      }
+    ],
+    "suggested_intake_raw": null,
+    "headings": [
+      "營養標示",
+      "其他成分(每份)",
+      "成分"
+    ]
+  }
+}

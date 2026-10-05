@@ -1,0 +1,232 @@
+{
+  "image_id": "p03-img01",
+  "engine_version": "gemini/gemini-3.5-flash-lite/prompt-g1",
+  "blocks": [
+    {
+      "text": "營養標示",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "每一份量 1錠",
+      "bbox": {
+        "x": 538,
+        "y": 1106,
+        "width": 228,
+        "height": 38
+      },
+      "confidence": null
+    },
+    {
+      "text": "維生素C 15毫克 15%",
+      "bbox": {
+        "x": 538,
+        "y": 1255,
+        "width": 635,
+        "height": 48
+      },
+      "confidence": null
+    },
+    {
+      "text": "維生素D 6.63微克(265IU) 66%",
+      "bbox": {
+        "x": 538,
+        "y": 1305,
+        "width": 633,
+        "height": 38
+      },
+      "confidence": null
+    },
+    {
+      "text": "維生素K 13.5微克 11%",
+      "bbox": {
+        "x": 538,
+        "y": 1340,
+        "width": 633,
+        "height": 33
+      },
+      "confidence": null
+    },
+    {
+      "text": "鈣 600毫克 50%",
+      "bbox": {
+        "x": 538,
+        "y": 1390,
+        "width": 633,
+        "height": 33
+      },
+      "confidence": null
+    },
+    {
+      "text": "鎂 75毫克 19%",
+      "bbox": {
+        "x": 538,
+        "y": 1425,
+        "width": 633,
+        "height": 41
+      },
+      "confidence": null
+    },
+    {
+      "text": "鋅 7.5毫克 50%",
+      "bbox": {
+        "x": 538,
+        "y": 1466,
+        "width": 633,
+        "height": 33
+      },
+      "confidence": null
+    },
+    {
+      "text": "銅 0.5毫克 *",
+      "bbox": {
+        "x": 538,
+        "y": 1501,
+        "width": 631,
+        "height": 43
+      },
+      "confidence": null
+    },
+    {
+      "text": "錳 1.75毫克 *",
+      "bbox": {
+        "x": 538,
+        "y": 1546,
+        "width": 633,
+        "height": 45
+      },
+      "confidence": null
+    }
+  ],
+  "reading": {
+    "serving": {
+      "raw_text": "每一份量 1錠",
+      "serving_size": 1.0,
+      "dose_unit_raw": "錠",
+      "bbox": {
+        "x": 538,
+        "y": 1106,
+        "width": 228,
+        "height": 38
+      }
+    },
+    "rows": [
+      {
+        "raw_text": "維生素C 15毫克 15%",
+        "raw_name": "維生素C",
+        "amount": 15.0,
+        "unit_raw": "毫克",
+        "percent_dv": 15.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 538,
+          "y": 1255,
+          "width": 635,
+          "height": 48
+        }
+      },
+      {
+        "raw_text": "維生素D 6.63微克(265IU) 66%",
+        "raw_name": "維生素D",
+        "amount": 6.63,
+        "unit_raw": "微克",
+        "percent_dv": 66.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 538,
+          "y": 1305,
+          "width": 633,
+          "height": 38
+        }
+      },
+      {
+        "raw_text": "維生素K 13.5微克 11%",
+        "raw_name": "維生素K",
+        "amount": 13.5,
+        "unit_raw": "微克",
+        "percent_dv": 11.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 538,
+          "y": 1340,
+          "width": 633,
+          "height": 33
+        }
+      },
+      {
+        "raw_text": "鈣 600毫克 50%",
+        "raw_name": "鈣",
+        "amount": 600.0,
+        "unit_raw": "毫克",
+        "percent_dv": 50.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 538,
+          "y": 1390,
+          "width": 633,
+          "height": 33
+        }
+      },
+      {
+        "raw_text": "鎂 75毫克 19%",
+        "raw_name": "鎂",
+        "amount": 75.0,
+        "unit_raw": "毫克",
+        "percent_dv": 19.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 538,
+          "y": 1425,
+          "width": 633,
+          "height": 41
+        }
+      },
+      {
+        "raw_text": "鋅 7.5毫克 50%",
+        "raw_name": "鋅",
+        "amount": 7.5,
+        "unit_raw": "毫克",
+        "percent_dv": 50.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 538,
+          "y": 1466,
+          "width": 633,
+          "height": 33
+        }
+      },
+      {
+        "raw_text": "銅 0.5毫克 *",
+        "raw_name": "銅",
+        "amount": 0.5,
+        "unit_raw": "毫克",
+        "percent_dv": null,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 538,
+          "y": 1501,
+          "width": 631,
+          "height": 43
+        }
+      },
+      {
+        "raw_text": "錳 1.75毫克 *",
+        "raw_name": "錳",
+        "amount": 1.75,
+        "unit_raw": "毫克",
+        "percent_dv": null,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 538,
+          "y": 1546,
+          "width": 633,
+          "height": 45
+        }
+      }
+    ],
+    "suggested_intake_raw": null,
+    "headings": [
+      "營養標示"
+    ]
+  }
+}

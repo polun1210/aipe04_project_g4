@@ -6,7 +6,8 @@ from uuid import UUID
 import pytest
 
 from app.extraction.engines import cloud_vision, gemini
-from scripts.compare_routes import build_report, main
+from app.schemas.enums import Unit
+from scripts.compare_routes import map_unit, build_report, main
 
 PRODUCT = UUID("b2000000-0000-4000-8000-000000000002")
 
@@ -140,3 +141,16 @@ def test_寫到指定檔案(responses, tmp_path):
     out = tmp_path / "docs" / "route.md"
     assert main(["--responses", str(responses), "--out", str(out)]) == 0
     assert out.read_text(encoding="utf-8").startswith("# 兩方案小測")
+
+
+@pytest.mark.parametrize(
+    ("raw", "unit"),
+    [
+        ("毫克", Unit.MG), ("毫克mg", Unit.MG), ("微克mcg", Unit.UG), ("微克(270IU)", Unit.UG),
+        ("毫克a-TE(36IU)", Unit.MG_ATE), ("毫克α-TE", Unit.MG_ATE), ("毫克mg NE", Unit.MG_NE), ("毫克NE", Unit.MG_NE),
+        ("億", Unit.OTHER),
+    ],
+)  # fmt: skip
+def test_比較表的單位對映認得中英並列與括號換算(raw, unit):
+    assert map_unit(raw) == unit
+
