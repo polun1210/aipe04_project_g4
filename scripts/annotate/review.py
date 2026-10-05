@@ -42,7 +42,7 @@ def _zh_field(field: str) -> str:
 
 def _zh_value(field: str, value: str) -> str:
     if value in ("", "null"):
-        return "（沒寫）"
+        return "（沒有這一列）" if field == "row" else "（沒寫）"
     return VALUE_ZH.get(field, {}).get(value, value)
 
 
@@ -124,6 +124,8 @@ def _section(image_id: str, src: str, count: dict, names: list[str], items: dict
         for i, r in items["spot"]
     )
     note_html = f"<p class='note'>⚠ {e(note)}</p>" if note else ""
+    done = items["dis"] and all(r.get("adjudicated") for _, r in items["dis"])
+    dis_hint = "✅ 已經裁決完成，不用再填" if done else "選對的那邊，都不對就自己填；整列多出來的填「刪除」"
     skipped = items.get("skipped", 0)
     skipped_html = f"<p class='skip'>另有隨機抽查 {skipped} 項本次跳過（只做全查）</p>" if skipped else ""
     return f"""
@@ -133,7 +135,7 @@ def _section(image_id: str, src: str, count: dict, names: list[str], items: dict
     <h2>{e(image_id)}</h2>{note_html}
     <p class="count">列數：{e(a)} {e(count[a])} 列、{e(b)} {e(count[b])} 列；照片上實際
       <input data-count="{e(image_id)}" size="4"> 列（營養標示每一列＋成分欄每一項）</p>
-    <h3>不一致（{len(items['dis'])}）：選對的那邊，都不對就自己填；整列多出來的填「刪除」</h3>
+    <h3>不一致（{len(items['dis'])}）：{dis_hint}</h3>
     <table><tr><th>成分（列）</th><th>要確認的項目</th><th>{e(a)} 讀成</th><th>{e(b)} 讀成</th><th>裁決</th></tr>{dis_rows}</table>
     <h3>抽查（{len(items['spot'])}）：兩個 AI 讀到一樣的值，看照片判斷它對不對</h3>
     <table><tr><th>成分（列）</th><th>要確認的項目</th><th>兩個 AI 都讀成</th><th></th><th>照片上是不是這樣？</th></tr>{spot_rows}</table>{skipped_html}

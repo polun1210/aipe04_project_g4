@@ -274,3 +274,10 @@ def test_指定照片的隨機抽查可以跳過只做全查(report, tmp_path):
     assert "隨機</td>" not in page and "全查</td>" in page
     assert "另有隨機抽查 4 項本次跳過" in page
 
+
+def test_整列不一致的空白顯示為沒有這一列(tmp_path):
+    report = compare({"p01-img01": A}, {"p01-img01": annotation(*B.rows[:3])})
+    out = tmp_path / "comparison"
+    write_outputs(report, out)
+    assert "（沒有這一列）" in build_review(out, tmp_path)
+
