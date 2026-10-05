@@ -251,3 +251,10 @@ def test_對照頁列出每張照片的不一致與抽查項目並引用本機�
     assert 'src="../images/p01-img01.jpg"' in page  # 相對路徑，不嵌入照片
     assert "不一致（2）" in page and "抽查（12）" in page
 
+
+def test_對照頁以CSV已填的值為初始值(report, tmp_path):
+    out = tmp_path / "comparison"
+    write_outputs(report, out)
+    page = build_review(out, tmp_path)
+    assert "r.adjudicated" in page and "r.actual_rows" in page  # 已裁決的結果不會在匯出時被空白蓋掉
+

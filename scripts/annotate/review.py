@@ -118,6 +118,10 @@ const DATA = {{DATA}};
 const KEY = "annotate-review:" + location.pathname;
 let state = { dis:{}, spot:{}, count:{} };
 try { state = Object.assign(state, JSON.parse(localStorage.getItem(KEY) || "{}")); } catch (e) {}
+// 已經填在 CSV 裡的值（例如在對話中裁決過的）當作初始值，避免匯出時被空白蓋掉
+DATA.disagreements.forEach((r, i) => { if (!state.dis[i] && r.adjudicated) state.dis[i] = r.adjudicated; });
+DATA.spot_checks.forEach((r, i) => { if (!state.spot[i] && r.verdict) state.spot[i] = r.verdict; });
+DATA.row_counts.forEach(r => { if (!state.count[r.image_id] && r.actual_rows) state.count[r.image_id] = r.actual_rows; });
 const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} progress(); };
 function progress() {
   const d = Object.values(state.dis).filter(v => v).length, s = Object.keys(state.spot).length, c = Object.values(state.count).filter(v => v).length;
