@@ -5,7 +5,11 @@ description = "補對了嗎？— AI 個人化營養補充評估系統（第一�
 requires-python = ">=3.12"
 # 系統執行時需要的套件。各模組需要的套件由負責人在自己的分支用 `uv add` 加入。
 dependencies = [
+    "google-cloud-vision>=3.16.0",
+    "google-genai>=2.28.0",
+    "pillow>=12.3.0",
     "pydantic>=2.7",
+    "python-dotenv>=1.2.4",
 ]
 
 # 只在開發時用、成品不需要的工具。

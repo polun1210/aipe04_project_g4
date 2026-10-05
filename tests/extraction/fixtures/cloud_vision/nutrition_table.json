@@ -1,0 +1,599 @@
+{
+  "image_id": "p01-img01",
+  "engine": "cloud_vision",
+  "request": {
+    "feature": "DOCUMENT_TEXT_DETECTION",
+    "model": "builtin/stable",
+    "language_hints": [
+      "zh-Hant",
+      "en"
+    ]
+  },
+  "response": {
+    "textAnnotations": [
+      {
+        "locale": "zh-Hant",
+        "description": "營養標示\n每一份量 2 粒\n維生素D 10微克\n鈣\n",
+        "boundingPoly": {
+          "vertices": [
+            {},
+            {
+              "x": 500
+            },
+            {
+              "x": 500,
+              "y": 230
+            },
+            {
+              "y": 230
+            }
+          ]
+        }
+      }
+    ],
+    "fullTextAnnotation": {
+      "pages": [
+        {
+          "property": {
+            "detectedLanguages": [
+              {
+                "languageCode": "zh-Hant",
+                "confidence": 0.9
+              }
+            ]
+          },
+          "width": 800,
+          "height": 1000,
+          "blocks": [
+            {
+              "boundingBox": {
+                "vertices": [
+                  {
+                    "x": 300,
+                    "y": 40
+                  },
+                  {
+                    "x": 500,
+                    "y": 40
+                  },
+                  {
+                    "x": 500,
+                    "y": 80
+                  },
+                  {
+                    "x": 300,
+                    "y": 80
+                  }
+                ]
+              },
+              "paragraphs": [
+                {
+                  "boundingBox": {
+                    "vertices": [
+                      {
+                        "x": 300,
+                        "y": 40
+                      },
+                      {
+                        "x": 500,
+                        "y": 40
+                      },
+                      {
+                        "x": 500,
+                        "y": 80
+                      },
+                      {
+                        "x": 300,
+                        "y": 80
+                      }
+                    ]
+                  },
+                  "words": [
+                    {
+                      "property": {
+                        "detectedLanguages": [
+                          {
+                            "languageCode": "zh-Hant"
+                          }
+                        ]
+                      },
+                      "boundingBox": {
+                        "vertices": [
+                          {
+                            "x": 300,
+                            "y": 40
+                          },
+                          {
+                            "x": 500,
+                            "y": 40
+                          },
+                          {
+                            "x": 500,
+                            "y": 80
+                          },
+                          {
+                            "x": 300,
+                            "y": 80
+                          }
+                        ]
+                      },
+                      "symbols": [
+                        {
+                          "text": "營",
+                          "confidence": 0.99
+                        },
+                        {
+                          "text": "養",
+                          "confidence": 0.99
+                        },
+                        {
+                          "text": "標",
+                          "confidence": 0.99
+                        },
+                        {
+                          "text": "示",
+                          "confidence": 0.99,
+                          "property": {
+                            "detectedBreak": {
+                              "type": "LINE_BREAK"
+                            }
+                          }
+                        }
+                      ],
+                      "confidence": 0.99
+                    }
+                  ],
+                  "confidence": 0.99
+                }
+              ],
+              "blockType": "TEXT",
+              "confidence": 0.99
+            },
+            {
+              "boundingBox": {
+                "vertices": [
+                  {
+                    "x": 60,
+                    "y": 120
+                  },
+                  {
+                    "x": 500,
+                    "y": 120
+                  },
+                  {
+                    "x": 500,
+                    "y": 230
+                  },
+                  {
+                    "x": 60,
+                    "y": 230
+                  }
+                ]
+              },
+              "paragraphs": [
+                {
+                  "boundingBox": {
+                    "vertices": [
+                      {
+                        "x": 60,
+                        "y": 120
+                      },
+                      {
+                        "x": 500,
+                        "y": 120
+                      },
+                      {
+                        "x": 500,
+                        "y": 230
+                      },
+                      {
+                        "x": 60,
+                        "y": 230
+                      }
+                    ]
+                  },
+                  "words": [
+                    {
+                      "property": {
+                        "detectedLanguages": [
+                          {
+                            "languageCode": "zh-Hant"
+                          }
+                        ]
+                      },
+                      "boundingBox": {
+                        "vertices": [
+                          {
+                            "x": 60,
+                            "y": 120
+                          },
+                          {
+                            "x": 220,
+                            "y": 120
+                          },
+                          {
+                            "x": 220,
+                            "y": 150
+                          },
+                          {
+                            "x": 60,
+                            "y": 150
+                          }
+                        ]
+                      },
+                      "symbols": [
+                        {
+                          "text": "每",
+                          "confidence": 0.98
+                        },
+                        {
+                          "text": "一",
+                          "confidence": 0.98
+                        },
+                        {
+                          "text": "份",
+                          "confidence": 0.98
+                        },
+                        {
+                          "text": "量",
+                          "confidence": 0.98,
+                          "property": {
+                            "detectedBreak": {
+                              "type": "SPACE"
+                            }
+                          }
+                        }
+                      ],
+                      "confidence": 0.98
+                    },
+                    {
+                      "property": {
+                        "detectedLanguages": [
+                          {
+                            "languageCode": "zh-Hant"
+                          }
+                        ]
+                      },
+                      "boundingBox": {
+                        "vertices": [
+                          {
+                            "x": 232,
+                            "y": 120
+                          },
+                          {
+                            "x": 250,
+                            "y": 120
+                          },
+                          {
+                            "x": 250,
+                            "y": 150
+                          },
+                          {
+                            "x": 232,
+                            "y": 150
+                          }
+                        ]
+                      },
+                      "symbols": [
+                        {
+                          "text": "2",
+                          "confidence": 0.97,
+                          "property": {
+                            "detectedBreak": {
+                              "type": "SPACE"
+                            }
+                          }
+                        }
+                      ],
+                      "confidence": 0.97
+                    },
+                    {
+                      "property": {
+                        "detectedLanguages": [
+                          {
+                            "languageCode": "zh-Hant"
+                          }
+                        ]
+                      },
+                      "boundingBox": {
+                        "vertices": [
+                          {
+                            "x": 262,
+                            "y": 120
+                          },
+                          {
+                            "x": 290,
+                            "y": 120
+                          },
+                          {
+                            "x": 290,
+                            "y": 150
+                          },
+                          {
+                            "x": 262,
+                            "y": 150
+                          }
+                        ]
+                      },
+                      "symbols": [
+                        {
+                          "text": "粒",
+                          "confidence": 0.95,
+                          "property": {
+                            "detectedBreak": {
+                              "type": "EOL_SURE_SPACE"
+                            }
+                          }
+                        }
+                      ],
+                      "confidence": 0.95
+                    },
+                    {
+                      "property": {
+                        "detectedLanguages": [
+                          {
+                            "languageCode": "zh-Hant"
+                          }
+                        ]
+                      },
+                      "boundingBox": {
+                        "vertices": [
+                          {
+                            "x": 60,
+                            "y": 200
+                          },
+                          {
+                            "x": 150,
+                            "y": 200
+                          },
+                          {
+                            "x": 150,
+                            "y": 230
+                          },
+                          {
+                            "x": 60,
+                            "y": 230
+                          }
+                        ]
+                      },
+                      "symbols": [
+                        {
+                          "text": "維",
+                          "confidence": 0.96
+                        },
+                        {
+                          "text": "生",
+                          "confidence": 0.96
+                        },
+                        {
+                          "text": "素",
+                          "confidence": 0.96
+                        }
+                      ],
+                      "confidence": 0.96
+                    },
+                    {
+                      "property": {
+                        "detectedLanguages": [
+                          {
+                            "languageCode": "zh-Hant"
+                          }
+                        ]
+                      },
+                      "boundingBox": {
+                        "vertices": [
+                          {
+                            "x": 150,
+                            "y": 200
+                          },
+                          {
+                            "x": 170,
+                            "y": 200
+                          },
+                          {
+                            "x": 170,
+                            "y": 230
+                          },
+                          {
+                            "x": 150,
+                            "y": 230
+                          }
+                        ]
+                      },
+                      "symbols": [
+                        {
+                          "text": "D",
+                          "confidence": 0.93,
+                          "property": {
+                            "detectedBreak": {
+                              "type": "SPACE"
+                            }
+                          }
+                        }
+                      ],
+                      "confidence": 0.93
+                    },
+                    {
+                      "property": {
+                        "detectedLanguages": [
+                          {
+                            "languageCode": "zh-Hant"
+                          }
+                        ]
+                      },
+                      "boundingBox": {
+                        "vertices": [
+                          {
+                            "x": 400,
+                            "y": 200
+                          },
+                          {
+                            "x": 440,
+                            "y": 200
+                          },
+                          {
+                            "x": 440,
+                            "y": 230
+                          },
+                          {
+                            "x": 400,
+                            "y": 230
+                          }
+                        ]
+                      },
+                      "symbols": [
+                        {
+                          "text": "1",
+                          "confidence": 0.99
+                        },
+                        {
+                          "text": "0",
+                          "confidence": 0.99
+                        }
+                      ],
+                      "confidence": 0.99
+                    },
+                    {
+                      "property": {
+                        "detectedLanguages": [
+                          {
+                            "languageCode": "zh-Hant"
+                          }
+                        ]
+                      },
+                      "boundingBox": {
+                        "vertices": [
+                          {
+                            "x": 440,
+                            "y": 200
+                          },
+                          {
+                            "x": 500,
+                            "y": 200
+                          },
+                          {
+                            "x": 500,
+                            "y": 230
+                          },
+                          {
+                            "x": 440,
+                            "y": 230
+                          }
+                        ]
+                      },
+                      "symbols": [
+                        {
+                          "text": "微",
+                          "confidence": 0.98
+                        },
+                        {
+                          "text": "克",
+                          "confidence": 0.98,
+                          "property": {
+                            "detectedBreak": {
+                              "type": "LINE_BREAK"
+                            }
+                          }
+                        }
+                      ],
+                      "confidence": 0.98
+                    }
+                  ],
+                  "confidence": 0.93
+                }
+              ],
+              "blockType": "TEXT",
+              "confidence": 0.93
+            },
+            {
+              "boundingBox": {
+                "vertices": [
+                  {},
+                  {
+                    "x": 30
+                  },
+                  {
+                    "x": 30,
+                    "y": 30
+                  },
+                  {
+                    "y": 30
+                  }
+                ]
+              },
+              "paragraphs": [
+                {
+                  "boundingBox": {
+                    "vertices": [
+                      {},
+                      {
+                        "x": 30
+                      },
+                      {
+                        "x": 30,
+                        "y": 30
+                      },
+                      {
+                        "y": 30
+                      }
+                    ]
+                  },
+                  "words": [
+                    {
+                      "property": {
+                        "detectedLanguages": [
+                          {
+                            "languageCode": "zh-Hant"
+                          }
+                        ]
+                      },
+                      "boundingBox": {
+                        "vertices": [
+                          {
+                            "x": -5,
+                            "y": -3
+                          },
+                          {
+                            "x": 30
+                          },
+                          {
+                            "x": 30,
+                            "y": 30
+                          },
+                          {
+                            "y": 30
+                          }
+                        ]
+                      },
+                      "symbols": [
+                        {
+                          "text": "鈣",
+                          "confidence": 0.9,
+                          "property": {
+                            "detectedBreak": {
+                              "type": "LINE_BREAK"
+                            }
+                          }
+                        }
+                      ],
+                      "confidence": 0.9
+                    }
+                  ],
+                  "confidence": 0.9
+                }
+              ],
+              "blockType": "TEXT",
+              "confidence": 0.9
+            }
+          ],
+          "confidence": 0.95
+        }
+      ],
+      "text": "營養標示\n每一份量 2 粒\n維生素D 10微克\n鈣\n"
+    }
+  },
+  "image_width": 800,
+  "image_height": 1000,
+  "latency_ms": 812.5,
+  "recorded_at": "2026-10-08T09:00:00Z"
+}

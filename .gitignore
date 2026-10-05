@@ -19,3 +19,6 @@ __pycache__/
 Thumbs.db
 .idea/
 .vscode/
+
+# 標示照片（版權，不進 repo，D09／D15）
+data/
