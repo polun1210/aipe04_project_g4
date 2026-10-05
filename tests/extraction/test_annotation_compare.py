@@ -5,6 +5,7 @@ import csv
 import pytest
 
 from app.schemas.enums import DoseUnit, LabelSection, Unit
+from scripts.annotate.review import build_review
 from scripts.annotate.compare import cohens_kappa, compare, row_count_mismatches, spot_check_stats, write_outputs
 from scripts.annotate.schema import AnnotatedRow, AnnotatedServing, Annotation
 
@@ -235,4 +236,18 @@ def test_實際列數介於兩邊之間時不重複列出(tmp_path):
 def test_實際列數未填的照片不計入(report, tmp_path):
     write_outputs(report, tmp_path)
     assert row_count_mismatches(tmp_path / "row_counts.csv") == []
+
+
+# ── 對照頁 ───────────────────────────────────────────────────────
+
+
+def test_對照頁列出每張照片的不一致與抽查項目並引用本機照片(report, tmp_path):
+    out, images = tmp_path / "comparison", tmp_path / "images"
+    images.mkdir()
+    (images / "p01-img01.jpg").write_bytes(b"fake-jpeg")
+    write_outputs(report, out)
+    page = build_review(out, images)
+    assert '<section id="p01-img01">' in page
+    assert 'src="../images/p01-img01.jpg"' in page  # 相對路徑，不嵌入照片
+    assert "不一致（2）" in page and "抽查（12）" in page
 

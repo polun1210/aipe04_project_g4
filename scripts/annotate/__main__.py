@@ -14,6 +14,7 @@ from scripts.annotate.compare import (
     summary_markdown,
     write_outputs,
 )
+from scripts.annotate.review import build_review
 from scripts.annotate.run import annotate_all
 
 IMAGE_SUFFIXES = {".jpg", ".jpeg", ".png", ".webp"}
@@ -68,6 +69,13 @@ def cmd_stats(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_review(args: argparse.Namespace) -> int:
+    out = args.comparison / "review.html"
+    out.write_text(build_review(args.comparison, args.images), encoding="utf-8")
+    print(f"已寫出 {out}；用瀏覽器打開，填完按「匯出」，把三個 CSV 放回 {args.comparison}")
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="python -m scripts.annotate", description="AI 雙盲標註工具")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -92,6 +100,11 @@ def main(argv: list[str] | None = None) -> int:
     stats = sub.add_parser("stats", help="人工填完 spot_checks.csv 的 verdict 後，算抽查錯誤率")
     stats.add_argument("--spot-checks", type=Path, default=Path("data/annotations/comparison/spot_checks.csv"))
     stats.set_defaults(func=cmd_stats)
+
+    review = sub.add_parser("review", help="產生人工裁決與抽查用的對照頁（HTML）")
+    review.add_argument("--comparison", type=Path, default=Path("data/annotations/comparison"))
+    review.add_argument("--images", type=Path, default=Path("data/images"))
+    review.set_defaults(func=cmd_review)
 
     args = parser.parse_args(argv)
     return args.func(args)

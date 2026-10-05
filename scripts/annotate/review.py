@@ -1,0 +1,166 @@
+"""產生人工裁決與抽查用的對照頁（D18 的人工步驟）。
+
+一張照片一區：左邊原圖（點一下放大），右邊是這張照片的列數核對、不一致項目與抽查項目。
+填完按「匯出」，下載三個填好的 CSV（格式與 compare 輸出的相同），放回比對資料夾就能執行 stats。
+頁面只引用本機照片的相對路徑，不嵌入照片，也不進 repo（data/ 已被 .gitignore 排除）。
+"""
+
+import csv
+import html
+import json
+import os
+from collections import defaultdict
+from pathlib import Path
+
+IMAGE_SUFFIXES = (".jpg", ".jpeg", ".png", ".webp")
+
+
+def _read(path: Path) -> list[dict[str, str]]:
+    with path.open(encoding="utf-8-sig", newline="") as fh:
+        return list(csv.DictReader(fh))
+
+
+def _find_image(images: Path, image_id: str) -> Path | None:
+    for suffix in IMAGE_SUFFIXES:
+        path = images / f"{image_id}{suffix}"
+        if path.exists():
+            return path
+    return None
+
+
+def build_review(comparison: Path, images: Path, notes: dict[str, str] | None = None) -> str:
+    """讀 compare 的輸出，回傳對照頁 HTML。notes：照片編號 → 要特別提醒裁決者的話。"""
+    disagreements = _read(comparison / "disagreements.csv")
+    spot_checks = _read(comparison / "spot_checks.csv")
+    row_counts = _read(comparison / "row_counts.csv")
+    names = list(row_counts[0].keys())[1:3] if row_counts else ["claude", "codex"]
+
+    by_image: dict[str, dict[str, list]] = defaultdict(lambda: {"dis": [], "spot": []})
+    for i, row in enumerate(disagreements):
+        by_image[row["image_id"]]["dis"].append((i, row))
+    for i, row in enumerate(spot_checks):
+        by_image[row["image_id"]]["spot"].append((i, row))
+
+    sections = []
+    for count in row_counts:
+        image_id = count["image_id"]
+        image = _find_image(images, image_id)
+        src = Path(os.path.relpath(image, comparison)).as_posix() if image else ""
+        sections.append(_section(image_id, src, count, names, by_image[image_id], (notes or {}).get(image_id)))
+
+    data = {
+        "names": names,
+        "disagreements": disagreements,
+        "spot_checks": spot_checks,
+        "row_counts": row_counts,
+    }
+    return _PAGE.replace("{{SECTIONS}}", "\n".join(sections)).replace(
+        "{{DATA}}", json.dumps(data, ensure_ascii=False).replace("</", "<\\/")
+    )
+
+
+def _section(image_id: str, src: str, count: dict, names: list[str], items: dict, note: str | None) -> str:
+    e = html.escape
+    a, b = names
+    dis_rows = "".join(
+        f"<tr><td>{e(r['row'])}</td><td>{e(r['field'])}</td>"
+        f"<td><button data-pick='{i}' data-side='{e(a)}'>{e(r[a])}</button></td>"
+        f"<td><button data-pick='{i}' data-side='{e(b)}'>{e(r[b])}</button></td>"
+        f"<td><input data-dis='{i}' placeholder='點左邊的值，或自己填'></td></tr>"
+        for i, r in items["dis"]
+    )
+    spot_rows = "".join(
+        f"<tr><td>{e(r['row'])}</td><td>{e(r['field'])}</td><td>{e(r['value'])}</td>"
+        f"<td class='{e(r['reason'])}'>{'全查' if r['reason'] == 'high_risk' else '隨機'}</td>"
+        f"<td><label><input type='radio' name='s{i}' value='對' data-spot='{i}'>對</label> "
+        f"<label><input type='radio' name='s{i}' value='錯' data-spot='{i}'>錯</label></td></tr>"
+        for i, r in items["spot"]
+    )
+    note_html = f"<p class='note'>⚠ {e(note)}</p>" if note else ""
+    return f"""
+<section id="{e(image_id)}">
+  <div class="img"><img src="{e(src)}" alt="{e(image_id)}" onclick="this.classList.toggle('zoom')"></div>
+  <div class="work">
+    <h2>{e(image_id)}</h2>{note_html}
+    <p class="count">列數：{e(a)} {e(count[a])} 列、{e(b)} {e(count[b])} 列；照片上實際
+      <input data-count="{e(image_id)}" size="4"> 列（營養標示每一列＋成分欄每一項）</p>
+    <h3>不一致（{len(items['dis'])}）：選對的那邊，都不對就自己填；整列多出來的填「刪除」</h3>
+    <table><tr><th>列</th><th>欄位</th><th>{e(a)}</th><th>{e(b)}</th><th>裁決</th></tr>{dis_rows}</table>
+    <h3>抽查（{len(items['spot'])}）：兩邊一致的值，看照片判斷對錯</h3>
+    <table><tr><th>列</th><th>欄位</th><th>值</th><th></th><th>判斷</th></tr>{spot_rows}</table>
+  </div>
+</section>"""
+
+
+_PAGE = """<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8"><title>標註裁決與抽查</title>
+<style>
+:root { --bg:#fff; --fg:#222; --line:#ddd; --accent:#0a6; --warn:#b60; }
+body { margin:0; font:14px/1.5 system-ui, "Microsoft JhengHei", sans-serif; background:var(--bg); color:var(--fg); }
+header { position:sticky; top:0; z-index:2; background:#f4f6f8; border-bottom:1px solid var(--line); padding:8px 16px; display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+section { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.1fr); gap:16px; padding:16px; border-bottom:2px solid var(--line); }
+.img img { width:100%; position:sticky; top:56px; cursor:zoom-in; }
+.img img.zoom { position:fixed; inset:0; width:auto; max-width:none; height:100vh; margin:auto; z-index:5; background:#000; cursor:zoom-out; }
+table { border-collapse:collapse; width:100%; margin-bottom:12px; }
+td, th { border:1px solid var(--line); padding:3px 6px; vertical-align:top; word-break:break-all; }
+button { font:inherit; text-align:left; cursor:pointer; background:#fff; border:1px solid #bbb; border-radius:4px; }
+button.on { background:#dff5ea; border-color:var(--accent); }
+td.high_risk { color:var(--warn); }
+.note { background:#fff4e0; padding:6px 8px; border-left:4px solid var(--warn); }
+#progress { font-weight:600; }
+@media (max-width:800px) { section { grid-template-columns:1fr; } .img img { position:static; } }
+</style></head><body>
+<header><strong>標註裁決與抽查</strong><span id="progress"></span>
+<button id="export">匯出三個 CSV</button><span>填寫內容會暫存在這個瀏覽器</span></header>
+{{SECTIONS}}
+<script>
+const DATA = {{DATA}};
+const KEY = "annotate-review:" + location.pathname;
+let state = { dis:{}, spot:{}, count:{} };
+try { state = Object.assign(state, JSON.parse(localStorage.getItem(KEY) || "{}")); } catch (e) {}
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} progress(); };
+function progress() {
+  const d = Object.values(state.dis).filter(v => v).length, s = Object.keys(state.spot).length, c = Object.values(state.count).filter(v => v).length;
+  document.getElementById("progress").textContent =
+    `不一致 ${d}/${DATA.disagreements.length}　抽查 ${s}/${DATA.spot_checks.length}　列數 ${c}/${DATA.row_counts.length}`;
+}
+document.querySelectorAll("[data-dis]").forEach(el => {
+  el.value = state.dis[el.dataset.dis] || "";
+  el.oninput = () => { state.dis[el.dataset.dis] = el.value; mark(el.dataset.dis); save(); };
+});
+function mark(i) {
+  document.querySelectorAll(`[data-pick='${i}']`).forEach(b => b.classList.toggle("on", b.textContent === state.dis[i]));
+}
+document.querySelectorAll("[data-pick]").forEach(b => {
+  b.onclick = () => { const i = b.dataset.pick; state.dis[i] = b.textContent; document.querySelector(`[data-dis='${i}']`).value = b.textContent; mark(i); save(); };
+});
+Object.keys(state.dis).forEach(mark);
+document.querySelectorAll("[data-spot]").forEach(r => {
+  r.checked = state.spot[r.dataset.spot] === r.value;
+  r.onchange = () => { state.spot[r.dataset.spot] = r.value; save(); };
+});
+document.querySelectorAll("[data-count]").forEach(el => {
+  el.value = state.count[el.dataset.count] || "";
+  el.oninput = () => { state.count[el.dataset.count] = el.value.trim(); save(); };
+});
+function csv(rows, header) {
+  const q = v => /[",\\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v;
+  return "\\ufeff" + [header, ...rows.map(r => header.map(h => r[h] ?? ""))].map(r => r.map(v => q(String(v))).join(",")).join("\\r\\n") + "\\r\\n";
+}
+function download(name, text) {
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([text], { type:"text/csv" }));
+  a.download = name; a.click();
+}
+document.getElementById("export").onclick = () => {
+  const [a, b] = DATA.names;
+  download("disagreements.csv", csv(DATA.disagreements.map((r, i) => ({ ...r, adjudicated: state.dis[i] || "" })),
+    ["image_id", "row", "field", a, b, "adjudicated"]));
+  download("spot_checks.csv", csv(DATA.spot_checks.map((r, i) => ({ ...r, verdict: state.spot[i] || "" })),
+    ["image_id", "row", "field", "value", "reason", "verdict"]));
+  download("row_counts.csv", csv(DATA.row_counts.map(r => ({ ...r, actual_rows: state.count[r.image_id] || "" })),
+    ["image_id", a, b, "actual_rows"]));
+};
+progress();
+</script></body></html>
+"""
