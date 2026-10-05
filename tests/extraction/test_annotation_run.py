@@ -93,6 +93,7 @@ def test_claude只開放讀檔工具且不載入MCP(photo):
     assert cmd[cmd.index("--tools") + 1] == "Read"
     assert cmd[cmd.index("--allowedTools") + 1] == "Read"
     assert "--strict-mcp-config" in cmd
+    assert "--restricted" in cmd  # 讀檔範圍鎖在工作目錄內
 
 
 def test_codex使用唯讀沙盒並附上照片(photo):

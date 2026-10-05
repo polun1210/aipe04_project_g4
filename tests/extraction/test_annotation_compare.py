@@ -5,7 +5,7 @@ import csv
 import pytest
 
 from app.schemas.enums import DoseUnit, LabelSection, Unit
-from scripts.annotate.compare import cohens_kappa, compare, spot_check_stats, write_outputs
+from scripts.annotate.compare import cohens_kappa, compare, row_count_mismatches, spot_check_stats, write_outputs
 from scripts.annotate.schema import AnnotatedRow, AnnotatedServing, Annotation
 
 NT = LabelSection.NUTRITION_TABLE
@@ -192,3 +192,40 @@ def test_抽查錯誤率依人工填的結果計算且未填的不計入(report,
         writer.writeheader()
         writer.writerows(rows)
     assert spot_check_stats(path)["all"] == (1, 10)
+
+
+# ── 列數核對：兩個模型都漏掉的列 ─────────────────────────────────
+
+
+def test_每張照片列出兩邊的列數(report):
+    assert report.row_counts == {"p01-img01": (4, 4)}
+
+
+def _fill_actual(tmp_path, actual_by_image):
+    path = tmp_path / "row_counts.csv"
+    with path.open(encoding="utf-8-sig", newline="") as fh:
+        rows = list(csv.reader(fh))
+    for r in rows[1:]:
+        r[3] = str(actual_by_image.get(r[0], ""))
+    with path.open("w", encoding="utf-8-sig", newline="") as fh:
+        csv.writer(fh).writerows(rows)
+    return path
+
+
+def test_實際列數比兩邊都多時列出該照片(tmp_path):
+    report = compare({"p01-img01": A, "p02-img01": A}, {"p01-img01": B, "p02-img01": B})
+    write_outputs(report, tmp_path)
+    path = _fill_actual(tmp_path, {"p01-img01": 5, "p02-img01": 4})
+    assert row_count_mismatches(path) == [("p01-img01", 4, 4, 5)]
+
+
+def test_實際列數介於兩邊之間時不重複列出(tmp_path):
+    report = compare({"p01-img01": A}, {"p01-img01": annotation(*B.rows[:3])})
+    write_outputs(report, tmp_path)
+    assert row_count_mismatches(_fill_actual(tmp_path, {"p01-img01": 4})) == []
+
+
+def test_實際列數未填的照片不計入(report, tmp_path):
+    write_outputs(report, tmp_path)
+    assert row_count_mismatches(tmp_path / "row_counts.csv") == []
+

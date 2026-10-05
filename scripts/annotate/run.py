@@ -4,10 +4,11 @@
 - 每個標註者、每張照片各開一個**只放那張照片**的暫存資料夾當工作目錄，放在系統暫存區（repo 之外）。
   schema 檔與輸出檔放在另一個暫存資料夾，工作目錄裡看不到。兩個標註者的輸出都寫到 repo 的
   輸出資料夾，彼此的工作目錄裡都沒有對方的結果與既有標準答案。
-- Claude：`--tools Read` 只開放讀檔工具、`--strict-mcp-config` 不載入任何 MCP 伺服器；
-  非互動模式下未核准的工具一律拒絕，因此不能執行程式或上網。
+- Claude：`--restricted` 把讀檔範圍鎖在工作目錄內、移除所有能執行程式的工具，並忽略個人與專案設定；
+  `--tools Read` 只開放讀檔工具、`--strict-mcp-config` 不載入任何 MCP 伺服器；
+  非互動模式下未核准的工具一律拒絕，因此不能執行程式、上網或讀工作目錄外的檔案。
 - Codex：`--sandbox read-only`，不能寫檔、不能連網。
-  已知限制：Codex 的唯讀沙盒仍能「讀」工作目錄外的檔案，無法從技術上完全阻止它去翻 repo；
+  已知限制（只剩 Codex 這側）：Codex 的唯讀沙盒仍能「讀」工作目錄外的檔案，無法從技術上完全阻止它去翻 repo；
   因為工作目錄在 repo 之外、提示詞也明確禁止，風險低，但報告方法論時應如實說明。
 - 提示詞從 stdin 傳入：Windows 上經 .cmd 包裝的指令，多行參數會被截斷。
 """
@@ -58,6 +59,7 @@ def claude_command(model: str) -> list[str]:
         "--output-format", "json",
         "--json-schema", json.dumps(JSON_SCHEMA, ensure_ascii=False),
         "--model", model,
+        "--restricted",
         "--tools", "Read",
         "--allowedTools", "Read",
         "--strict-mcp-config",

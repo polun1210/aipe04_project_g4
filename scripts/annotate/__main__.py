@@ -9,6 +9,7 @@ from scripts.annotate.compare import (
     DEFAULT_SEED,
     compare,
     load_annotations,
+    row_count_mismatches,
     spot_check_stats,
     summary_markdown,
     write_outputs,
@@ -57,6 +58,13 @@ def cmd_stats(args: argparse.Namespace) -> int:
         wrong, checked = stats.get(key, (0, 0))
         rate = f"{wrong / checked:.1%}" if checked else "—"
         print(f"{label}：抽查錯誤率 {rate}（{wrong}／{checked}，n = {checked}）")
+    row_counts = args.spot_checks.parent / "row_counts.csv"
+    if row_counts.exists():
+        flagged = row_count_mismatches(row_counts)
+        for image_id, a, b, n in flagged:
+            print(f"列數對不上，請回去看照片：{image_id}（兩邊 {a}、{b} 列，實際 {n} 列）")
+        if not flagged:
+            print("已填的列數都在兩邊之間，沒有兩邊都漏掉或都多出的列")
     return 0
 
 

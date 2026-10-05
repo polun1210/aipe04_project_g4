@@ -10,6 +10,9 @@
 
 抽查名單：兩邊一致的欄位中，高風險欄位（每一份量、劑型、單位、%、元素量）全部列入；
 其他欄位以固定亂數種子隨機抽 sample_rate 比例（無條件進位），同一份輸入一定產生同一份名單。
+
+列數核對：抽查只看「兩邊都有」的欄位，兩個模型都漏掉（或都多出）的列不會出現在任何清單。
+因此每張照片列出兩邊的列數，由人工填照片上實際的列數；實際列數比兩邊都多或都少，就要回去看那張照片。
 """
 
 import csv
@@ -62,6 +65,7 @@ class ComparisonReport:
     rows_unpaired: int
     images_compared: list[str]
     images_only_in: dict[str, list[str]]  # 只有某一方標註的照片，不參與比對
+    row_counts: dict[str, tuple[int, int]]  # 照片編號 → (a 的列數, b 的列數)
     seed: int
     sample_rate: float
     names: tuple[str, str] = ("claude", "codex")
@@ -116,6 +120,7 @@ def compare(
         rows_unpaired=unpaired,
         images_compared=images,
         images_only_in={names[0]: sorted(a.keys() - b.keys()), names[1]: sorted(b.keys() - a.keys())},
+        row_counts={i: (len(a[i].rows), len(b[i].rows)) for i in images},
         seed=seed,
         sample_rate=sample_rate,
         names=names,
@@ -237,6 +242,11 @@ def write_outputs(report: ComparisonReport, out: Path) -> None:
         writer.writerow(["image_id", "row", "field", "value", "reason", "verdict"])
         for s in report.spot_checks:
             writer.writerow([s.item.image_id, s.item.row, s.item.field, _fmt(s.item.a), s.reason, ""])
+    with (out / "row_counts.csv").open("w", newline="", encoding="utf-8-sig") as fh:
+        writer = csv.writer(fh)
+        writer.writerow(["image_id", name_a, name_b, "actual_rows"])
+        for image_id, (count_a, count_b) in report.row_counts.items():
+            writer.writerow([image_id, count_a, count_b, ""])
     (out / "summary.md").write_text(summary_markdown(report), encoding="utf-8")
 
 
@@ -273,6 +283,9 @@ def summary_markdown(report: ComparisonReport) -> str:
     lines += ["", "## 數值與文字欄位完全一致率", "", "| 欄位 | 一致率 | 一致／比較 |", "|---|---|---|"]
     for f, (agree, total) in report.exact_agreement.items():
         lines.append(f"| {f} | {_pct(agree / total if total else None)} | {agree}／{total} |")
+    lines += ["", "## 每張照片的列數（請在 row_counts.csv 填照片上實際的列數）", "", f"| 照片 | {name_a} | {name_b} |", "|---|---|---|"]
+    for image_id, (count_a, count_b) in report.row_counts.items():
+        lines.append(f"| {image_id} | {count_a} | {count_b} |")
     lines += ["", "κ 只表示兩個模型彼此多一致，不代表正確；正確率以人工抽查錯誤率估計。", ""]
     return "\n".join(lines)
 
@@ -304,3 +317,23 @@ def spot_check_stats(path: Path) -> dict[str, tuple[int, int]]:
                 stats[key][0] += verdict in _WRONG
                 stats[key][1] += 1
     return {k: (v[0], v[1]) for k, v in stats.items()}
+
+
+def row_count_mismatches(path: Path) -> list[tuple[str, int, int, int]]:
+    """讀人工填好 actual_rows 的 row_counts.csv，回傳要回去看的照片：(照片, a 列數, b 列數, 實際列數)。
+
+    實際列數比兩邊都多＝兩個模型都漏了列；比兩邊都少＝兩個模型都多抓了列。
+    介於兩者之間的差異已經在不一致清單裡（某一方多抓或漏抓），不重複列出。空白表示還沒數，不計入。
+    """
+    flagged = []
+    with path.open(encoding="utf-8-sig", newline="") as fh:
+        reader = csv.reader(fh)
+        next(reader)  # 表頭的兩欄是標註者名稱，依位置讀
+        for image_id, count_a, count_b, actual in reader:
+            if not actual.strip():
+                continue
+            a, b, n = int(count_a), int(count_b), int(actual)
+            if n > max(a, b) or n < min(a, b):
+                flagged.append((image_id, a, b, n))
+    return flagged
+
