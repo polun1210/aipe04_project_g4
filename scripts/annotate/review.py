@@ -163,7 +163,9 @@ td.high_risk { color:var(--warn); }
 @media (max-width:800px) { section { grid-template-columns:1fr; } .img img { position:static; } }
 </style></head><body>
 <header><strong>標註裁決與抽查</strong><span id="progress"></span>
-<button id="export">匯出三個 CSV</button><span>填寫內容會暫存在這個瀏覽器</span></header>
+<span>匯出（瀏覽器會擋連續下載，請一個一個按）：</span>
+<button id="export-spot">① 抽查結果</button><button id="export-dis">② 不一致裁決</button><button id="export-count">③ 列數</button>
+<span>填寫內容會暫存在這個瀏覽器</span></header>
 {{SECTIONS}}
 <script>
 const DATA = {{DATA}};
@@ -209,12 +211,18 @@ function download(name, text) {
   a.href = URL.createObjectURL(new Blob([text], { type:"text/csv" }));
   a.download = name; a.click();
 }
-document.getElementById("export").onclick = () => {
-  const [a, b] = DATA.names;
+const [A, B] = DATA.names;
+document.getElementById("export-dis").onclick = () => {
+  const [a, b] = [A, B];
   download("disagreements.csv", csv(DATA.disagreements.map((r, i) => ({ ...r, adjudicated: state.dis[i] || "" })),
     ["image_id", "row", "field", a, b, "adjudicated"]));
+};
+document.getElementById("export-spot").onclick = () => {
   download("spot_checks.csv", csv(DATA.spot_checks.map((r, i) => ({ ...r, verdict: state.spot[i] || "" })),
     ["image_id", "row", "field", "value", "reason", "verdict"]));
+};
+document.getElementById("export-count").onclick = () => {
+  const [a, b] = [A, B];
   download("row_counts.csv", csv(DATA.row_counts.map(r => ({ ...r, actual_rows: state.count[r.image_id] || "" })),
     ["image_id", a, b, "actual_rows"]));
 };
