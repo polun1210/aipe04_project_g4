@@ -28,6 +28,7 @@ __all__ = [
 _EXAMPLE_DRAFT = (
     Path(__file__).resolve().parents[2] / "docs" / "schemas" / "examples" / "04b_extraction_job_done.json"
 )
+_STUB_VERSION = "stub-t01"
 
 
 def check_quality(images: list[ImageInput]) -> list[SourceImage]:
@@ -41,17 +42,17 @@ def check_quality(images: list[ImageInput]) -> list[SourceImage]:
 def extract(product_id: UUID, images: list[ImageInput], engine: Engine | None = None) -> ExtractionDraft:
     """非同步工作內呼叫。只處理 quality_status = accepted 的圖。
 
-    假版本：回傳範例草稿，product_id 與照片編號換成呼叫者給的；
-    指定 engine 時會實際呼叫它，ocr_version 改成該引擎的版本。
+    假版本：回傳範例草稿，product_id 與照片編號換成呼叫者給的；三個版本欄位標為 stub，
+    避免串接期間的修正紀錄被誤認為真實辨識結果。指定 engine 時會實際呼叫它，ocr_version 改成該引擎的版本。
     """
     sources = check_quality(images)
     accepted = [img for img, src in zip(images, sources) if src.quality_status is QualityStatus.ACCEPTED]
     if not accepted:
         raise ExtractionError("沒有通過品質檢查的照片")
 
-    ocr_version = None
+    ocr_version = _STUB_VERSION
     if engine is not None:
-        results = [engine.run(img) for img in accepted]
+        results = [_run_engine(engine, img) for img in accepted]
         ocr_version = results[0].engine_version
 
     draft = json.loads(_EXAMPLE_DRAFT.read_text(encoding="utf-8"))["result"]
@@ -61,7 +62,20 @@ def extract(product_id: UUID, images: list[ImageInput], engine: Engine | None = 
     draft["serving_info"]["source_image_id"] = first_id
     for row in draft["nutrients"]:
         row["source_image_id"] = first_id
-    draft["extraction_meta"]["extracted_at"] = datetime.now(timezone.utc).isoformat()
-    if ocr_version is not None:
-        draft["extraction_meta"]["ocr_version"] = ocr_version
+    draft["extraction_meta"] = {
+        "ocr_version": ocr_version,
+        "rule_layer_version": _STUB_VERSION,
+        "synonym_table_version": _STUB_VERSION,
+        "extracted_at": datetime.now(timezone.utc).isoformat(),
+    }
     return ExtractionDraft.model_validate(draft)
+
+
+def _run_engine(engine: Engine, image: ImageInput) -> EngineResult:
+    """引擎的任何失敗（逾時、網路、格式）都轉成 ExtractionError，後端只需處理這一種。"""
+    try:
+        return engine.run(image)
+    except ExtractionError:
+        raise
+    except Exception as e:
+        raise ExtractionError(f"{image.image_id} 辨識失敗") from e

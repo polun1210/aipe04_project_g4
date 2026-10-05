@@ -51,3 +51,17 @@ def test_extract_with_replay_engine_records_engine_version(tmp_path):
 def test_missing_recording_raises_extraction_error(tmp_path):
     with pytest.raises(ExtractionError):
         extract(PRODUCT_ID, IMAGES, engine=ReplayEngine(tmp_path))
+
+
+def test_stub_marks_all_versions_as_stub():
+    meta = extract(PRODUCT_ID, IMAGES).extraction_meta
+    assert (meta.ocr_version, meta.rule_layer_version, meta.synonym_table_version) == ("stub-t01",) * 3
+
+
+def test_any_engine_failure_becomes_extraction_error():
+    class TimingOutEngine:
+        def run(self, image):
+            raise TimeoutError("engine timed out")
+
+    with pytest.raises(ExtractionError):
+        extract(PRODUCT_ID, IMAGES, engine=TimingOutEngine())
