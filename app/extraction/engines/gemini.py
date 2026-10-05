@@ -7,7 +7,8 @@
 位置框：要求 Gemini 給 box_2d（0–1000 正規化的 [ymin, xmin, ymax, xmax]），再換算成轉正後的
 像素座標。VLM 的座標通常不可靠（D04），這裡照收，可不可用由 W1 比較表的「有框比例」與人工檢視判斷。
 
-金鑰：環境變數 GEMINI_API_KEY；模型：GEMINI_MODEL（未設時用 DEFAULT_MODEL）。
+金鑰：環境變數 GEMINI_API_KEY；模型：GEMINI_MODEL，必填、沒有預設值（D27：模型必須明確指定，
+避免預設型號過時或被悄悄換掉）。
 """
 
 import os
@@ -33,7 +34,6 @@ from app.schemas.common import BoundingBox
 from app.schemas.enums import LabelSection
 
 ENGINE_NAME = "gemini"
-DEFAULT_MODEL = "gemini-2.5-flash"
 PROMPT_VERSION = "g1"  # 改提示詞或回應結構就要加版本，engine_version 會跟著變
 TEMPERATURE = 0.0
 
@@ -88,7 +88,7 @@ class _GeminiLabel(BaseModel):
 
 
 class GeminiEngine:
-    def __init__(self, client: Any, model: str = DEFAULT_MODEL) -> None:
+    def __init__(self, client: Any, model: str) -> None:
         self._client = client
         self.model = model
 
@@ -97,7 +97,10 @@ class GeminiEngine:
         api_key = os.environ.get("GEMINI_API_KEY")
         if not api_key:
             raise ExtractionError("沒有設定環境變數 GEMINI_API_KEY")
-        return cls(genai.Client(api_key=api_key), model=os.environ.get("GEMINI_MODEL") or DEFAULT_MODEL)
+        model = os.environ.get("GEMINI_MODEL")
+        if not model:
+            raise ExtractionError("沒有設定環境變數 GEMINI_MODEL（模型必須明確指定，請到 AI Studio 確認型號）")
+        return cls(genai.Client(api_key=api_key), model=model)
 
     def record(self, image: ImageInput) -> EngineRecording:
         """真的呼叫一次 Gemini，回傳原始紀錄。"""

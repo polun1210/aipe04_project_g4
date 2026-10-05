@@ -123,7 +123,7 @@ def test_拿到別的引擎的紀錄時拋出辨識錯誤(load_recording):
 
 def test_送出的圖已依EXIF方向轉正(table, rotated_photo):
     client = fake_client(table.response)
-    rec = GeminiEngine(client).record(ImageInput(image_id="p01-img01", content=rotated_photo))
+    rec = GeminiEngine(client, model="gemini-test").record(ImageInput(image_id="p01-img01", content=rotated_photo))
     image_part = client.models.calls[0]["contents"][0]
     assert Image.open(BytesIO(image_part.inline_data.data)).size == (20, 40)
     assert (rec.image_width, rec.image_height) == (20, 40)
@@ -131,7 +131,7 @@ def test_送出的圖已依EXIF方向轉正(table, rotated_photo):
 
 def test_請求使用結構化輸出且溫度為零(table, make_jpeg):
     client = fake_client(table.response)
-    GeminiEngine(client).record(ImageInput(image_id="p01-img01", content=make_jpeg(30, 50)))
+    GeminiEngine(client, model="gemini-test").record(ImageInput(image_id="p01-img01", content=make_jpeg(30, 50)))
     config = client.models.calls[0]["config"]
     assert config.response_mime_type == "application/json"
     assert config.response_schema is not None
@@ -146,7 +146,7 @@ def test_紀錄載明模型與提示詞版本(table, make_jpeg):
 
 
 def test_錄下的原始回應轉換後與直接執行結果相同(table, make_jpeg):
-    engine = GeminiEngine(fake_client(table.response))
+    engine = GeminiEngine(fake_client(table.response), model="gemini-test")
     image = ImageInput(image_id="p01-img01", content=make_jpeg(800, 1000))
     assert to_engine_result(engine.record(image)) == engine.run(image)
 
@@ -154,7 +154,7 @@ def test_錄下的原始回應轉換後與直接執行結果相同(table, make_j
 def test_呼叫失敗時拋出辨識錯誤(make_jpeg):
     error = errors.ClientError(403, {"error": {"code": 403, "message": "API key not valid", "status": "PERMISSION_DENIED"}})
     with pytest.raises(ExtractionError, match="Gemini"):
-        GeminiEngine(fake_client(error=error)).run(ImageInput(image_id="p01-img01", content=make_jpeg(30, 50)))
+        GeminiEngine(fake_client(error=error), model="gemini-test").run(ImageInput(image_id="p01-img01", content=make_jpeg(30, 50)))
 
 
 def test_沒有設定金鑰時拋出辨識錯誤(monkeypatch):
@@ -176,3 +176,11 @@ def test_轉換結果可存成錄製檔交給辨識函式重播(table, tmp_path)
     )
     ExtractionDraft.model_validate(draft.model_dump())
     assert draft.extraction_meta.ocr_version == "gemini/gemini-2.5-flash/prompt-g1"
+
+
+def test_沒有指定模型時不使用預設值而是報錯(monkeypatch):
+    monkeypatch.setenv("GEMINI_API_KEY", "test-key")
+    monkeypatch.delenv("GEMINI_MODEL", raising=False)
+    with pytest.raises(ExtractionError, match="GEMINI_MODEL"):
+        GeminiEngine.from_env()
+
