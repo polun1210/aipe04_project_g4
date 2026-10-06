@@ -281,3 +281,19 @@ def test_整列不一致的空白顯示為沒有這一列(tmp_path):
     write_outputs(report, out)
     assert "（沒有這一列）" in build_review(out, tmp_path)
 
+
+def test_項目清單改變時對照頁的暫存指紋也改變(report, tmp_path):
+    import json
+    import re
+
+    def fingerprint(rep):
+        out = tmp_path / "c"
+        write_outputs(rep, out)
+        page = build_review(out, tmp_path)
+        return json.loads(re.search(r"const DATA = (\{.*?\});\n", page, re.S).group(1))["fingerprint"]
+
+    same = fingerprint(report)
+    assert fingerprint(report) == same  # 同一份清單，暫存可以沿用
+    other = compare({"p01-img01": A}, {"p01-img01": B}, seed=99)  # 抽到的項目不同
+    assert fingerprint(other) != same  # 清單改變，舊暫存不會被套到別的項目
+

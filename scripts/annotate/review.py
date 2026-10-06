@@ -6,6 +6,7 @@
 """
 
 import csv
+import hashlib
 import html
 import json
 import os
@@ -100,10 +101,19 @@ def build_review(
         "spot_checks": spot_checks,
         "row_counts": row_counts,
         "skipped": skipped,
+        # 暫存在瀏覽器的結果是依「第幾項」記的；項目清單一變（例如重跑 compare），指紋就不同，
+        # 舊的暫存不會被套到別的項目上
+        "fingerprint": _fingerprint(disagreements, spot_checks),
     }
     return _PAGE.replace("{{SECTIONS}}", "\n".join(sections)).replace(
         "{{DATA}}", json.dumps(data, ensure_ascii=False).replace("</", "<\\/")
     )
+
+
+def _fingerprint(disagreements: list[dict[str, str]], spot_checks: list[dict[str, str]]) -> str:
+    items = [f"d|{r['image_id']}|{r['row']}|{r['field']}" for r in disagreements]
+    items += [f"s|{r['image_id']}|{r['row']}|{r['field']}" for r in spot_checks]
+    return hashlib.sha1("\n".join(items).encode("utf-8")).hexdigest()[:12]
 
 
 def _section(image_id: str, src: str, count: dict, names: list[str], items: dict, note: str | None) -> str:
@@ -169,7 +179,7 @@ td.high_risk { color:var(--warn); }
 {{SECTIONS}}
 <script>
 const DATA = {{DATA}};
-const KEY = "annotate-review:" + location.pathname;
+const KEY = "annotate-review:" + location.pathname + ":" + DATA.fingerprint;
 let state = { dis:{}, spot:{}, count:{} };
 try { state = Object.assign(state, JSON.parse(localStorage.getItem(KEY) || "{}")); } catch (e) {}
 // 已經填在 CSV 裡的值（例如在對話中裁決過的）當作初始值，避免匯出時被空白蓋掉
