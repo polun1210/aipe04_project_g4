@@ -186,3 +186,11 @@ def test_沒有指定模型時不使用預設值而是報錯(monkeypatch):
     with pytest.raises(ExtractionError, match="GEMINI_MODEL"):
         GeminiEngine.from_env()
 
+
+def test_每一份量只寫重量時不當成粒數():
+    from app.extraction.engines.gemini import _GeminiLabel, _GeminiServing, _to_reading
+
+    serving = _GeminiServing(raw_text="每一份量0.8公克", serving_size=0.8, dose_unit="公克", box_2d=None)
+    reading = _to_reading(_GeminiLabel(serving=serving, rows=[], suggested_intake=None, headings=[]), 100, 100)
+    assert reading.serving.serving_size is None and reading.serving.raw_text == "每一份量0.8公克"
+

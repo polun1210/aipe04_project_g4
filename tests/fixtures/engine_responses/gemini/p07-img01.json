@@ -206,7 +206,7 @@
   "reading": {
     "serving": {
       "raw_text": "每一份量0.8公克",
-      "serving_size": 0.8,
+      "serving_size": null,
       "dose_unit_raw": "公克",
       "bbox": {
         "x": 85,

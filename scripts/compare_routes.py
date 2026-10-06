@@ -33,6 +33,7 @@ SERVING_KEYWORD = "每一份量"
 _UNITS = r"(?:mg|毫克|μg|ug|mcg|微克|kcal|大卡|千卡|iu|國際單位|g|公克|克)"
 _AMOUNT_WITH_UNIT = re.compile(r"\d+(?:\.\d+)?" + _UNITS, re.IGNORECASE)
 _SERVING_VALUE = re.compile(SERVING_KEYWORD + r"[:：]?(\d+(?:\.\d+)?)([^\d(]{0,2})")  # 「每一份量2粒(1.2公克)」→ 2、粒
+_SERVING_COUNT = re.compile(r"[(（](\d+(?:\.\d+)?)\s*(粒|錠|顆|包|膠囊|片|匙)[)）]")  # 「1.76公克(2粒)」→ 2、粒
 _NUMBER = re.compile(r"\d+(?:\.\d+)?")
 
 # 只供本表使用的單位對映；比對前已做 NFKC（µ→μ）與去空白、轉小寫
@@ -94,6 +95,9 @@ def _ocr_serving(texts: list[str]) -> tuple[bool, float | None, str]:
     """OCR 文字行裡的「每一份量」：（有沒有這個字, 同一行緊接的數字, 數字後的字）。"""
     for text in texts:
         if SERVING_KEYWORD in text:
+            count = _SERVING_COUNT.search(text)  # 重量與粒數並列時取括號內的粒數
+            if count:
+                return True, float(count.group(1)), count.group(2)
             match = _SERVING_VALUE.search(text)
             return (True, float(match.group(1)), match.group(2)) if match else (True, None, "")
     return False, None, ""

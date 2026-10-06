@@ -111,3 +111,18 @@ def test_重新轉換不呼叫服務(images, tmp_path, recorder):
 
 def test_照片資料夾不存在時結束碼為2(tmp_path, recorder):
     assert run(tmp_path / "沒有這個資料夾", tmp_path / "out", recorder) == 2
+
+
+def test_重新轉換失敗時不留下舊的轉換結果(tmp_path):
+    from app.extraction.types import ExtractionError
+    from scripts.record_engines import convert_one
+
+    old = tmp_path / "p01-img01.json"
+    old.write_text("{}", encoding="utf-8")
+
+    def broken(recording):
+        raise ExtractionError("格式錯誤")
+
+    assert convert_one(broken, type("R", (), {"image_id": "p01-img01"})(), tmp_path) is False
+    assert not old.exists()
+

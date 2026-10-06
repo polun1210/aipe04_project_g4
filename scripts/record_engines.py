@@ -112,12 +112,14 @@ def reconvert_all(convert: Callable[[EngineRecording], EngineResult], out: Path,
 
 
 def convert_one(convert: Callable[[EngineRecording], EngineResult], recording: EngineRecording, out: Path) -> bool:
+    target = out / f"{recording.image_id}.json"
+    target.unlink(missing_ok=True)  # 先刪舊結果：轉換失敗時不留下與新原始回應對不上的舊結果
     try:
         result = convert(recording)
     except ExtractionError as e:
         print(f"轉換失敗 {recording.image_id}：{e}（原始回應已保存在 raw/）", file=sys.stderr)
         return False
-    write_json(out / f"{recording.image_id}.json", result)
+    write_json(target, result)
     return True
 
 

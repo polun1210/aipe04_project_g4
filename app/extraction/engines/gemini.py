@@ -169,12 +169,17 @@ def to_engine_result(recording: EngineRecording) -> EngineResult:
     )
 
 
+_WEIGHT_UNITS = {"公克", "克", "g", "毫克", "mg"}
+
+
 def _to_reading(label: _GeminiLabel, width: int, height: int) -> LabelReading:
     serving = None
     if label.serving is not None:
+        # 每一份量是劑型單位數（幾粒），不是重量；只寫重量（例如「0.8公克」）時不猜粒數，留空（D40）
+        unit = (label.serving.dose_unit or "").strip().lower()
         serving = ServingReading(
             raw_text=label.serving.raw_text,
-            serving_size=label.serving.serving_size,
+            serving_size=None if unit in _WEIGHT_UNITS else label.serving.serving_size,
             dose_unit_raw=label.serving.dose_unit,
             bbox=_to_bbox(label.serving.box_2d, width, height),
         )

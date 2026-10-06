@@ -154,3 +154,10 @@ def test_寫到指定檔案(responses, tmp_path):
 def test_比較表的單位對映認得中英並列與括號換算(raw, unit):
     assert map_unit(raw) == unit
 
+
+def test_每一份量重量與粒數並列時取括號內的粒數():
+    from scripts.compare_routes import _ocr_serving
+
+    assert _ocr_serving(["每一份量1.76公克(2粒)"]) == (True, 2.0, "粒")
+    assert _ocr_serving(["每一份量3錠"]) == (True, 3.0, "錠")
+
