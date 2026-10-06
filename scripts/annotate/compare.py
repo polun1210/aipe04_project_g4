@@ -213,6 +213,19 @@ def _spot_checks(fields: list[FieldComparison], seed: int, sample_rate: float) -
 # ── 讀寫檔案 ─────────────────────────────────────────────────────
 
 
+def image_hashes(folder: Path) -> dict[str, str | None]:
+    """照片編號 → 標註當時照片的 SHA-256（舊紀錄沒有就是 None）。"""
+    return {
+        path.stem: AnnotationRecord.model_validate_json(path.read_text(encoding="utf-8")).image_sha256
+        for path in sorted(folder.glob("*.json"))
+    }
+
+
+def mismatched_images(a: dict[str, str | None], b: dict[str, str | None]) -> list[str]:
+    """兩位標註者都有指紋、但指紋不同的照片：兩邊看的不是同一張照片，不能比對。"""
+    return sorted(i for i in a.keys() & b.keys() if a[i] and b[i] and a[i] != b[i])
+
+
 def load_annotations(folder: Path, annotator: str) -> tuple[dict[str, Annotation], set[str]]:
     """讀 <folder>/<照片編號>.json，回傳（照片編號 → 標註, 用到的模型）。
 

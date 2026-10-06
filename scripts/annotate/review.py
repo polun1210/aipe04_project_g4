@@ -62,6 +62,19 @@ def _find_image(images: Path, image_id: str) -> Path | None:
     return None
 
 
+def image_problems(comparison: Path, images: Path) -> list[str]:
+    """每個照片編號都要恰好對到一張照片（副檔名不分大小寫）；回傳找不到或重複的編號。"""
+    problems = []
+    candidates = sorted(images.iterdir()) if images.is_dir() else []
+    for row in _read(comparison / "row_counts.csv"):
+        hits = [p for p in candidates if p.stem == row["image_id"] and p.suffix.lower() in IMAGE_SUFFIXES]
+        if not hits:
+            problems.append(f"{row['image_id']} 找不到照片")
+        elif len(hits) > 1:
+            problems.append(f"{row['image_id']} 有 {len(hits)} 張同名照片")
+    return problems
+
+
 def build_review(
     comparison: Path,
     images: Path,

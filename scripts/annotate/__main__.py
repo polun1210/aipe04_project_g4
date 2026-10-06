@@ -8,13 +8,15 @@ from scripts.annotate.compare import (
     DEFAULT_SAMPLE_RATE,
     DEFAULT_SEED,
     compare,
+    image_hashes,
     load_annotations,
+    mismatched_images,
     row_count_mismatches,
     spot_check_stats,
     summary_markdown,
     write_outputs,
 )
-from scripts.annotate.review import build_review
+from scripts.annotate.review import build_review, image_problems
 from scripts.annotate.run import annotate_all
 
 IMAGE_SUFFIXES = {".jpg", ".jpeg", ".png", ".webp"}
@@ -48,6 +50,10 @@ def cmd_run(args: argparse.Namespace) -> int:
 def cmd_compare(args: argparse.Namespace) -> int:
     a, models_a = load_annotations(args.annotations / "claude", "claude")
     b, models_b = load_annotations(args.annotations / "codex", "codex")
+    differ = mismatched_images(image_hashes(args.annotations / "claude"), image_hashes(args.annotations / "codex"))
+    if differ:
+        print(f"兩位標註者看的照片內容不同（照片中途被換過）：{', '.join(differ)}；請用 --force 重新標註", file=sys.stderr)
+        return 2
     if not a or not b or not (a.keys() & b.keys()):
         print("兩個標註者都要有標註，且至少要有一張共同的照片才能比對（請檢查資料夾路徑或標註是否失敗）", file=sys.stderr)
         return 2
@@ -78,6 +84,10 @@ def cmd_stats(args: argparse.Namespace) -> int:
 
 
 def cmd_review(args: argparse.Namespace) -> int:
+    problems = image_problems(args.comparison, args.images)
+    if problems:  # 沒有照片或照片不確定時不產生頁面，避免在錯的照片上裁決
+        print("照片有問題，不產生對照頁：" + "；".join(problems), file=sys.stderr)
+        return 2
     out = args.comparison / "review.html"
     out.write_text(build_review(args.comparison, args.images, skip_random=set(args.skip_random or [])), encoding="utf-8")
     print(f"已寫出 {out}；用瀏覽器打開，填完按「匯出」，把三個 CSV 放回 {args.comparison}")

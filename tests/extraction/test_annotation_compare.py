@@ -5,8 +5,8 @@ import csv
 import pytest
 
 from app.schemas.enums import DoseUnit, LabelSection, Unit
-from scripts.annotate.review import build_review
-from scripts.annotate.compare import cohens_kappa, compare, row_count_mismatches, spot_check_stats, write_outputs
+from scripts.annotate.review import build_review, image_problems
+from scripts.annotate.compare import mismatched_images, cohens_kappa, compare, row_count_mismatches, spot_check_stats, write_outputs
 from scripts.annotate.schema import AnnotatedRow, AnnotatedServing, Annotation
 
 NT = LabelSection.NUTRITION_TABLE
@@ -325,4 +325,19 @@ def test_對照頁找得到大寫副檔名的照片(report, tmp_path):
     (images / "p01-img01.JPG").write_bytes(b"fake-jpeg")
     write_outputs(report, out)
     assert 'src="../images/p01-img01.JPG"' in build_review(out, images)
+
+
+def test_找不到或重複的照片不產生對照頁(report, tmp_path):
+    out, images = tmp_path / "comparison", tmp_path / "images"
+    images.mkdir()
+    write_outputs(report, out)
+    assert image_problems(out, images) == ["p01-img01 找不到照片"]
+    (images / "p01-img01.jpg").write_bytes(b"a")
+    assert image_problems(out, images) == []
+    (images / "p01-img01.png").write_bytes(b"b")
+    assert image_problems(out, images) == ["p01-img01 有 2 張同名照片"]
+
+
+def test_兩位標註者看的照片指紋不同時列出():
+    assert mismatched_images({"p01": "aa", "p02": "bb", "p03": None}, {"p01": "aa", "p02": "cc", "p03": "dd"}) == ["p02"]
 
