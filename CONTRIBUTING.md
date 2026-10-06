@@ -33,7 +33,7 @@
    | 測試 | `uv run pytest` | **建議每個人都做**，看到全部通過（沒有 `failed`）就好 |
    | 程式檢查 | `uv run ruff check .` | 寫了 Python 程式的人建議做，只抓真正的錯誤。只改 CSV 或文件不需要 |
 
-5. **push 並在 GitHub 開 PR。** 說明寫做了什麼、為什麼。
+5. **push 並在 GitHub 開 PR。** 開 PR 時會自動帶出模板，照著填就好。記得填**驗收人**。
    如果動到 `app/schemas/`（資料格式）或想做的事與某份 ADR 不同，也請一併說明。
 
 6. **組長 review 並合併。** 請不要直接 push 到 `main`。
