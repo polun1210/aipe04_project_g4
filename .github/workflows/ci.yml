@@ -1,0 +1,20 @@
+# 每個 PR 自動跑測試與程式檢查，結果顯示在 PR 頁面下方（綠勾＝通過）。
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10
+        with:
+          enable-cache: true
+      # --locked：uv.lock 和 pyproject.toml 對不上就失敗，提醒加套件的人一起 commit uv.lock
+      - run: uv sync --locked
+      - run: uv run pytest
+      - run: uv run ruff check .
