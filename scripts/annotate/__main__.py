@@ -84,7 +84,12 @@ def cmd_stats(args: argparse.Namespace) -> int:
 
 
 def cmd_review(args: argparse.Namespace) -> int:
-    problems = image_problems(args.comparison, args.images)
+    recorded: dict[str, set[str]] = {}
+    for annotator in ("claude", "codex"):
+        for image_id, digest in image_hashes(args.annotations / annotator).items():
+            if digest:
+                recorded.setdefault(image_id, set()).add(digest)
+    problems = image_problems(args.comparison, args.images, recorded)
     if problems:  # 沒有照片或照片不確定時不產生頁面，避免在錯的照片上裁決
         print("照片有問題，不產生對照頁：" + "；".join(problems), file=sys.stderr)
         return 2
@@ -122,6 +127,7 @@ def main(argv: list[str] | None = None) -> int:
     review = sub.add_parser("review", help="產生人工裁決與抽查用的對照頁（HTML）")
     review.add_argument("--comparison", type=Path, default=Path("data/annotations/comparison"))
     review.add_argument("--images", type=Path, default=Path("data/images"))
+    review.add_argument("--annotations", type=Path, default=Path("data/annotations"), help="核對照片指紋用")
     review.add_argument("--skip-random", nargs="+", metavar="IMAGE_ID", help="這些照片只做全查，隨機抽查項目跳過")
     review.set_defaults(func=cmd_review)
 

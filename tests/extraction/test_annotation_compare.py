@@ -341,3 +341,16 @@ def test_找不到或重複的照片不產生對照頁(report, tmp_path):
 def test_兩位標註者看的照片指紋不同時列出():
     assert mismatched_images({"p01": "aa", "p02": "bb", "p03": None}, {"p01": "aa", "p02": "cc", "p03": "dd"}) == ["p02"]
 
+
+def test_照片在標註後被換過時不產生對照頁(report, tmp_path):
+    import hashlib
+
+    out, images = tmp_path / "comparison", tmp_path / "images"
+    images.mkdir()
+    write_outputs(report, out)
+    (images / "p01-img01.jpg").write_bytes(b"original")
+    recorded = {"p01-img01": {hashlib.sha256(b"original").hexdigest()}}
+    assert image_problems(out, images, recorded) == []
+    (images / "p01-img01.jpg").write_bytes(b"replaced")
+    assert image_problems(out, images, recorded) == ["p01-img01 的照片在標註後被換過"]
+

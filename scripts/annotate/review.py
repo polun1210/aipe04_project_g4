@@ -62,8 +62,11 @@ def _find_image(images: Path, image_id: str) -> Path | None:
     return None
 
 
-def image_problems(comparison: Path, images: Path) -> list[str]:
-    """每個照片編號都要恰好對到一張照片（副檔名不分大小寫）；回傳找不到或重複的編號。"""
+def image_problems(comparison: Path, images: Path, recorded: dict[str, set[str]] | None = None) -> list[str]:
+    """每個照片編號都要恰好對到一張照片（副檔名不分大小寫），而且照片內容要與標註當時相同。
+
+    recorded：照片編號 → 標註紀錄裡的照片指紋（兩位標註者有記錄的都放進來）。回傳有問題的編號與原因。
+    """
     problems = []
     candidates = sorted(images.iterdir()) if images.is_dir() else []
     for row in _read(comparison / "row_counts.csv"):
@@ -72,6 +75,10 @@ def image_problems(comparison: Path, images: Path) -> list[str]:
             problems.append(f"{row['image_id']} 找不到照片")
         elif len(hits) > 1:
             problems.append(f"{row['image_id']} 有 {len(hits)} 張同名照片")
+        elif recorded and recorded.get(row["image_id"]):
+            current = hashlib.sha256(hits[0].read_bytes()).hexdigest()
+            if recorded[row["image_id"]] != {current}:
+                problems.append(f"{row['image_id']} 的照片在標註後被換過")
     return problems
 
 
