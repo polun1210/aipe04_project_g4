@@ -17,7 +17,7 @@ from pathlib import Path
 from app.extraction.textnorm import compact, strip_parenthetical
 from app.schemas.enums import IngredientCode, LabelSection, ScopeStatus
 from app.schemas.label import ExtractionDraft
-from scripts.annotate.compare import ROW_PRESENCE, SERVING_ROW, _pair_rows
+from scripts.annotate.compare import ROW_PRESENCE, SERVING_ROW, _pair_rows, compare
 from scripts.annotate.schema import AnnotatedRow, AnnotatedServing, Annotation
 
 DELETE = "刪除"
@@ -55,13 +55,20 @@ def adjudicate(
     corrections: list[dict[str, str]],
 ) -> dict[str, Annotation]:
     """回傳照片編號 → 裁決後的標註。不一致沒裁決、抽查判錯卻沒有更正，都會報錯。"""
+    if a.keys() != b.keys():  # 雙盲標註不完整：少一邊的照片不能默默丟掉
+        missing_images = sorted(a.keys() ^ b.keys())
+        raise GoldError(f"兩位標註者的照片不一致，缺：{', '.join(missing_images)}")
     ruling = {(r["image_id"], r["row"], r["field"]): r["adjudicated"].strip() for r in disagreements}
+    expected = {(f.image_id, f.row, f.field) for f in compare(a, b).disagreements}
+    unlisted = sorted(expected - ruling.keys())
+    if unlisted:  # 不一致清單過期或漏列時，不能默默採用其中一邊的值
+        raise GoldError(f"有 {len(unlisted)} 項不一致不在裁決清單裡（請重新執行 compare），例如 {unlisted[0]}")
     missing = [k for k, v in ruling.items() if not v]
     if missing:
         raise GoldError(f"還有 {len(missing)} 項不一致沒有裁決，例如 {missing[0]}")
     fixes = {(r["image_id"], r["row"], r["field"]): r["value"].strip() for r in corrections}
     wrong = [(r["image_id"], r["row"], r["field"]) for r in spot_checks if r.get("verdict", "").strip() == "錯"]
-    unfixed = [k for k in wrong if k not in fixes]
+    unfixed = [k for k in wrong if not fixes.get(k)]  # 更正值留白不算；要清空請明確填 null
     if unfixed:
         raise GoldError(f"抽查判錯的 {len(unfixed)} 項沒有更正值（填在 corrections.csv），例如 {unfixed[0]}")
     decided = {**ruling, **fixes}

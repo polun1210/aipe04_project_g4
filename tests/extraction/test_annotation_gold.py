@@ -91,3 +91,21 @@ def test_名稱對照表缺列時報錯():
     gold = adjudicate({"p01-img01": A}, {"p01-img01": B}, DIS, [], [])
     with pytest.raises(GoldError, match="名稱對照表"):
         build_gold(gold, [], [{"image_id": "p01-img01", "product_id": "p01", "product_name": ""}])
+
+
+def test_不一致沒列在裁決清單時報錯():
+    with pytest.raises(GoldError, match="不在裁決清單"):
+        adjudicate({"p01-img01": A}, {"p01-img01": B}, DIS[1:], [], [])
+
+
+def test_更正值留白不算更正():
+    spot = [{"image_id": "p01-img01", "row": "每一份量", "field": "dose_unit", "verdict": "錯"}]
+    blank = [{"image_id": "p01-img01", "row": "每一份量", "field": "dose_unit", "value": ""}]
+    with pytest.raises(GoldError, match="corrections"):
+        adjudicate({"p01-img01": A}, {"p01-img01": B}, DIS, spot, blank)
+
+
+def test_兩位標註者的照片不一致時報錯():
+    with pytest.raises(GoldError, match="缺：p02-img01"):
+        adjudicate({"p01-img01": A, "p02-img01": A}, {"p01-img01": B}, DIS, [], [])
+
