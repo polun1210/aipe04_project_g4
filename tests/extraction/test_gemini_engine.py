@@ -13,7 +13,8 @@ from app.extraction.engines.base import EngineRecording
 from app.extraction.engines.gemini import GeminiEngine, to_engine_result
 from app.schemas.common import BoundingBox
 from app.schemas.enums import LabelSection
-from app.schemas.label import ExtractionDraft
+from app.schemas.enums import QualityStatus
+from app.schemas.label import ExtractionDraft, SourceImage
 
 
 class FakeModels:
@@ -172,6 +173,7 @@ def test_轉換結果可存成錄製檔交給辨識函式重播(table, tmp_path)
     draft = extract(
         UUID("b2000000-0000-4000-8000-000000000002"),
         [ImageInput(image_id="p01-img01", content=b"fake")],
+        [SourceImage(image_id="p01-img01", quality_status=QualityStatus.ACCEPTED)],
         engine=ReplayEngine(tmp_path),
     )
     ExtractionDraft.model_validate(draft.model_dump())
