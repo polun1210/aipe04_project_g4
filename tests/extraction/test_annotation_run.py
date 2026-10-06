@@ -248,3 +248,28 @@ def test_標註檔的照片編號與檔名不符時報錯(photo, tmp_path):
     with pytest.raises(ValueError, match="與檔名不符"):
         load_annotations(out / "claude", "claude")
 
+
+def test_codex標註時關閉電腦操作與瀏覽器外掛(photo):
+    runner = FakeRunner()
+    annotate_image(photo, "codex", "m", runner)
+    cmd = " ".join(runner.calls[0]["cmd"])
+    for flag in ("mcp_servers.node_repl.enabled=false", 'plugins."computer-use@openai-bundled".enabled=false',
+                 'plugins."browser@openai-bundled".enabled=false', 'plugins."chrome@openai-bundled".enabled=false'):
+        assert flag in cmd
+
+
+def test_交給標註工具的環境變數不含金鑰且不含WindowsApps():
+    from scripts.annotate.run import annotator_env
+
+    env = annotator_env({"GEMINI_API_KEY": "x", "GITHUB_TOKEN": "y", "HOME": "h",
+                         "PATH": "C:/bin;C:/Users/u/AppData/Local/Microsoft/WindowsApps".replace(";", __import__("os").pathsep)})
+    assert "GEMINI_API_KEY" not in env and "GITHUB_TOKEN" not in env and env["HOME"] == "h"
+    assert "WindowsApps" not in env["PATH"]
+
+
+def test_紀錄的指紋是實際交給模型的副本(photo):
+    import hashlib
+
+    record = annotate_image(photo, "claude", "m", FakeRunner())
+    assert record.image_sha256 == hashlib.sha256(photo.read_bytes()).hexdigest()
+

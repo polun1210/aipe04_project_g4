@@ -16,6 +16,8 @@
 
 import hashlib
 import json
+import os
+import re
 import shutil
 import subprocess
 from collections.abc import Callable
@@ -38,6 +40,21 @@ class AnnotationError(Exception):
     """標註工具執行失敗或輸出不符結構。"""
 
 
+_SECRET_ENV = re.compile(r"KEY|TOKEN|SECRET|PASSWORD|CREDENTIAL", re.IGNORECASE)
+
+
+def annotator_env(environ: dict[str, str] | None = None) -> dict[str, str]:
+    """交給標註工具的環境變數：拿掉看起來像金鑰的變數；PATH 去掉 WindowsApps。
+
+    本機的 pwsh.exe 是 Microsoft Store 版（WindowsApps），Codex 沙盒的受限權限啟動不了它，
+    Codex 就會改用電腦操作工具在沙盒外執行（D58、D59）；去掉後改用內建 PowerShell，沙盒才有效。
+    """
+    env = {k: v for k, v in (environ if environ is not None else os.environ).items() if not _SECRET_ENV.search(k)}
+    for key in [k for k in env if k.upper() == "PATH"]:
+        env[key] = os.pathsep.join(p for p in env[key].split(os.pathsep) if "windowsapps" not in p.lower())
+    return env
+
+
 def run_subprocess(cmd: list[str], cwd: Path, stdin: str) -> subprocess.CompletedProcess:
     exe = shutil.which(cmd[0])
     if exe is None:
@@ -45,6 +62,7 @@ def run_subprocess(cmd: list[str], cwd: Path, stdin: str) -> subprocess.Complete
     return subprocess.run(
         [exe, *cmd[1:]],
         cwd=cwd,
+        env=annotator_env(),
         input=stdin,
         capture_output=True,
         text=True,
@@ -80,6 +98,12 @@ def codex_command(model: str, image: Path, workdir: Path, schema: Path, output: 
         "--model", model,
         "--output-schema", str(schema),
         "--output-last-message", str(output),
+        # 不載入使用者的電腦操作、瀏覽器外掛與 node_repl：它們能在沙盒外操作電腦（D59）
+        "-c", "mcp_servers.node_repl.enabled=false",
+        "-c", 'plugins."computer-use@openai-bundled".enabled=false',
+        "-c", 'plugins."unified-computer-use@openai-bundled".enabled=false',
+        "-c", 'plugins."chrome@openai-bundled".enabled=false',
+        "-c", 'plugins."browser@openai-bundled".enabled=false',
         "-",  # 提示詞從 stdin 讀
     ]  # fmt: skip
 
@@ -93,6 +117,7 @@ def annotate_image(image_path: Path, annotator: str, model: str, runner: Runner 
         workdir, iodir = Path(work), Path(io)
         image = workdir / image_path.name
         shutil.copyfile(image_path, image)  # 只複製像素檔，不帶原資料夾的任何東西
+        seen_sha256 = image_sha256(image)  # 實際交給模型的那份副本的指紋
         if annotator == "claude":
             proc = runner(claude_command(model), workdir, prompt)
             _check(proc, annotator, image_path)
@@ -117,7 +142,7 @@ def annotate_image(image_path: Path, annotator: str, model: str, runner: Runner 
         prompt_version=PROMPT_VERSION,
         annotated_at=datetime.now(timezone.utc),
         annotation=annotation,
-        image_sha256=image_sha256(image_path),
+        image_sha256=seen_sha256,
     )
 
 
