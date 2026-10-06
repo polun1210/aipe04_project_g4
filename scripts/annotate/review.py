@@ -53,9 +53,11 @@ def _read(path: Path) -> list[dict[str, str]]:
 
 
 def _find_image(images: Path, image_id: str) -> Path | None:
-    for suffix in IMAGE_SUFFIXES:
-        path = images / f"{image_id}{suffix}"
-        if path.exists():
+    """副檔名不分大小寫（p01-img01.JPG 也找得到），與 run 的判斷一致；在大小寫敏感的系統上也成立。"""
+    if not images.is_dir():
+        return None
+    for path in sorted(images.iterdir()):
+        if path.stem == image_id and path.suffix.lower() in IMAGE_SUFFIXES:
             return path
     return None
 

@@ -318,3 +318,11 @@ def test_跳過的隨機抽查匯出時一律留空(report, tmp_path):
     page = build_review(out, tmp_path, skip_random={"p01-img01"})
     assert 'SKIPPED.has(i) ? ""' in page and "delete state.spot[i]" in page
 
+
+def test_對照頁找得到大寫副檔名的照片(report, tmp_path):
+    out, images = tmp_path / "comparison", tmp_path / "images"
+    images.mkdir()
+    (images / "p01-img01.JPG").write_bytes(b"fake-jpeg")
+    write_outputs(report, out)
+    assert 'src="../images/p01-img01.JPG"' in build_review(out, images)
+
