@@ -33,7 +33,7 @@ PipeList = Annotated[list[T], BeforeValidator(_split_pipe)]
 
 
 class BoundingBox(StrictModel):
-    """整數像素。座標系 ＝ 傾斜校正後、實際顯示在 HITL 畫面上的那張圖。"""
+    """整數像素。座標系 ＝ 依 EXIF 方向轉正後的圖；前端畫框要用轉正後的圖。"""
 
     x: int = Field(ge=0)
     y: int = Field(ge=0)
