@@ -22,3 +22,6 @@ Thumbs.db
 
 # 標示照片（版權，不進 repo，D09／D15）
 /data/
+
+# Claude Code 每個人自己的設定（共用的 skill 在 .claude/skills/ 會進 git）
+.claude/settings.local.json
