@@ -27,6 +27,11 @@ def cmd_run(args: argparse.Namespace) -> int:
     if not images:
         print(f"{args.images} 裡沒有照片", file=sys.stderr)
         return 2
+    stems = [p.stem for p in images]
+    duplicated = sorted({s for s in stems if stems.count(s) > 1})
+    if duplicated:  # 照片編號取自檔名，同名不同副檔名會互相覆蓋或被當成已標註
+        print(f"照片編號重複（同名不同副檔名）：{', '.join(duplicated)}", file=sys.stderr)
+        return 2
     models = {"claude": args.claude_model, "codex": args.codex_model}
     models = {k: v for k, v in models.items() if k in args.annotators}
     missing = [k for k, v in models.items() if not v]
@@ -43,6 +48,9 @@ def cmd_run(args: argparse.Namespace) -> int:
 def cmd_compare(args: argparse.Namespace) -> int:
     a, models_a = load_annotations(args.annotations / "claude", "claude")
     b, models_b = load_annotations(args.annotations / "codex", "codex")
+    if not a or not b or not (a.keys() & b.keys()):
+        print("兩個標註者都要有標註，且至少要有一張共同的照片才能比對（請檢查資料夾路徑或標註是否失敗）", file=sys.stderr)
+        return 2
     report = compare(a, b, seed=args.seed, sample_rate=args.sample_rate)
     report.extra["claude 模型"] = "、".join(sorted(models_a)) or "—"
     report.extra["codex 模型"] = "、".join(sorted(models_b)) or "—"

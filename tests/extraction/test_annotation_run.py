@@ -209,3 +209,24 @@ def test_標註放錯資料夾時讀取直接報錯(photo, tmp_path):
     with pytest.raises(ValueError, match="不應放在 codex"):
         load_annotations(out / "codex", "codex")
 
+
+def test_照片編號重複時不執行標註(tmp_path, capsys):
+    from scripts.annotate.__main__ import main
+
+    images = tmp_path / "images"
+    images.mkdir()
+    (images / "p01.jpg").write_bytes(b"a")
+    (images / "p01.png").write_bytes(b"b")
+    assert main(["run", "--images", str(images), "--annotations", str(tmp_path / "out"),
+                 "--claude-model", "m", "--codex-model", "m"]) == 2  # fmt: skip
+    assert "照片編號重複" in capsys.readouterr().err
+
+
+def test_比對時標註資料夾是空的就失敗(tmp_path, capsys):
+    from scripts.annotate.__main__ import main
+
+    (tmp_path / "claude").mkdir()
+    (tmp_path / "codex").mkdir()
+    assert main(["compare", "--annotations", str(tmp_path), "--out", str(tmp_path / "cmp")]) == 2
+    assert "共同的照片" in capsys.readouterr().err
+

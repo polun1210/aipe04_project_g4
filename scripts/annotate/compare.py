@@ -13,7 +13,9 @@
 sample_rate 比例（無條件進位），同一份輸入一定產生同一份名單。
 
 列數核對：抽查只看「兩邊都有」的欄位，兩個模型都漏掉（或都多出）的列不會出現在任何清單。
-因此每張照片列出兩邊的列數，由人工填照片上實際的列數；實際列數比兩邊都多或都少，就要回去看那張照片。
+因此每張照片列出兩邊的列數，由人工填照片上的實際列數；實際列數比兩邊都多或都少，就要回去看那張照片。
+限制：只能發現「淨列數」的差異。兩個模型同時漏掉一列、又同時多抓一列時，列數相同，抓不到；
+這種情況要靠人工核對時對照照片逐列確認名稱（例如抽查名單裡的名稱欄位）。
 """
 
 import csv
@@ -237,7 +239,11 @@ def _fmt(value: Any) -> str:
 
 
 def write_outputs(report: ComparisonReport, out: Path) -> None:
-    """不一致清單與抽查名單寫成 CSV（utf-8-sig，Excel 直接開不會亂碼），附一份 markdown 摘要。"""
+    """不一致清單與抽查名單寫成 CSV（utf-8-sig），附一份 markdown 摘要。
+
+    CSV 給工具讀回，人工裁決請用對照頁（review）。不要用試算表直接開：內容來自 AI 讀取的標示文字，
+    以 = + @ 開頭的儲存格可能被試算表當成公式執行。
+    """
     out.mkdir(parents=True, exist_ok=True)
     name_a, name_b = report.names
     with (out / "disagreements.csv").open("w", newline="", encoding="utf-8-sig") as fh:
