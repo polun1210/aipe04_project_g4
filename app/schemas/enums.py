@@ -311,3 +311,4 @@ class ErrorCode(StrEnum):
     ALL_IMAGES_REJECTED = "all_images_rejected"
     PRODUCT_NOT_VERIFIED = "product_not_verified"
     JOB_FAILED = "job_failed"
+    INTERNAL_ERROR = "internal_error"  # 伺服器沒預期到的錯誤；message 固定，不洩漏內部細節

@@ -19,3 +19,6 @@ __pycache__/
 Thumbs.db
 .idea/
 .vscode/
+
+# Claude Code 每個人自己的設定（共用的 skill 在 .claude/skills/ 會進 git）
+.claude/settings.local.json
