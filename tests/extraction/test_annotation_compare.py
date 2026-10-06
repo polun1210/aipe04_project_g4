@@ -297,3 +297,24 @@ def test_項目清單改變時對照頁的暫存指紋也改變(report, tmp_path
     other = compare({"p01-img01": A}, {"p01-img01": B}, seed=99)  # 抽到的項目不同
     assert fingerprint(other) != same  # 清單改變，舊暫存不會被套到別的項目
 
+
+def test_數值改變時對照頁的暫存指紋也改變(tmp_path):
+    import json
+    import re
+
+    def fingerprint(b):
+        out = tmp_path / "c"
+        write_outputs(compare({"p01-img01": A}, {"p01-img01": b}), out)
+        page = build_review(out, tmp_path)
+        return json.loads(re.search(r"const DATA = (\{.*?\});\n", page, re.S).group(1))["fingerprint"]
+
+    changed = annotation(*B.rows[:2], row("鎂", 130, Unit.MG), B.rows[3])  # 同樣的項目、不同的值
+    assert fingerprint(B) != fingerprint(changed)
+
+
+def test_跳過的隨機抽查匯出時一律留空(report, tmp_path):
+    out = tmp_path / "comparison"
+    write_outputs(report, out)
+    page = build_review(out, tmp_path, skip_random={"p01-img01"})
+    assert 'SKIPPED.has(i) ? ""' in page and "delete state.spot[i]" in page
+

@@ -211,12 +211,18 @@ def _spot_checks(fields: list[FieldComparison], seed: int, sample_rate: float) -
 # ── 讀寫檔案 ─────────────────────────────────────────────────────
 
 
-def load_annotations(folder: Path) -> tuple[dict[str, Annotation], set[str]]:
-    """讀 <folder>/<照片編號>.json，回傳（照片編號 → 標註, 用到的模型）。"""
+def load_annotations(folder: Path, annotator: str) -> tuple[dict[str, Annotation], set[str]]:
+    """讀 <folder>/<照片編號>.json，回傳（照片編號 → 標註, 用到的模型）。
+
+    每筆紀錄的 annotator 必須是預期的標註者：檔案放錯資料夾（例如 Claude 的結果複製到 codex/）
+    會讓兩邊變成同一份標註，產生假的雙盲一致，所以直接報錯。
+    """
     annotations: dict[str, Annotation] = {}
     models: set[str] = set()
     for path in sorted(folder.glob("*.json")):
         record = AnnotationRecord.model_validate_json(path.read_text(encoding="utf-8"))
+        if record.annotator != annotator:
+            raise ValueError(f"{path} 是 {record.annotator} 的標註，不應放在 {annotator} 的資料夾")
         annotations[record.image_id] = record.annotation
         models.add(record.model)
     return annotations, models

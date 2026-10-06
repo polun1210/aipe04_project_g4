@@ -181,8 +181,8 @@ def test_批次標註寫出兩份標註且可直接比對(photo, tmp_path):
     out = tmp_path / "annotations"
     failed = annotate_all([photo], out, {"claude": "m1", "codex": "m2"}, runner=FakeRunner())
     assert failed == []
-    a, models_a = load_annotations(out / "claude")
-    b, _ = load_annotations(out / "codex")
+    a, models_a = load_annotations(out / "claude", "claude")
+    b, _ = load_annotations(out / "codex", "codex")
     assert models_a == {"m1"}
     assert compare(a, b).disagreements == []
 
@@ -199,3 +199,13 @@ def test_一項失敗不影響其他項(photo, tmp_path):
     out = tmp_path / "annotations"
     failed = annotate_all([photo], out, {"claude": "m", "codex": "m"}, runner=FakeRunner(returncode=1))
     assert failed == ["claude:p01-img01", "codex:p01-img01"]
+
+
+def test_標註放錯資料夾時讀取直接報錯(photo, tmp_path):
+    out = tmp_path / "annotations"
+    annotate_all([photo], out, {"claude": "m"}, runner=FakeRunner())
+    (out / "codex").mkdir()
+    (out / "claude" / "p01-img01.json").rename(out / "codex" / "p01-img01.json")
+    with pytest.raises(ValueError, match="不應放在 codex"):
+        load_annotations(out / "codex", "codex")
+

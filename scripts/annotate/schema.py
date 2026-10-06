@@ -6,6 +6,7 @@ Pydantic 產生的 schema 不符合。兩者是否一致由測試檢查。
 """
 
 from datetime import datetime
+from typing import Literal
 
 from pydantic import Field
 
@@ -38,7 +39,7 @@ class AnnotationRecord(StrictModel):
     """一個標註者對一張照片的標註，連同可追溯的執行資訊。"""
 
     image_id: str
-    annotator: str  # claude、codex
+    annotator: Literal["claude", "codex"]
     model: str  # 執行時以 --model 指定的模型
     models_reported: list[str] = Field(default_factory=list)  # 工具自己回報實際用到的模型（有的話）
     prompt_version: str

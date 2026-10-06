@@ -41,8 +41,8 @@ def cmd_run(args: argparse.Namespace) -> int:
 
 
 def cmd_compare(args: argparse.Namespace) -> int:
-    a, models_a = load_annotations(args.annotations / "claude")
-    b, models_b = load_annotations(args.annotations / "codex")
+    a, models_a = load_annotations(args.annotations / "claude", "claude")
+    b, models_b = load_annotations(args.annotations / "codex", "codex")
     report = compare(a, b, seed=args.seed, sample_rate=args.sample_rate)
     report.extra["claude 模型"] = "、".join(sorted(models_a)) or "—"
     report.extra["codex 模型"] = "、".join(sorted(models_b)) or "—"

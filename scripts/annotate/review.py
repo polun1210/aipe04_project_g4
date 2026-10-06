@@ -111,8 +111,12 @@ def build_review(
 
 
 def _fingerprint(disagreements: list[dict[str, str]], spot_checks: list[dict[str, str]]) -> str:
-    items = [f"d|{r['image_id']}|{r['row']}|{r['field']}" for r in disagreements]
-    items += [f"s|{r['image_id']}|{r['row']}|{r['field']}" for r in spot_checks]
+    # 包含兩邊的值、抽查值與原因（不含人工填的裁決／判斷）：內容一變就換一份暫存
+    def content(prefix: str, row: dict[str, str], skip: str) -> str:
+        return prefix + "|" + "|".join(f"{k}={v}" for k, v in row.items() if k != skip)
+
+    items = [content("d", r, "adjudicated") for r in disagreements]
+    items += [content("s", r, "verdict") for r in spot_checks]
     return hashlib.sha1("\n".join(items).encode("utf-8")).hexdigest()[:12]
 
 
@@ -184,7 +188,9 @@ let state = { dis:{}, spot:{}, count:{} };
 try { state = Object.assign(state, JSON.parse(localStorage.getItem(KEY) || "{}")); } catch (e) {}
 // 已經填在 CSV 裡的值（例如在對話中裁決過的）當作初始值，避免匯出時被空白蓋掉
 DATA.disagreements.forEach((r, i) => { if (!state.dis[i] && r.adjudicated) state.dis[i] = r.adjudicated; });
-DATA.spot_checks.forEach((r, i) => { if (!state.spot[i] && r.verdict) state.spot[i] = r.verdict; });
+const SKIPPED = new Set(DATA.skipped);
+SKIPPED.forEach(i => { delete state.spot[i]; });  // 跳過的項目不沿用任何舊答案
+DATA.spot_checks.forEach((r, i) => { if (!SKIPPED.has(i) && !state.spot[i] && r.verdict) state.spot[i] = r.verdict; });
 DATA.row_counts.forEach(r => { if (!state.count[r.image_id] && r.actual_rows) state.count[r.image_id] = r.actual_rows; });
 const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} progress(); };
 function progress() {
@@ -228,7 +234,7 @@ document.getElementById("export-dis").onclick = () => {
     ["image_id", "row", "field", a, b, "adjudicated"]));
 };
 document.getElementById("export-spot").onclick = () => {
-  download("spot_checks.csv", csv(DATA.spot_checks.map((r, i) => ({ ...r, verdict: state.spot[i] || "" })),
+  download("spot_checks.csv", csv(DATA.spot_checks.map((r, i) => ({ ...r, verdict: SKIPPED.has(i) ? "" : (state.spot[i] || "") })),
     ["image_id", "row", "field", "value", "reason", "verdict"]));
 };
 document.getElementById("export-count").onclick = () => {
