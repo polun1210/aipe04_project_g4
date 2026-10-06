@@ -5,6 +5,7 @@
   schema 檔與輸出檔放在另一個暫存資料夾，工作目錄裡看不到。兩個標註者的輸出都寫到 repo 的
   輸出資料夾，彼此的工作目錄裡都沒有對方的結果與既有標準答案。
 - Claude：`--restricted` 把讀檔範圍鎖在工作目錄內、移除所有能執行程式的工具，並忽略個人與專案設定；
+  `--safe-mode` 另外停用 CLAUDE.md、技能、外掛、hooks、MCP 等所有自訂內容；
   `--tools Read` 只開放讀檔工具、`--strict-mcp-config` 不載入任何 MCP 伺服器；
   非互動模式下未核准的工具一律拒絕，因此不能執行程式、上網或讀工作目錄外的檔案。
 - Codex：`--sandbox read-only`，不能寫檔、不能連網。
@@ -13,6 +14,7 @@
 - 提示詞從 stdin 傳入：Windows 上經 .cmd 包裝的指令，多行參數會被截斷。
 """
 
+import hashlib
 import json
 import shutil
 import subprocess
@@ -60,6 +62,7 @@ def claude_command(model: str) -> list[str]:
         "--json-schema", json.dumps(JSON_SCHEMA, ensure_ascii=False),
         "--model", model,
         "--restricted",
+        "--safe-mode",  # 不載入 CLAUDE.md、技能、外掛、hooks、MCP 等個人自訂內容
         "--tools", "Read",
         "--allowedTools", "Read",
         "--strict-mcp-config",
@@ -114,7 +117,24 @@ def annotate_image(image_path: Path, annotator: str, model: str, runner: Runner 
         prompt_version=PROMPT_VERSION,
         annotated_at=datetime.now(timezone.utc),
         annotation=annotation,
+        image_sha256=image_sha256(image_path),
     )
+
+
+def image_sha256(image_path: Path) -> str:
+    return hashlib.sha256(image_path.read_bytes()).hexdigest()
+
+
+def _stale_reason(target: Path, image_path: Path, model: str) -> str | None:
+    """已有標註時，確認它對應的還是同一張照片、同一個模型、同一版提示詞；不是就回傳原因。"""
+    record = AnnotationRecord.model_validate_json(target.read_text(encoding="utf-8"))
+    if record.image_sha256 is not None and record.image_sha256 != image_sha256(image_path):
+        return "照片內容已經換過"
+    if record.model != model:
+        return f"模型不同（{record.model} → {model}）"
+    if record.prompt_version != PROMPT_VERSION:
+        return f"提示詞版本不同（{record.prompt_version} → {PROMPT_VERSION}）"
+    return None
 
 
 def _check(proc: subprocess.CompletedProcess, annotator: str, image_path: Path) -> None:
@@ -154,7 +174,12 @@ def annotate_all(
         for annotator, model in models.items():
             target = out / annotator / f"{image_path.stem}.json"
             if target.exists() and not force:
-                print(f"跳過 {annotator} {image_path.stem}（已標註；要重做加 --force）")
+                stale = _stale_reason(target, image_path, model)
+                if stale:  # 不默默沿用舊標註，也不自動覆蓋：要使用者確認後加 --force 重做
+                    print(f"失敗 {annotator} {image_path.stem}：已有標註但{stale}，確認後加 --force 重做")
+                    failed.append(f"{annotator}:{image_path.stem}")
+                else:
+                    print(f"跳過 {annotator} {image_path.stem}（已標註；要重做加 --force）")
                 continue
             try:
                 record = annotate_image(image_path, annotator, model, runner)

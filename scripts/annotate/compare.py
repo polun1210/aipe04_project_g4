@@ -223,6 +223,8 @@ def load_annotations(folder: Path, annotator: str) -> tuple[dict[str, Annotation
     models: set[str] = set()
     for path in sorted(folder.glob("*.json")):
         record = AnnotationRecord.model_validate_json(path.read_text(encoding="utf-8"))
+        if record.image_id != path.stem:  # 例如備份檔 p01-old.json 裡寫的是 p01，會蓋掉正式的標註
+            raise ValueError(f"{path} 的照片編號是 {record.image_id}，與檔名不符")
         if record.annotator != annotator:
             raise ValueError(f"{path} 是 {record.annotator} 的標註，不應放在 {annotator} 的資料夾")
         annotations[record.image_id] = record.annotation

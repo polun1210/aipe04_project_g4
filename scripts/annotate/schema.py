@@ -45,6 +45,7 @@ class AnnotationRecord(StrictModel):
     prompt_version: str
     annotated_at: datetime
     annotation: Annotation
+    image_sha256: str | None = None  # 標註當時照片的指紋；舊紀錄沒有這欄
 
 
 def _nullable(json_type: str) -> dict:

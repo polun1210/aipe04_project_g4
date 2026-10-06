@@ -94,6 +94,7 @@ def test_claude只開放讀檔工具且不載入MCP(photo):
     assert cmd[cmd.index("--allowedTools") + 1] == "Read"
     assert "--strict-mcp-config" in cmd
     assert "--restricted" in cmd  # 讀檔範圍鎖在工作目錄內
+    assert "--safe-mode" in cmd  # 不載入個人的 hooks、外掛、MCP
 
 
 def test_codex使用唯讀沙盒並附上照片(photo):
@@ -229,4 +230,21 @@ def test_比對時標註資料夾是空的就失敗(tmp_path, capsys):
     (tmp_path / "codex").mkdir()
     assert main(["compare", "--annotations", str(tmp_path), "--out", str(tmp_path / "cmp")]) == 2
     assert "共同的照片" in capsys.readouterr().err
+
+
+def test_照片換過後不沿用舊標註而是要求重做(photo, tmp_path):
+    out = tmp_path / "annotations"
+    annotate_all([photo], out, {"claude": "m"}, runner=FakeRunner())
+    photo.write_bytes(b"another-photo")
+    failed = annotate_all([photo], out, {"claude": "m"}, runner=FakeRunner())
+    assert failed == ["claude:p01-img01"]
+    assert annotate_all([photo], out, {"claude": "m"}, force=True, runner=FakeRunner()) == []
+
+
+def test_標註檔的照片編號與檔名不符時報錯(photo, tmp_path):
+    out = tmp_path / "annotations"
+    annotate_all([photo], out, {"claude": "m"}, runner=FakeRunner())
+    (out / "claude" / "p01-img01.json").rename(out / "claude" / "p01-old.json")
+    with pytest.raises(ValueError, match="與檔名不符"):
+        load_annotations(out / "claude", "claude")
 
