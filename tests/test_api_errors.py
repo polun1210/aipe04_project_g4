@@ -31,7 +31,11 @@ def client() -> TestClient:
     def unauthorized() -> None:
         raise HTTPException(status_code=401)
 
-    return TestClient(app)
+    @app.get("/api/_test/boom")
+    def boom() -> None:
+        raise RuntimeError("db password=hunter2")
+
+    return TestClient(app, raise_server_exceptions=False)
 
 
 def test_unknown_path_returns_not_found_error(client):
@@ -71,3 +75,18 @@ def test_http_401_maps_to_unauthorized(client):
     response = client.get("/api/_test/unauthorized")
     assert response.status_code == 401
     assert ErrorResponse.model_validate(response.json()).error.code == "unauthorized"
+
+
+def test_unexpected_exception_returns_internal_error_without_leaking_details(client):
+    response = client.get("/api/_test/boom")
+    assert response.status_code == 500
+    body = ErrorResponse.model_validate(response.json())
+    assert body.error.code == "internal_error"
+    assert "hunter2" not in response.text
+    assert "RuntimeError" not in response.text
+
+
+def test_wrong_method_still_uses_error_format(client):
+    response = client.get("/api/_test/echo")
+    assert response.status_code == 405
+    ErrorResponse.model_validate(response.json())
