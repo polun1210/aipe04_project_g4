@@ -39,16 +39,26 @@ def check_quality(images: list[ImageInput]) -> list[SourceImage]:
     return [SourceImage(image_id=img.image_id, quality_status=QualityStatus.ACCEPTED) for img in images]
 
 
-def extract(product_id: UUID, images: list[ImageInput], engine: Engine | None = None) -> ExtractionDraft:
-    """非同步工作內呼叫。只處理 quality_status = accepted 的圖。
+def extract(
+    product_id: UUID,
+    images: list[ImageInput],
+    quality: list[SourceImage],
+    engine: Engine | None = None,
+) -> ExtractionDraft:
+    """非同步工作內呼叫。quality 是上傳時 check_quality 的結果（已回給前端，04a），這裡不再重新檢查，
+    所以 04a 與 04b 的品質結果一定一致；只處理 quality_status = accepted 的圖。
 
     假版本：回傳範例草稿，product_id 與照片編號換成呼叫者給的；三個版本欄位標為 stub，
-    避免串接期間的修正紀錄被誤認為真實辨識結果。指定 engine 時會實際呼叫它，ocr_version 改成該引擎的版本。
+    避免串接期間的修正紀錄被誤認為真實辨識結果。位置框是範例圖的座標，不對應真實照片。
+    指定 engine 時會實際呼叫它，ocr_version 改成該引擎的版本。
     """
-    sources = check_quality(images)
-    accepted = [img for img, src in zip(images, sources) if src.quality_status is QualityStatus.ACCEPTED]
+    by_id = {img.image_id: img for img in images}
+    if [s.image_id for s in quality] != [img.image_id for img in images]:
+        raise ExtractionError("品質檢查結果與照片對不上（照片編號或順序不同）")
+    accepted = [by_id[s.image_id] for s in quality if s.quality_status is QualityStatus.ACCEPTED]
     if not accepted:
         raise ExtractionError("沒有通過品質檢查的照片")
+    sources = quality
 
     ocr_version = _STUB_VERSION
     if engine is not None:
