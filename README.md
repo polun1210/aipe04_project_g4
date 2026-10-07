@@ -27,6 +27,7 @@ uv run pytest      # 看到 passed、沒有 failed，就表示環境沒問題
 | 某個詞是什麼意思 | [CONTEXT.md](CONTEXT.md) |
 | 支援哪些藥、營養素、成分 | [docs/v1-scope-checklist.md](docs/v1-scope-checklist.md) |
 | 各模組之間傳什麼資料（JSON／CSV） | [docs/schemas/README.md](docs/schemas/README.md) |
+| 哪一頁打哪個網址、送什麼收什麼（前後端對接） | [docs/schemas/README.md](docs/schemas/README.md#哪一頁--哪個網址--用哪個範例檔) |
 | 為什麼這樣設計 | [docs/adr/README.md](docs/adr/README.md) |
 | 怎麼安裝環境、加套件 | [docs/uv-guide.md](docs/uv-guide.md) |
 | 怎麼協作、發 PR、commit 怎麼寫 | [CONTRIBUTING.md](CONTRIBUTING.md) |
