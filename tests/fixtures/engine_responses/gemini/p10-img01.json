@@ -1,0 +1,316 @@
+{
+  "image_id": "p10-img01",
+  "engine_version": "gemini/gemini-3.5-flash-lite/prompt-g1",
+  "blocks": [
+    {
+      "text": "營養標示 Supplement Facts",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "每份",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "每日參考值百分比 % Daily Reference Value",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "每一份量1粒 本包裝含300份",
+      "bbox": {
+        "x": 144,
+        "y": 654,
+        "width": 741,
+        "height": 48
+      },
+      "confidence": null
+    },
+    {
+      "text": "維生素B1 Vitamin B1 35毫克mg 2500%",
+      "bbox": {
+        "x": 155,
+        "y": 863,
+        "width": 710,
+        "height": 26
+      },
+      "confidence": null
+    },
+    {
+      "text": "維生素B2 Vitamin B2 50毫克mg 3125%",
+      "bbox": {
+        "x": 155,
+        "y": 889,
+        "width": 711,
+        "height": 25
+      },
+      "confidence": null
+    },
+    {
+      "text": "維生素B6 Vitamin B6 50毫克mg 3125%",
+      "bbox": {
+        "x": 155,
+        "y": 914,
+        "width": 712,
+        "height": 26
+      },
+      "confidence": null
+    },
+    {
+      "text": "維生素B12 Vitamin B12 50微克mcg 2083%",
+      "bbox": {
+        "x": 155,
+        "y": 940,
+        "width": 710,
+        "height": 26
+      },
+      "confidence": null
+    },
+    {
+      "text": "維生素C Vitamin C 300毫克mg 300%",
+      "bbox": {
+        "x": 155,
+        "y": 966,
+        "width": 708,
+        "height": 26
+      },
+      "confidence": null
+    },
+    {
+      "text": "菸鹼素 Niacin 30毫克mg NE 167%",
+      "bbox": {
+        "x": 155,
+        "y": 992,
+        "width": 715,
+        "height": 26
+      },
+      "confidence": null
+    },
+    {
+      "text": "葉酸 Folic Acid 400微克mcg 100%",
+      "bbox": {
+        "x": 155,
+        "y": 1018,
+        "width": 714,
+        "height": 25
+      },
+      "confidence": null
+    },
+    {
+      "text": "泛酸 Pantothenic Acid 100毫克mg 2000%",
+      "bbox": {
+        "x": 155,
+        "y": 1043,
+        "width": 715,
+        "height": 26
+      },
+      "confidence": null
+    },
+    {
+      "text": "生物素 Biotin 100微克mcg 333%",
+      "bbox": {
+        "x": 155,
+        "y": 1069,
+        "width": 717,
+        "height": 27
+      },
+      "confidence": null
+    },
+    {
+      "text": "鈣 Calcium 26毫克mg 2%",
+      "bbox": {
+        "x": 155,
+        "y": 1096,
+        "width": 717,
+        "height": 26
+      },
+      "confidence": null
+    },
+    {
+      "text": "肌醇 Inositol 25毫克mg *",
+      "bbox": {
+        "x": 155,
+        "y": 1122,
+        "width": 718,
+        "height": 26
+      },
+      "confidence": null
+    }
+  ],
+  "reading": {
+    "serving": {
+      "raw_text": "每一份量1粒 本包裝含300份",
+      "serving_size": 1.0,
+      "dose_unit_raw": "粒",
+      "bbox": {
+        "x": 144,
+        "y": 654,
+        "width": 741,
+        "height": 48
+      }
+    },
+    "rows": [
+      {
+        "raw_text": "維生素B1 Vitamin B1 35毫克mg 2500%",
+        "raw_name": "維生素B1 Vitamin B1",
+        "amount": 35.0,
+        "unit_raw": "毫克mg",
+        "percent_dv": 2500.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 155,
+          "y": 863,
+          "width": 710,
+          "height": 26
+        }
+      },
+      {
+        "raw_text": "維生素B2 Vitamin B2 50毫克mg 3125%",
+        "raw_name": "維生素B2 Vitamin B2",
+        "amount": 50.0,
+        "unit_raw": "毫克mg",
+        "percent_dv": 3125.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 155,
+          "y": 889,
+          "width": 711,
+          "height": 25
+        }
+      },
+      {
+        "raw_text": "維生素B6 Vitamin B6 50毫克mg 3125%",
+        "raw_name": "維生素B6 Vitamin B6",
+        "amount": 50.0,
+        "unit_raw": "毫克mg",
+        "percent_dv": 3125.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 155,
+          "y": 914,
+          "width": 712,
+          "height": 26
+        }
+      },
+      {
+        "raw_text": "維生素B12 Vitamin B12 50微克mcg 2083%",
+        "raw_name": "維生素B12 Vitamin B12",
+        "amount": 50.0,
+        "unit_raw": "微克mcg",
+        "percent_dv": 2083.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 155,
+          "y": 940,
+          "width": 710,
+          "height": 26
+        }
+      },
+      {
+        "raw_text": "維生素C Vitamin C 300毫克mg 300%",
+        "raw_name": "維生素C Vitamin C",
+        "amount": 300.0,
+        "unit_raw": "毫克mg",
+        "percent_dv": 300.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 155,
+          "y": 966,
+          "width": 708,
+          "height": 26
+        }
+      },
+      {
+        "raw_text": "菸鹼素 Niacin 30毫克mg NE 167%",
+        "raw_name": "菸鹼素 Niacin",
+        "amount": 30.0,
+        "unit_raw": "毫克mg NE",
+        "percent_dv": 167.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 155,
+          "y": 992,
+          "width": 715,
+          "height": 26
+        }
+      },
+      {
+        "raw_text": "葉酸 Folic Acid 400微克mcg 100%",
+        "raw_name": "葉酸 Folic Acid",
+        "amount": 400.0,
+        "unit_raw": "微克mcg",
+        "percent_dv": 100.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 155,
+          "y": 1018,
+          "width": 714,
+          "height": 25
+        }
+      },
+      {
+        "raw_text": "泛酸 Pantothenic Acid 100毫克mg 2000%",
+        "raw_name": "泛酸 Pantothenic Acid",
+        "amount": 100.0,
+        "unit_raw": "毫克mg",
+        "percent_dv": 2000.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 155,
+          "y": 1043,
+          "width": 715,
+          "height": 26
+        }
+      },
+      {
+        "raw_text": "生物素 Biotin 100微克mcg 333%",
+        "raw_name": "生物素 Biotin",
+        "amount": 100.0,
+        "unit_raw": "微克mcg",
+        "percent_dv": 333.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 155,
+          "y": 1069,
+          "width": 717,
+          "height": 27
+        }
+      },
+      {
+        "raw_text": "鈣 Calcium 26毫克mg 2%",
+        "raw_name": "鈣 Calcium",
+        "amount": 26.0,
+        "unit_raw": "毫克mg",
+        "percent_dv": 2.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 155,
+          "y": 1096,
+          "width": 717,
+          "height": 26
+        }
+      },
+      {
+        "raw_text": "肌醇 Inositol 25毫克mg *",
+        "raw_name": "肌醇 Inositol",
+        "amount": 25.0,
+        "unit_raw": "毫克mg",
+        "percent_dv": null,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 155,
+          "y": 1122,
+          "width": 718,
+          "height": 26
+        }
+      }
+    ],
+    "suggested_intake_raw": null,
+    "headings": [
+      "營養標示 Supplement Facts",
+      "每份",
+      "每日參考值百分比 % Daily Reference Value"
+    ]
+  }
+}

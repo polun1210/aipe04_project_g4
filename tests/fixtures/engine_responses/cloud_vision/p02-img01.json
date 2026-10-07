@@ -1,0 +1,687 @@
+{
+  "image_id": "p02-img01",
+  "engine_version": "cloud_vision/document_text_detection/builtin/stable",
+  "blocks": [
+    {
+      "text": "段",
+      "bbox": {
+        "x": 0,
+        "y": 2104,
+        "width": 51,
+        "height": 65
+      },
+      "confidence": 0.9513
+    },
+    {
+      "text": "營養標示",
+      "bbox": {
+        "x": 962,
+        "y": 1049,
+        "width": 163,
+        "height": 40
+      },
+      "confidence": 0.984
+    },
+    {
+      "text": "网站",
+      "bbox": {
+        "x": 1419,
+        "y": 1327,
+        "width": 129,
+        "height": 63
+      },
+      "confidence": 0.8294
+    },
+    {
+      "text": "新例:48%、DHA",
+      "bbox": {
+        "x": 584,
+        "y": 1113,
+        "width": 91,
+        "height": 44
+      },
+      "confidence": 0.1291
+    },
+    {
+      "text": "「每一份量1.76公克(2粒)",
+      "bbox": {
+        "x": 699,
+        "y": 1100,
+        "width": 293,
+        "height": 51
+      },
+      "confidence": 0.8543
+    },
+    {
+      "text": "化劑迷迭香",
+      "bbox": {
+        "x": 604,
+        "y": 1155,
+        "width": 71,
+        "height": 37
+      },
+      "confidence": 0.8736
+    },
+    {
+      "text": "本包裝含45份",
+      "bbox": {
+        "x": 706,
+        "y": 1142,
+        "width": 158,
+        "height": 43
+      },
+      "confidence": 0.9502
+    },
+    {
+      "text": "每份",
+      "bbox": {
+        "x": 1064,
+        "y": 1173,
+        "width": 59,
+        "height": 25
+      },
+      "confidence": 0.992
+    },
+    {
+      "text": "每日參考值百分比|",
+      "bbox": {
+        "x": 1174,
+        "y": 1170,
+        "width": 192,
+        "height": 30
+      },
+      "confidence": 0.9021
+    },
+    {
+      "text": "| 熱量",
+      "bbox": {
+        "x": 702,
+        "y": 1223,
+        "width": 51,
+        "height": 31
+      },
+      "confidence": 0.4637
+    },
+    {
+      "text": "13.3大卡",
+      "bbox": {
+        "x": 1030,
+        "y": 1210,
+        "width": 121,
+        "height": 29
+      },
+      "confidence": 0.981
+    },
+    {
+      "text": "0.7% |",
+      "bbox": {
+        "x": 1313,
+        "y": 1210,
+        "width": 52,
+        "height": 26
+      },
+      "confidence": 0.9231
+    },
+    {
+      "text": "蛋白質",
+      "bbox": {
+        "x": 711,
+        "y": 1255,
+        "width": 67,
+        "height": 30
+      },
+      "confidence": 0.9871
+    },
+    {
+      "text": "0.2公克",
+      "bbox": {
+        "x": 1049,
+        "y": 1246,
+        "width": 103,
+        "height": 28
+      },
+      "confidence": 0.9721
+    },
+    {
+      "text": "0.3%",
+      "bbox": {
+        "x": 1316,
+        "y": 1247,
+        "width": 42,
+        "height": 22
+      },
+      "confidence": 0.9878
+    },
+    {
+      "text": "台灣價230毫克)",
+      "bbox": {
+        "x": 590,
+        "y": 1281,
+        "width": 67,
+        "height": 29
+      },
+      "confidence": 0.1535
+    },
+    {
+      "text": "脂肪",
+      "bbox": {
+        "x": 712,
+        "y": 1292,
+        "width": 42,
+        "height": 25
+      },
+      "confidence": 0.9978
+    },
+    {
+      "text": "1.3公克",
+      "bbox": {
+        "x": 1052,
+        "y": 1282,
+        "width": 103,
+        "height": 28
+      },
+      "confidence": 0.9862
+    },
+    {
+      "text": "2.2%",
+      "bbox": {
+        "x": 1317,
+        "y": 1281,
+        "width": 44,
+        "height": 21
+      },
+      "confidence": 0.9918
+    },
+    {
+      "text": "飽和脂肪酸",
+      "bbox": {
+        "x": 737,
+        "y": 1323,
+        "width": 129,
+        "height": 29
+      },
+      "confidence": 0.9784
+    },
+    {
+      "text": "0.01公克",
+      "bbox": {
+        "x": 1034,
+        "y": 1317,
+        "width": 122,
+        "height": 30
+      },
+      "confidence": 0.9898
+    },
+    {
+      "text": "0.1%",
+      "bbox": {
+        "x": 1318,
+        "y": 1313,
+        "width": 45,
+        "height": 23
+      },
+      "confidence": 0.9806
+    },
+    {
+      "text": "t",
+      "bbox": {
+        "x": 1356,
+        "y": 1352,
+        "width": 6,
+        "height": 8
+      },
+      "confidence": 0.8514
+    },
+    {
+      "text": "期封後盡早使",
+      "bbox": {
+        "x": 601,
+        "y": 1363,
+        "width": 76,
+        "height": 26
+      },
+      "confidence": 0.1389
+    },
+    {
+      "text": "反式脂肪酸",
+      "bbox": {
+        "x": 739,
+        "y": 1357,
+        "width": 129,
+        "height": 28
+      },
+      "confidence": 0.9831
+    },
+    {
+      "text": "0公克",
+      "bbox": {
+        "x": 1082,
+        "y": 1352,
+        "width": 76,
+        "height": 29
+      },
+      "confidence": 0.9622
+    },
+    {
+      "text": "|碳水化合物",
+      "bbox": {
+        "x": 707,
+        "y": 1392,
+        "width": 129,
+        "height": 30
+      },
+      "confidence": 0.8383
+    },
+    {
+      "text": "0.2公克",
+      "bbox": {
+        "x": 1054,
+        "y": 1389,
+        "width": 106,
+        "height": 28
+      },
+      "confidence": 0.9778
+    },
+    {
+      "text": "0.1%",
+      "bbox": {
+        "x": 1322,
+        "y": 1381,
+        "width": 46,
+        "height": 24
+      },
+      "confidence": 0.9927
+    },
+    {
+      "text": "糖",
+      "bbox": {
+        "x": 739,
+        "y": 1428,
+        "width": 22,
+        "height": 26
+      },
+      "confidence": 0.9727
+    },
+    {
+      "text": "0公克",
+      "bbox": {
+        "x": 1085,
+        "y": 1425,
+        "width": 76,
+        "height": 28
+      },
+      "confidence": 0.9579
+    },
+    {
+      "text": "用抗凝血劑之疑",
+      "bbox": {
+        "x": 600,
+        "y": 1444,
+        "width": 79,
+        "height": 32
+      },
+      "confidence": 0.1455
+    },
+    {
+      "text": "鈉",
+      "bbox": {
+        "x": 713,
+        "y": 1462,
+        "width": 25,
+        "height": 28
+      },
+      "confidence": 0.9882
+    },
+    {
+      "text": "3.62毫克",
+      "bbox": {
+        "x": 1038,
+        "y": 1459,
+        "width": 125,
+        "height": 33
+      },
+      "confidence": 0.9806
+    },
+    {
+      "text": "0.2%|",
+      "bbox": {
+        "x": 1326,
+        "y": 1446,
+        "width": 50,
+        "height": 30
+      },
+      "confidence": 0.8301
+    },
+    {
+      "text": "歐建為醫師意見。",
+      "bbox": {
+        "x": 593,
+        "y": 1481,
+        "width": 84,
+        "height": 37
+      },
+      "confidence": 0.1348
+    },
+    {
+      "text": "|W-3脂肪酸",
+      "bbox": {
+        "x": 708,
+        "y": 1499,
+        "width": 124,
+        "height": 29
+      },
+      "confidence": 0.846
+    },
+    {
+      "text": "1105毫克",
+      "bbox": {
+        "x": 1032,
+        "y": 1497,
+        "width": 133,
+        "height": 32
+      },
+      "confidence": 0.9758
+    },
+    {
+      "text": "廠不適合對其過敏",
+      "bbox": {
+        "x": 589,
+        "y": 1521,
+        "width": 94,
+        "height": 42
+      },
+      "confidence": 0.1351
+    },
+    {
+      "text": "| 二十碳五烯酸(EPA)",
+      "bbox": {
+        "x": 707,
+        "y": 1530,
+        "width": 248,
+        "height": 37
+      },
+      "confidence": 0.6559
+    },
+    {
+      "text": "624毫克",
+      "bbox": {
+        "x": 1052,
+        "y": 1533,
+        "width": 114,
+        "height": 32
+      },
+      "confidence": 0.9885
+    },
+    {
+      "text": "二十二碳六烯酸(DHA)",
+      "bbox": {
+        "x": 716,
+        "y": 1566,
+        "width": 279,
+        "height": 38
+      },
+      "confidence": 0.9767
+    },
+    {
+      "text": "416毫克",
+      "bbox": {
+        "x": 1051,
+        "y": 1569,
+        "width": 118,
+        "height": 34
+      },
+      "confidence": 0.9737
+    },
+    {
+      "text": "*參考值未訂定",
+      "bbox": {
+        "x": 710,
+        "y": 1609,
+        "width": 157,
+        "height": 39
+      },
+      "confidence": 0.974
+    },
+    {
+      "text": "90420",
+      "bbox": {
+        "x": 602,
+        "y": 1666,
+        "width": 79,
+        "height": 57
+      },
+      "confidence": 0.9372
+    },
+    {
+      "text": "每日參考值:熱量2000大卡、蛋白質60公克、脂肪60公克、飽",
+      "bbox": {
+        "x": 709,
+        "y": 1625,
+        "width": 666,
+        "height": 65
+      },
+      "confidence": 0.9509
+    },
+    {
+      "text": "和脂肪18公克、碳水化合物300公克、鈉2000毫克。",
+      "bbox": {
+        "x": 707,
+        "y": 1676,
+        "width": 596,
+        "height": 51
+      },
+      "confidence": 0.9618
+    },
+    {
+      "text": "46",
+      "bbox": {
+        "x": 110,
+        "y": 2020,
+        "width": 32,
+        "height": 28
+      },
+      "confidence": 0.5293
+    },
+    {
+      "text": "青埔",
+      "bbox": {
+        "x": 265,
+        "y": 1693,
+        "width": 145,
+        "height": 93
+      },
+      "confidence": 0.9878
+    },
+    {
+      "text": "埔小",
+      "bbox": {
+        "x": 285,
+        "y": 1695,
+        "width": 132,
+        "height": 182
+      },
+      "confidence": 0.5891
+    },
+    {
+      "text": "國小",
+      "bbox": {
+        "x": 226,
+        "y": 1760,
+        "width": 148,
+        "height": 95
+      },
+      "confidence": 0.9645
+    },
+    {
+      "text": "D",
+      "bbox": {
+        "x": 216,
+        "y": 1971,
+        "width": 77,
+        "height": 77
+      },
+      "confidence": 0.9686
+    },
+    {
+      "text": "資訊",
+      "bbox": {
+        "x": 513,
+        "y": 1807,
+        "width": 88,
+        "height": 58
+      },
+      "confidence": 0.9856
+    },
+    {
+      "text": "FRANCE FISH CL",
+      "bbox": {
+        "x": 728,
+        "y": 1863,
+        "width": 103,
+        "height": 31
+      },
+      "confidence": 0.5181
+    },
+    {
+      "text": "桃園",
+      "bbox": {
+        "x": 510,
+        "y": 1912,
+        "width": 95,
+        "height": 61
+      },
+      "confidence": 0.9945
+    },
+    {
+      "text": "水利會",
+      "bbox": {
+        "x": 472,
+        "y": 1956,
+        "width": 135,
+        "height": 75
+      },
+      "confidence": 0.9786
+    },
+    {
+      "text": "27",
+      "bbox": {
+        "x": 455,
+        "y": 2101,
+        "width": 66,
+        "height": 54
+      },
+      "confidence": 0.9864
+    },
+    {
+      "text": "詠美館",
+      "bbox": {
+        "x": 3,
+        "y": 2228,
+        "width": 127,
+        "height": 78
+      },
+      "confidence": 0.9683
+    },
+    {
+      "text": "364",
+      "bbox": {
+        "x": 257,
+        "y": 2322,
+        "width": 71,
+        "height": 41
+      },
+      "confidence": 0.9902
+    },
+    {
+      "text": "食品",
+      "bbox": {
+        "x": 1338,
+        "y": 1819,
+        "width": 60,
+        "height": 50
+      },
+      "confidence": 0.9951
+    },
+    {
+      "text": "飯店",
+      "bbox": {
+        "x": 1479,
+        "y": 1787,
+        "width": 104,
+        "height": 46
+      },
+      "confidence": 0.9544
+    },
+    {
+      "text": "三期",
+      "bbox": {
+        "x": 1230,
+        "y": 2188,
+        "width": 150,
+        "height": 84
+      },
+      "confidence": 0.8853
+    },
+    {
+      "text": "百貨+商辦+廣場",
+      "bbox": {
+        "x": 1021,
+        "y": 2223,
+        "width": 498,
+        "height": 140
+      },
+      "confidence": 0.6484
+    },
+    {
+      "text": "KE",
+      "bbox": {
+        "x": 1692,
+        "y": 1631,
+        "width": 81,
+        "height": 43
+      },
+      "confidence": 0.5753
+    },
+    {
+      "text": "新京店",
+      "bbox": {
+        "x": 1666,
+        "y": 1849,
+        "width": 107,
+        "height": 41
+      },
+      "confidence": 0.2601
+    },
+    {
+      "text": "高鐵站前東路一段",
+      "bbox": {
+        "x": 1609,
+        "y": 1887,
+        "width": 45,
+        "height": 313
+      },
+      "confidence": 0.4938
+    },
+    {
+      "text": "段 桃大",
+      "bbox": {
+        "x": 1612,
+        "y": 2135,
+        "width": 160,
+        "height": 55
+      },
+      "confidence": 0.9451
+    },
+    {
+      "text": "428",
+      "bbox": {
+        "x": 1697,
+        "y": 2211,
+        "width": 74,
+        "height": 38
+      },
+      "confidence": 0.9878
+    }
+  ],
+  "reading": null
+}

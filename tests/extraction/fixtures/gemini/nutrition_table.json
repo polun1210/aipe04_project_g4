@@ -1,0 +1,36 @@
+{
+  "image_id": "p01-img01",
+  "engine": "gemini",
+  "request": {
+    "model": "gemini-2.5-flash",
+    "prompt_version": "g1",
+    "temperature": 0.0
+  },
+  "response": {
+    "candidates": [
+      {
+        "finish_reason": "STOP",
+        "index": 0,
+        "content": {
+          "parts": [
+            {
+              "text": "{\"serving\": {\"raw_text\": \"每一份量 2 粒\", \"serving_size\": 2, \"dose_unit\": \"粒\", \"box_2d\": [100, 50, 140, 400]}, \"rows\": [{\"raw_text\": \"維生素D 10微克 100%\", \"raw_name\": \"維生素D\", \"amount\": 10, \"unit\": \"微克\", \"percent_dv\": 100, \"label_section\": \"nutrition_table\", \"box_2d\": [200, 50, 240, 700]}, {\"raw_text\": \"檸檬酸鈣(含純鈣50mg) 238毫克\", \"raw_name\": \"檸檬酸鈣(含純鈣50mg)\", \"amount\": 238, \"unit\": \"毫克\", \"percent_dv\": null, \"label_section\": \"nutrition_table\", \"box_2d\": [300, 600, 280, 700]}, {\"raw_text\": \"紅麴\", \"raw_name\": \"紅麴\", \"amount\": null, \"unit\": null, \"percent_dv\": null, \"label_section\": \"ingredient_list\", \"box_2d\": null}], \"suggested_intake\": \"每日1次，每次2粒\", \"headings\": [\"營養標示\", \"成分\"]}"
+            }
+          ],
+          "role": "model"
+        }
+      }
+    ],
+    "model_version": "gemini-2.5-flash",
+    "response_id": "fake-response-0001",
+    "usage_metadata": {
+      "prompt_token_count": 1290,
+      "candidates_token_count": 210,
+      "total_token_count": 1500
+    }
+  },
+  "image_width": 800,
+  "image_height": 1000,
+  "latency_ms": 4321.0,
+  "recorded_at": "2026-10-08T09:00:00Z"
+}

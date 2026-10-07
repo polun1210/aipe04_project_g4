@@ -1,0 +1,36 @@
+{
+  "image_id": "p01-img02",
+  "engine": "gemini",
+  "request": {
+    "model": "gemini-2.5-flash",
+    "prompt_version": "g1",
+    "temperature": 0.0
+  },
+  "response": {
+    "candidates": [
+      {
+        "finish_reason": "STOP",
+        "index": 0,
+        "content": {
+          "parts": [
+            {
+              "text": "{\"serving\": null, \"rows\": [{\"raw_text\": \"紅麴\", \"raw_name\": \"紅麴\", \"amount\": null, \"unit\": null, \"percent_dv\": null, \"label_section\": \"ingredient_list\", \"box_2d\": null}], \"suggested_intake\": null, \"headings\": [\"成分\"]}"
+            }
+          ],
+          "role": "model"
+        }
+      }
+    ],
+    "model_version": "gemini-2.5-flash",
+    "response_id": "fake-response-0001",
+    "usage_metadata": {
+      "prompt_token_count": 1290,
+      "candidates_token_count": 210,
+      "total_token_count": 1500
+    }
+  },
+  "image_width": 800,
+  "image_height": 1000,
+  "latency_ms": 3000.0,
+  "recorded_at": "2026-10-08T09:00:00Z"
+}

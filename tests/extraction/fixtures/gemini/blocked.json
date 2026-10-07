@@ -1,0 +1,28 @@
+{
+  "image_id": "p01-img03",
+  "engine": "gemini",
+  "request": {
+    "model": "gemini-2.5-flash",
+    "prompt_version": "g1",
+    "temperature": 0.0
+  },
+  "response": {
+    "candidates": [
+      {
+        "finish_reason": "SAFETY",
+        "index": 0
+      }
+    ],
+    "model_version": "gemini-2.5-flash",
+    "response_id": "fake-response-0001",
+    "usage_metadata": {
+      "prompt_token_count": 1290,
+      "candidates_token_count": 210,
+      "total_token_count": 1500
+    }
+  },
+  "image_width": 800,
+  "image_height": 1000,
+  "latency_ms": 900.0,
+  "recorded_at": "2026-10-08T09:00:00Z"
+}

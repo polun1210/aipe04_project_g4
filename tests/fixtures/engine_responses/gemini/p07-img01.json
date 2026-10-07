@@ -1,0 +1,478 @@
+{
+  "image_id": "p07-img01",
+  "engine_version": "gemini/gemini-3.5-flash-lite/prompt-g1",
+  "blocks": [
+    {
+      "text": "營養標示",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "成分",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "每一份量0.8公克",
+      "bbox": {
+        "x": 85,
+        "y": 119,
+        "width": 1012,
+        "height": 19
+      },
+      "confidence": null
+    },
+    {
+      "text": "熱量 3大卡 0%",
+      "bbox": {
+        "x": 85,
+        "y": 201,
+        "width": 1012,
+        "height": 21
+      },
+      "confidence": null
+    },
+    {
+      "text": "蛋白質 0.1公克 0%",
+      "bbox": {
+        "x": 84,
+        "y": 221,
+        "width": 1013,
+        "height": 18
+      },
+      "confidence": null
+    },
+    {
+      "text": "脂肪 0公克 0%",
+      "bbox": {
+        "x": 85,
+        "y": 239,
+        "width": 1012,
+        "height": 18
+      },
+      "confidence": null
+    },
+    {
+      "text": "飽和脂肪 0公克 0%",
+      "bbox": {
+        "x": 111,
+        "y": 257,
+        "width": 986,
+        "height": 18
+      },
+      "confidence": null
+    },
+    {
+      "text": "反式脂肪 0公克 *",
+      "bbox": {
+        "x": 111,
+        "y": 275,
+        "width": 986,
+        "height": 18
+      },
+      "confidence": null
+    },
+    {
+      "text": "碳水化合物 0.6公克 0%",
+      "bbox": {
+        "x": 85,
+        "y": 293,
+        "width": 1012,
+        "height": 18
+      },
+      "confidence": null
+    },
+    {
+      "text": "糖 0公克 *",
+      "bbox": {
+        "x": 111,
+        "y": 312,
+        "width": 986,
+        "height": 17
+      },
+      "confidence": null
+    },
+    {
+      "text": "鈉 0毫克 0%",
+      "bbox": {
+        "x": 85,
+        "y": 330,
+        "width": 1012,
+        "height": 18
+      },
+      "confidence": null
+    },
+    {
+      "text": "紅麴粉",
+      "bbox": {
+        "x": 144,
+        "y": 612,
+        "width": 68,
+        "height": 17
+      },
+      "confidence": null
+    },
+    {
+      "text": "明膠(源自牛)",
+      "bbox": {
+        "x": 213,
+        "y": 612,
+        "width": 129,
+        "height": 17
+      },
+      "confidence": null
+    },
+    {
+      "text": "磷酸鈣",
+      "bbox": {
+        "x": 343,
+        "y": 612,
+        "width": 65,
+        "height": 17
+      },
+      "confidence": null
+    },
+    {
+      "text": "黃豆發酵物",
+      "bbox": {
+        "x": 409,
+        "y": 612,
+        "width": 93,
+        "height": 17
+      },
+      "confidence": null
+    },
+    {
+      "text": "水",
+      "bbox": {
+        "x": 504,
+        "y": 612,
+        "width": 17,
+        "height": 17
+      },
+      "confidence": null
+    },
+    {
+      "text": "硬脂酸鎂",
+      "bbox": {
+        "x": 522,
+        "y": 612,
+        "width": 81,
+        "height": 17
+      },
+      "confidence": null
+    },
+    {
+      "text": "乳糖",
+      "bbox": {
+        "x": 604,
+        "y": 612,
+        "width": 37,
+        "height": 17
+      },
+      "confidence": null
+    },
+    {
+      "text": "二氧化矽",
+      "bbox": {
+        "x": 642,
+        "y": 612,
+        "width": 80,
+        "height": 17
+      },
+      "confidence": null
+    },
+    {
+      "text": "硫酸月桂酯鈉",
+      "bbox": {
+        "x": 723,
+        "y": 612,
+        "width": 107,
+        "height": 17
+      },
+      "confidence": null
+    },
+    {
+      "text": "甘油",
+      "bbox": {
+        "x": 831,
+        "y": 612,
+        "width": 37,
+        "height": 17
+      },
+      "confidence": null
+    }
+  ],
+  "reading": {
+    "serving": {
+      "raw_text": "每一份量0.8公克",
+      "serving_size": null,
+      "dose_unit_raw": "公克",
+      "bbox": {
+        "x": 85,
+        "y": 119,
+        "width": 1012,
+        "height": 19
+      }
+    },
+    "rows": [
+      {
+        "raw_text": "熱量 3大卡 0%",
+        "raw_name": "熱量",
+        "amount": 3.0,
+        "unit_raw": "大卡",
+        "percent_dv": 0.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 85,
+          "y": 201,
+          "width": 1012,
+          "height": 21
+        }
+      },
+      {
+        "raw_text": "蛋白質 0.1公克 0%",
+        "raw_name": "蛋白質",
+        "amount": 0.1,
+        "unit_raw": "公克",
+        "percent_dv": 0.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 84,
+          "y": 221,
+          "width": 1013,
+          "height": 18
+        }
+      },
+      {
+        "raw_text": "脂肪 0公克 0%",
+        "raw_name": "脂肪",
+        "amount": 0.0,
+        "unit_raw": "公克",
+        "percent_dv": 0.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 85,
+          "y": 239,
+          "width": 1012,
+          "height": 18
+        }
+      },
+      {
+        "raw_text": "飽和脂肪 0公克 0%",
+        "raw_name": "飽和脂肪",
+        "amount": 0.0,
+        "unit_raw": "公克",
+        "percent_dv": 0.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 111,
+          "y": 257,
+          "width": 986,
+          "height": 18
+        }
+      },
+      {
+        "raw_text": "反式脂肪 0公克 *",
+        "raw_name": "反式脂肪",
+        "amount": 0.0,
+        "unit_raw": "公克",
+        "percent_dv": null,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 111,
+          "y": 275,
+          "width": 986,
+          "height": 18
+        }
+      },
+      {
+        "raw_text": "碳水化合物 0.6公克 0%",
+        "raw_name": "碳水化合物",
+        "amount": 0.6,
+        "unit_raw": "公克",
+        "percent_dv": 0.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 85,
+          "y": 293,
+          "width": 1012,
+          "height": 18
+        }
+      },
+      {
+        "raw_text": "糖 0公克 *",
+        "raw_name": "糖",
+        "amount": 0.0,
+        "unit_raw": "公克",
+        "percent_dv": null,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 111,
+          "y": 312,
+          "width": 986,
+          "height": 17
+        }
+      },
+      {
+        "raw_text": "鈉 0毫克 0%",
+        "raw_name": "鈉",
+        "amount": 0.0,
+        "unit_raw": "毫克",
+        "percent_dv": 0.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 85,
+          "y": 330,
+          "width": 1012,
+          "height": 18
+        }
+      },
+      {
+        "raw_text": "紅麴粉",
+        "raw_name": "紅麴粉",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 144,
+          "y": 612,
+          "width": 68,
+          "height": 17
+        }
+      },
+      {
+        "raw_text": "明膠(源自牛)",
+        "raw_name": "明膠(源自牛)",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 213,
+          "y": 612,
+          "width": 129,
+          "height": 17
+        }
+      },
+      {
+        "raw_text": "磷酸鈣",
+        "raw_name": "磷酸鈣",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 343,
+          "y": 612,
+          "width": 65,
+          "height": 17
+        }
+      },
+      {
+        "raw_text": "黃豆發酵物",
+        "raw_name": "黃豆發酵物",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 409,
+          "y": 612,
+          "width": 93,
+          "height": 17
+        }
+      },
+      {
+        "raw_text": "水",
+        "raw_name": "水",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 504,
+          "y": 612,
+          "width": 17,
+          "height": 17
+        }
+      },
+      {
+        "raw_text": "硬脂酸鎂",
+        "raw_name": "硬脂酸鎂",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 522,
+          "y": 612,
+          "width": 81,
+          "height": 17
+        }
+      },
+      {
+        "raw_text": "乳糖",
+        "raw_name": "乳糖",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 604,
+          "y": 612,
+          "width": 37,
+          "height": 17
+        }
+      },
+      {
+        "raw_text": "二氧化矽",
+        "raw_name": "二氧化矽",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 642,
+          "y": 612,
+          "width": 80,
+          "height": 17
+        }
+      },
+      {
+        "raw_text": "硫酸月桂酯鈉",
+        "raw_name": "硫酸月桂酯鈉",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 723,
+          "y": 612,
+          "width": 107,
+          "height": 17
+        }
+      },
+      {
+        "raw_text": "甘油",
+        "raw_name": "甘油",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 831,
+          "y": 612,
+          "width": 37,
+          "height": 17
+        }
+      }
+    ],
+    "suggested_intake_raw": null,
+    "headings": [
+      "營養標示",
+      "成分"
+    ]
+  }
+}

@@ -1,0 +1,304 @@
+{
+  "image_id": "p02-img01",
+  "engine_version": "gemini/gemini-3.5-flash-lite/prompt-g1",
+  "blocks": [
+    {
+      "text": "營養標示",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "每一份量1.76公克(2粒)",
+      "bbox": {
+        "x": 704,
+        "y": 1102,
+        "width": 286,
+        "height": 37
+      },
+      "confidence": null
+    },
+    {
+      "text": "熱量 13.3大卡 0.7%",
+      "bbox": {
+        "x": 710,
+        "y": 1213,
+        "width": 649,
+        "height": 30
+      },
+      "confidence": null
+    },
+    {
+      "text": "蛋白質 0.2公克 0.3%",
+      "bbox": {
+        "x": 710,
+        "y": 1243,
+        "width": 651,
+        "height": 31
+      },
+      "confidence": null
+    },
+    {
+      "text": "脂肪 1.3公克 2.2%",
+      "bbox": {
+        "x": 710,
+        "y": 1281,
+        "width": 651,
+        "height": 31
+      },
+      "confidence": null
+    },
+    {
+      "text": "飽和脂肪酸 0.01公克 0.1%",
+      "bbox": {
+        "x": 742,
+        "y": 1317,
+        "width": 620,
+        "height": 30
+      },
+      "confidence": null
+    },
+    {
+      "text": "反式脂肪酸 0公克",
+      "bbox": {
+        "x": 743,
+        "y": 1352,
+        "width": 417,
+        "height": 29
+      },
+      "confidence": null
+    },
+    {
+      "text": "碳水化合物 0.2公克 0.1%",
+      "bbox": {
+        "x": 710,
+        "y": 1390,
+        "width": 658,
+        "height": 31
+      },
+      "confidence": null
+    },
+    {
+      "text": "糖 0公克",
+      "bbox": {
+        "x": 742,
+        "y": 1425,
+        "width": 416,
+        "height": 29
+      },
+      "confidence": null
+    },
+    {
+      "text": "鈉 3.62毫克 0.2%",
+      "bbox": {
+        "x": 710,
+        "y": 1459,
+        "width": 658,
+        "height": 33
+      },
+      "confidence": null
+    },
+    {
+      "text": "ω-3脂肪酸 1105毫克",
+      "bbox": {
+        "x": 710,
+        "y": 1494,
+        "width": 450,
+        "height": 31
+      },
+      "confidence": null
+    },
+    {
+      "text": "二十碳五烯酸(EPA) 624毫克",
+      "bbox": {
+        "x": 711,
+        "y": 1534,
+        "width": 455,
+        "height": 26
+      },
+      "confidence": null
+    },
+    {
+      "text": "二十二碳六烯酸(DHA) 416毫克",
+      "bbox": {
+        "x": 711,
+        "y": 1570,
+        "width": 456,
+        "height": 30
+      },
+      "confidence": null
+    }
+  ],
+  "reading": {
+    "serving": {
+      "raw_text": "每一份量1.76公克(2粒)",
+      "serving_size": 2.0,
+      "dose_unit_raw": "粒",
+      "bbox": {
+        "x": 704,
+        "y": 1102,
+        "width": 286,
+        "height": 37
+      }
+    },
+    "rows": [
+      {
+        "raw_text": "熱量 13.3大卡 0.7%",
+        "raw_name": "熱量",
+        "amount": 13.3,
+        "unit_raw": "大卡",
+        "percent_dv": 0.7,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 710,
+          "y": 1213,
+          "width": 649,
+          "height": 30
+        }
+      },
+      {
+        "raw_text": "蛋白質 0.2公克 0.3%",
+        "raw_name": "蛋白質",
+        "amount": 0.2,
+        "unit_raw": "公克",
+        "percent_dv": 0.3,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 710,
+          "y": 1243,
+          "width": 651,
+          "height": 31
+        }
+      },
+      {
+        "raw_text": "脂肪 1.3公克 2.2%",
+        "raw_name": "脂肪",
+        "amount": 1.3,
+        "unit_raw": "公克",
+        "percent_dv": 2.2,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 710,
+          "y": 1281,
+          "width": 651,
+          "height": 31
+        }
+      },
+      {
+        "raw_text": "飽和脂肪酸 0.01公克 0.1%",
+        "raw_name": "飽和脂肪酸",
+        "amount": 0.01,
+        "unit_raw": "公克",
+        "percent_dv": 0.1,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 742,
+          "y": 1317,
+          "width": 620,
+          "height": 30
+        }
+      },
+      {
+        "raw_text": "反式脂肪酸 0公克",
+        "raw_name": "反式脂肪酸",
+        "amount": 0.0,
+        "unit_raw": "公克",
+        "percent_dv": null,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 743,
+          "y": 1352,
+          "width": 417,
+          "height": 29
+        }
+      },
+      {
+        "raw_text": "碳水化合物 0.2公克 0.1%",
+        "raw_name": "碳水化合物",
+        "amount": 0.2,
+        "unit_raw": "公克",
+        "percent_dv": 0.1,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 710,
+          "y": 1390,
+          "width": 658,
+          "height": 31
+        }
+      },
+      {
+        "raw_text": "糖 0公克",
+        "raw_name": "糖",
+        "amount": 0.0,
+        "unit_raw": "公克",
+        "percent_dv": null,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 742,
+          "y": 1425,
+          "width": 416,
+          "height": 29
+        }
+      },
+      {
+        "raw_text": "鈉 3.62毫克 0.2%",
+        "raw_name": "鈉",
+        "amount": 3.62,
+        "unit_raw": "毫克",
+        "percent_dv": 0.2,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 710,
+          "y": 1459,
+          "width": 658,
+          "height": 33
+        }
+      },
+      {
+        "raw_text": "ω-3脂肪酸 1105毫克",
+        "raw_name": "ω-3脂肪酸",
+        "amount": 1105.0,
+        "unit_raw": "毫克",
+        "percent_dv": null,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 710,
+          "y": 1494,
+          "width": 450,
+          "height": 31
+        }
+      },
+      {
+        "raw_text": "二十碳五烯酸(EPA) 624毫克",
+        "raw_name": "二十碳五烯酸(EPA)",
+        "amount": 624.0,
+        "unit_raw": "毫克",
+        "percent_dv": null,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 711,
+          "y": 1534,
+          "width": 455,
+          "height": 26
+        }
+      },
+      {
+        "raw_text": "二十二碳六烯酸(DHA) 416毫克",
+        "raw_name": "二十二碳六烯酸(DHA)",
+        "amount": 416.0,
+        "unit_raw": "毫克",
+        "percent_dv": null,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 711,
+          "y": 1570,
+          "width": 456,
+          "height": 30
+        }
+      }
+    ],
+    "suggested_intake_raw": null,
+    "headings": [
+      "營養標示"
+    ]
+  }
+}

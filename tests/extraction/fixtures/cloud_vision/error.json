@@ -1,0 +1,22 @@
+{
+  "image_id": "p01-img02",
+  "engine": "cloud_vision",
+  "request": {
+    "feature": "DOCUMENT_TEXT_DETECTION",
+    "model": "builtin/stable",
+    "language_hints": [
+      "zh-Hant",
+      "en"
+    ]
+  },
+  "response": {
+    "error": {
+      "code": 3,
+      "message": "Bad image data."
+    }
+  },
+  "image_width": 800,
+  "image_height": 1000,
+  "latency_ms": 120.0,
+  "recorded_at": "2026-10-08T09:00:00Z"
+}

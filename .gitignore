@@ -23,5 +23,8 @@ Thumbs.db
 # 標示照片（版權，不進 repo，D09／D15）
 /data/
 
+# 引擎原始回應很大（Cloud Vision 一張約 1 MB），只留本機；repo 只放轉換後的精簡結果（D51）
+tests/fixtures/engine_responses/*/raw/
+
 # Claude Code 每個人自己的設定（共用的 skill 在 .claude/skills/ 會進 git）
 .claude/settings.local.json

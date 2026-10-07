@@ -1,0 +1,567 @@
+{
+  "image_id": "p03-img01",
+  "engine_version": "cloud_vision/document_text_detection/builtin/stable",
+  "blocks": [
+    {
+      "text": "為50+需求設計",
+      "bbox": {
+        "x": 740,
+        "y": 728,
+        "width": 433,
+        "height": 91
+      },
+      "confidence": 0.9508
+    },
+    {
+      "text": "K2.新升級配方!",
+      "bbox": {
+        "x": 544,
+        "y": 829,
+        "width": 640,
+        "height": 122
+      },
+      "confidence": 0.5927
+    },
+    {
+      "text": "品名:挺立樂活高鈣強力錠+K2配方",
+      "bbox": {
+        "x": 527,
+        "y": 969,
+        "width": 664,
+        "height": 55
+      },
+      "confidence": 0.9475
+    },
+    {
+      "text": "營養標示",
+      "bbox": {
+        "x": 746,
+        "y": 1047,
+        "width": 202,
+        "height": 43
+      },
+      "confidence": 0.9867
+    },
+    {
+      "text": "每一份量 1錠",
+      "bbox": {
+        "x": 545,
+        "y": 1106,
+        "width": 215,
+        "height": 35
+      },
+      "confidence": 0.9324
+    },
+    {
+      "text": "本包裝含 95份",
+      "bbox": {
+        "x": 542,
+        "y": 1147,
+        "width": 219,
+        "height": 39
+      },
+      "confidence": 0.9637
+    },
+    {
+      "text": "每份 每日參考值百分比",
+      "bbox": {
+        "x": 782,
+        "y": 1207,
+        "width": 393,
+        "height": 38
+      },
+      "confidence": 0.9634
+    },
+    {
+      "text": "維維維鈣鎂鋅銅錳",
+      "bbox": {
+        "x": 532,
+        "y": 1254,
+        "width": 28,
+        "height": 312
+      },
+      "confidence": 0.6291
+    },
+    {
+      "text": "「維生素C",
+      "bbox": {
+        "x": 529,
+        "y": 1257,
+        "width": 115,
+        "height": 40
+      },
+      "confidence": 0.8219
+    },
+    {
+      "text": "15毫克",
+      "bbox": {
+        "x": 740,
+        "y": 1264,
+        "width": 122,
+        "height": 37
+      },
+      "confidence": 0.9863
+    },
+    {
+      "text": "15%",
+      "bbox": {
+        "x": 1106,
+        "y": 1269,
+        "width": 65,
+        "height": 27
+      },
+      "confidence": 0.9936
+    },
+    {
+      "text": "「維生素D",
+      "bbox": {
+        "x": 528,
+        "y": 1296,
+        "width": 118,
+        "height": 40
+      },
+      "confidence": 0.7172
+    },
+    {
+      "text": "6.63微克(2651U)",
+      "bbox": {
+        "x": 706,
+        "y": 1304,
+        "width": 303,
+        "height": 40
+      },
+      "confidence": 0.9171
+    },
+    {
+      "text": "66%",
+      "bbox": {
+        "x": 1104,
+        "y": 1311,
+        "width": 66,
+        "height": 27
+      },
+      "confidence": 0.9845
+    },
+    {
+      "text": "「維生素K",
+      "bbox": {
+        "x": 528,
+        "y": 1334,
+        "width": 116,
+        "height": 43
+      },
+      "confidence": 0.2667
+    },
+    {
+      "text": "13.5微克",
+      "bbox": {
+        "x": 708,
+        "y": 1343,
+        "width": 152,
+        "height": 42
+      },
+      "confidence": 0.9912
+    },
+    {
+      "text": "11%",
+      "bbox": {
+        "x": 1105,
+        "y": 1350,
+        "width": 64,
+        "height": 30
+      },
+      "confidence": 0.9864
+    },
+    {
+      "text": "600毫克",
+      "bbox": {
+        "x": 713,
+        "y": 1385,
+        "width": 149,
+        "height": 42
+      },
+      "confidence": 0.9924
+    },
+    {
+      "text": "50%",
+      "bbox": {
+        "x": 1104,
+        "y": 1392,
+        "width": 66,
+        "height": 29
+      },
+      "confidence": 0.9943
+    },
+    {
+      "text": "75毫克",
+      "bbox": {
+        "x": 733,
+        "y": 1429,
+        "width": 126,
+        "height": 39
+      },
+      "confidence": 0.9873
+    },
+    {
+      "text": "19%",
+      "bbox": {
+        "x": 1105,
+        "y": 1433,
+        "width": 66,
+        "height": 29
+      },
+      "confidence": 0.9856
+    },
+    {
+      "text": "7.5毫克",
+      "bbox": {
+        "x": 722,
+        "y": 1470,
+        "width": 139,
+        "height": 42
+      },
+      "confidence": 0.99
+    },
+    {
+      "text": "50%",
+      "bbox": {
+        "x": 1103,
+        "y": 1473,
+        "width": 68,
+        "height": 30
+      },
+      "confidence": 0.9946
+    },
+    {
+      "text": "銅",
+      "bbox": {
+        "x": 533,
+        "y": 1494,
+        "width": 26,
+        "height": 32
+      },
+      "confidence": 0.9629
+    },
+    {
+      "text": "0.5毫克",
+      "bbox": {
+        "x": 724,
+        "y": 1513,
+        "width": 135,
+        "height": 40
+      },
+      "confidence": 0.9887
+    },
+    {
+      "text": "*",
+      "bbox": {
+        "x": 1154,
+        "y": 1516,
+        "width": 15,
+        "height": 17
+      },
+      "confidence": 0.9306
+    },
+    {
+      "text": "*",
+      "bbox": {
+        "x": 1154,
+        "y": 1556,
+        "width": 15,
+        "height": 18
+      },
+      "confidence": 0.9309
+    },
+    {
+      "text": "1.75毫克",
+      "bbox": {
+        "x": 702,
+        "y": 1553,
+        "width": 157,
+        "height": 43
+      },
+      "confidence": 0.9868
+    },
+    {
+      "text": "* 參考值未訂定",
+      "bbox": {
+        "x": 522,
+        "y": 1585,
+        "width": 231,
+        "height": 65
+      },
+      "confidence": 0.9615
+    },
+    {
+      "text": "^與挺立樂活強力鈣相比,",
+      "bbox": {
+        "x": 516,
+        "y": 1644,
+        "width": 411,
+        "height": 84
+      },
+      "confidence": 0.4453
+    },
+    {
+      "text": "每錠增加13.5微克維生素K",
+      "bbox": {
+        "x": 531,
+        "y": 1687,
+        "width": 436,
+        "height": 86
+      },
+      "confidence": 0.529
+    },
+    {
+      "text": "食品",
+      "bbox": {
+        "x": 513,
+        "y": 1762,
+        "width": 356,
+        "height": 228
+      },
+      "confidence": 0.9968
+    },
+    {
+      "text": "林力昂生技股份有限公司",
+      "bbox": {
+        "x": 511,
+        "y": 1979,
+        "width": 498,
+        "height": 131
+      },
+      "confidence": 0.4311
+    },
+    {
+      "text": "地址:台北市忠孝西路一段66號24樓",
+      "bbox": {
+        "x": 521,
+        "y": 2027,
+        "width": 515,
+        "height": 104
+      },
+      "confidence": 0.9865
+    },
+    {
+      "text": "消費者服務專線:0800-212-259",
+      "bbox": {
+        "x": 507,
+        "y": 2065,
+        "width": 454,
+        "height": 112
+      },
+      "confidence": 0.9889
+    },
+    {
+      "text": "原產地:台灣",
+      "bbox": {
+        "x": 509,
+        "y": 2107,
+        "width": 173,
+        "height": 90
+      },
+      "confidence": 0.9951
+    },
+    {
+      "text": "Trade Marks owned or licensed by Haleon",
+      "bbox": {
+        "x": 510,
+        "y": 2149,
+        "width": 567,
+        "height": 114
+      },
+      "confidence": 0.9847
+    },
+    {
+      "text": "© 2025 Haleon or licensor",
+      "bbox": {
+        "x": 510,
+        "y": 2183,
+        "width": 349,
+        "height": 114
+      },
+      "confidence": 0.9657
+    },
+    {
+      "text": "K2",
+      "bbox": {
+        "x": 1297,
+        "y": 840,
+        "width": 65,
+        "height": 64
+      },
+      "confidence": 0.9823
+    },
+    {
+      "text": "配方",
+      "bbox": {
+        "x": 1302,
+        "y": 983,
+        "width": 49,
+        "height": 52
+      },
+      "confidence": 0.9931
+    },
+    {
+      "text": "50",
+      "bbox": {
+        "x": 1251,
+        "y": 1662,
+        "width": 151,
+        "height": 144
+      },
+      "confidence": 0.6215
+    },
+    {
+      "text": "95號",
+      "bbox": {
+        "x": 1210,
+        "y": 2086,
+        "width": 151,
+        "height": 117
+      },
+      "confidence": 0.8219
+    },
+    {
+      "text": "桃園",
+      "bbox": {
+        "x": 1578,
+        "y": 1397,
+        "width": 192,
+        "height": 110
+      },
+      "confidence": 0.9978
+    },
+    {
+      "text": "站前",
+      "bbox": {
+        "x": 1559,
+        "y": 1485,
+        "width": 210,
+        "height": 117
+      },
+      "confidence": 0.9885
+    },
+    {
+      "text": "第三",
+      "bbox": {
+        "x": 1660,
+        "y": 1687,
+        "width": 111,
+        "height": 64
+      },
+      "confidence": 0.9721
+    },
+    {
+      "text": "百貨、商用",
+      "bbox": {
+        "x": 1529,
+        "y": 1708,
+        "width": 244,
+        "height": 123
+      },
+      "confidence": 0.4345
+    },
+    {
+      "text": "領航南路",
+      "bbox": {
+        "x": 1490,
+        "y": 1835,
+        "width": 283,
+        "height": 138
+      },
+      "confidence": 0.7556
+    },
+    {
+      "text": "中悅",
+      "bbox": {
+        "x": 1427,
+        "y": 1935,
+        "width": 96,
+        "height": 61
+      },
+      "confidence": 0.7885
+    },
+    {
+      "text": "柏軒 公七",
+      "bbox": {
+        "x": 1405,
+        "y": 1971,
+        "width": 295,
+        "height": 150
+      },
+      "confidence": 0.6583
+    },
+    {
+      "text": "128",
+      "bbox": {
+        "x": 1413,
+        "y": 2086,
+        "width": 72,
+        "height": 47
+      },
+      "confidence": 0.7149
+    },
+    {
+      "text": "1,872坪",
+      "bbox": {
+        "x": 1567,
+        "y": 2114,
+        "width": 206,
+        "height": 116
+      },
+      "confidence": 0.7891
+    },
+    {
+      "text": "禾林",
+      "bbox": {
+        "x": 1425,
+        "y": 2204,
+        "width": 76,
+        "height": 52
+      },
+      "confidence": 0.9913
+    },
+    {
+      "text": "Rich One 力璞機",
+      "bbox": {
+        "x": 1388,
+        "y": 2230,
+        "width": 289,
+        "height": 123
+      },
+      "confidence": 0.4655
+    },
+    {
+      "text": "130",
+      "bbox": {
+        "x": 1430,
+        "y": 2284,
+        "width": 49,
+        "height": 35
+      },
+      "confidence": 0.6429
+    },
+    {
+      "text": "131",
+      "bbox": {
+        "x": 1598,
+        "y": 2340,
+        "width": 38,
+        "height": 23
+      },
+      "confidence": 0.7846
+    },
+    {
+      "text": "14",
+      "bbox": {
+        "x": 1738,
+        "y": 2353,
+        "width": 17,
+        "height": 10
+      },
+      "confidence": 0.4662
+    }
+  ],
+  "reading": null
+}

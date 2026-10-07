@@ -1,0 +1,357 @@
+{
+  "image_id": "p07-img01",
+  "engine_version": "cloud_vision/document_text_detection/builtin/stable",
+  "blocks": [
+    {
+      "text": "營養標示",
+      "bbox": {
+        "x": 553,
+        "y": 90,
+        "width": 76,
+        "height": 18
+      },
+      "confidence": 0.9867
+    },
+    {
+      "text": "每一份量",
+      "bbox": {
+        "x": 95,
+        "y": 119,
+        "width": 89,
+        "height": 21
+      },
+      "confidence": 0.9902
+    },
+    {
+      "text": "本包裝含",
+      "bbox": {
+        "x": 95,
+        "y": 148,
+        "width": 90,
+        "height": 21
+      },
+      "confidence": 0.9628
+    },
+    {
+      "text": "熱量",
+      "bbox": {
+        "x": 94,
+        "y": 210,
+        "width": 43,
+        "height": 22
+      },
+      "confidence": 0.9948
+    },
+    {
+      "text": "蛋白質",
+      "bbox": {
+        "x": 96,
+        "y": 237,
+        "width": 62,
+        "height": 22
+      },
+      "confidence": 0.9864
+    },
+    {
+      "text": "脂肪",
+      "bbox": {
+        "x": 92,
+        "y": 265,
+        "width": 44,
+        "height": 22
+      },
+      "confidence": 0.996
+    },
+    {
+      "text": "飽和脂肪",
+      "bbox": {
+        "x": 115,
+        "y": 294,
+        "width": 85,
+        "height": 19
+      },
+      "confidence": 0.9934
+    },
+    {
+      "text": "反式脂肪",
+      "bbox": {
+        "x": 116,
+        "y": 321,
+        "width": 83,
+        "height": 19
+      },
+      "confidence": 0.9802
+    },
+    {
+      "text": "碳水化合物",
+      "bbox": {
+        "x": 96,
+        "y": 348,
+        "width": 104,
+        "height": 21
+      },
+      "confidence": 0.988
+    },
+    {
+      "text": "鈉",
+      "bbox": {
+        "x": 93,
+        "y": 402,
+        "width": 23,
+        "height": 21
+      },
+      "confidence": 0.9896
+    },
+    {
+      "text": "糖",
+      "bbox": {
+        "x": 114,
+        "y": 375,
+        "width": 21,
+        "height": 20
+      },
+      "confidence": 0.9781
+    },
+    {
+      "text": "*參考值未訂定",
+      "bbox": {
+        "x": 96,
+        "y": 476,
+        "width": 149,
+        "height": 25
+      },
+      "confidence": 0.9761
+    },
+    {
+      "text": "0.8公克",
+      "bbox": {
+        "x": 1003,
+        "y": 118,
+        "width": 84,
+        "height": 24
+      },
+      "confidence": 0.9864
+    },
+    {
+      "text": "60份",
+      "bbox": {
+        "x": 1032,
+        "y": 145,
+        "width": 55,
+        "height": 24
+      },
+      "confidence": 0.9609
+    },
+    {
+      "text": "每份",
+      "bbox": {
+        "x": 811,
+        "y": 180,
+        "width": 47,
+        "height": 21
+      },
+      "confidence": 0.9923
+    },
+    {
+      "text": "每日參考值百分比",
+      "bbox": {
+        "x": 898,
+        "y": 179,
+        "width": 189,
+        "height": 23
+      },
+      "confidence": 0.9805
+    },
+    {
+      "text": "3大卡",
+      "bbox": {
+        "x": 795,
+        "y": 211,
+        "width": 63,
+        "height": 23
+      },
+      "confidence": 0.9692
+    },
+    {
+      "text": "0%",
+      "bbox": {
+        "x": 1047,
+        "y": 212,
+        "width": 42,
+        "height": 21
+      },
+      "confidence": 0.9778
+    },
+    {
+      "text": "0.1公克",
+      "bbox": {
+        "x": 776,
+        "y": 238,
+        "width": 81,
+        "height": 22
+      },
+      "confidence": 0.9841
+    },
+    {
+      "text": "0%",
+      "bbox": {
+        "x": 1046,
+        "y": 238,
+        "width": 42,
+        "height": 22
+      },
+      "confidence": 0.9769
+    },
+    {
+      "text": "0公克",
+      "bbox": {
+        "x": 797,
+        "y": 264,
+        "width": 60,
+        "height": 24
+      },
+      "confidence": 0.9527
+    },
+    {
+      "text": "0%",
+      "bbox": {
+        "x": 1047,
+        "y": 265,
+        "width": 42,
+        "height": 22
+      },
+      "confidence": 0.9757
+    },
+    {
+      "text": "0公克",
+      "bbox": {
+        "x": 797,
+        "y": 293,
+        "width": 60,
+        "height": 21
+      },
+      "confidence": 0.9573
+    },
+    {
+      "text": "0%",
+      "bbox": {
+        "x": 1046,
+        "y": 291,
+        "width": 42,
+        "height": 22
+      },
+      "confidence": 0.9753
+    },
+    {
+      "text": "0公克",
+      "bbox": {
+        "x": 797,
+        "y": 318,
+        "width": 61,
+        "height": 24
+      },
+      "confidence": 0.9576
+    },
+    {
+      "text": "*",
+      "bbox": {
+        "x": 1074,
+        "y": 325,
+        "width": 12,
+        "height": 10
+      },
+      "confidence": 0.8904
+    },
+    {
+      "text": "0.6公克",
+      "bbox": {
+        "x": 779,
+        "y": 346,
+        "width": 79,
+        "height": 23
+      },
+      "confidence": 0.9849
+    },
+    {
+      "text": "0%",
+      "bbox": {
+        "x": 1046,
+        "y": 346,
+        "width": 44,
+        "height": 22
+      },
+      "confidence": 0.9767
+    },
+    {
+      "text": "0公克",
+      "bbox": {
+        "x": 797,
+        "y": 371,
+        "width": 60,
+        "height": 25
+      },
+      "confidence": 0.9534
+    },
+    {
+      "text": "0毫克",
+      "bbox": {
+        "x": 797,
+        "y": 400,
+        "width": 61,
+        "height": 22
+      },
+      "confidence": 0.9492
+    },
+    {
+      "text": "0%",
+      "bbox": {
+        "x": 1046,
+        "y": 400,
+        "width": 43,
+        "height": 22
+      },
+      "confidence": 0.9807
+    },
+    {
+      "text": "每日參考值: 熱量2000大卡、蛋白質60公克、脂肪60公克、飽和脂肪18公克、碳水化合物300公克、",
+      "bbox": {
+        "x": 97,
+        "y": 507,
+        "width": 983,
+        "height": 23
+      },
+      "confidence": 0.9241
+    },
+    {
+      "text": "鈉2000毫克",
+      "bbox": {
+        "x": 96,
+        "y": 536,
+        "width": 122,
+        "height": 23
+      },
+      "confidence": 0.9841
+    },
+    {
+      "text": "成分",
+      "bbox": {
+        "x": 96,
+        "y": 581,
+        "width": 48,
+        "height": 21
+      },
+      "confidence": 0.9698
+    },
+    {
+      "text": "紅麴粉、明膠(源自牛)、磷酸鈣、黃豆發酵物、水、硬脂酸鎂、乳糖、二氧化矽、硫酸月桂酯鈉、甘油",
+      "bbox": {
+        "x": 96,
+        "y": 610,
+        "width": 985,
+        "height": 23
+      },
+      "confidence": 0.9433
+    }
+  ],
+  "reading": null
+}

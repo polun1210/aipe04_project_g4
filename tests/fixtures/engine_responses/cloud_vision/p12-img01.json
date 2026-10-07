@@ -1,0 +1,307 @@
+{
+  "image_id": "p12-img01",
+  "engine_version": "cloud_vision/document_text_detection/builtin/stable",
+  "blocks": [
+    {
+      "text": "每一份量2錠",
+      "bbox": {
+        "x": 19,
+        "y": 98,
+        "width": 153,
+        "height": 26
+      },
+      "confidence": 0.8861
+    },
+    {
+      "text": "本包裝含60份",
+      "bbox": {
+        "x": 18,
+        "y": 126,
+        "width": 170,
+        "height": 28
+      },
+      "confidence": 0.9682
+    },
+    {
+      "text": "維生素D",
+      "bbox": {
+        "x": 21,
+        "y": 234,
+        "width": 101,
+        "height": 24
+      },
+      "confidence": 0.969
+    },
+    {
+      "text": "鈣",
+      "bbox": {
+        "x": 14,
+        "y": 262,
+        "width": 34,
+        "height": 26
+      },
+      "confidence": 0.9865
+    },
+    {
+      "text": "營養標示",
+      "bbox": {
+        "x": 287,
+        "y": 60,
+        "width": 108,
+        "height": 25
+      },
+      "confidence": 0.9814
+    },
+    {
+      "text": "每份",
+      "bbox": {
+        "x": 318,
+        "y": 167,
+        "width": 53,
+        "height": 26
+      },
+      "confidence": 0.9923
+    },
+    {
+      "text": "6微克(240 IU)",
+      "bbox": {
+        "x": 293,
+        "y": 233,
+        "width": 179,
+        "height": 29
+      },
+      "confidence": 0.946
+    },
+    {
+      "text": "300 毫克",
+      "bbox": {
+        "x": 262,
+        "y": 261,
+        "width": 108,
+        "height": 27
+      },
+      "confidence": 0.9912
+    },
+    {
+      "text": "150毫克",
+      "bbox": {
+        "x": 263,
+        "y": 290,
+        "width": 107,
+        "height": 28
+      },
+      "confidence": 0.9843
+    },
+    {
+      "text": "3毫克",
+      "bbox": {
+        "x": 294,
+        "y": 320,
+        "width": 77,
+        "height": 25
+      },
+      "confidence": 0.9776
+    },
+    {
+      "text": "0.6毫克",
+      "bbox": {
+        "x": 270,
+        "y": 349,
+        "width": 100,
+        "height": 26
+      },
+      "confidence": 0.9841
+    },
+    {
+      "text": "·美滓洞孟",
+      "bbox": {
+        "x": 24,
+        "y": 277,
+        "width": 20,
+        "height": 127
+      },
+      "confidence": 0.2882
+    },
+    {
+      "text": "金金金金金 *",
+      "bbox": {
+        "x": 13,
+        "y": 261,
+        "width": 19,
+        "height": 181
+      },
+      "confidence": 0.5102
+    },
+    {
+      "text": "*參考值未訂定",
+      "bbox": {
+        "x": 11,
+        "y": 419,
+        "width": 190,
+        "height": 26
+      },
+      "confidence": 0.9762
+    },
+    {
+      "text": "0.6毫克",
+      "bbox": {
+        "x": 269,
+        "y": 378,
+        "width": 101,
+        "height": 27
+      },
+      "confidence": 0.982
+    },
+    {
+      "text": "成分添加量(每日4錠含:)",
+      "bbox": {
+        "x": 195,
+        "y": 459,
+        "width": 291,
+        "height": 29
+      },
+      "confidence": 0.9327
+    },
+    {
+      "text": "大豆胜肽",
+      "bbox": {
+        "x": 22,
+        "y": 501,
+        "width": 108,
+        "height": 24
+      },
+      "confidence": 0.9862
+    },
+    {
+      "text": "納豆發酵物(含維生素K2)",
+      "bbox": {
+        "x": 21,
+        "y": 529,
+        "width": 295,
+        "height": 28
+      },
+      "confidence": 0.9421
+    },
+    {
+      "text": "菊苣根萃取物(含寡多醣)",
+      "bbox": {
+        "x": 21,
+        "y": 558,
+        "width": 294,
+        "height": 28
+      },
+      "confidence": 0.9437
+    },
+    {
+      "text": "每日參考",
+      "bbox": {
+        "x": 548,
+        "y": 166,
+        "width": 110,
+        "height": 26
+      },
+      "confidence": 0.9902
+    },
+    {
+      "text": "值百分比",
+      "bbox": {
+        "x": 549,
+        "y": 196,
+        "width": 109,
+        "height": 25
+      },
+      "confidence": 0.9614
+    },
+    {
+      "text": "60%",
+      "bbox": {
+        "x": 605,
+        "y": 237,
+        "width": 53,
+        "height": 19
+      },
+      "confidence": 0.9941
+    },
+    {
+      "text": "25%",
+      "bbox": {
+        "x": 604,
+        "y": 266,
+        "width": 55,
+        "height": 19
+      },
+      "confidence": 0.9946
+    },
+    {
+      "text": "38%",
+      "bbox": {
+        "x": 604,
+        "y": 295,
+        "width": 55,
+        "height": 19
+      },
+      "confidence": 0.9904
+    },
+    {
+      "text": "20%",
+      "bbox": {
+        "x": 604,
+        "y": 324,
+        "width": 55,
+        "height": 19
+      },
+      "confidence": 0.9905
+    },
+    {
+      "text": "*",
+      "bbox": {
+        "x": 636,
+        "y": 354,
+        "width": 18,
+        "height": 15
+      },
+      "confidence": 0.8973
+    },
+    {
+      "text": "*",
+      "bbox": {
+        "x": 636,
+        "y": 384,
+        "width": 17,
+        "height": 15
+      },
+      "confidence": 0.8956
+    },
+    {
+      "text": "40毫克",
+      "bbox": {
+        "x": 564,
+        "y": 500,
+        "width": 94,
+        "height": 27
+      },
+      "confidence": 0.9763
+    },
+    {
+      "text": "30毫克",
+      "bbox": {
+        "x": 565,
+        "y": 529,
+        "width": 93,
+        "height": 27
+      },
+      "confidence": 0.99
+    },
+    {
+      "text": "20 毫克",
+      "bbox": {
+        "x": 566,
+        "y": 559,
+        "width": 92,
+        "height": 27
+      },
+      "confidence": 0.9679
+    }
+  ],
+  "reading": null
+}

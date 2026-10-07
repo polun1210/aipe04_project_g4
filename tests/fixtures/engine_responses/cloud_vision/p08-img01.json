@@ -1,0 +1,587 @@
+{
+  "image_id": "p08-img01",
+  "engine_version": "cloud_vision/document_text_detection/builtin/stable",
+  "blocks": [
+    {
+      "text": "商品規格",
+      "bbox": {
+        "x": 337,
+        "y": 58,
+        "width": 333,
+        "height": 73
+      },
+      "confidence": 0.9843
+    },
+    {
+      "text": "品成",
+      "bbox": {
+        "x": 60,
+        "y": 184,
+        "width": 20,
+        "height": 73
+      },
+      "confidence": 0.7446
+    },
+    {
+      "text": "名 諾得®頂級紅麴膠囊",
+      "bbox": {
+        "x": 130,
+        "y": 186,
+        "width": 247,
+        "height": 24
+      },
+      "confidence": 0.9427
+    },
+    {
+      "text": "營養標示",
+      "bbox": {
+        "x": 749,
+        "y": 181,
+        "width": 95,
+        "height": 19
+      },
+      "confidence": 0.9769
+    },
+    {
+      "text": "成",
+      "bbox": {
+        "x": 60,
+        "y": 233,
+        "width": 24,
+        "height": 23
+      },
+      "confidence": 0.9015
+    },
+    {
+      "text": "分 內容物:紅麴粉末。",
+      "bbox": {
+        "x": 130,
+        "y": 233,
+        "width": 251,
+        "height": 23
+      },
+      "confidence": 0.7566
+    },
+    {
+      "text": "每一份量1.0公克(2顆)",
+      "bbox": {
+        "x": 665,
+        "y": 210,
+        "width": 193,
+        "height": 16
+      },
+      "confidence": 0.9488
+    },
+    {
+      "text": "本包裝含 15份",
+      "bbox": {
+        "x": 665,
+        "y": 227,
+        "width": 126,
+        "height": 19
+      },
+      "confidence": 0.9584
+    },
+    {
+      "text": "膠囊殼:羥丙基甲基纖維素、純水、食用色素",
+      "bbox": {
+        "x": 172,
+        "y": 270,
+        "width": 463,
+        "height": 25
+      },
+      "confidence": 0.9291
+    },
+    {
+      "text": "熱量",
+      "bbox": {
+        "x": 663,
+        "y": 280,
+        "width": 39,
+        "height": 17
+      },
+      "confidence": 0.9952
+    },
+    {
+      "text": "每份 每日參考值百分比",
+      "bbox": {
+        "x": 791,
+        "y": 254,
+        "width": 146,
+        "height": 18
+      },
+      "confidence": 0.9772
+    },
+    {
+      "text": "4.0大卡",
+      "bbox": {
+        "x": 775,
+        "y": 281,
+        "width": 56,
+        "height": 17
+      },
+      "confidence": 0.9405
+    },
+    {
+      "text": "0%",
+      "bbox": {
+        "x": 907,
+        "y": 281,
+        "width": 29,
+        "height": 15
+      },
+      "confidence": 0.978
+    },
+    {
+      "text": "紅色六號、二氧化鈦、食用色素藍色一號。",
+      "bbox": {
+        "x": 175,
+        "y": 309,
+        "width": 435,
+        "height": 24
+      },
+      "confidence": 0.9522
+    },
+    {
+      "text": "裝 30顆(每顆500毫克)。 產地 台灣",
+      "bbox": {
+        "x": 131,
+        "y": 356,
+        "width": 489,
+        "height": 24
+      },
+      "confidence": 0.9185
+    },
+    {
+      "text": "食用方法 每日1次,每次2顆,飯後食用。",
+      "bbox": {
+        "x": 60,
+        "y": 403,
+        "width": 441,
+        "height": 24
+      },
+      "confidence": 0.9815
+    },
+    {
+      "text": "蛋白質",
+      "bbox": {
+        "x": 665,
+        "y": 302,
+        "width": 57,
+        "height": 17
+      },
+      "confidence": 0.992
+    },
+    {
+      "text": "0.2公克",
+      "bbox": {
+        "x": 777,
+        "y": 302,
+        "width": 53,
+        "height": 17
+      },
+      "confidence": 0.968
+    },
+    {
+      "text": "0%",
+      "bbox": {
+        "x": 908,
+        "y": 302,
+        "width": 29,
+        "height": 14
+      },
+      "confidence": 0.979
+    },
+    {
+      "text": "脂肪",
+      "bbox": {
+        "x": 665,
+        "y": 322,
+        "width": 37,
+        "height": 15
+      },
+      "confidence": 0.9952
+    },
+    {
+      "text": "0.2公克",
+      "bbox": {
+        "x": 776,
+        "y": 323,
+        "width": 54,
+        "height": 15
+      },
+      "confidence": 0.9776
+    },
+    {
+      "text": "0%",
+      "bbox": {
+        "x": 908,
+        "y": 323,
+        "width": 28,
+        "height": 12
+      },
+      "confidence": 0.9765
+    },
+    {
+      "text": "飽和脂肪",
+      "bbox": {
+        "x": 685,
+        "y": 342,
+        "width": 76,
+        "height": 17
+      },
+      "confidence": 0.9875
+    },
+    {
+      "text": "0.0公克",
+      "bbox": {
+        "x": 777,
+        "y": 342,
+        "width": 54,
+        "height": 17
+      },
+      "confidence": 0.9875
+    },
+    {
+      "text": "0%",
+      "bbox": {
+        "x": 908,
+        "y": 344,
+        "width": 29,
+        "height": 13
+      },
+      "confidence": 0.9808
+    },
+    {
+      "text": "反式脂肪",
+      "bbox": {
+        "x": 684,
+        "y": 363,
+        "width": 77,
+        "height": 17
+      },
+      "confidence": 0.9838
+    },
+    {
+      "text": "0.0公克",
+      "bbox": {
+        "x": 777,
+        "y": 363,
+        "width": 53,
+        "height": 17
+      },
+      "confidence": 0.9861
+    },
+    {
+      "text": "*",
+      "bbox": {
+        "x": 923,
+        "y": 366,
+        "width": 10,
+        "height": 9
+      },
+      "confidence": 0.8878
+    },
+    {
+      "text": "| 碳水化合物",
+      "bbox": {
+        "x": 659,
+        "y": 383,
+        "width": 101,
+        "height": 19
+      },
+      "confidence": 0.6503
+    },
+    {
+      "text": "糖",
+      "bbox": {
+        "x": 685,
+        "y": 405,
+        "width": 17,
+        "height": 15
+      },
+      "confidence": 0.9825
+    },
+    {
+      "text": "0.4公克",
+      "bbox": {
+        "x": 777,
+        "y": 383,
+        "width": 53,
+        "height": 19
+      },
+      "confidence": 0.9847
+    },
+    {
+      "text": "0%",
+      "bbox": {
+        "x": 908,
+        "y": 384,
+        "width": 28,
+        "height": 14
+      },
+      "confidence": 0.9659
+    },
+    {
+      "text": "0公克",
+      "bbox": {
+        "x": 790,
+        "y": 406,
+        "width": 39,
+        "height": 15
+      },
+      "confidence": 0.9729
+    },
+    {
+      "text": "*",
+      "bbox": {
+        "x": 922,
+        "y": 406,
+        "width": 10,
+        "height": 11
+      },
+      "confidence": 0.9639
+    },
+    {
+      "text": "[鈉",
+      "bbox": {
+        "x": 659,
+        "y": 424,
+        "width": 25,
+        "height": 19
+      },
+      "confidence": 0.3939
+    },
+    {
+      "text": "5毫克",
+      "bbox": {
+        "x": 789,
+        "y": 426,
+        "width": 41,
+        "height": 15
+      },
+      "confidence": 0.98
+    },
+    {
+      "text": "0%",
+      "bbox": {
+        "x": 909,
+        "y": 425,
+        "width": 27,
+        "height": 13
+      },
+      "confidence": 0.9865
+    },
+    {
+      "text": "保存條件 置於乾燥陰涼處,避免高溫潮濕或陽光直射。",
+      "bbox": {
+        "x": 61,
+        "y": 450,
+        "width": 568,
+        "height": 24
+      },
+      "confidence": 0.9766
+    },
+    {
+      "text": "*參考值未訂定",
+      "bbox": {
+        "x": 661,
+        "y": 456,
+        "width": 109,
+        "height": 16
+      },
+      "confidence": 0.9577
+    },
+    {
+      "text": "每日參考值:熱量2000大卡、蛋白質60",
+      "bbox": {
+        "x": 659,
+        "y": 476,
+        "width": 280,
+        "height": 16
+      },
+      "confidence": 0.9684
+    },
+    {
+      "text": "注意事項 1.請徵詢醫師、藥師或營養師之意見;均衡的 公克、脂肪60公克、飽和脂肪18公克、",
+      "bbox": {
+        "x": 60,
+        "y": 491,
+        "width": 872,
+        "height": 33
+      },
+      "confidence": 0.9298
+    },
+    {
+      "text": "飲食及適當的運動為身體健康之基礎。",
+      "bbox": {
+        "x": 206,
+        "y": 535,
+        "width": 381,
+        "height": 24
+      },
+      "confidence": 0.9756
+    },
+    {
+      "text": "2. 本產品非藥品供保健用,罹病者仍需就醫。",
+      "bbox": {
+        "x": 174,
+        "y": 573,
+        "width": 453,
+        "height": 24
+      },
+      "confidence": 0.9698
+    },
+    {
+      "text": "碳水化合物300公克、鈉2000毫克。",
+      "bbox": {
+        "x": 659,
+        "y": 516,
+        "width": 243,
+        "height": 16
+      },
+      "confidence": 0.9733
+    },
+    {
+      "text": "每份(2顆)含保健之相關成分含量",
+      "bbox": {
+        "x": 670,
+        "y": 552,
+        "width": 248,
+        "height": 16
+      },
+      "confidence": 0.9536
+    },
+    {
+      "text": "HMG-COA還原酵素抑制劑",
+      "bbox": {
+        "x": 671,
+        "y": 581,
+        "width": 211,
+        "height": 16
+      },
+      "confidence": 0.9822
+    },
+    {
+      "text": "Monacolin K 含量為11±2.0毫克",
+      "bbox": {
+        "x": 672,
+        "y": 601,
+        "width": 250,
+        "height": 16
+      },
+      "confidence": 0.9773
+    },
+    {
+      "text": "3. 請依建議攝取量食用,勿過量。",
+      "bbox": {
+        "x": 174,
+        "y": 611,
+        "width": 337,
+        "height": 23
+      },
+      "confidence": 0.9803
+    },
+    {
+      "text": "● 純素® 健康食品",
+      "bbox": {
+        "x": 369,
+        "y": 671,
+        "width": 249,
+        "height": 35
+      },
+      "confidence": 0.3089
+    },
+    {
+      "text": "警 語",
+      "bbox": {
+        "x": 76,
+        "y": 770,
+        "width": 95,
+        "height": 25
+      },
+      "confidence": 0.9782
+    },
+    {
+      "text": "1.患有嚴重疾病、感染症、肝病或經外科手術等情況者,請勿食用",
+      "bbox": {
+        "x": 63,
+        "y": 810,
+        "width": 613,
+        "height": 21
+      },
+      "confidence": 0.9674
+    },
+    {
+      "text": "2.是否適用於膽固醇之控制,應先徵詢醫師。",
+      "bbox": {
+        "x": 63,
+        "y": 842,
+        "width": 422,
+        "height": 21
+      },
+      "confidence": 0.9683
+    },
+    {
+      "text": "3.懷孕及授乳期間請勿食用。 4.本品與降血脂藥(statin及fibrate類",
+      "bbox": {
+        "x": 63,
+        "y": 874,
+        "width": 621,
+        "height": 21
+      },
+      "confidence": 0.8897
+    },
+    {
+      "text": "藥物)、葡萄柚合併使用,恐會造成肝、腎損傷、橫紋肌溶解症。",
+      "bbox": {
+        "x": 79,
+        "y": 906,
+        "width": 593,
+        "height": 22
+      },
+      "confidence": 0.9141
+    },
+    {
+      "text": "°",
+      "bbox": {
+        "x": 686,
+        "y": 818,
+        "width": 7,
+        "height": 5
+      },
+      "confidence": 0.6613
+    },
+    {
+      "text": "NORITLE",
+      "bbox": {
+        "x": 722,
+        "y": 666,
+        "width": 68,
+        "height": 253
+      },
+      "confidence": 0.9513
+    },
+    {
+      "text": "產諾得",
+      "bbox": {
+        "x": 741,
+        "y": 762,
+        "width": 123,
+        "height": 35
+      },
+      "confidence": 0.3266
+    },
+    {
+      "text": "頂級紅麴 :",
+      "bbox": {
+        "x": 786,
+        "y": 809,
+        "width": 78,
+        "height": 24
+      },
+      "confidence": 0.8945
+    }
+  ],
+  "reading": null
+}
