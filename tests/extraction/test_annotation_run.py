@@ -1,0 +1,275 @@
+"""雙盲標註的執行：用假的 runner 取代 claude／codex，不真的執行它們。"""
+
+import json
+import subprocess
+from pathlib import Path
+
+import pytest
+
+from scripts.annotate.compare import compare, load_annotations
+from scripts.annotate.run import AnnotationError, annotate_all, annotate_image
+from scripts.annotate.schema import JSON_SCHEMA, AnnotatedRow, AnnotatedServing, Annotation
+
+ANSWER = {
+    "serving": {"serving_size": 2, "dose_unit": "capsule"},
+    "rows": [
+        {
+            "raw_name": "維生素D",
+            "per_serving": 10,
+            "unit": "ug",
+            "percent_dv": 100,
+            "stated_elemental_amount": None,
+            "label_section": "nutrition_table",
+        }
+    ],
+}
+
+
+class FakeRunner:
+    """記下每次呼叫的指令、工作目錄內容與 stdin，並模擬兩個工具的輸出方式。"""
+
+    def __init__(self, answer: dict | None = None, returncode: int = 0, claude_envelope: dict | None = None):
+        self.answer = answer if answer is not None else ANSWER
+        self.returncode = returncode
+        self.claude_envelope = claude_envelope
+        self.calls: list[dict] = []
+
+    def __call__(self, cmd: list[str], cwd: Path, stdin: str) -> subprocess.CompletedProcess:
+        self.calls.append({"cmd": cmd, "cwd": cwd, "files": sorted(p.name for p in cwd.iterdir()), "stdin": stdin})
+        stdout = ""
+        if cmd[0] == "claude":
+            envelope = self.claude_envelope or {
+                "type": "result",
+                "is_error": False,
+                "result": "",
+                "structured_output": self.answer,
+                "modelUsage": {"claude-test-model": {"inputTokens": 1}},
+            }
+            stdout = json.dumps(envelope, ensure_ascii=False)
+        elif self.returncode == 0:
+            output = Path(cmd[cmd.index("--output-last-message") + 1])
+            output.write_text(json.dumps(self.answer, ensure_ascii=False), encoding="utf-8")
+        return subprocess.CompletedProcess(cmd, self.returncode, stdout=stdout, stderr="boom")
+
+
+@pytest.fixture
+def photo(tmp_path) -> Path:
+    folder = tmp_path / "images"
+    folder.mkdir()
+    (folder / "p01-img01.jpg").write_bytes(b"fake-jpeg")  # 標註工具只複製檔案，不解碼影像
+    (folder / "gold-answer.json").write_text("{}", encoding="utf-8")  # 同資料夾的其他檔案不可被帶進去
+    return folder / "p01-img01.jpg"
+
+
+# ── 隔離 ───────────────────────────────────────────────────────────
+
+
+@pytest.mark.parametrize("annotator", ["claude", "codex"])
+def test_工作目錄裡只有這一張照片(photo, annotator):
+    runner = FakeRunner()
+    annotate_image(photo, annotator, "m", runner)
+    assert runner.calls[0]["files"] == ["p01-img01.jpg"]
+
+
+@pytest.mark.parametrize("annotator", ["claude", "codex"])
+def test_工作目錄不在照片原本的資料夾裡(photo, annotator):
+    runner = FakeRunner()
+    annotate_image(photo, annotator, "m", runner)
+    assert photo.parent not in runner.calls[0]["cwd"].parents
+    assert runner.calls[0]["cwd"] != photo.parent
+
+
+def test_兩個標註者各自使用不同的工作目錄(photo):
+    runner = FakeRunner()
+    annotate_image(photo, "claude", "m", runner)
+    annotate_image(photo, "codex", "m", runner)
+    assert runner.calls[0]["cwd"] != runner.calls[1]["cwd"]
+
+
+def test_claude只開放讀檔工具且不載入MCP(photo):
+    runner = FakeRunner()
+    annotate_image(photo, "claude", "m", runner)
+    cmd = runner.calls[0]["cmd"]
+    assert cmd[cmd.index("--tools") + 1] == "Read"
+    assert cmd[cmd.index("--allowedTools") + 1] == "Read"
+    assert "--strict-mcp-config" in cmd
+    assert "--restricted" in cmd  # 讀檔範圍鎖在工作目錄內
+    assert "--safe-mode" in cmd  # 不載入個人的 hooks、外掛、MCP
+
+
+def test_codex使用唯讀沙盒並附上照片(photo):
+    runner = FakeRunner()
+    annotate_image(photo, "codex", "m", runner)
+    cmd = runner.calls[0]["cmd"]
+    assert cmd[cmd.index("--sandbox") + 1] == "read-only"
+    assert Path(cmd[cmd.index("--image") + 1]).name == "p01-img01.jpg"
+
+
+def test_codex的結構檔不放在工作目錄裡(photo):
+    runner = FakeRunner()
+    annotate_image(photo, "codex", "m", runner)
+    cmd = runner.calls[0]["cmd"]
+    assert Path(cmd[cmd.index("--output-schema") + 1]).parent != runner.calls[0]["cwd"]
+
+
+@pytest.mark.parametrize("annotator", ["claude", "codex"])
+def test_指定的模型傳給工具(photo, annotator):
+    runner = FakeRunner()
+    annotate_image(photo, annotator, "model-x", runner)
+    cmd = runner.calls[0]["cmd"]
+    assert cmd[cmd.index("--model") + 1] == "model-x"
+
+
+@pytest.mark.parametrize("annotator", ["claude", "codex"])
+def test_提示詞由stdin傳入並指名照片檔(photo, annotator):
+    runner = FakeRunner()
+    annotate_image(photo, annotator, "m", runner)
+    assert "p01-img01.jpg" in runner.calls[0]["stdin"]
+
+
+# ── 輸出 ───────────────────────────────────────────────────────────
+
+
+@pytest.mark.parametrize("annotator", ["claude", "codex"])
+def test_標註結果通過結構驗證並記錄照片與模型(photo, annotator):
+    record = annotate_image(photo, annotator, "model-x", FakeRunner())
+    assert (record.image_id, record.annotator, record.model) == ("p01-img01", annotator, "model-x")
+    assert record.annotation.rows[0].raw_name == "維生素D"
+
+
+def test_記錄claude回報實際使用的模型(photo):
+    assert annotate_image(photo, "claude", "m", FakeRunner()).models_reported == ["claude-test-model"]
+
+
+def test_claude沒有structured_output時改讀result文字(photo):
+    envelope = {"is_error": False, "result": json.dumps(ANSWER, ensure_ascii=False)}
+    record = annotate_image(photo, "claude", "m", FakeRunner(claude_envelope=envelope))
+    assert record.annotation.serving.serving_size == 2
+
+
+def test_claude回報錯誤時拋出標註錯誤(photo):
+    with pytest.raises(AnnotationError, match="回報錯誤"):
+        annotate_image(photo, "claude", "m", FakeRunner(claude_envelope={"is_error": True, "result": "額度用完"}))
+
+
+@pytest.mark.parametrize("annotator", ["claude", "codex"])
+def test_結束碼非零時拋出標註錯誤(photo, annotator):
+    with pytest.raises(AnnotationError, match="結束碼"):
+        annotate_image(photo, annotator, "m", FakeRunner(returncode=1))
+
+
+@pytest.mark.parametrize("annotator", ["claude", "codex"])
+def test_輸出不符結構時拋出標註錯誤(photo, annotator):
+    with pytest.raises(AnnotationError, match="不符結構"):
+        annotate_image(photo, annotator, "m", FakeRunner(answer={"rows": "沒有"}))
+
+
+def test_結構檔的欄位與標註模型一致():
+    def check(schema: dict, model) -> None:
+        assert set(schema["properties"]) == set(model.model_fields)
+        assert set(schema["required"]) == set(model.model_fields)  # 結構化輸出要求每欄都必填
+        assert schema["additionalProperties"] is False
+
+    check(JSON_SCHEMA, Annotation)
+    check(JSON_SCHEMA["properties"]["serving"], AnnotatedServing)
+    check(JSON_SCHEMA["properties"]["rows"]["items"], AnnotatedRow)
+
+
+# ── 批次 ───────────────────────────────────────────────────────────
+
+
+def test_批次標註寫出兩份標註且可直接比對(photo, tmp_path):
+    out = tmp_path / "annotations"
+    failed = annotate_all([photo], out, {"claude": "m1", "codex": "m2"}, runner=FakeRunner())
+    assert failed == []
+    a, models_a = load_annotations(out / "claude", "claude")
+    b, _ = load_annotations(out / "codex", "codex")
+    assert models_a == {"m1"}
+    assert compare(a, b).disagreements == []
+
+
+def test_已標註的照片預設跳過(photo, tmp_path):
+    out = tmp_path / "annotations"
+    annotate_all([photo], out, {"claude": "m"}, runner=FakeRunner())
+    runner = FakeRunner()
+    annotate_all([photo], out, {"claude": "m"}, runner=runner)
+    assert runner.calls == []
+
+
+def test_一項失敗不影響其他項(photo, tmp_path):
+    out = tmp_path / "annotations"
+    failed = annotate_all([photo], out, {"claude": "m", "codex": "m"}, runner=FakeRunner(returncode=1))
+    assert failed == ["claude:p01-img01", "codex:p01-img01"]
+
+
+def test_標註放錯資料夾時讀取直接報錯(photo, tmp_path):
+    out = tmp_path / "annotations"
+    annotate_all([photo], out, {"claude": "m"}, runner=FakeRunner())
+    (out / "codex").mkdir()
+    (out / "claude" / "p01-img01.json").rename(out / "codex" / "p01-img01.json")
+    with pytest.raises(ValueError, match="不應放在 codex"):
+        load_annotations(out / "codex", "codex")
+
+
+def test_照片編號重複時不執行標註(tmp_path, capsys):
+    from scripts.annotate.__main__ import main
+
+    images = tmp_path / "images"
+    images.mkdir()
+    (images / "p01.jpg").write_bytes(b"a")
+    (images / "p01.png").write_bytes(b"b")
+    assert main(["run", "--images", str(images), "--annotations", str(tmp_path / "out"),
+                 "--claude-model", "m", "--codex-model", "m"]) == 2  # fmt: skip
+    assert "照片編號重複" in capsys.readouterr().err
+
+
+def test_比對時標註資料夾是空的就失敗(tmp_path, capsys):
+    from scripts.annotate.__main__ import main
+
+    (tmp_path / "claude").mkdir()
+    (tmp_path / "codex").mkdir()
+    assert main(["compare", "--annotations", str(tmp_path), "--out", str(tmp_path / "cmp")]) == 2
+    assert "共同的照片" in capsys.readouterr().err
+
+
+def test_照片換過後不沿用舊標註而是要求重做(photo, tmp_path):
+    out = tmp_path / "annotations"
+    annotate_all([photo], out, {"claude": "m"}, runner=FakeRunner())
+    photo.write_bytes(b"another-photo")
+    failed = annotate_all([photo], out, {"claude": "m"}, runner=FakeRunner())
+    assert failed == ["claude:p01-img01"]
+    assert annotate_all([photo], out, {"claude": "m"}, force=True, runner=FakeRunner()) == []
+
+
+def test_標註檔的照片編號與檔名不符時報錯(photo, tmp_path):
+    out = tmp_path / "annotations"
+    annotate_all([photo], out, {"claude": "m"}, runner=FakeRunner())
+    (out / "claude" / "p01-img01.json").rename(out / "claude" / "p01-old.json")
+    with pytest.raises(ValueError, match="與檔名不符"):
+        load_annotations(out / "claude", "claude")
+
+
+def test_codex標註時關閉電腦操作與瀏覽器外掛(photo):
+    runner = FakeRunner()
+    annotate_image(photo, "codex", "m", runner)
+    cmd = " ".join(runner.calls[0]["cmd"])
+    for flag in ("mcp_servers.node_repl.enabled=false", 'plugins."computer-use@openai-bundled".enabled=false',
+                 'plugins."browser@openai-bundled".enabled=false', 'plugins."chrome@openai-bundled".enabled=false'):
+        assert flag in cmd
+
+
+def test_交給標註工具的環境變數不含金鑰且不含WindowsApps():
+    from scripts.annotate.run import annotator_env
+
+    env = annotator_env({"GEMINI_API_KEY": "x", "GITHUB_TOKEN": "y", "HOME": "h",
+                         "PATH": "C:/bin;C:/Users/u/AppData/Local/Microsoft/WindowsApps".replace(";", __import__("os").pathsep)})
+    assert "GEMINI_API_KEY" not in env and "GITHUB_TOKEN" not in env and env["HOME"] == "h"
+    assert "WindowsApps" not in env["PATH"]
+
+
+def test_紀錄的指紋是實際交給模型的副本(photo):
+    import hashlib
+
+    record = annotate_image(photo, "claude", "m", FakeRunner())
+    assert record.image_sha256 == hashlib.sha256(photo.read_bytes()).hexdigest()
+
