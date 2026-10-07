@@ -1,0 +1,16 @@
+image_id,product_id,product_name,source,source_url,dataset,scenario,coverage_notes
+p01-img01,p01,挺立 葡萄糖胺強力錠,自拍,,w1,手持瓶身、室內燈光、曲面標籤,葡萄糖胺（允許成分，在其他成分欄）、維生素 D 微克加 IU 並列、mg α-TE、mg NE、B6、B12、菸鹼素、鈣、成分欄長且小字
+p02-img01,p02,法國魚油（品名未入鏡）,自拍,,w1,手持瓶身、室內燈光、標籤左側被切,魚油 ω-3／EPA／DHA 三列、熱量等範圍外營養素、每一份量為「1.76公克(2粒)」重量與粒數並列
+p03-img01,p03,挺立樂活高鈣強力錠+K2配方,自拍,,w1,手持瓶身、室內燈光,維生素 C、D（IU 並列）、K（範圍外）、鈣、鎂、鋅、銅錳（參考值未訂定）
+p04-img01,p04,挺立 關鍵迷你錠,自拍,,holdout,手持小瓶、字很小、曲面,維生素 C、鎂、鋅、其他成分 UC-II、成分欄小字
+p05-img01,p05,三倍強化海藻鈣鎂+D3,自拍,,w1,手持鋁袋、反光輕微、多個區塊,化合物元素量寫法「天然海藻鈣(含32%鈣)」、關鍵成分含量表、建議吃法「每日3顆」、鈣鎂 D K
+p06-img01,p06,熱激化乳酸菌（品名未入鏡）,自拍,,holdout,手持袋裝、成分欄左側被切,只有熱量等範圍外營養素、「每份」與「每100公克」兩欄、每一份量只有重量「2公克」沒有粒數
+p07-img01,p07,BWL Avance 紅麴配方膠囊,網路（品牌官網）,https://www.avanceforlife.com.tw/Updates/img/products/red-yeast-rice-plus-supplement-facts.jpg,w1,數位標示圖、背景乾淨,紅麴（允許成分，在成分欄）、熱量等範圍外營養素
+p08-img01,p08,諾得 健字號頂級紅麴膠囊,網路（PChome 商品圖）,https://img.pchome.com.tw/cs/items/DFAP0XA900HWB83/i010007_1727429252.jpg,w1,商品規格圖、標示框很小、多個區塊,紅麴、Monacolin K 含量表、每一份量「1.0公克(2顆)」、警語
+p09-img01,p09,克補 完整維他命B群,網路（PChome 商品圖）,https://img.pchome.com.tw/cs/items/DBBC1EA9007PYEM/i010002_1693894021.jpg,w1,數位標示圖,高劑量菸鹼素 100毫克NE（556%）、B6、B12、葉酸、維生素 E 以 mg α-TE 加 IU 並列、維生素 C
+p10-img01,p10,Nature Made 萊萃美 全方位維生素B群加C,網路（PChome 商品圖）,https://img.pchome.com.tw/cs/items/DBBBE3A900FOHWS/i010001_1666565520.jpg,w1,宣傳圖中的中英並列標示表,中英文雙語名稱、菸鹼素、B6、B12、葉酸、鈣、%DV 高達 3125%
+p11-img01,p11,Richvita 利捷維 有酵維生素D3錠,網路（PChome 商品圖）,https://img.pchome.com.tw/cs/items/DBBC04A900AXQFF/i010026_1710920660.jpg,w1,宣傳圖中的標示表、橘色底,維生素 D 20微克(800IU) 200%、微量礦物質、成分欄長
+p12-img01,p12,永信 HAC 檸檬酸鈣錠,網路（mamilove 商品圖）,https://cdn-thumbnail.mamilove.com.tw/Bd20vVPnMzmXGMwKupd75G32nvo=/680x0/https://images.mamilove.com.tw/items/76da0fbe-80f8-11ed-ac6a-ea7e46aab685.jpg,w1,數位標示圖、解析度低（680px）,鈣鎂鋅銅錳、D（IU 並列）、「成分添加量(每日4錠含)」第二個表格（每日 vs 每份）
+p13-img01,p13,信東 紅麴膠囊,網路（PChome 商品圖）,https://img.pchome.com.tw/cs/items/DBAW7TA900B3BC7/i010010_1754291407.jpg,holdout,商品說明圖、紅底、字很小,紅麴、Monacolin K、每一份量「0.5公克(1粒)」、建議吃法
+p14-img01,p14,統欣生技 TX版 維生素B群,網路（PChome 商品圖）,https://img.pchome.com.tw/cs/items/DBBB2GA900GKGO9/i010063_1734683400.jpg,holdout,宣傳圖中的標示表、字很小,B 群高劑量（菸鹼素 150%、B6 6250%）
+p15-img01,p15,綠芙特級 檸檬酸鈣全方位加強錠,網路（PChome 商品圖）,https://img.pchome.com.tw/cs/items/DBBC5NA900GC5TW/i010002_1684306198.jpg,holdout,數位標示圖,檸檬酸鈣在成分欄、D 12.5微克(500IU)、鈣鎂鋅銅、每一份量「1.9公克(1錠)」

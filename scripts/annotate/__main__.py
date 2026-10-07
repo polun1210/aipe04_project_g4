@@ -16,6 +16,9 @@ from scripts.annotate.compare import (
     summary_markdown,
     write_outputs,
 )
+from scripts.annotate.gold import GoldError, adjudicate, build_gold, draft_name_map, write_name_map
+from scripts.annotate.gold import _read as read_csv
+from scripts.annotate.name_review import build_name_review
 from scripts.annotate.review import build_review, image_problems
 from scripts.annotate.run import annotate_all
 
@@ -99,6 +102,44 @@ def cmd_review(args: argparse.Namespace) -> int:
     return 0
 
 
+def _adjudicated(args: argparse.Namespace):
+    a, _ = load_annotations(args.annotations / "claude", "claude")
+    b, _ = load_annotations(args.annotations / "codex", "codex")
+    c = args.annotations / "comparison"
+    return adjudicate(a, b, read_csv(c / "disagreements.csv"), read_csv(c / "spot_checks.csv"), read_csv(c / "corrections.csv"))
+
+
+def cmd_gold_map(args: argparse.Namespace) -> int:
+    try:
+        gold = _adjudicated(args)
+    except GoldError as e:
+        print(e, file=sys.stderr)
+        return 1
+    rows = draft_name_map(gold, args.catalog)
+    out = args.annotations / "gold"
+    write_name_map(rows, out / "name_map_draft.csv")
+    (out / "name_review.html").write_text(build_name_review(rows), encoding="utf-8")
+    print(f"已寫出 {out / 'name_review.html'}；確認後匯出 name_map.csv，放到 {out}")
+    return 0
+
+
+def cmd_gold_build(args: argparse.Namespace) -> int:
+    name_map = read_csv(args.annotations / "gold" / "name_map.csv")
+    if not name_map:
+        print("找不到人工確認過的 name_map.csv（先執行 gold-map 並在確認頁匯出）", file=sys.stderr)
+        return 2
+    try:
+        drafts = build_gold(_adjudicated(args), name_map, read_csv(args.sources))
+    except GoldError as e:
+        print(e, file=sys.stderr)
+        return 1
+    args.out.mkdir(parents=True, exist_ok=True)
+    for product, draft in drafts.items():
+        (args.out / f"{product}.json").write_text(draft.model_dump_json(indent=2, exclude_none=True) + "\n", encoding="utf-8")
+    print(f"已寫出 {len(drafts)} 份標準答案到 {args.out}")
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="python -m scripts.annotate", description="AI 雙盲標註工具")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -130,6 +171,17 @@ def main(argv: list[str] | None = None) -> int:
     review.add_argument("--annotations", type=Path, default=Path("data/annotations"), help="核對照片指紋用")
     review.add_argument("--skip-random", nargs="+", metavar="IMAGE_ID", help="這些照片只做全查，隨機抽查項目跳過")
     review.set_defaults(func=cmd_review)
+
+    gmap = sub.add_parser("gold-map", help="合併裁決，產生名稱對照表草稿與確認頁")
+    gmap.add_argument("--annotations", type=Path, default=Path("data/annotations"))
+    gmap.add_argument("--catalog", type=Path, default=Path("docs/schemas/examples/catalog/ingredients.csv"))
+    gmap.set_defaults(func=cmd_gold_map)
+
+    gbuild = sub.add_parser("gold-build", help="用確認過的名稱對照表產生標準答案（辨識草稿結構）")
+    gbuild.add_argument("--annotations", type=Path, default=Path("data/annotations"))
+    gbuild.add_argument("--sources", type=Path, default=Path("tests/fixtures/labels/sources.csv"))
+    gbuild.add_argument("--out", type=Path, default=Path("tests/fixtures/labels"))
+    gbuild.set_defaults(func=cmd_gold_build)
 
     args = parser.parse_args(argv)
     return args.func(args)
