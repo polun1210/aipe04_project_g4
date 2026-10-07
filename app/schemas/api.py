@@ -3,17 +3,21 @@
 成功：直接回資料本體（各交接點的模型），不另外包一層。
 失敗：一律回 ErrorResponse。
 長時間工作（辨識、報告生成）：POST 回 202 ＋ JobAccepted，前端每 2 秒 GET 一次 JobResponse。
+評估（06）是確定性計算、不需要等，所以同步回傳；只有 LLM 產生的報告（08）才走工作編號。
 
 端點一覽：
   GET  /api/catalog                               → CatalogResponse
   POST /api/extractions            (multipart)    → ExtractionAccepted
   GET  /api/extractions/{job_id}                  → JobResponse[ExtractionDraft]
+  POST /api/products               (第一週手動輸入) ← VerificationSubmission → ProductCreated
   PUT  /api/products/{product_id}/verification    ← VerificationSubmission → 204
-  POST /api/assessments                           ← AssessmentRequest → JobAccepted
-  GET  /api/assessments/jobs/{job_id}             → JobResponse[Report]
+  POST /api/assessments                           ← AssessmentRequest → Assessment（確定性計算，很快，同步回傳）
+  POST /api/assessments/{case_id}/report  (W3)    → JobAccepted（LLM 敘述很慢，才用工作編號）
+  GET  /api/assessments/jobs/{job_id}     (W3)    → JobResponse[Report]
 """
 
 from typing import Generic, TypeVar
+from uuid import UUID
 
 from pydantic import model_validator
 
@@ -31,6 +35,10 @@ class ErrorBody(StrictModel):
 
 class ErrorResponse(StrictModel):
     error: ErrorBody
+
+
+class ProductCreated(StrictModel):
+    product_id: UUID
 
 
 class JobAccepted(StrictModel):

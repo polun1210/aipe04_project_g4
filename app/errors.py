@@ -19,6 +19,17 @@ _VALUE_ERROR_PREFIX = "Value error, "  # pydantic 對自訂驗證器訊息加的
 _REQUEST_PART_NAMES = {"body", "query", "path", "header", "cookie"}
 
 
+class ApiError(Exception):
+    """路由裡要回特定錯誤代碼時丟這個（message 給使用者看，不可含內部細節）。"""
+
+    def __init__(self, status_code: int, code: ErrorCode, message: str, details: list[str] | None = None):
+        super().__init__(message)
+        self.status_code = status_code
+        self.code = code
+        self.message = message
+        self.details = details
+
+
 def _error_response(status_code: int, code: ErrorCode, message: str, details: list[str] | None = None):
     body = ErrorResponse(error=ErrorBody(code=code, message=message, details=details))
     return JSONResponse(status_code=status_code, content=body.model_dump(mode="json", exclude_none=True))
@@ -42,11 +53,16 @@ async def _handle_http_exception(_: Request, exc: StarletteHTTPException):
     return _error_response(exc.status_code, code, message)
 
 
+async def _handle_api_error(_: Request, exc: ApiError):
+    return _error_response(exc.status_code, exc.code, exc.message, exc.details)
+
+
 async def _handle_unexpected_error(_: Request, __: Exception):
     return _error_response(500, ErrorCode.INTERNAL_ERROR, _INTERNAL_MESSAGE)
 
 
 def register_error_handlers(app: FastAPI) -> None:
+    app.add_exception_handler(ApiError, _handle_api_error)
     app.add_exception_handler(RequestValidationError, _handle_validation_error)
     app.add_exception_handler(StarletteHTTPException, _handle_http_exception)
     app.add_exception_handler(Exception, _handle_unexpected_error)

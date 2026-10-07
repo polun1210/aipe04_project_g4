@@ -79,9 +79,9 @@
 | 頁面 | 動作 | 方法與網址 | 送出 | 收到 | 狀態 |
 |---|---|---|---|---|---|
 | PG-004 使用者輸入頁 | 載入慢性病、藥物選單 | `GET /api/catalog` | — | `CatalogResponse`（`catalog/` 底下 CSV 的內容） | 已完成 |
-| PG-007 保健食品資訊確認頁 | 按「確認」存一罐產品 | `POST /api/products` | `05a_verification_submission` | `product_id`（之後送評估時用） | 草案 |
-| PG-007 → PG-009 | 選「沒有其他保健食品」，開始評估 | `POST /api/assessments` | `03_assessment_request`（`product_ids` 放前面存好的產品） | `06_assessment` | 草案 |
-| PG-010 報告呈現頁 | 顯示評估結果 | 同上一列的回傳 | — | `06_assessment` | 草案 |
+| PG-007 保健食品資訊確認頁 | 按「確認」存一罐產品 | `POST /api/products` | `05a_verification_submission` | `product_id`（之後送評估時用），HTTP 201 | 已完成（計算為假版本） |
+| PG-007 → PG-009 | 選「沒有其他保健食品」，開始評估 | `POST /api/assessments` | `03_assessment_request`（`product_ids` 放前面存好的產品） | `06_assessment` | 已完成（計算為假版本） |
+| PG-010 報告呈現頁 | 顯示評估結果 | 同上一列的回傳 | — | `06_assessment` | 已完成（計算為假版本） |
 
 PG-010 顯示「每天吃多少」「佔上限幾 %」，用 `06_assessment` 的 `relevant_nutrients`，每個營養素一筆：
 
