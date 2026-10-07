@@ -3,13 +3,15 @@
 from fastapi import FastAPI
 
 from app.errors import register_error_handlers
-from app.routers import catalog
+from app.routers import assessments, catalog, products
 
 
 def create_app() -> FastAPI:
     app = FastAPI(title="補對了嗎？API")
     register_error_handlers(app)
     app.include_router(catalog.router)
+    app.include_router(products.router)
+    app.include_router(assessments.router)
 
     @app.get("/api/health")
     def health() -> dict[str, str]:
