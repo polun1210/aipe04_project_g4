@@ -1,4 +1,4 @@
-"""AI 雙盲標註工具（issue 02，D18、D20）。
+"""AI 雙盲標註工具（issue 02）。
 
     uv run python -m scripts.annotate run      對每張照片分別請 Claude Code 與 Codex CLI 標註
     uv run python -m scripts.annotate compare  逐欄比對兩份標註，產出不一致清單、抽查名單、κ 與一致率

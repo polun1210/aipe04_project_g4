@@ -4,7 +4,7 @@ from app.schemas.common import StrictModel
 
 
 class ImageInput(StrictModel):
-    image_id: str  # 檔名即編號，例如 p03-img01（D15）
+    image_id: str  # 檔名即編號，例如 p03-img01
     content: bytes  # 原始上傳檔
 
 

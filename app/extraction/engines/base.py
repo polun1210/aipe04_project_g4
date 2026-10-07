@@ -11,7 +11,7 @@ from app.schemas.enums import LabelSection
 
 
 class TextBlock(StrictModel):
-    """引擎讀出的一段文字。座標系 ＝ 依 EXIF 方向轉正後的圖（D15）。"""
+    """引擎讀出的一段文字。座標系 ＝ 依 EXIF 方向轉正後的圖。"""
 
     text: str
     bbox: BoundingBox | None = None
@@ -19,7 +19,7 @@ class TextBlock(StrictModel):
 
 
 # ── 直接讀出結構的引擎（Gemini）才有的結果 ─────────────────────────
-# D11：只放原文、數值、單位、區塊。單位保留標示原文（「毫克」「μg」），
+# 只放原文、數值、單位、區塊。單位保留標示原文（「毫克」「μg」），
 # 名稱標準化與單位對映都由規則層做，兩條路線才能公平比較。
 
 
@@ -60,7 +60,7 @@ class EngineResult(StrictModel):
 
 
 class EngineRecording(StrictModel):
-    """一次真實呼叫的原始紀錄（D14）。轉換函式只吃這個，因此換轉換規則時不必重新呼叫付費服務。"""
+    """一次真實呼叫的原始紀錄。轉換函式只吃這個，因此換轉換規則時不必重新呼叫付費服務。"""
 
     image_id: str
     engine: str  # cloud_vision、gemini

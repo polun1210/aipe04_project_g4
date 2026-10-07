@@ -69,7 +69,7 @@ td.note { color:#666; font-size:13px; }
 tr.changed { background:#fff8e0; }
 </style></head><body>
 <header><strong>名稱對照表確認</strong>
-<span>範圍內＝要評估的 13 項營養素或 3 項允許成分；成分欄裡營養素的原料（例如檸檬酸鈣）一律範圍外（D45）</span>
+<span>範圍內＝要評估的 13 項營養素或 3 項允許成分；成分欄裡營養素的原料（例如檸檬酸鈣）一律範圍外</span>
 <button id="export">匯出 name_map.csv</button></header>
 {{BODY}}
 <script>

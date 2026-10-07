@@ -39,7 +39,7 @@ def table(load_recording) -> EngineRecording:
     return load_recording("gemini", "nutrition_table")
 
 
-# ── 轉換：只放原文、數值、單位、區塊（D11）─────────────────────────
+# ── 轉換：只放原文、數值、單位、區塊─────────────────────────
 
 
 def test_每列保留名稱原文含括號內容(table):

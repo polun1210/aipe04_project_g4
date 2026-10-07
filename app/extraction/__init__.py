@@ -1,7 +1,7 @@
 """標示辨識模組（E）。對外只有兩個函式：check_quality（交接點 04a）與 extract（交接點 04b）。
 
 目前是假版本（T01）：回傳 docs/schemas/examples/ 的固定內容，讓後端與前端先行串接。
-位置框座標系 ＝ 依 EXIF 方向轉正後的圖（D15）。
+位置框座標系 ＝ 依 EXIF 方向轉正後的圖。
 """
 
 import json
