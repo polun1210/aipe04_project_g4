@@ -1,4 +1,4 @@
-"""逐欄比對兩份標註（D18）：一致／不一致清單、人工抽查名單、Cohen's κ 與完全一致率。
+"""逐欄比對兩份標註：一致／不一致清單、人工抽查名單、Cohen's κ 與完全一致率。
 
 對齊方式：同一張照片內，以「名稱去括號、全形轉半形、去空白」後的字串對齊兩邊的列；
 同名出現多次時依出現順序一對一配對。對不上的列整列列為不一致（某一方多抓或漏抓），交人工裁決。
@@ -30,7 +30,7 @@ from app.extraction.textnorm import compact, strip_parenthetical
 from scripts.annotate.schema import AnnotatedRow, Annotation, AnnotationRecord
 
 DEFAULT_SEED = 20261007
-DEFAULT_SAMPLE_RATE = 0.2  # 比較集 20%；驗收集用 0.3（D18）
+DEFAULT_SAMPLE_RATE = 0.2  # 比較集 20%；驗收集用 0.3
 
 ROW_FIELDS = ("raw_name", "per_serving", "unit", "percent_dv", "stated_elemental_amount", "label_section")
 SERVING_FIELDS = ("serving_size", "dose_unit")

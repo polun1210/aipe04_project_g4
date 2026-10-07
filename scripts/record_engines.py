@@ -1,4 +1,4 @@
-"""錄製引擎回應（D14）：對每張照片真的呼叫一次引擎，把原始回應與轉換後的 EngineResult 存成 JSON。
+"""錄製引擎回應：對每張照片真的呼叫一次引擎，把原始回應與轉換後的 EngineResult 存成 JSON。
 
 **會呼叫付費服務**（在免費額度內），由使用者手動執行；pytest 只讀錄好的檔案。
 
@@ -79,7 +79,7 @@ def record_all(recorder: Recorder, images: list[Path], out: Path, force: bool) -
     """回傳失敗的照片編號。一張失敗不影響其他張。"""
     failed = []
     for path in images:
-        image_id = path.stem  # 檔名即照片編號（D15）
+        image_id = path.stem  # 檔名即照片編號
         raw_path = out / "raw" / f"{image_id}.json"
         if raw_path.exists() and not force:
             print(f"跳過 {image_id}（已錄過；要重錄加 --force）")

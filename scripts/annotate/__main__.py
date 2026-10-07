@@ -40,7 +40,7 @@ def cmd_run(args: argparse.Namespace) -> int:
     models = {"claude": args.claude_model, "codex": args.codex_model}
     models = {k: v for k, v in models.items() if k in args.annotators}
     missing = [k for k, v in models.items() if not v]
-    if missing:  # D20：模型版本必須明確指定並記錄，不用工具的預設值
+    if missing:  # 模型版本必須明確指定並記錄，不用工具的預設值
         print(f"請用 --{missing[0]}-model 指定 {missing[0]} 使用的模型", file=sys.stderr)
         return 2
     failed = annotate_all(images, args.annotations, models, force=args.force)

@@ -1,4 +1,4 @@
-"""把雙盲標註、人工裁決與抽查結果轉成標準答案（issue 03，D18、D40、D45）。
+"""把雙盲標註、人工裁決與抽查結果轉成標準答案（issue 03）。範圍狀態與型態代碼的規則見 supplement-label-output.md。
 
 三個步驟：
 1. adjudicate：兩份標註 ＋ 不一致清單的裁決 ＋ 抽查錯誤的更正 → 每張照片一份裁決後的標註
@@ -11,7 +11,6 @@ import csv
 import re
 import uuid
 from dataclasses import dataclass
-from datetime import datetime, timezone
 from pathlib import Path
 
 from app.extraction.textnorm import compact, strip_parenthetical
@@ -23,6 +22,7 @@ from scripts.annotate.schema import AnnotatedRow, AnnotatedServing, Annotation
 DELETE = "刪除"
 NULL = "null"
 GOLD_VERSION = "gold-annotation"
+GOLD_EXTRACTED_AT = "2026-10-05T00:00:00+08:00"  # 比較集標準答案的定稿日
 _FLOAT_FIELDS = {"per_serving", "percent_dv", "stated_elemental_amount", "serving_size"}
 _PRODUCT_NS = uuid.UUID("6f1c6a3e-3b1e-4c0e-9d7a-1f0e2a6b0c01")  # 產品編號 → 固定的 product_id
 
@@ -41,10 +41,15 @@ def _read(path: Path) -> list[dict[str, str]]:
         return list(csv.DictReader(fh))
 
 
-def _typed(field: str, value: str):
+def _typed(field: str, value: str, where: tuple[str, str, str] | None = None):
     if value in ("", NULL):
         return None
-    return float(value) if field in _FLOAT_FIELDS else value
+    if field not in _FLOAT_FIELDS:
+        return value
+    try:
+        return float(value)
+    except ValueError:
+        raise GoldError(f"{where or field} 應該填數字（或 null），卻填了「{value}」") from None
 
 
 def adjudicate(
@@ -63,6 +68,9 @@ def adjudicate(
     unlisted = sorted(expected - ruling.keys())
     if unlisted:  # 不一致清單過期或漏列時，不能默默採用其中一邊的值
         raise GoldError(f"有 {len(unlisted)} 項不一致不在裁決清單裡（請重新執行 compare），例如 {unlisted[0]}")
+    obsolete = sorted(ruling.keys() - expected)
+    if obsolete:  # 反方向：清單裡的項目現在已經不是不一致（例如重新標註後），舊裁決可能套到別列
+        raise GoldError(f"有 {len(obsolete)} 項裁決對應的不一致已經不存在（請重新執行 compare），例如 {obsolete[0]}")
     missing = [k for k, v in ruling.items() if not v]
     if missing:
         raise GoldError(f"還有 {len(missing)} 項不一致沒有裁決，例如 {missing[0]}")
@@ -75,7 +83,7 @@ def adjudicate(
 
     def value(image_id: str, label: str, field: str, agreed):
         key = (image_id, label, field)
-        return _typed(field, decided[key]) if key in decided else agreed
+        return _typed(field, decided[key], key) if key in decided else agreed
 
     gold: dict[str, Annotation] = {}
     for image_id in sorted(a.keys() & b.keys()):
@@ -120,7 +128,7 @@ def _synonyms(ingredients_csv: Path) -> dict[str, str]:
 
 
 def _allowed(name: str) -> Suggestion | None:
-    """允許成分不論出現在哪個區塊都是範圍內（D45 的例外）。"""
+    """允許成分不論出現在哪個區塊都是範圍內（supplement-label-output.md「範圍判定」）。"""
     text = compact(name).lower()
     if "monacolin" in text:
         return Suggestion("in_scope", ScopeStatus.IN_SCOPE, IngredientCode.RED_YEAST_RICE, "monacolin_k")
@@ -148,7 +156,7 @@ def suggest(name: str, section: str, synonyms: dict[str, str], table_codes: set[
     if allowed:
         return allowed
     if section == LabelSection.INGREDIENT_LIST:
-        return Suggestion("out_of_scope", ScopeStatus.OUT_OF_SCOPE, note="成分欄的原料或賦形劑（D45）")
+        return Suggestion("out_of_scope", ScopeStatus.OUT_OF_SCOPE, note="成分欄的原料或賦形劑（範圍判定見 supplement-label-output.md）")
     core = compact(strip_parenthetical(name.split(" ")[0])).lower()  # 「維生素B12 Vitamin B12」取中文部分
     code = synonyms.get(core)
     if code and section == LabelSection.NUTRITION_TABLE:
@@ -260,7 +268,7 @@ def build_gold(gold: dict[str, Annotation], name_map: list[dict[str, str]], sour
                     "ocr_version": GOLD_VERSION,
                     "rule_layer_version": GOLD_VERSION,
                     "synonym_table_version": GOLD_VERSION,
-                    "extracted_at": datetime.now(timezone.utc).isoformat(),
+                    "extracted_at": GOLD_EXTRACTED_AT,  # 固定時間：重跑不會讓 10 份檔案都出現差異
                 },
             }
         )

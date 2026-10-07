@@ -1,13 +1,13 @@
 """Gemini 轉接器（路線 B，issue 06）。
 
-用結構化輸出（response schema）讓 Gemini 直接讀出每一列的原文、數值、單位與區塊（D11）。
+用結構化輸出（response schema）讓 Gemini 直接讀出每一列的原文、數值、單位與區塊。
 **不要求 Gemini 做名稱標準化或單位換算**：標準代碼、範圍狀態、單位對映一律由規則層處理，
 和 Cloud Vision 路線共用同一套程式，比較才公平。
 
 位置框：要求 Gemini 給 box_2d（0–1000 正規化的 [ymin, xmin, ymax, xmax]），再換算成轉正後的
-像素座標。VLM 的座標通常不可靠（D04），這裡照收，可不可用由 W1 比較表的「有框比例」與人工檢視判斷。
+像素座標。VLM 的座標通常不可靠，這裡照收，可不可用由 W1 比較表的「有框比例」與人工檢視判斷。
 
-金鑰：環境變數 GEMINI_API_KEY；模型：GEMINI_MODEL，必填、沒有預設值（D27：模型必須明確指定，
+金鑰：環境變數 GEMINI_API_KEY；模型：GEMINI_MODEL，必填、沒有預設值（模型必須明確指定，
 避免預設型號過時或被悄悄換掉）。
 """
 
@@ -175,7 +175,7 @@ _WEIGHT_UNITS = {"公克", "克", "g", "毫克", "mg"}
 def _to_reading(label: _GeminiLabel, width: int, height: int) -> LabelReading:
     serving = None
     if label.serving is not None:
-        # 每一份量是劑型單位數（幾粒），不是重量；只寫重量（例如「0.8公克」）時不猜粒數，留空（D40）
+        # 每一份量是劑型單位數（幾粒），不是重量；只寫重量（例如「0.8公克」）時不猜粒數，留空
         unit = (label.serving.dose_unit or "").strip().lower()
         serving = ServingReading(
             raw_text=label.serving.raw_text,

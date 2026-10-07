@@ -1,4 +1,4 @@
-"""用本機 Claude Code 與 Codex CLI 各自標註一張照片（D20）。
+"""用本機 Claude Code 與 Codex CLI 各自標註一張照片。
 
 雙盲與「只看圖」的做法：
 - 每個標註者、每張照片各開一個**只放那張照片**的暫存資料夾當工作目錄，放在系統暫存區（repo 之外）。
@@ -47,7 +47,7 @@ def annotator_env(environ: dict[str, str] | None = None) -> dict[str, str]:
     """交給標註工具的環境變數：拿掉看起來像金鑰的變數；PATH 去掉 WindowsApps。
 
     本機的 pwsh.exe 是 Microsoft Store 版（WindowsApps），Codex 沙盒的受限權限啟動不了它，
-    Codex 就會改用電腦操作工具在沙盒外執行（D58、D59）；去掉後改用內建 PowerShell，沙盒才有效。
+    Codex 就會改用電腦操作工具在沙盒外執行；去掉後改用內建 PowerShell，沙盒才有效。
     """
     env = {k: v for k, v in (environ if environ is not None else os.environ).items() if not _SECRET_ENV.search(k)}
     for key in [k for k in env if k.upper() == "PATH"]:
@@ -98,7 +98,7 @@ def codex_command(model: str, image: Path, workdir: Path, schema: Path, output: 
         "--model", model,
         "--output-schema", str(schema),
         "--output-last-message", str(output),
-        # 不載入使用者的電腦操作、瀏覽器外掛與 node_repl：它們能在沙盒外操作電腦（D59）
+        # 不載入使用者的電腦操作、瀏覽器外掛與 node_repl：它們能在沙盒外操作電腦
         "-c", "mcp_servers.node_repl.enabled=false",
         "-c", 'plugins."computer-use@openai-bundled".enabled=false',
         "-c", 'plugins."unified-computer-use@openai-bundled".enabled=false',

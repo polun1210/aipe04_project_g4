@@ -109,3 +109,23 @@ def test_兩位標註者的照片不一致時報錯():
     with pytest.raises(GoldError, match="缺：p02-img01"):
         adjudicate({"p01-img01": A, "p02-img01": A}, {"p01-img01": B}, DIS, [], [])
 
+
+def test_裁決清單裡有已經不存在的不一致時報錯():
+    stale = DIS + [{"image_id": "p01-img01", "row": "鈣", "field": "per_serving", "adjudicated": "200"}]
+    with pytest.raises(GoldError, match="已經不存在"):
+        adjudicate({"p01-img01": A}, {"p01-img01": B}, stale, [], [])
+
+
+def test_數字欄位填了非數字時指出是哪一格():
+    bad = [{**DIS[0], "adjudicated": "十"}, DIS[1]]
+    with pytest.raises(GoldError, match="維生素D.*per_serving.*十"):
+        adjudicate({"p01-img01": A}, {"p01-img01": B}, bad, [], [])
+
+
+def test_標準答案的時間固定不隨重跑改變():
+    gold = adjudicate({"p01-img01": A}, {"p01-img01": B}, DIS, [], [])
+    name_map = draft_name_map(gold, CATALOG)
+    sources = [{"image_id": "p01-img01", "product_id": "p01", "product_name": ""}]
+    first = build_gold(gold, name_map, sources)["p01"].extraction_meta.extracted_at
+    assert build_gold(gold, name_map, sources)["p01"].extraction_meta.extracted_at == first
+
