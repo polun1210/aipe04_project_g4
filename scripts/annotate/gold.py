@@ -8,6 +8,7 @@
 """
 
 import csv
+import math
 import re
 import uuid
 from dataclasses import dataclass
@@ -47,9 +48,12 @@ def _typed(field: str, value: str, where: tuple[str, str, str] | None = None):
     if field not in _FLOAT_FIELDS:
         return value
     try:
-        return float(value)
+        number = float(value)
     except ValueError:
-        raise GoldError(f"{where or field} 應該填數字（或 null），卻填了「{value}」") from None
+        number = math.nan
+    if not math.isfinite(number):  # NaN、inf 也不算合法數字
+        raise GoldError(f"{where or field} 應該填數字（或 null），卻填了「{value}」")
+    return number
 
 
 def adjudicate(

@@ -129,3 +129,9 @@ def test_標準答案的時間固定不隨重跑改變():
     first = build_gold(gold, name_map, sources)["p01"].extraction_meta.extracted_at
     assert build_gold(gold, name_map, sources)["p01"].extraction_meta.extracted_at == first
 
+
+@pytest.mark.parametrize("value", ["NaN", "inf"])
+def test_非有限數字也視為非數字(value):
+    with pytest.raises(GoldError, match="應該填數字"):
+        adjudicate({"p01-img01": A}, {"p01-img01": B}, [{**DIS[0], "adjudicated": value}, DIS[1]], [], [])
+
