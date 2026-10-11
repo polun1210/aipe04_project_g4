@@ -1,0 +1,592 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="以國人膳食營養素參考攝取量與專題規則表，試算保健品提供量及用藥注意事項。">
+  <title>營養素與用藥評估｜試用版</title>
+  <style>
+
+:root{--ink:#172b2a;--muted:#667a77;--teal:#126b63;--teal-dark:#0d4d48;--mint:#eaf3ef;--line:#dce7e1;--paper:#f5f7f3;--white:#fff;--warn:#ab6338;--warn-bg:#fff2e6;--risk:#a23a35;--risk-bg:#fff1ee;--shadow:0 14px 40px rgba(21,58,48,.065)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font-family:'DM Sans','Noto Sans TC',system-ui,sans-serif;font-size:15px;line-height:1.65}button,input,select{font:inherit}button{cursor:pointer}input,select{color:var(--ink)}h1,h2,h3,p{margin-top:0}.topbar{height:74px;background:rgba(255,255,255,.92);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:20px;padding:0 max(32px,calc((100vw - 1400px)/2));position:sticky;top:0;z-index:10;backdrop-filter:blur(12px)}.brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.01em;font-size:17px;white-space:nowrap}.brand-mark{width:31px;height:31px;background:var(--teal);border-radius:10px;color:white;display:inline-grid;place-items:center;font-size:21px;font-weight:400;line-height:1}.badge{font-size:11px;letter-spacing:.06em;color:var(--teal);background:var(--mint);border-radius:999px;padding:2px 9px;margin-left:3px}.top-actions{display:flex;gap:8px}.ghost,.outline{background:white;border:1px solid var(--line);color:var(--teal-dark);border-radius:10px;padding:8px 13px;font-weight:700}.ghost:hover,.outline:hover{background:var(--mint);border-color:#b6d0c8}.page{max-width:1400px;margin:0 auto;padding:42px 32px 70px}.intro{position:relative;overflow:hidden;border-radius:27px;background:#dcece5;min-height:280px;padding:42px 50px;margin-bottom:30px}.intro:after{content:'';width:400px;height:400px;border:1px solid rgba(10,93,82,.13);border-radius:50%;position:absolute;right:-80px;top:-180px;box-shadow:0 0 0 45px rgba(255,255,255,.12),0 0 0 95px rgba(255,255,255,.12),0 0 0 145px rgba(255,255,255,.12)}.intro>*{position:relative;z-index:1}.eyebrow{color:var(--teal);font-size:11px;letter-spacing:.22em;font-weight:800;margin-bottom:14px}.intro h1{font-size:clamp(28px,3vw,44px);line-height:1.22;letter-spacing:-.045em;margin-bottom:16px}.intro h1 em{color:var(--teal);font-style:normal}.intro p{max-width:610px;color:#48645d;font-size:15px;margin-bottom:23px}.intro-note{display:inline-flex;align-items:center;gap:8px;color:#48645d;font-size:12px}.dot{width:7px;height:7px;border-radius:50%;background:#48a77d}.workspace{display:grid;grid-template-columns:minmax(0,1.24fr) minmax(350px,.82fr);gap:24px;align-items:start}.form-column{min-width:0}.panel,.report-panel,.source-note{background:white;border:1px solid var(--line);border-radius:19px;box-shadow:var(--shadow)}.panel{padding:27px 29px;margin-bottom:18px}.section-head{display:flex;align-items:flex-start;gap:14px;margin-bottom:22px}.step{display:inline-grid;place-items:center;flex:none;background:var(--mint);color:var(--teal);border-radius:9px;font-weight:800;font-size:12px;width:32px;height:32px}.section-head h2{font-size:20px;line-height:1.2;margin:2px 0 3px;letter-spacing:-.02em}.section-head p{font-size:12px;color:var(--muted);margin:0}.field-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:17px}.field{display:flex;flex-direction:column;gap:7px;font-size:13px;font-weight:700;color:#334a46}.field input,.field select,.inline-entry input,.nutrient-row input,.nutrient-row select,.product-top input,.condition-field select,.elemental-row input{height:42px;border:1px solid #cfddd5;border-radius:9px;background:#fff;padding:0 12px;outline:none;width:100%;min-width:0}.field input:focus,.field select:focus,.inline-entry input:focus,.nutrient-row input:focus,.nutrient-row select:focus,.product-top input:focus,.condition-field select:focus,.elemental-row input:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(18,107,99,.11)}.hint{font-size:11px;color:#91a29d;font-weight:500}.input-suffix{position:relative}.input-suffix input{padding-right:52px}.input-suffix>span{position:absolute;right:12px;top:9px;color:#889c95;font-size:12px}.inline-entry{display:flex;gap:8px}.inline-entry input{flex:1}.inline-entry button{white-space:nowrap}.tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:13px}.tag{display:inline-flex;align-items:center;gap:7px;background:var(--mint);color:var(--teal-dark);padding:5px 7px 5px 11px;border-radius:7px;font-size:12px;font-weight:700}.tag button{border:0;background:transparent;color:var(--teal-dark);font-size:18px;line-height:1;padding:0 2px}.microcopy{color:var(--muted);font-size:12px;margin:12px 0 0}.product-card{border:1px solid var(--line);border-radius:13px;padding:17px;margin-bottom:12px;background:#fcfdfb}.product-top{display:flex;align-items:end;gap:10px;margin-bottom:15px}.product-top .field:first-child{flex:1}.product-top .field:nth-child(2){width:112px}.icon-btn{border:0;background:transparent;color:#82958e;font-size:19px;line-height:1;padding:10px;border-radius:8px}.icon-btn:hover{background:#f5e9e4;color:var(--risk)}.row-head{display:grid;grid-template-columns:1.5fr .85fr .8fr 33px;gap:8px;color:#8a9b95;font-size:11px;font-weight:700;margin:0 0 6px}.nutrient-row{display:grid;grid-template-columns:1.5fr .85fr .8fr 33px;gap:8px;margin-bottom:7px;align-items:center}.nutrient-row select,.nutrient-row input{font-size:13px}.nutrient-row .icon-btn{padding:7px}.add-row,.add-product{border:1px dashed #a9c9bd;color:var(--teal);background:#f7fbf8;border-radius:9px;font-weight:700;font-size:12px;padding:8px 12px}.add-row:hover,.add-product:hover{background:var(--mint)}.add-product{display:block;width:100%;padding:13px;font-size:13px}.add-product span{font-size:17px;vertical-align:-1px;margin-right:4px}.advanced{padding:0;overflow:hidden}.advanced summary{padding:24px 29px;display:flex;align-items:center;gap:14px;cursor:pointer;list-style:none}.advanced summary::-webkit-details-marker{display:none}.advanced summary strong{display:block;font-size:18px;line-height:1.25}.advanced summary small{display:block;color:var(--muted);font-size:12px;margin-top:3px}.chevron{margin-left:auto;font-size:24px;color:var(--muted);transition:transform .2s}.advanced[open] .chevron{transform:rotate(180deg)}.advanced-body{padding:0 29px 27px;border-top:1px solid var(--line)}.advanced-body>.microcopy{margin:15px 0}.condition-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.condition-field{display:flex;flex-direction:column;gap:6px;color:#405651;font-size:12px;font-weight:600}.condition-field select{height:38px}.condition-heading{font-weight:800;color:var(--teal-dark);margin:23px 0 10px;border-top:1px solid var(--line);padding-top:18px}.elemental-row{display:grid;grid-template-columns:1fr 100px 76px;gap:8px;align-items:center;margin-bottom:7px;font-size:12px}.form-error{background:#fff0ed;border:1px solid #f0c3bb;color:#8f3930;border-radius:11px;padding:12px 16px;margin:0 0 16px;font-size:13px}.submit-bar{display:flex;align-items:center;gap:16px;margin:20px 0 0}.submit-bar>span{font-size:12px;color:var(--muted)}.primary{background:var(--teal);border:0;border-radius:11px;color:white;font-weight:800;padding:13px 21px;box-shadow:0 7px 16px rgba(18,107,99,.18)}.primary:hover{background:var(--teal-dark)}.primary span{margin-left:14px}.report-column{position:sticky;top:98px}.report-panel{min-height:410px;padding:24px}.report-empty{text-align:center;max-width:270px;margin:83px auto}.report-icon{background:var(--mint);color:var(--teal);width:53px;height:53px;border-radius:15px;display:grid;place-items:center;font-size:28px;margin:0 auto 17px}.report-empty h2{font-size:20px;margin-bottom:7px}.report-empty p{color:var(--muted);font-size:13px}.source-note{padding:19px 23px;margin-top:14px;background:#f9fbf8;box-shadow:none}.source-note strong{color:var(--teal-dark);font-size:13px}.source-note p{font-size:12px;color:var(--muted);margin:5px 0 8px}.source-note span{font-size:10px;color:#95a59e}.report-header{border-bottom:1px solid var(--line);padding-bottom:15px;margin-bottom:17px;display:flex;align-items:flex-start;justify-content:space-between;gap:10px}.report-header .eyebrow{margin-bottom:3px}.report-header h2{font-size:22px;margin:0}.report-meta{font-size:12px;color:var(--muted)}.report-stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:19px}.report-stat{border-radius:11px;background:#f3f7f4;padding:10px}.report-stat strong{display:block;font-size:22px;line-height:1.2;color:var(--teal-dark)}.report-stat span{font-size:10px;color:var(--muted)}.report-section{margin-top:20px}.report-section h3{font-size:13px;letter-spacing:.02em;margin-bottom:9px;color:#435b55}.result-card{border:1px solid var(--line);border-left:4px solid #b8d1c4;border-radius:10px;padding:10px 12px;margin-bottom:7px;background:#fff}.result-card.risk{border-color:#efcfca;border-left-color:var(--risk);background:#fff8f6}.result-card.pending{border-color:#f3d9ba;border-left-color:var(--warn);background:#fffaf3}.result-card.unknown{background:#fafbfa}.result-title{display:flex;align-items:center;justify-content:space-between;gap:10px;font-weight:800;font-size:13px}.pill{font-size:10px;border-radius:999px;padding:2px 8px;white-space:nowrap;color:var(--teal);background:var(--mint)}.pill.high{color:#9c3029;background:#ffe3df}.pill.medium{color:#9c6831;background:#fff0d9}.pill.ul{color:#a23a35;background:#ffe3df}.result-body{font-size:12px;color:#60726d;margin-top:4px;line-height:1.5}.empty-line{font-size:12px;color:var(--muted);background:#f7faf7;padding:10px 12px;border-radius:9px}.report-footnote{font-size:11px;color:#81938d;border-top:1px solid var(--line);margin-top:18px;padding-top:13px}.text-button{border:0;background:transparent;color:var(--teal);font-size:11px;font-weight:800;padding:4px 0}.text-button:hover{text-decoration:underline}.collapsed-list[hidden]{display:none}footer{text-align:center;color:#9aa9a3;font-size:11px;padding:0 16px 35px}
+@media(max-width:1050px){.workspace{grid-template-columns:minmax(0,1fr)}.report-column{position:static}.report-panel{min-height:300px}.report-empty{margin:60px auto}}
+@media(max-width:640px){.topbar{height:auto;min-height:68px;padding:12px 18px;flex-wrap:wrap}.brand{font-size:14px}.top-actions{width:100%;justify-content:flex-end}.ghost{font-size:11px;padding:6px 10px}.page{padding:20px 14px 45px}.intro{padding:31px 24px;min-height:0;border-radius:20px}.intro:after{right:-270px}.intro p{font-size:13px}.workspace{gap:15px}.panel{padding:20px 16px;border-radius:14px}.section-head h2{font-size:18px}.field-grid{gap:11px}.field{font-size:12px}.field input,.field select{height:40px}.product-card{padding:12px}.product-top{flex-wrap:wrap}.product-top .field:nth-child(2){width:95px}.row-head,.nutrient-row{grid-template-columns:1.2fr .75fr .7fr 25px;gap:4px}.nutrient-row select,.nutrient-row input{padding:0 5px;font-size:11px}.row-head{font-size:10px}.advanced summary{padding:18px 16px}.advanced-body{padding:0 16px 20px}.condition-grid{grid-template-columns:1fr}.report-panel{padding:18px}.submit-bar{flex-direction:column;align-items:stretch}.submit-bar>span{text-align:center}.primary{width:100%}}
+
+</style>
+  <script id="ruleData" type="application/json">{"referenceRows":[{"label":"蛋白質","nutrient":"蛋白質","unit":"g","cells":["70／60","70／60","70／60","70／60"]},{"label":"碳水化合物 EAR","nutrient":"碳水化合物","unit":"g","cells":["100／100","100／100","100／100","100／100"]},{"label":"碳水化合物 RDA","nutrient":"碳水化合物","unit":"g","cells":["130／130","130／130","130／130","130／130"]},{"label":"碳水化合物 AMDR","nutrient":"碳水化合物","unit":"總熱量 %","cells":["50–65／50–65","50–65／50–65","50–65／50–65","50–65／50–65"]},{"label":"脂質","nutrient":"脂質","unit":"總熱量 %","cells":["20–30／20–30","20–30／20–30","20–30／20–30","20–30／20–30"]},{"label":"飽和脂肪酸","nutrient":"飽和脂肪酸","unit":"總熱量 %","cells":["\u003c10／\u003c10","\u003c10／\u003c10","\u003c10／\u003c10","\u003c10／\u003c10"]},{"label":"n-6 多元不飽和脂肪酸","nutrient":"n-6 多元不飽和脂肪酸","unit":"總熱量 %","cells":["4–8／4–8","4–8／4–8","4–8／4–8","4–8／4–8"]},{"label":"n-3 多元不飽和脂肪酸","nutrient":"n-3 多元不飽和脂肪酸","unit":"總熱量 %","cells":["0.6–1.2／0.6–1.2","0.6–1.2／0.6–1.2","0.6–1.2／0.6–1.2","0.6–1.2／0.6–1.2"]},{"label":"反式脂肪酸","nutrient":"反式脂肪酸","unit":"總熱量 %","cells":["\u003c1／\u003c1","\u003c1／\u003c1","\u003c1／\u003c1","\u003c1／\u003c1"]},{"label":"維生素 A","nutrient":"維生素 A","unit":"µg RE","cells":["600／500","600／500","600／500","600／500"]},{"label":"維生素 D","nutrient":"維生素 D","unit":"µg","cells":["10／10","10／10","15／15","15／15"]},{"label":"維生素 E","nutrient":"維生素 E","unit":"mg α-TE","cells":["12／12","12／12","12／12","12／12"]},{"label":"維生素 K","nutrient":"維生素 K","unit":"µg","cells":["120／90","120／90","120／90","120／90"]},{"label":"維生素 C","nutrient":"維生素 C","unit":"mg","cells":["100／100","100／100","100／100","100／100"]},{"label":"維生素 B1","nutrient":"維生素 B1","unit":"mg","cells":["1.2／0.9","1.2／0.9","1.2／0.9","1.2／0.9"]},{"label":"維生素 B2","nutrient":"維生素 B2","unit":"mg","cells":["1.3／1.0","1.3／1.0","1.3／1.0","1.3／1.0"]},{"label":"菸鹼素","nutrient":"菸鹼素","unit":"mg NE","cells":["16／14","16／14","16／14","16／14"]},{"label":"維生素 B6","nutrient":"維生素 B6","unit":"mg","cells":["1.5／1.5","1.5／1.5","1.6／1.6","1.6／1.6"]},{"label":"維生素 B12","nutrient":"維生素 B12","unit":"µg","cells":["2.4／2.4","2.4／2.4","2.4／2.4","2.4／2.4"]},{"label":"葉酸","nutrient":"葉酸","unit":"µg","cells":["400／400","400／400","400／400","400／400"]},{"label":"膽素","nutrient":"膽素","unit":"mg","cells":["450／390","450／390","450／390","450／390"]},{"label":"生物素","nutrient":"生物素","unit":"µg","cells":["30／30","30／30","30／30","30／30"]},{"label":"泛酸","nutrient":"泛酸","unit":"mg","cells":["5／5","5／5","5／5","5／5"]},{"label":"鈣","nutrient":"鈣","unit":"mg","cells":["1,000／1,000","1,000／1,000","1,000／1,000","1,000／1,000"]},{"label":"磷","nutrient":"磷","unit":"mg","cells":["800／800","800／800","800／800","800／800"]},{"label":"鎂","nutrient":"鎂","unit":"mg","cells":["380／320","380／320","360／310","350／300"]},{"label":"鐵","nutrient":"鐵","unit":"mg","cells":["10／15","10／15","10／10","10／10"]},{"label":"鋅","nutrient":"鋅","unit":"mg","cells":["15／12","15／12","15／12","15／12"]},{"label":"碘","nutrient":"碘","unit":"µg","cells":["150／150","150／150","150／150","150／150"]},{"label":"硒","nutrient":"硒","unit":"µg","cells":["55／55","55／55","55／55","55／55"]},{"label":"氟","nutrient":"氟","unit":"mg","cells":["3／3","3／3","3／3","3／3"]},{"label":"鈉 CDRR","nutrient":"鈉","unit":"mg","cells":["2,300／2,300","2,300／2,300","2,300／2,300","2,300／2,300"]},{"label":"鉀","nutrient":"鉀","unit":"mg","cells":["2,800／2,500","2,800／2,500","2,800／2,500","2,800／2,500"]}],"fiber":{"低":["26／20","25／20","24／20","23／18"],"稍低":["30／23","29／23","27／22","27／21"],"適度":["34／27","34／27","32／25","30／24"],"高":["38／29","37／29","35／28","—"]},"units":{"蛋白質":"g","碳水化合物":"g","脂質":"g","飽和脂肪酸":"g","n-6 多元不飽和脂肪酸":"g","n-3 多元不飽和脂肪酸":"g","反式脂肪酸":"g","維生素 A":"µg RE","維生素 D":"µg","維生素 E":"mg α-TE","維生素 K":"µg","維生素 C":"mg","維生素 B1":"mg","維生素 B2":"mg","菸鹼素":"mg NE","維生素 B6":"mg","維生素 B12":"µg","葉酸":"µg","膽素":"mg","生物素":"µg","泛酸":"mg","鈣":"mg","磷":"mg","鎂":"mg","鐵":"mg","鋅":"mg","碘":"µg","硒":"µg","氟":"mg","鈉":"mg","鉀":"mg","膳食纖維":"g","紅麴":"mg","葡萄糖胺":"mg","魚油":"mg"},"ul":{"維生素 A":3000,"維生素 D":50,"維生素 E":1000,"維生素 C":2000,"維生素 B6":80,"菸鹼素":35,"葉酸":1000,"膽素":3500,"鈣":2500,"磷":[4000,3000],"鎂":350,"鐵":40,"鋅":35,"碘":1000,"硒":400,"氟":10},"percentItems":{"碳水化合物 AMDR":["碳水化合物",4],"脂質":["脂質",9],"飽和脂肪酸":["飽和脂肪酸",9],"n-6 多元不飽和脂肪酸":["n-6 多元不飽和脂肪酸",9],"n-3 多元不飽和脂肪酸":["n-3 多元不飽和脂肪酸",9],"反式脂肪酸":["反式脂肪酸",9]},"rules":[{"medication":"Hydrochlorothiazide","nutrient":"鈣","mode":"supplement","severity":"中","message":"減少尿鈣排泄；併用鈣鹽可能使血鈣上升。DailyMed 複方仿單的 HCTZ 交互作用段落明列此警示，建議監測血鈣；不是以複方所有成分共同推定。實際處理仍依所用產品與病人狀況。","line":138},{"medication":"Hydrochlorothiazide","nutrient":"鉀","mode":"medicine","severity":"中","message":"增加尿鉀排泄，可能造成低血鉀；屬營養狀態監測，不代表禁止補鉀。","line":140},{"medication":"Hydrochlorothiazide","nutrient":"鎂","mode":"medicine","severity":"中","message":"增加尿鎂排泄，可能造成鎂耗損。","line":141},{"medication":"Hydrochlorothiazide","nutrient":"鋅","mode":"medicine","severity":"中","message":"增加尿鋅排泄，可能降低血清鋅。","line":142},{"medication":"Indapamide","nutrient":"鈣","mode":"supplement","severity":"中，類別推論","message":"仿單指出相關利尿劑減少尿鈣排泄，Indapamide 試驗血鈣僅輕微上升；本次未取得補鈣併用的直接配對驗證。可依機轉提示補鈣及血鈣評估，不能寫成此成分併用鈣已被直接試驗證成高血鈣。","line":143},{"medication":"Indapamide","nutrient":"鉀","mode":"medicine","severity":"中","message":"可能造成低血鉀。","line":145},{"medication":"Indapamide","nutrient":"鎂","mode":"medicine","severity":"中","message":"仿單記載相關利尿劑可增加尿鎂排泄、造成低血鎂。","line":146},{"medication":"Losartan","nutrient":"鉀","mode":"supplement","severity":"高","message":"減少尿鉀排泄；併用鉀補充劑或含鉀代鹽，可能增加高血鉀風險。","line":148},{"medication":"Valsartan","nutrient":"鉀","mode":"supplement","severity":"高","message":"減少尿鉀排泄；併用鉀補充劑或含鉀代鹽，可能增加高血鉀風險。","line":150},{"medication":"Irbesartan","nutrient":"鉀","mode":"supplement","severity":"高","message":"依 ARB 類別證據，額外補鉀可能增加高血鉀風險。","line":152},{"medication":"Telmisartan","nutrient":"鉀","mode":"supplement","severity":"高","message":"併用鉀補充劑或含鉀代鹽，可能增加高血鉀風險。","line":154},{"medication":"Lisinopril","nutrient":"鉀","mode":"supplement","severity":"高","message":"依 ACEI 類別證據，減少鉀排泄；額外補鉀可能增加高血鉀風險。","line":156},{"medication":"Metformin","nutrient":"維生素 B12","mode":"medicine","severity":"中","message":"可能降低 B12 吸收及血清濃度，增加缺乏風險；高劑量、長期使用更需注意。未補充 B12 也適用。","line":163},{"medication":"Metformin","nutrient":"菸鹼素","mode":"niacin_glycemic","severity":"中","message":"高劑量 nicotinic acid 可能使血糖控制變差；屬降血糖治療的類別警示。 依本節菸鹼素條件補充監測血糖，必要時由醫療人員評估治療調整。","line":164},{"medication":"胰島素","nutrient":"鉀","mode":"medicine","severity":"中","message":"促進鉀移入細胞，可能造成低血鉀；不等於身體總鉀量一定不足。","line":166},{"medication":"胰島素","nutrient":"菸鹼素","mode":"niacin_glycemic","severity":"中","message":"高劑量 nicotinic acid 可能降低血糖控制效果。 依本節菸鹼素條件補充監測血糖，必要時由醫療人員評估治療調整。","line":167},{"medication":"Atorvastatin","nutrient":"紅麴","mode":"red_yeast","severity":"高","message":"紅麴含 monacolin K 時，形成 statin 類作用重疊，可能增加肌肉、肝臟等不良反應。 Monacolin K 有無／含量未知時標記待確認；不能僅憑紅麴重量推算劑量，亦不宣稱各 Statin 都有直接併用試驗。","line":184},{"medication":"Atorvastatin","nutrient":"菸鹼素","mode":"niacin_statin","severity":"高","message":"【門檻更正】DailyMed 明列降血脂用 niacin ≥1 g／日（含剛好 1 g），併用 Atorvastatin 有肌病／橫紋肌溶解症報告。原版「>1 g」會漏掉 1 g 情境。限降血脂用 nicotinic acid；不把一般含 B3 產品或菸鹼醯胺直接套用。","line":185},{"medication":"Rosuvastatin","nutrient":"紅麴","mode":"red_yeast","severity":"高","message":"含 monacolin K 的紅麴造成同類作用重疊。 Monacolin K 有無／含量未知時標記待確認；不能僅憑紅麴重量推算劑量，亦不宣稱各 Statin 都有直接併用試驗。","line":187},{"medication":"Rosuvastatin","nutrient":"菸鹼素","mode":"niacin_statin","severity":"高","message":"nicotinic acid ≥1 g／日併用，可能增加肌病、橫紋肌溶解症風險。 限降血脂用 nicotinic acid；不可將一般含 B3 產品或菸鹼醯胺直接套用。","line":188},{"medication":"Rosuvastatin","nutrient":"鎂","mode":"al_mg_antacid","severity":"中，限特定製劑","message":"同時使用含氫氧化鋁／氫氧化鎂的複方制酸劑，可使 Rosuvastatin 平均藥物暴露量下降約 50%；仿單要求 Rosuvastatin 至少提前 2 小時。這是製劑特定規則，不能套用到所有鎂補充劑，也不從暴露量下降直接推算臨床失效比例。","line":189},{"medication":"Simvastatin","nutrient":"紅麴","mode":"red_yeast","severity":"高","message":"含 monacolin K 的紅麴造成同類作用重疊。 Monacolin K 有無／含量未知時標記待確認；不能僅憑紅麴重量推算劑量，亦不宣稱各 Statin 都有直接併用試驗。","line":190},{"medication":"Simvastatin","nutrient":"菸鹼素","mode":"niacin_statin","severity":"高","message":"nicotinic acid ≥1 g／日併用，可能增加肌病、橫紋肌溶解症風險。 限降血脂用 nicotinic acid；不可將一般含 B3 產品或菸鹼醯胺直接套用。","line":191},{"medication":"Pravastatin","nutrient":"紅麴","mode":"red_yeast","severity":"高","message":"含 monacolin K 的紅麴造成同類作用重疊。 Monacolin K 有無／含量未知時標記待確認；不能僅憑紅麴重量推算劑量，亦不宣稱各 Statin 都有直接併用試驗。","line":194},{"medication":"Pravastatin","nutrient":"菸鹼素","mode":"pravastatin_niacin","severity":"高，須確認劑量","message":"仿單有併用肌病及橫紋肌溶解症報告；不可將一般含 B3 產品直接套用。","line":195},{"medication":"Omeprazole","nutrient":"鎂","mode":"long_term","severity":"中","message":"長期使用可能造成低血鎂。 部分案例不能單靠補鎂改善；長期治療前及期間可評估血鎂。依本節 PPI／鎂補充條件解讀，不以一年作安全分界。","line":226},{"medication":"Omeprazole","nutrient":"維生素 B12","mode":"medicine","severity":"中","message":"可能降低食物來源 B12 吸收。 不宣稱所有使用者必然缺乏，亦不直接套用為所有 B12 補充劑吸收不良。","line":227},{"medication":"Omeprazole","nutrient":"鐵","mode":"ppi_iron","severity":"中","message":"PPI 抑酸可能降低非血基質鐵吸收，缺鐵者補鐵反應可能較差。NIH 所引正常鐵儲存研究未見耗竭；另有 ≥2 年用藥與缺鐵相關的病例對照研究。兩者族群及設計不同：不保證正常鐵儲存者完全無風險，也不推論每位使用者必然缺鐵／貧血。除 NIH 明列的 Omeprazole／Lansoprazole 外，其餘成分為類別推論。","line":228},{"medication":"Esomeprazole","nutrient":"鎂","mode":"long_term","severity":"中","message":"長期使用可能造成低血鎂。 部分案例不能單靠補鎂改善；長期治療前及期間可評估血鎂。依本節 PPI／鎂補充條件解讀，不以一年作安全分界。","line":231},{"medication":"Esomeprazole","nutrient":"維生素 B12","mode":"medicine","severity":"中","message":"可能降低食物來源 B12 吸收。 不宣稱所有使用者必然缺乏，亦不直接套用為所有 B12 補充劑吸收不良。","line":232},{"medication":"Esomeprazole","nutrient":"鐵","mode":"ppi_iron","severity":"中","message":"PPI 抑酸可能降低非血基質鐵吸收，缺鐵者補鐵反應可能較差。NIH 所引正常鐵儲存研究未見耗竭；另有 ≥2 年用藥與缺鐵相關的病例對照研究。兩者族群及設計不同：不保證正常鐵儲存者完全無風險，也不推論每位使用者必然缺鐵／貧血。除 NIH 明列的 Omeprazole／Lansoprazole 外，其餘成分為類別推論。","line":233},{"medication":"Lansoprazole","nutrient":"鎂","mode":"long_term","severity":"中","message":"長期使用可能造成低血鎂。 部分案例不能單靠補鎂改善；長期治療前及期間可評估血鎂。依本節 PPI／鎂補充條件解讀，不以一年作安全分界。","line":235},{"medication":"Lansoprazole","nutrient":"維生素 B12","mode":"medicine","severity":"中","message":"可能降低食物來源 B12 吸收。 不宣稱所有使用者必然缺乏，亦不直接套用為所有 B12 補充劑吸收不良。","line":236},{"medication":"Lansoprazole","nutrient":"鐵","mode":"ppi_iron","severity":"中","message":"PPI 抑酸可能降低非血基質鐵吸收，缺鐵者補鐵反應可能較差。NIH 所引正常鐵儲存研究未見耗竭；另有 ≥2 年用藥與缺鐵相關的病例對照研究。兩者族群及設計不同：不保證正常鐵儲存者完全無風險，也不推論每位使用者必然缺鐵／貧血。除 NIH 明列的 Omeprazole／Lansoprazole 外，其餘成分為類別推論。","line":237},{"medication":"Pantoprazole","nutrient":"鎂","mode":"long_term","severity":"中","message":"長期使用可能造成低血鎂。 部分案例不能單靠補鎂改善；長期治療前及期間可評估血鎂。依本節 PPI／鎂補充條件解讀，不以一年作安全分界。","line":239},{"medication":"Pantoprazole","nutrient":"維生素 B12","mode":"medicine","severity":"中","message":"可能降低食物來源 B12 吸收。 不宣稱所有使用者必然缺乏，亦不直接套用為所有 B12 補充劑吸收不良。","line":240},{"medication":"Pantoprazole","nutrient":"鐵","mode":"ppi_iron","severity":"中","message":"PPI 抑酸可能降低非血基質鐵吸收，缺鐵者補鐵反應可能較差。NIH 所引正常鐵儲存研究未見耗竭；另有 ≥2 年用藥與缺鐵相關的病例對照研究。兩者族群及設計不同：不保證正常鐵儲存者完全無風險，也不推論每位使用者必然缺鐵／貧血。除 NIH 明列的 Omeprazole／Lansoprazole 外，其餘成分為類別推論。","line":241},{"medication":"Rabeprazole","nutrient":"鎂","mode":"long_term","severity":"中","message":"長期使用可能造成低血鎂。 部分案例不能單靠補鎂改善；長期治療前及期間可評估血鎂。依本節 PPI／鎂補充條件解讀，不以一年作安全分界。","line":243},{"medication":"Rabeprazole","nutrient":"維生素 B12","mode":"medicine","severity":"中","message":"可能降低食物來源 B12 吸收。 不宣稱所有使用者必然缺乏，亦不直接套用為所有 B12 補充劑吸收不良。","line":244},{"medication":"Rabeprazole","nutrient":"鐵","mode":"ppi_iron","severity":"中","message":"PPI 抑酸可能降低非血基質鐵吸收，缺鐵者補鐵反應可能較差。NIH 所引正常鐵儲存研究未見耗竭；另有 ≥2 年用藥與缺鐵相關的病例對照研究。兩者族群及設計不同：不保證正常鐵儲存者完全無風險，也不推論每位使用者必然缺鐵／貧血。除 NIH 明列的 Omeprazole／Lansoprazole 外，其餘成分為類別推論。","line":245},{"medication":"Famotidine","nutrient":"維生素 B12","mode":"medicine","severity":"中","message":"依 H2RA 類別證據，抑制胃酸可能降低食物來源 B12 吸收。 限食物來源 B12；不宣稱所有使用者必然缺乏。","line":258},{"medication":"Famotidine","nutrient":"鐵","mode":"long_term","severity":"中，類別推論","message":"H2RA 長期使用與缺鐵相關；依抑酸機轉可提示非血基質鐵吸收及補鐵反應評估，尤其已有缺鐵或補鐵效果不佳時。證據為 H2RA 類別觀察研究，非此成分的直接吸收試驗，不宣稱已證明個別成分因果關係。","line":259},{"medication":"Cimetidine","nutrient":"維生素 B12","mode":"medicine","severity":"中","message":"可能降低食物來源 B12 吸收。 限食物來源 B12；不宣稱所有使用者必然缺乏。","line":260},{"medication":"Cimetidine","nutrient":"鐵","mode":"cimetidine_iron","severity":"中，條件式監測","message":"單次 Cimetidine 300／600／900 mg 先於餐食使用的人體研究，非血基質鐵吸收分別下降約 28%／42%／65%。作者並指出一般建議劑量未預期對鐵營養有重大影響；高劑量合併制酸劑需注意。可作吸收及營養狀態評估，不能據此宣稱一般療程必然缺鐵或指定所有產品通用錯開時數。","line":261},{"medication":"Nizatidine","nutrient":"維生素 B12","mode":"medicine","severity":"中","message":"依 H2RA 類別證據，可能降低食物來源 B12 吸收。 限食物來源 B12；不宣稱所有使用者必然缺乏。","line":262},{"medication":"Nizatidine","nutrient":"鐵","mode":"long_term","severity":"中，類別推論","message":"H2RA 長期使用與缺鐵相關；依抑酸機轉可提示非血基質鐵吸收及補鐵反應評估，尤其已有缺鐵或補鐵效果不佳時。證據為 H2RA 類別觀察研究，非此成分的直接吸收試驗，不宣稱已證明個別成分因果關係。","line":263},{"medication":"Calcium carbonate","nutrient":"鐵","mode":"calcium_iron","severity":"中","message":"同服可能降低鐵吸收，程度受製劑與共同成分影響。 ODS 強調效果尚未完全確立；鈣、鐵補充劑可分時服用，不指定通用間隔。","line":264},{"medication":"鋁鎂複方","nutrient":"鐵","mode":"al_mg_iron","severity":"中，限所列產品","message":"PubMed 人體研究中，液體氫氧化鋁／氫氧化鎂複方未顯著降低鐵吸收；Maalox Plus 的產品仿單另列鐵鹽吸收警示。不同製劑／研究結果不可合成所有鋁鎂複方均確定降低吸收。提示僅限實際產品有此警示時；未核對產品時保留待確認，不套用到單方。","line":269},{"medication":"Magnesium oxide","nutrient":"鐵","mode":"magmitt_iron","severity":"中，限所列產品","message":"本次 NIH／DailyMed 未取得同等成分特定規則；PubMed S32 只有體外機轉，不能據此指定臨床程度。另核對 PMDA 的 Magmitt 氧化鎂錠仿單 10.2，列鐵劑吸收／排泄可能受影響並提醒錯開服用。現行提示依此產品仿單成立，須核對實際所用產品；不宣稱已由 NIH 人體試驗證成，不自行指定通用間隔。","line":271}],"medicationAliases":{"氯沙坦":"Losartan","二甲雙胍":"Metformin","insulin":"胰島素","hctz":"Hydrochlorothiazide","碳酸鈣":"Calcium carbonate","氫氧化鎂":"Magnesium hydroxide","氧化鎂":"Magnesium oxide"},"medicationElemental":{"Calcium carbonate":["鈣"],"Magnesium hydroxide":["鎂"],"Magnesium oxide":["鎂"],"鋁鎂複方":["鎂"]},"massAliases":{"kg":"kg","公斤":"kg","千克":"kg","g":"g","公克":"g","克":"g","gram":"g","grams":"g","mg":"mg","毫克":"mg","milligram":"mg","milligrams":"mg","µg":"µg","ug":"µg","mcg":"µg","微克":"µg","ng":"ng","奈克":"ng","納克":"ng","nanogram":"ng","nanograms":"ng"},"massToMg":{"kg":"1000000","g":"1000","mg":"1","µg":"0.001","ng":"0.000001"},"equivalentAliases":{"αte":"α-TE","alphate":"α-TE","re":"RE","ne":"NE"},"sources":["規則.md","交互作用規則(複查)(覆蓋型更新).md","「國人膳食營養素參考攝取量」第八版_總表(1111020) (1).pdf"]}</script>
+<script defer>
+const equivalentSuffixes = [['alphate', 'α-TE'], ['αte', 'α-TE'], ['re', 'RE'], ['ne', 'NE']];
+
+function parseUnit(unit, data, field = '單位') {
+  const raw = String(unit ?? '').normalize('NFKC').trim().toLowerCase().replaceAll('μ', 'µ').replace(/[\s_-]/g, '');
+  if (raw === 'iu' || raw === '國際單位') throw new Error(`${field}：IU 無法通用換算；請先依營養素型態確認對應重量。`);
+  for (const [suffix, equivalent] of equivalentSuffixes) {
+    const mass = raw.slice(0, -suffix.length);
+    if (raw.endsWith(suffix) && data.massAliases[mass]) return [data.massAliases[mass], equivalent];
+  }
+  if (data.massAliases[raw]) return [data.massAliases[raw], null];
+  throw new Error(`${field}：不支援的單位「${unit}」。`);
+}
+
+function nonnegative(value, field) {
+  if (value === '' || value === null || value === undefined) throw new Error(`${field}：請填數字。`);
+  const n = Number(value);
+  if (!Number.isFinite(n) || n < 0) throw new Error(`${field}：只能填非負的有限數值。`);
+  return n;
+}
+
+function convert(entry, wanted, data, field) {
+  if (!entry || entry.amount === '' || entry.amount === null || entry.amount === undefined) return null;
+  const amount = nonnegative(entry.amount, field);
+  const [sourceMass, sourceEquivalent] = parseUnit(entry.unit, data, field);
+  const [targetMass, targetEquivalent] = parseUnit(wanted, data, `${field}參考單位`);
+  if (sourceEquivalent !== targetEquivalent) throw new Error(`${field}：標示型態應為 ${wanted}；RE、α-TE、NE 與一般重量不可直接互換。`);
+  return amount * Number(data.massToMg[sourceMass]) / Number(data.massToMg[targetMass]);
+}
+
+function canonicalMedication(name, data) {
+  const key = String(name ?? '').trim().toLocaleLowerCase();
+  for (const [alias, canonical] of Object.entries(data.medicationAliases)) if (alias.toLocaleLowerCase() === key) return canonical;
+  const known = new Set([...data.rules.map(rule => rule.medication), ...Object.keys(data.medicationElemental)]);
+  for (const item of known) if (item.toLocaleLowerCase() === key) return item;
+  return String(name ?? '').trim();
+}
+
+function present(nutrient, totals, unknown) {
+  if ((totals[nutrient] ?? 0) > 0) return 'hit';
+  return unknown.has(nutrient) ? 'confirm' : 'no';
+}
+
+function trigger(rule, totals, unknown, context) {
+  const p = present(rule.nutrient, totals, unknown);
+  const mode = rule.mode;
+  if (mode === 'medicine') return 'hit';
+  if (mode === 'supplement') return p;
+  if (mode === 'long_term') {
+    const flag = context.longTermUse?.[rule.medication] ?? null;
+    return flag === true ? 'hit' : flag === false ? 'no' : 'confirm';
+  }
+  if (mode === 'ppi_iron') {
+    if (context.iron_deficiency_or_poor_response === true) return 'hit';
+    if (context.nonheme_iron_supplement === true && p === 'hit') return 'hit';
+    return p !== 'no' ? 'confirm' : 'no';
+  }
+  if (mode === 'niacin_glycemic') {
+    if (context.niacin_form === 'nicotinamide') return 'no';
+    if (context.niacin_form === 'nicotinic acid' && context.nicotinic_acid_mg_per_day !== null && context.nicotinic_acid_mg_per_day !== '') {
+      const dose = nonnegative(context.nicotinic_acid_mg_per_day, '菸鹼酸每日量');
+      if (dose > 0) return context.high_dose_nicotinic_acid === true ? 'hit' : context.high_dose_nicotinic_acid === false ? 'no' : 'confirm';
+    }
+    return p !== 'no' ? 'confirm' : 'no';
+  }
+  if (mode === 'niacin_statin' || mode === 'pravastatin_niacin') {
+    if (context.niacin_form === 'nicotinamide' || context.niacin_for_lipids === false) return 'no';
+    if (context.niacin_form !== 'nicotinic acid' || context.niacin_for_lipids !== true || context.nicotinic_acid_mg_per_day === null || context.nicotinic_acid_mg_per_day === '') return p !== 'no' ? 'confirm' : 'no';
+    const dose = nonnegative(context.nicotinic_acid_mg_per_day, '菸鹼酸每日量');
+    if (mode === 'pravastatin_niacin') return dose > 0 ? (context.pravastatin_niacin_dose_confirmed === true ? 'hit' : context.pravastatin_niacin_dose_confirmed === false ? 'no' : 'confirm') : 'no';
+    return dose >= 1000 ? 'hit' : 'no';
+  }
+  if (mode === 'red_yeast') {
+    if (p === 'no') return 'no';
+    const flag = context.monacolin_k_present;
+    return flag === true && p === 'hit' ? 'hit' : flag === false ? 'no' : 'confirm';
+  }
+  const field = {
+    al_mg_antacid: 'al_mg_antacid_same_time', calcium_iron: 'calcium_carbonate_with_iron',
+    al_mg_iron: 'al_mg_product_iron_warning', magmitt_iron: 'magmitt_product_verified',
+    cimetidine_iron: 'cimetidine_high_dose_with_antacid'
+  }[mode];
+  if (!field) throw new Error(`尚未設定觸發方式：${mode}`);
+  if (mode !== 'al_mg_antacid' && p === 'no') return 'no';
+  const flag = context[field];
+  if (flag === false) return 'no';
+  if (flag === true && (mode === 'al_mg_antacid' || p === 'hit')) return 'hit';
+  return 'confirm';
+}
+
+function selectedReference(cell, sex) {
+  const parts = cell.split('／');
+  return (parts.length === 2 ? parts[sex === '男' ? 0 : 1] : cell).trim();
+}
+
+function cleanNumber(value) { return Number(String(value).replaceAll(',', '')); }
+
+function calculate(input, data) {
+  const age = nonnegative(input.age, '年齡');
+  if (!Number.isInteger(age) || age < 19) throw new Error('年齡目前須為 19 歲以上整數。');
+  if (!['男', '女'].includes(input.sex)) throw new Error('性別請選男或女。');
+  if (!['低', '稍低', '適度', '高'].includes(input.activity) || (age >= 71 && input.activity === '高')) throw new Error('此年齡層沒有「高」活動強度的膳食纖維參考值。');
+  const ageIndex = age <= 30 ? 0 : age <= 50 ? 1 : age <= 70 ? 2 : 3;
+  const energy = input.energy === '' || input.energy === null || input.energy === undefined ? null : nonnegative(input.energy, '全天熱量');
+  if (energy === 0) throw new Error('全天熱量須大於 0；未知請留空。');
+
+  const medications = [...new Set((input.medications || []).map(name => canonicalMedication(name, data)).filter(Boolean))];
+  const knownMedicationNames = new Set([...data.rules.map(rule => rule.medication), ...Object.keys(data.medicationElemental)]);
+  const totals = Object.fromEntries(Object.keys(data.units).map(name => [name, 0]));
+  const unknown = new Set();
+
+  for (const [index, product] of (input.products || []).entries()) {
+    const name = product.name?.trim() || `產品 ${index + 1}`;
+    const servings = nonnegative(product.servings, `${name}每日份數`);
+    if (servings === 0) continue;
+    const entries = {};
+    for (const row of product.rows || []) {
+      if (!data.units[row.nutrient]) throw new Error(`${name}：未知營養素「${row.nutrient}」。`);
+      if (entries[row.nutrient]) throw new Error(`${name}：「${row.nutrient}」重複輸入；請合併為一列。`);
+      entries[row.nutrient] = row;
+    }
+    for (const [nutrient, wanted] of Object.entries(data.units)) {
+      const value = convert(entries[nutrient], wanted, data, `${name}／${nutrient}`);
+      if (value === null) unknown.add(nutrient);
+      else totals[nutrient] += value * servings;
+    }
+  }
+  for (const [medication, nutrients] of Object.entries(data.medicationElemental)) {
+    if (!medications.includes(medication)) continue;
+    for (const nutrient of nutrients) {
+      const entry = input.medicationElemental?.[medication]?.[nutrient];
+      const value = convert(entry, data.units[nutrient], data, `${medication}／元素${nutrient}`);
+      if (value === null) unknown.add(nutrient);
+      else totals[nutrient] += value;
+    }
+  }
+
+  const hits = {};
+  const pending = [];
+  for (const rule of data.rules) {
+    if (!medications.includes(rule.medication)) continue;
+    const status = trigger(rule, totals, unknown, input.context || {});
+    if (status === 'hit') (hits[rule.nutrient] ||= []).push(rule);
+    if (status === 'confirm') pending.push(rule);
+  }
+  Object.values(hits).forEach(items => items.sort((a, b) => (a.severity.startsWith('高') ? 0 : 1) - (b.severity.startsWith('高') ? 0 : 1)));
+
+  const results = [];
+  for (const row of data.referenceRows) {
+    const nutrient = row.nutrient;
+    const item = { label: row.label, nutrient, unit: row.unit, amount: totals[nutrient], kind: 'normal', reference: selectedReference(row.cells[ageIndex], input.sex) };
+    if (hits[nutrient]) { item.kind = 'risk'; item.rules = hits[nutrient]; results.push(item); continue; }
+    if (unknown.has(nutrient)) { item.kind = 'unknown'; item.partial = totals[nutrient] > 0; results.push(item); continue; }
+    if (totals[nutrient] === 0) { item.kind = 'zero'; results.push(item); continue; }
+    if (data.percentItems[row.label]) {
+      item.percentEnergy = energy === null ? null : totals[nutrient] * data.percentItems[row.label][1] / energy * 100;
+    } else {
+      item.target = cleanNumber(item.reference);
+      item.ratio = item.target > 0 ? totals[nutrient] / item.target * 100 : null;
+    }
+    const ul = data.ul[nutrient];
+    if (ul !== undefined) {
+      item.ul = Array.isArray(ul) ? ul[ageIndex < 3 ? 0 : 1] : ul;
+      item.ulStatus = totals[nutrient] > item.ul ? 'over' : totals[nutrient] === item.ul ? 'at' : null;
+    }
+    results.push(item);
+  }
+
+  const fiberReference = cleanNumber(selectedReference(data.fiber[input.activity][ageIndex], input.sex));
+  const fiber = { label: '膳食纖維', nutrient: '膳食纖維', unit: 'g', amount: totals['膳食纖維'], reference: fiberReference, kind: 'normal' };
+  if (unknown.has('膳食纖維')) { fiber.kind = 'unknown'; fiber.partial = fiber.amount > 0; }
+  else if (fiber.amount === 0) fiber.kind = 'zero';
+  else fiber.ratio = fiber.amount / fiberReference * 100;
+  results.push(fiber);
+
+  for (const nutrient of ['紅麴', '葡萄糖胺', '魚油']) {
+    const item = { label: nutrient, nutrient, unit: 'mg', amount: totals[nutrient], extra: true, kind: 'normal' };
+    if (hits[nutrient]) { item.kind = 'risk'; item.rules = hits[nutrient]; }
+    else if (unknown.has(nutrient)) { item.kind = 'unknown'; item.partial = item.amount > 0; }
+    else if (item.amount === 0) item.kind = 'zero';
+    results.push(item);
+  }
+
+  const notes = [];
+  for (const med of ['Empagliflozin', 'Dapagliflozin']) {
+    if (medications.includes(med) && present('鎂', totals, unknown) === 'hit') notes.push(`${med} × 鎂：原報告僅允許資訊提示，不列高／中風險。`);
+  }
+  return {
+    age, sex: input.sex, medications, results, pending, notes,
+    unknownMedications: medications.filter(med => !knownMedicationNames.has(med)),
+    riskCount: results.filter(item => item.kind === 'risk').length,
+    recordedCount: results.filter(item => item.kind === 'normal' || item.kind === 'risk').length,
+    pendingCount: pending.length,
+  };
+}
+
+
+let data;
+let medications = [];
+let productSerial = 0;
+const savedLongTerm = {};
+const savedElemental = {};
+
+const $ = id => document.getElementById(id);
+const el = (tag, className, text) => {
+  const node = document.createElement(tag);
+  if (className) node.className = className;
+  if (text !== undefined) node.textContent = text;
+  return node;
+};
+const fmt = value => Number(value).toLocaleString('zh-TW', { maximumFractionDigits: 3 });
+const pct = value => `${Number(value).toFixed(1)}%`;
+
+const conditionDefs = [
+  ['iron_deficiency_or_poor_response', '已缺鐵或補鐵反應不佳'],
+  ['nonheme_iron_supplement', '鐵補充品為非血基質鐵'],
+  ['niacin_for_lipids', '菸鹼酸用於降血脂'],
+  ['high_dose_nicotinic_acid', '已確認屬高劑量菸鹼酸'],
+  ['pravastatin_niacin_dose_confirmed', 'Pravastatin 併用條件已核對'],
+  ['monacolin_k_present', '紅麴確定含 monacolin K'],
+  ['al_mg_antacid_same_time', 'Rosuvastatin 與鋁鎂複方制酸劑同時用'],
+  ['calcium_carbonate_with_iron', '碳酸鈣與鐵同服'],
+  ['al_mg_product_iron_warning', '鋁鎂複方產品仿單有鐵警示'],
+  ['magmitt_product_verified', '氧化鎂為報告所列 Magmitt 產品'],
+  ['cimetidine_high_dose_with_antacid', 'Cimetidine 特定高劑量／制酸劑情境'],
+];
+
+function triSelect(id, label, value = '') {
+  const wrap = el('label', 'condition-field', label);
+  const select = el('select');
+  select.id = id;
+  [['', '未知'], ['true', '是'], ['false', '否']].forEach(([v, text]) => {
+    const option = el('option', '', text); option.value = v; select.append(option);
+  });
+  select.value = value;
+  wrap.append(select);
+  return wrap;
+}
+
+function readTri(value) { return value === 'true' ? true : value === 'false' ? false : null; }
+
+function populateStaticFields() {
+  const container = $('conditionalFields');
+  const formLabel = el('label', 'condition-field', '菸鹼素型態');
+  const formSelect = el('select'); formSelect.id = 'niacinForm';
+  [['', '未知'], ['nicotinic acid', 'nicotinic acid（菸鹼酸）'], ['nicotinamide', 'nicotinamide（菸鹼醯胺）']].forEach(([v, text]) => { const o = el('option', '', text); o.value = v; formSelect.append(o); });
+  formLabel.append(formSelect); container.append(formLabel);
+  const doseLabel = el('label', 'condition-field', '菸鹼酸每日量（mg）');
+  const dose = el('input'); dose.type = 'number'; dose.min = '0'; dose.step = 'any'; dose.placeholder = '未知'; dose.id = 'nicotinicDose';
+  doseLabel.append(dose); container.append(doseLabel);
+  conditionDefs.forEach(([id, label]) => container.append(triSelect(id, label)));
+}
+
+function rememberDynamicFields() {
+  document.querySelectorAll('[data-long-term-med]').forEach(node => { savedLongTerm[node.dataset.longTermMed] = node.value; });
+  document.querySelectorAll('[data-elemental-med]').forEach(node => {
+    const key = `${node.dataset.elementalMed}::${node.dataset.elementalNutrient}`;
+    (savedElemental[key] ||= {})[node.dataset.part] = node.value;
+  });
+}
+
+function renderDynamicFields() {
+  rememberDynamicFields();
+  const host = $('medicationElementalFields'); host.replaceChildren();
+  const longMeds = medications.filter(med => data.rules.some(rule => rule.medication === med && rule.mode === 'long_term'));
+  if (longMeds.length) {
+    host.append(el('div', 'condition-heading', '長期用藥條件'));
+    const grid = el('div', 'condition-grid');
+    longMeds.forEach(med => {
+      const wrap = triSelect('', `${med} 是否長期使用`, savedLongTerm[med] || '');
+      wrap.querySelector('select').dataset.longTermMed = med;
+      grid.append(wrap);
+    });
+    host.append(grid);
+  }
+  const elementalMeds = medications.filter(med => data.medicationElemental[med]);
+  if (elementalMeds.length) {
+    host.append(el('div', 'condition-heading', '藥品提供的元素量（每日，選填）'));
+    elementalMeds.forEach(med => data.medicationElemental[med].forEach(nutrient => {
+      const key = `${med}::${nutrient}`;
+      const row = el('div', 'elemental-row');
+      row.append(el('span', '', `${med}・元素${nutrient}`));
+      for (const part of ['amount', 'unit']) {
+        const input = el('input');
+        input.dataset.elementalMed = med; input.dataset.elementalNutrient = nutrient; input.dataset.part = part;
+        if (part === 'amount') { input.type = 'number'; input.min = '0'; input.step = 'any'; input.placeholder = '未知'; }
+        else { input.type = 'text'; input.setAttribute('list', 'unitOptions'); }
+        input.value = savedElemental[key]?.[part] ?? (part === 'unit' ? data.units[nutrient] : '');
+        row.append(input);
+      }
+      host.append(row);
+    }));
+  }
+}
+
+function renderMedicationTags() {
+  const host = $('medicationTags'); host.replaceChildren();
+  if (!medications.length) host.append(el('span', 'microcopy', '目前未加入藥品'));
+  medications.forEach(med => {
+    const tag = el('span', 'tag', med);
+    const remove = el('button', '', '×'); remove.type = 'button'; remove.setAttribute('aria-label', `移除 ${med}`);
+    remove.addEventListener('click', () => { medications = medications.filter(item => item !== med); renderMedicationTags(); renderDynamicFields(); });
+    tag.append(remove); host.append(tag);
+  });
+  renderDynamicFields();
+}
+
+function addMedication(value) {
+  const original = String(value ?? '').trim();
+  if (!original) return;
+  const canonical = canonicalMedication(original, data);
+  if (!medications.includes(canonical)) medications.push(canonical);
+  $('medicationInput').value = '';
+  renderMedicationTags();
+}
+
+function nutrientOptions(select, selected) {
+  const names = [...new Set([...data.referenceRows.map(row => row.nutrient), '膳食纖維', '紅麴', '葡萄糖胺', '魚油'])];
+  names.forEach(name => { const o = el('option', '', name); o.value = name; select.append(o); });
+  select.value = selected && names.includes(selected) ? selected : names[0];
+}
+
+function addNutrientRow(card, initial = {}) {
+  const rows = card.querySelector('.nutrient-rows');
+  const row = el('div', 'nutrient-row');
+  const nutrient = el('select'); nutrient.className = 'nutrient-name'; nutrient.setAttribute('aria-label', '營養素');
+  nutrientOptions(nutrient, initial.nutrient);
+  const amount = el('input'); amount.className = 'nutrient-amount'; amount.type = 'number'; amount.min = '0'; amount.step = 'any'; amount.placeholder = '未記錄'; amount.setAttribute('aria-label', '每份含量');
+  amount.value = initial.amount ?? '';
+  const unit = el('input'); unit.className = 'nutrient-unit'; unit.setAttribute('list', 'unitOptions'); unit.setAttribute('aria-label', '劑量單位');
+  unit.value = initial.unit ?? data.units[nutrient.value];
+  nutrient.addEventListener('change', () => { unit.value = data.units[nutrient.value]; });
+  const remove = el('button', 'icon-btn', '×'); remove.type = 'button'; remove.setAttribute('aria-label', '移除這項營養素'); remove.addEventListener('click', () => row.remove());
+  row.append(nutrient, amount, unit, remove); rows.append(row);
+}
+
+function addProduct(initial = {}) {
+  productSerial += 1;
+  const card = el('div', 'product-card'); card.dataset.product = String(productSerial);
+  const top = el('div', 'product-top');
+  const nameLabel = el('label', 'field', '產品名稱'); const nameInput = el('input'); nameInput.className = 'product-name'; nameInput.placeholder = `保健品 ${productSerial}`; nameInput.value = initial.name ?? ''; nameLabel.append(nameInput);
+  const servingLabel = el('label', 'field', '每日份數'); const servingInput = el('input'); servingInput.className = 'product-servings'; servingInput.type = 'number'; servingInput.min = '0'; servingInput.step = 'any'; servingInput.value = initial.servings ?? '1'; servingLabel.append(servingInput);
+  const remove = el('button', 'icon-btn', '×'); remove.type = 'button'; remove.setAttribute('aria-label', '移除這款產品'); remove.addEventListener('click', () => card.remove());
+  top.append(nameLabel, servingLabel, remove);
+  const headers = el('div', 'row-head'); ['營養素', '每份含量', '單位', ''].forEach(text => headers.append(el('span', '', text)));
+  const rows = el('div', 'nutrient-rows');
+  const add = el('button', 'add-row', '＋ 新增營養素'); add.type = 'button'; add.addEventListener('click', () => addNutrientRow(card));
+  card.append(top, headers, rows, add); $('products').append(card);
+  (initial.rows?.length ? initial.rows : [{nutrient: '維生素 C', amount: '', unit: 'mg'}]).forEach(row => addNutrientRow(card, row));
+}
+
+function clearAll() {
+  medications = []; productSerial = 0;
+  $('medicationElementalFields').replaceChildren();
+  Object.keys(savedLongTerm).forEach(key => delete savedLongTerm[key]);
+  Object.keys(savedElemental).forEach(key => delete savedElemental[key]);
+  $('age').value = '35'; $('sex').value = '男'; $('activity').value = '稍低'; $('energy').value = '';
+  $('medicationInput').value = '';
+  $('niacinForm').value = ''; $('nicotinicDose').value = '';
+  conditionDefs.forEach(([id]) => { $(id).value = ''; });
+  $('products').replaceChildren(); addProduct(); renderMedicationTags();
+  $('formError').hidden = true; $('advancedSection').open = false;
+  $('reportPanel').replaceChildren();
+  const empty = el('div', 'report-empty'); empty.append(el('div', 'report-icon', '▤'), el('h2', '', '報告將顯示在這裡'), el('p', '', '填入資料後按「產生評估報告」，即可查看每日營養素與用藥提示。'));
+  $('reportPanel').append(empty);
+}
+
+function loadDemo() {
+  clearAll();
+  $('age').value = '35';
+  $('products').replaceChildren();
+  addProduct({ name: '綜合保健品', servings: '2', rows: [
+    { nutrient: '鉀', amount: '100', unit: 'mg' },
+    { nutrient: '鈣', amount: '250', unit: 'mg' },
+    { nutrient: '維生素 B12', amount: '1.2', unit: 'µg' },
+    { nutrient: '維生素 C', amount: '60000', unit: 'µg' },
+    { nutrient: '維生素 D', amount: '5', unit: 'µg' },
+  ]});
+  addMedication('Losartan'); addMedication('Metformin');
+  runAssessment();
+}
+
+function readState() {
+  const products = [...document.querySelectorAll('.product-card')].map(card => ({
+    name: card.querySelector('.product-name').value,
+    servings: card.querySelector('.product-servings').value,
+    rows: [...card.querySelectorAll('.nutrient-row')].map(row => ({
+      nutrient: row.querySelector('.nutrient-name').value,
+      amount: row.querySelector('.nutrient-amount').value,
+      unit: row.querySelector('.nutrient-unit').value,
+    })),
+  }));
+  const context = { longTermUse: {}, niacin_form: $('niacinForm').value || null, nicotinic_acid_mg_per_day: $('nicotinicDose').value || null };
+  conditionDefs.forEach(([id]) => { context[id] = readTri($(id).value); });
+  document.querySelectorAll('[data-long-term-med]').forEach(node => { context.longTermUse[node.dataset.longTermMed] = readTri(node.value); });
+  const medicationElemental = {};
+  document.querySelectorAll('[data-elemental-med]').forEach(node => {
+    const med = node.dataset.elementalMed, nutrient = node.dataset.elementalNutrient;
+    ((medicationElemental[med] ||= {})[nutrient] ||= {})[node.dataset.part] = node.value;
+  });
+  return { age: $('age').value, sex: $('sex').value, activity: $('activity').value, energy: $('energy').value, medications, products, context, medicationElemental };
+}
+
+function resultCard(title, body, type = '', badge = '') {
+  const card = el('div', `result-card ${type}`);
+  const head = el('div', 'result-title'); head.append(el('span', '', title));
+  if (badge) head.append(el('span', `pill ${badge === '高' ? 'high' : badge === '中' ? 'medium' : badge === 'UL' ? 'ul' : ''}`, badge));
+  card.append(head);
+  if (body) card.append(el('div', 'result-body', body));
+  return card;
+}
+
+function reportItem(item) {
+  if (item.kind === 'risk') {
+    const group = el('div');
+    item.rules.forEach(rule => group.append(resultCard(`${item.label} × ${rule.medication}`, `${rule.message}　〔規則第 ${rule.line} 行；依規格跳過此成分的劑量評估〕`, 'risk', rule.severity.startsWith('高') ? '高' : '中')));
+    return group;
+  }
+  if (item.kind === 'unknown') return resultCard(item.label, item.partial ? '部分含量已知，總量未能計算。' : '未記錄到相關成分；不代表未攝取。', 'unknown', '未記錄');
+  if (item.kind === 'zero') return resultCard(item.label, '已確認未攝取。', 'unknown', '0');
+  let body = `${fmt(item.amount)} ${item.unit}／日`;
+  if (item.extra) body += '；原始營養素總表未列每日參考值。';
+  else if (item.nutrient === '膳食纖維') body += `；活動量參考 ${fmt(item.reference)} g／日，相當於 ${pct(item.ratio)}（僅保健品）。`;
+  else if (item.percentEnergy === null) body += `；未填全天熱量，無法比較參考 ${item.reference}。`;
+  else if (item.percentEnergy !== undefined) body += `；佔全天熱量 ${pct(item.percentEnergy)}，參考 ${item.reference}（僅保健品貢獻）。`;
+  else if (item.label === '鈉 CDRR') body += `；相當於 CDRR ${fmt(item.target)} ${item.unit} 的 ${pct(item.ratio)}。`;
+  else body += `；相當於每日參考值 ${fmt(item.target)} ${item.unit} 的 ${pct(item.ratio)}（僅保健品）。`;
+  if (item.ulStatus) body += ` 僅已輸入來源就${item.ulStatus === 'over' ? '超過' : '達到'} UL ${fmt(item.ul)} ${item.nutrient === '維生素 A' ? 'µg RE' : item.nutrient === '維生素 E' ? 'mg α-TE' : item.nutrient === '菸鹼素' ? 'mg NE' : item.unit}。`;
+  return resultCard(item.label, body, item.ulStatus ? 'risk' : '', item.ulStatus ? 'UL' : '已記錄');
+}
+
+function section(parent, title, items, emptyMessage = '') {
+  const wrap = el('section', 'report-section'); wrap.append(el('h3', '', title));
+  if (!items.length && emptyMessage) wrap.append(el('div', 'empty-line', emptyMessage));
+  else items.forEach(item => wrap.append(item));
+  parent.append(wrap);
+}
+
+function renderReport(report) {
+  const panel = $('reportPanel'); panel.replaceChildren();
+  const header = el('div', 'report-header'); const left = el('div'); left.append(el('div', 'eyebrow', '檢測完成'), el('h2', '', '評估報告'), el('span', 'report-meta', `${report.age} 歲・${report.sex}・${report.medications.length} 種用藥`));
+  const copy = el('button', 'text-button', '複製報告'); copy.type = 'button';
+  copy.addEventListener('click', async () => { try { await navigator.clipboard.writeText(panel.innerText.replace('複製報告', '')); copy.textContent = '已複製'; setTimeout(() => copy.textContent = '複製報告', 1800); } catch { copy.textContent = '複製失敗'; } });
+  header.append(left, copy); panel.append(header);
+  const stats = el('div', 'report-stat-grid');
+  [[report.riskCount, '交互提示'], [report.recordedCount, '已記錄成分'], [report.pendingCount, '待確認條件']].forEach(([count, label]) => { const box = el('div', 'report-stat'); box.append(el('strong', '', String(count)), el('span', '', label)); stats.append(box); });
+  panel.append(stats);
+  const risk = report.results.filter(item => item.kind === 'risk').map(reportItem);
+  const ul = report.results.filter(item => item.kind !== 'risk' && item.ulStatus).map(reportItem);
+  const normal = report.results.filter(item => item.kind === 'normal' && !item.ulStatus).map(reportItem);
+  const unknown = report.results.filter(item => item.kind === 'unknown').map(reportItem);
+  const zero = report.results.filter(item => item.kind === 'zero').map(reportItem);
+  section(panel, '需要注意的交互作用', risk, '未觸發目前已啟用的高／中規則。');
+  if (ul.length) section(panel, '已達或超過上限', ul);
+  section(panel, '保健品提供量', normal, '尚未輸入正值成分。');
+  section(panel, '規則條件待確認', report.pending.map(rule => resultCard(`${rule.nutrient} × ${rule.medication}`, `條件尚未確認，暫不判為高／中提示。〔規則第 ${rule.line} 行〕`, 'pending', '待確認')), '沒有待確認的已列條件。');
+  if (report.unknownMedications.length || report.notes.length) section(panel, '其他提醒', [
+    ...report.unknownMedications.map(med => resultCard(med, '尚未納入本版用藥規則，不能解讀為沒有交互作用。', 'pending')),
+    ...report.notes.map(note => resultCard('資訊提示', note, 'pending')),
+  ]);
+  if (unknown.length || zero.length) {
+    const details = el('details', 'report-section');
+    details.append(el('summary', '', `未記錄或確認 0 的項目（${unknown.length + zero.length}）`));
+    const contents = el('div'); contents.style.marginTop = '10px'; [...unknown, ...zero].forEach(card => contents.append(card)); details.append(contents); panel.append(details);
+  }
+  panel.append(el('p', 'report-footnote', '高／中是專題規則表的提示優先級；未觸發不代表沒有交互作用。全天攝取仍包含未輸入的一般飲食與其他來源。'));
+  if (window.innerWidth < 1050) panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function runAssessment() {
+  try {
+    $('formError').hidden = true;
+    const result = calculate(readState(), data);
+    renderReport(result);
+  } catch (error) {
+    $('formError').textContent = error.message;
+    $('formError').hidden = false;
+    $('formError').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+}
+
+async function init() {
+  try {
+    const inlineData = $('ruleData');
+    if (inlineData) data = JSON.parse(inlineData.textContent);
+    else {
+      const response = await fetch('./data.json');
+      if (!response.ok) throw new Error(`資料檔載入失敗（HTTP ${response.status}）。`);
+      data = await response.json();
+    }
+    $('sourceNames').textContent = `依據：${data.sources.join('、')}`;
+    const meds = [...new Set([...data.rules.map(rule => rule.medication), ...Object.keys(data.medicationElemental)])].sort((a, b) => a.localeCompare(b));
+    meds.forEach(med => { const option = el('option'); option.value = med; $('medicationOptions').append(option); });
+    const units = ['kg', 'g', 'mg', 'µg', 'ug', 'mcg', 'ng', '公克', '毫克', '微克', '奈克', 'µg RE', 'mg RE', 'mg α-TE', 'µg α-TE', 'mg NE', 'µg NE'];
+    const datalist = el('datalist'); datalist.id = 'unitOptions';
+    units.forEach(unit => { const option = el('option'); option.value = unit; datalist.append(option); }); document.body.append(datalist);
+    populateStaticFields(); clearAll();
+    $('addMedication').addEventListener('click', () => addMedication($('medicationInput').value));
+    $('medicationInput').addEventListener('keydown', event => { if (event.key === 'Enter') { event.preventDefault(); addMedication(event.currentTarget.value); } });
+    $('addProduct').addEventListener('click', () => addProduct());
+    $('clearAll').addEventListener('click', clearAll);
+    $('loadDemo').addEventListener('click', loadDemo);
+    $('assessmentForm').addEventListener('submit', event => { event.preventDefault(); runAssessment(); });
+  } catch (error) {
+    $('reportPanel').replaceChildren(el('div', 'form-error', `頁面無法載入規則資料：${error.message}`));
+  }
+}
+
+init();
+
+</script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark">＋</span><span>營養素與用藥評估</span><span class="badge">試用版</span></div>
+    <div class="top-actions"><button id="loadDemo" class="ghost" type="button">載入範例</button><button id="clearAll" class="ghost" type="button">清空輸入</button></div>
+  </header>
+
+  <main class="page">
+    <section class="intro">
+      <div class="eyebrow">保健品用量・藥物注意事項</div>
+      <h1>把產品標示，整理成<br><em>看得懂的每日報告。</em></h1>
+      <p>輸入年齡、性別、保健品與目前使用的藥品。系統先統一重量單位，再依專題規則表檢查用量與交互作用。</p>
+      <div class="intro-note"><span class="dot"></span>資料只在此瀏覽器頁面中運算；目前不儲存輸入內容。</div>
+    </section>
+
+    <div class="workspace">
+      <form id="assessmentForm" class="form-column" novalidate>
+        <section class="panel">
+          <div class="section-head"><span class="step">01</span><div><h2>基本資料</h2><p>用來選擇對應的成人參考值</p></div></div>
+          <div class="field-grid">
+            <label class="field">年齡 <input id="age" type="number" min="19" max="120" step="1" value="35" required></label>
+            <label class="field">性別 <select id="sex"><option value="男">男</option><option value="女">女</option></select></label>
+            <label class="field">活動強度 <select id="activity"><option value="低">低</option><option value="稍低" selected>稍低</option><option value="適度">適度</option><option value="高">高</option></select></label>
+            <label class="field">全天熱量 <span class="hint">選填，用於總熱量百分比</span><div class="input-suffix"><input id="energy" type="number" min="0" step="any" placeholder="未記錄"><span>kcal</span></div></label>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="section-head"><span class="step">02</span><div><h2>目前使用藥品</h2><p>請輸入藥品成分名稱；可加入多種</p></div></div>
+          <div class="inline-entry"><input id="medicationInput" list="medicationOptions" autocomplete="off" placeholder="例如 Losartan、Metformin" aria-label="藥品成分名稱"><datalist id="medicationOptions"></datalist><button id="addMedication" class="outline" type="button">加入藥品</button></div>
+          <div id="medicationTags" class="tags" aria-live="polite"></div>
+          <p class="microcopy">未列入規則的藥名仍可輸入；報告會提示尚未涵蓋。</p>
+        </section>
+
+        <section class="panel">
+          <div class="section-head"><span class="step">03</span><div><h2>保健品與成分</h2><p>每款產品填「每份」含量及每日食用份數</p></div></div>
+          <div id="products"></div>
+          <button id="addProduct" class="add-product" type="button"><span>＋</span> 新增一款保健品</button>
+          <p class="microcopy">未填的成分視為「未記錄」，不會當作 0。確定沒有該成分時，請填 0。</p>
+        </section>
+
+        <details class="panel advanced" id="advancedSection">
+          <summary><span class="step">04</span><span><strong>進階交互作用條件</strong><small>如療程長短、成分型態、是否同時服用</small></span><span class="chevron">⌄</span></summary>
+          <div class="advanced-body">
+            <p class="microcopy">未確認的條件請保留「未知」。系統會列為待確認，不會直接判成已確定風險。</p>
+            <div id="conditionalFields" class="condition-grid"></div>
+            <div id="medicationElementalFields"></div>
+          </div>
+        </details>
+
+        <div id="formError" class="form-error" role="alert" hidden></div>
+        <div class="submit-bar"><button class="primary" type="submit">產生評估報告 <span aria-hidden="true">↗</span></button><span>依目前輸入即時計算</span></div>
+      </form>
+
+      <aside class="report-column">
+        <section class="report-panel" id="reportPanel" aria-live="polite">
+          <div class="report-empty"><div class="report-icon">▤</div><h2>報告將顯示在這裡</h2><p>填入資料後按「產生評估報告」，即可查看每日營養素與用藥提示。</p></div>
+        </section>
+        <div class="source-note"><strong>判讀範圍</strong><p>參考值與 UL 屬全天攝取標準；目前只計算已輸入的保健品與藥品元素量。「高／中」是規則表的提示優先級，不是個人的臨床風險機率。</p><span id="sourceNames"></span></div>
+      </aside>
+    </div>
+  </main>
+  <footer>營養素與用藥評估・專題試用版</footer>
+</body>
+</html>
