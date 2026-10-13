@@ -26,7 +26,7 @@ from app.extraction.engines.base import EngineRecording, EngineResult  # noqa: E
 from app.extraction.types import ExtractionError, ImageInput  # noqa: E402
 
 IMAGE_SUFFIXES = {".jpg", ".jpeg", ".png", ".webp"}
-ENGINES = ("cloud_vision", "gemini")
+ENGINES = ("cloud_vision", "gemini", "openrouter")
 
 
 class Recorder:
@@ -47,6 +47,10 @@ def recorder_for(engine: str) -> Recorder:
         from app.extraction.engines import cloud_vision as module
 
         real = module.CloudVisionEngine.from_env()
+    elif engine == "openrouter":
+        from app.extraction.engines import openrouter as module
+
+        real = module.OpenRouterEngine.from_env()
     else:
         from app.extraction.engines import gemini as module
 
@@ -57,6 +61,8 @@ def recorder_for(engine: str) -> Recorder:
 def converter_for(engine: str) -> Callable[[EngineRecording], EngineResult]:
     if engine == "cloud_vision":
         from app.extraction.engines.cloud_vision import to_engine_result
+    elif engine == "openrouter":
+        from app.extraction.engines.openrouter import to_engine_result
     else:
         from app.extraction.engines.gemini import to_engine_result
     return to_engine_result
