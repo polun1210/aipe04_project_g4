@@ -101,6 +101,13 @@ def test_數值欄位收到文字時取第一個數字並標成需要確認(make
     assert not second.needs_review
 
 
+@pytest.mark.parametrize(("text", "expected"), [(".5 mg", 0.5), ("1,000毫克", 1000), ("1e3", 1000), ("-2", None)])
+def test_數值容錯正確處理小數點千分位指數與負號(make_jpeg, text, expected):
+    rows = [{**LABEL["rows"][0], "amount": text}]
+    row = to_engine_result(record(FakeTransport(reply({**LABEL, "rows": rows})), make_jpeg)).reading.rows[0]
+    assert row.amount == expected and row.needs_review
+
+
 def test_數值欄位的文字裡沒有數字時留空並標成需要確認(make_jpeg):
     rows = [{**LABEL["rows"][0], "amount": "微量"}]
     result = to_engine_result(record(FakeTransport(reply({**LABEL, "rows": rows})), make_jpeg))

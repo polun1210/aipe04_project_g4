@@ -179,15 +179,19 @@ def _describe(error: Exception) -> str:
     return type(error).__name__
 
 
-_FIRST_NUMBER = re.compile(r"\d+(?:\.\d+)?")
+_FIRST_NUMBER = re.compile(r"[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?")
 
 
 def _as_number(value: Any) -> tuple[Any, bool]:
-    """數值欄位收到文字時取第一個數字。回傳（值, 是否經過容錯）。取不到數字就給 null，同樣要人確認。"""
+    """數值欄位收到文字時取第一個數字。回傳（值, 是否經過容錯）。
+
+    取不到數字、或取到負數（含量不可能是負的，不能把負號拿掉當正數用）就給 null，同樣要人確認。
+    """
     if not isinstance(value, str):
         return value, False
     match = _FIRST_NUMBER.search(value.replace(",", ""))
-    return (float(match.group()) if match else None), True
+    number = float(match.group()) if match else None
+    return (number if number is not None and number >= 0 else None), True
 
 
 def to_engine_result(recording: EngineRecording) -> EngineResult:
