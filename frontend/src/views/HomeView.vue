@@ -7,8 +7,8 @@ import { RouterLink } from 'vue-router'
     <RouterLink to="/">補對了嗎?</RouterLink>
 
     <nav aria-label="會員導覽">
-      <button type="button" disabled>註冊（尚未開放）</button>
-      <button type="button" disabled>登入（尚未開放）</button>
+      <RouterLink to="/register">註冊</RouterLink>
+      <RouterLink to="/login">登入</RouterLink>
     </nav>
   </header>
 
