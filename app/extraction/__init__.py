@@ -1,6 +1,8 @@
 """標示辨識模組（E）。對外只有兩個函式：check_quality（上傳時的品質檢查）與 extract（交接點 04_supplement_draft）。
 
-目前是假版本（T01）：回傳 docs/schemas/examples/ 的固定內容，讓後端與前端先行串接。
+VLM 引擎（直接讀出結構，例如 OpenRouter 的 Gemini 3.8 Flash）經規則層（rules.py）整理成真實的辨識草稿；
+沒指定引擎、或引擎只有文字區塊（OCR）時，仍回傳 docs/schemas/examples/ 的固定內容（T01 假版本）。
+品質檢查仍是假版本（每張都判為 accepted）。
 位置框座標系 ＝ 依 EXIF 方向轉正後的圖。
 """
 
@@ -9,10 +11,11 @@ from datetime import datetime, timezone
 from pathlib import Path
 from uuid import UUID
 
+from app.extraction import rules
 from app.extraction.engines import Engine, EngineResult, ReplayEngine, TextBlock
 from app.extraction.types import ExtractionError, ImageInput
 from app.schemas.enums import QualityStatus
-from app.schemas.label import ExtractionDraft, SourceImage
+from app.schemas.label import ExtractionDraft, ExtractionMeta, SourceImage
 
 __all__ = [
     "Engine",
@@ -51,9 +54,10 @@ def extract(
     """同步呼叫。quality 是上傳時 check_quality 的結果，這裡不再重新檢查，
     所以草稿裡的品質結果與 check_quality 一定一致；只處理 quality_status = accepted 的圖。
 
-    假版本：回傳範例草稿，product_id 與照片編號換成呼叫者給的；三個版本欄位標為 stub，
-    避免串接期間的修正紀錄被誤認為真實辨識結果。位置框是範例圖的座標，不對應真實照片。
-    指定 engine 時會實際呼叫它，ocr_version 改成該引擎的版本。
+    指定 VLM 引擎時：實際呼叫它，經規則層產出真實草稿，三個版本欄位記錄引擎、規則層與同義詞表的版本。
+    沒指定引擎、或引擎只回傳文字區塊（OCR，還沒有規則層）時：回傳範例草稿，product_id 與照片編號換成呼叫者給的；
+    規則層與同義詞表的版本欄位標為 stub，避免串接期間的修正紀錄被誤認為真實辨識結果。
+    位置框是範例圖的座標，不對應真實照片。
     """
     by_id = {img.image_id: img for img in images}
     if [s.image_id for s in quality] != [img.image_id for img in images]:
@@ -67,6 +71,8 @@ def extract(
     if engine is not None:
         results = [_run_engine(engine, img) for img in accepted]
         ocr_version = results[0].engine_version
+        if all(r.reading is not None for r in results):
+            return _vlm_draft(product_id, sources, results)
 
     draft = json.loads(_EXAMPLE_DRAFT.read_text(encoding="utf-8"))
     first_id = accepted[0].image_id
@@ -82,6 +88,34 @@ def extract(
         "extracted_at": datetime.now(timezone.utc).isoformat(),
     }
     return ExtractionDraft.model_validate(draft)
+
+
+def _vlm_draft(product_id: UUID, sources: list[SourceImage], results: list[EngineResult]) -> ExtractionDraft:
+    names = rules.load_names()
+    readings = [(r.image_id, r.reading) for r in results if r.reading is not None]
+    # 多張圖時，每一份量取第一張有讀到、而且數字可信（沒做過數值容錯）的
+    serving = next(
+        (
+            rules.serving_info(rd.serving, image_id)
+            for image_id, rd in readings
+            if rd.serving and rd.serving.serving_size and not rd.serving.needs_review
+        ),
+        rules.serving_info(readings[0][1].serving, readings[0][0]),
+    )
+    intake = next((rules.suggested_intake(rd.suggested_intake_raw) for _, rd in readings if rd.suggested_intake_raw), None)
+    return ExtractionDraft(
+        product_id=product_id,
+        source_images=sources,
+        serving_info=serving,
+        label_suggested_intake=intake,
+        nutrients=rules.build_rows(readings, names),
+        extraction_meta=ExtractionMeta(
+            ocr_version=results[0].engine_version,
+            rule_layer_version=rules.RULE_LAYER_VERSION,
+            synonym_table_version=names.version,
+            extracted_at=datetime.now(timezone.utc),
+        ),
+    )
 
 
 def _run_engine(engine: Engine, image: ImageInput) -> EngineResult:

@@ -1,0 +1,755 @@
+{
+  "image_id": "p05-img01",
+  "engine_version": "openrouter/google/gemini-3.8-flash/google-ai-studio/prompt-g1",
+  "blocks": [
+    {
+      "text": "三倍強化海藻鈣鎂+D3 | 吃法小提醒",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "品名",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "成 分",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "膠囊成分",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "內容量",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "食用方法",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "保存方法",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "保存期限",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "有效日期",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "產地",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "負責廠商",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "地址",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "電話",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "關鍵成分含量",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "營養標示",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "每一份量 1.8 公克(3顆)",
+      "bbox": {
+        "x": 757,
+        "y": 1142,
+        "width": 382,
+        "height": 45
+      },
+      "confidence": null
+    },
+    {
+      "text": "每日3顆，多食無益，建議空腹或睡前食用",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "熱量 0.2 大卡 0%",
+      "bbox": {
+        "x": 754,
+        "y": 1340,
+        "width": 610,
+        "height": 41
+      },
+      "confidence": null
+    },
+    {
+      "text": "蛋白質 0 公克 0%",
+      "bbox": {
+        "x": 752,
+        "y": 1383,
+        "width": 612,
+        "height": 42
+      },
+      "confidence": null
+    },
+    {
+      "text": "脂肪 0 公克 0%",
+      "bbox": {
+        "x": 750,
+        "y": 1428,
+        "width": 614,
+        "height": 42
+      },
+      "confidence": null
+    },
+    {
+      "text": "飽和脂肪 0 公克 0%",
+      "bbox": {
+        "x": 781,
+        "y": 1473,
+        "width": 583,
+        "height": 42
+      },
+      "confidence": null
+    },
+    {
+      "text": "反式脂肪 0 公克 *",
+      "bbox": {
+        "x": 781,
+        "y": 1513,
+        "width": 585,
+        "height": 43
+      },
+      "confidence": null
+    },
+    {
+      "text": "碳水化合物 0 公克 0%",
+      "bbox": {
+        "x": 745,
+        "y": 1558,
+        "width": 617,
+        "height": 45
+      },
+      "confidence": null
+    },
+    {
+      "text": "糖 0 公克 *",
+      "bbox": {
+        "x": 743,
+        "y": 1603,
+        "width": 619,
+        "height": 42
+      },
+      "confidence": null
+    },
+    {
+      "text": "鈉 3.8 毫克 0%",
+      "bbox": {
+        "x": 742,
+        "y": 1645,
+        "width": 620,
+        "height": 43
+      },
+      "confidence": null
+    },
+    {
+      "text": "鈣 425 毫克 35%",
+      "bbox": {
+        "x": 740,
+        "y": 1690,
+        "width": 621,
+        "height": 43
+      },
+      "confidence": null
+    },
+    {
+      "text": "鎂 209 毫克 54%",
+      "bbox": {
+        "x": 742,
+        "y": 1735,
+        "width": 619,
+        "height": 43
+      },
+      "confidence": null
+    },
+    {
+      "text": "維生素D 10 微克(400 I.U.) 100%",
+      "bbox": {
+        "x": 742,
+        "y": 1780,
+        "width": 619,
+        "height": 40
+      },
+      "confidence": null
+    },
+    {
+      "text": "維生素K 50 微克 42%",
+      "bbox": {
+        "x": 740,
+        "y": 1823,
+        "width": 621,
+        "height": 40
+      },
+      "confidence": null
+    },
+    {
+      "text": "天然海藻鈣(含32%鈣) 1330 毫克",
+      "bbox": {
+        "x": 300,
+        "y": 1617,
+        "width": 374,
+        "height": 99
+      },
+      "confidence": null
+    },
+    {
+      "text": "海洋濃縮物(含45%鎂) 400 毫克",
+      "bbox": {
+        "x": 298,
+        "y": 1657,
+        "width": 373,
+        "height": 109
+      },
+      "confidence": null
+    },
+    {
+      "text": "蕎麥種子粉(含維生素D3) 40 毫克",
+      "bbox": {
+        "x": 294,
+        "y": 1690,
+        "width": 375,
+        "height": 114
+      },
+      "confidence": null
+    },
+    {
+      "text": "鷹嘴豆抽出物(含維生素K2) 25 毫克",
+      "bbox": {
+        "x": 293,
+        "y": 1728,
+        "width": 374,
+        "height": 128
+      },
+      "confidence": null
+    },
+    {
+      "text": "愛爾蘭天然海藻鈣",
+      "bbox": {
+        "x": 408,
+        "y": 489,
+        "width": 273,
+        "height": 74
+      },
+      "confidence": null
+    },
+    {
+      "text": "法國海水濃縮物(含鎂)",
+      "bbox": {
+        "x": 711,
+        "y": 433,
+        "width": 414,
+        "height": 92
+      },
+      "confidence": null
+    },
+    {
+      "text": "蕎麥種子粉(含維生素D3)",
+      "bbox": {
+        "x": 408,
+        "y": 411,
+        "width": 992,
+        "height": 199
+      },
+      "confidence": null
+    },
+    {
+      "text": "鷹嘴豆萃取物(微結晶纖維素、中鏈三酸甘油脂、鷹嘴豆抽出物(含維生素K2))",
+      "bbox": {
+        "x": 408,
+        "y": 468,
+        "width": 988,
+        "height": 184
+      },
+      "confidence": null
+    },
+    {
+      "text": "羥丙基甲基纖維素",
+      "bbox": {
+        "x": 408,
+        "y": 615,
+        "width": 268,
+        "height": 85
+      },
+      "confidence": null
+    },
+    {
+      "text": "純水",
+      "bbox": {
+        "x": 699,
+        "y": 608,
+        "width": 89,
+        "height": 52
+      },
+      "confidence": null
+    },
+    {
+      "text": "鹿角菜膠",
+      "bbox": {
+        "x": 812,
+        "y": 591,
+        "width": 181,
+        "height": 52
+      },
+      "confidence": null
+    },
+    {
+      "text": "二氧化鈦",
+      "bbox": {
+        "x": 1022,
+        "y": 579,
+        "width": 191,
+        "height": 45
+      },
+      "confidence": null
+    },
+    {
+      "text": "氯化鉀",
+      "bbox": {
+        "x": 1258,
+        "y": 579,
+        "width": 133,
+        "height": 43
+      },
+      "confidence": null
+    }
+  ],
+  "reading": {
+    "serving": {
+      "raw_text": "每一份量 1.8 公克(3顆)",
+      "serving_size": 3.0,
+      "dose_unit_raw": "顆",
+      "bbox": {
+        "x": 757,
+        "y": 1142,
+        "width": 382,
+        "height": 45
+      },
+      "needs_review": false
+    },
+    "rows": [
+      {
+        "raw_text": "熱量 0.2 大卡 0%",
+        "raw_name": "熱量",
+        "amount": 0.2,
+        "unit_raw": "大卡",
+        "percent_dv": 0.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 754,
+          "y": 1340,
+          "width": 610,
+          "height": 41
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "蛋白質 0 公克 0%",
+        "raw_name": "蛋白質",
+        "amount": 0.0,
+        "unit_raw": "公克",
+        "percent_dv": 0.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 752,
+          "y": 1383,
+          "width": 612,
+          "height": 42
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "脂肪 0 公克 0%",
+        "raw_name": "脂肪",
+        "amount": 0.0,
+        "unit_raw": "公克",
+        "percent_dv": 0.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 750,
+          "y": 1428,
+          "width": 614,
+          "height": 42
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "飽和脂肪 0 公克 0%",
+        "raw_name": "飽和脂肪",
+        "amount": 0.0,
+        "unit_raw": "公克",
+        "percent_dv": 0.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 781,
+          "y": 1473,
+          "width": 583,
+          "height": 42
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "反式脂肪 0 公克 *",
+        "raw_name": "反式脂肪",
+        "amount": 0.0,
+        "unit_raw": "公克",
+        "percent_dv": null,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 781,
+          "y": 1513,
+          "width": 585,
+          "height": 43
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "碳水化合物 0 公克 0%",
+        "raw_name": "碳水化合物",
+        "amount": 0.0,
+        "unit_raw": "公克",
+        "percent_dv": 0.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 745,
+          "y": 1558,
+          "width": 617,
+          "height": 45
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "糖 0 公克 *",
+        "raw_name": "糖",
+        "amount": 0.0,
+        "unit_raw": "公克",
+        "percent_dv": null,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 743,
+          "y": 1603,
+          "width": 619,
+          "height": 42
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "鈉 3.8 毫克 0%",
+        "raw_name": "鈉",
+        "amount": 3.8,
+        "unit_raw": "毫克",
+        "percent_dv": 0.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 742,
+          "y": 1645,
+          "width": 620,
+          "height": 43
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "鈣 425 毫克 35%",
+        "raw_name": "鈣",
+        "amount": 425.0,
+        "unit_raw": "毫克",
+        "percent_dv": 35.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 740,
+          "y": 1690,
+          "width": 621,
+          "height": 43
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "鎂 209 毫克 54%",
+        "raw_name": "鎂",
+        "amount": 209.0,
+        "unit_raw": "毫克",
+        "percent_dv": 54.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 742,
+          "y": 1735,
+          "width": 619,
+          "height": 43
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "維生素D 10 微克(400 I.U.) 100%",
+        "raw_name": "維生素D",
+        "amount": 10.0,
+        "unit_raw": "微克",
+        "percent_dv": 100.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 742,
+          "y": 1780,
+          "width": 619,
+          "height": 40
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "維生素K 50 微克 42%",
+        "raw_name": "維生素K",
+        "amount": 50.0,
+        "unit_raw": "微克",
+        "percent_dv": 42.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 740,
+          "y": 1823,
+          "width": 621,
+          "height": 40
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "天然海藻鈣(含32%鈣) 1330 毫克",
+        "raw_name": "天然海藻鈣(含32%鈣)",
+        "amount": 1330.0,
+        "unit_raw": "毫克",
+        "percent_dv": null,
+        "label_section": "per_unit_note",
+        "bbox": {
+          "x": 300,
+          "y": 1617,
+          "width": 374,
+          "height": 99
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "海洋濃縮物(含45%鎂) 400 毫克",
+        "raw_name": "海洋濃縮物(含45%鎂)",
+        "amount": 400.0,
+        "unit_raw": "毫克",
+        "percent_dv": null,
+        "label_section": "per_unit_note",
+        "bbox": {
+          "x": 298,
+          "y": 1657,
+          "width": 373,
+          "height": 109
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "蕎麥種子粉(含維生素D3) 40 毫克",
+        "raw_name": "蕎麥種子粉(含維生素D3)",
+        "amount": 40.0,
+        "unit_raw": "毫克",
+        "percent_dv": null,
+        "label_section": "per_unit_note",
+        "bbox": {
+          "x": 294,
+          "y": 1690,
+          "width": 375,
+          "height": 114
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "鷹嘴豆抽出物(含維生素K2) 25 毫克",
+        "raw_name": "鷹嘴豆抽出物(含維生素K2)",
+        "amount": 25.0,
+        "unit_raw": "毫克",
+        "percent_dv": null,
+        "label_section": "per_unit_note",
+        "bbox": {
+          "x": 293,
+          "y": 1728,
+          "width": 374,
+          "height": 128
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "愛爾蘭天然海藻鈣",
+        "raw_name": "愛爾蘭天然海藻鈣",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 408,
+          "y": 489,
+          "width": 273,
+          "height": 74
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "法國海水濃縮物(含鎂)",
+        "raw_name": "法國海水濃縮物(含鎂)",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 711,
+          "y": 433,
+          "width": 414,
+          "height": 92
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "蕎麥種子粉(含維生素D3)",
+        "raw_name": "蕎麥種子粉(含維生素D3)",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 408,
+          "y": 411,
+          "width": 992,
+          "height": 199
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "鷹嘴豆萃取物(微結晶纖維素、中鏈三酸甘油脂、鷹嘴豆抽出物(含維生素K2))",
+        "raw_name": "鷹嘴豆萃取物(微結晶纖維素、中鏈三酸甘油脂、鷹嘴豆抽出物(含維生素K2))",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 408,
+          "y": 468,
+          "width": 988,
+          "height": 184
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "羥丙基甲基纖維素",
+        "raw_name": "羥丙基甲基纖維素",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 408,
+          "y": 615,
+          "width": 268,
+          "height": 85
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "純水",
+        "raw_name": "純水",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 699,
+          "y": 608,
+          "width": 89,
+          "height": 52
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "鹿角菜膠",
+        "raw_name": "鹿角菜膠",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 812,
+          "y": 591,
+          "width": 181,
+          "height": 52
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "二氧化鈦",
+        "raw_name": "二氧化鈦",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 1022,
+          "y": 579,
+          "width": 191,
+          "height": 45
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "氯化鉀",
+        "raw_name": "氯化鉀",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 1258,
+          "y": 579,
+          "width": 133,
+          "height": 43
+        },
+        "needs_review": false
+      }
+    ],
+    "suggested_intake_raw": "每日3顆，多食無益，建議空腹或睡前食用",
+    "headings": [
+      "三倍強化海藻鈣鎂+D3 | 吃法小提醒",
+      "品名",
+      "成 分",
+      "膠囊成分",
+      "內容量",
+      "食用方法",
+      "保存方法",
+      "保存期限",
+      "有效日期",
+      "產地",
+      "負責廠商",
+      "地址",
+      "電話",
+      "關鍵成分含量",
+      "營養標示"
+    ]
+  }
+}
