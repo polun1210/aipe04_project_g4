@@ -33,6 +33,8 @@ class ReadingRow(StrictModel):
     percent_dv: float | None = Field(default=None, ge=0)  # 每日參考值%，不是劑量
     label_section: LabelSection
     bbox: BoundingBox | None = None
+    # 引擎回傳的數值不是單純數字（例如「11±2.0」），轉接器取了第一個數字；後續要標成需要使用者確認
+    needs_review: bool = False
 
 
 class ServingReading(StrictModel):
@@ -42,6 +44,7 @@ class ServingReading(StrictModel):
     serving_size: float | None = Field(default=None, gt=0)  # 劑型單位數，不是重量
     dose_unit_raw: str | None = None  # 劑型原文，例如「粒」「錠」
     bbox: BoundingBox | None = None
+    needs_review: bool = False  # 同 ReadingRow.needs_review
 
 
 class LabelReading(StrictModel):

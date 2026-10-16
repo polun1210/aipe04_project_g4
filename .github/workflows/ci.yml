@@ -19,3 +19,24 @@ jobs:
       - run: uv sync --locked
       - run: uv run pytest
       - run: uv run ruff check .
+
+  frontend:
+    runs-on: ubuntu-latest
+    # 以下每個 run 都在 frontend/ 資料夾裡執行
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      # 照 package-lock.json 裝套件；lock 檔和 package.json 對不上就失敗（跟 uv sync --locked 同概念）
+      - run: npm ci
+      # build 會同時跑 vue-tsc 型別檢查和 vite 打包
+      - run: npm run build
+      # 不用 npm run lint：它帶 --fix 會自動改檔，CI 只要檢查、不要修改
+      - run: npx oxlint .
+      - run: npx eslint .
