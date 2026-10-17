@@ -77,3 +77,13 @@ class Report(FrozenModel):
     nutrients: list[ReportNutrient]
     interactions: list[ReportInteraction]
     disclosures: Disclosures
+
+
+class ReportSummary(FrozenModel):
+    """報告記錄查詢頁的一列。"""
+
+    report_id: UUID
+    case_id: UUID
+    generated_at: datetime
+    drug_count: int  # profile.drugs 的筆數（含範圍外與無法確認）
+    product_count: int  # products 的筆數
