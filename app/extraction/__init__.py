@@ -1,4 +1,4 @@
-"""標示辨識模組（E）。對外只有兩個函式：check_quality（交接點 04a）與 extract（交接點 04b）。
+"""標示辨識模組（E）。對外只有兩個函式：check_quality（上傳時的品質檢查）與 extract（交接點 04_supplement_draft）。
 
 目前是假版本（T01）：回傳 docs/schemas/examples/ 的固定內容，讓後端與前端先行串接。
 位置框座標系 ＝ 依 EXIF 方向轉正後的圖。
@@ -26,7 +26,7 @@ __all__ = [
 ]
 
 _EXAMPLE_DRAFT = (
-    Path(__file__).resolve().parents[2] / "docs" / "schemas" / "examples" / "04b_extraction_job_done.json"
+    Path(__file__).resolve().parents[2] / "docs" / "schemas" / "examples" / "04_supplement_draft.json"
 )
 _STUB_VERSION = "stub-t01"
 
@@ -36,7 +36,10 @@ def check_quality(images: list[ImageInput]) -> list[SourceImage]:
 
     假版本：每張都判為 accepted。
     """
-    return [SourceImage(image_id=img.image_id, quality_status=QualityStatus.ACCEPTED) for img in images]
+    return [
+        SourceImage(image_id=img.image_id, quality_status=QualityStatus.ACCEPTED, image_kind=img.image_kind)
+        for img in images
+    ]
 
 
 def extract(
@@ -45,8 +48,8 @@ def extract(
     quality: list[SourceImage],
     engine: Engine | None = None,
 ) -> ExtractionDraft:
-    """非同步工作內呼叫。quality 是上傳時 check_quality 的結果（已回給前端，04a），這裡不再重新檢查，
-    所以 04a 與 04b 的品質結果一定一致；只處理 quality_status = accepted 的圖。
+    """同步呼叫。quality 是上傳時 check_quality 的結果，這裡不再重新檢查，
+    所以草稿裡的品質結果與 check_quality 一定一致；只處理 quality_status = accepted 的圖。
 
     假版本：回傳範例草稿，product_id 與照片編號換成呼叫者給的；三個版本欄位標為 stub，
     避免串接期間的修正紀錄被誤認為真實辨識結果。位置框是範例圖的座標，不對應真實照片。
@@ -65,7 +68,7 @@ def extract(
         results = [_run_engine(engine, img) for img in accepted]
         ocr_version = results[0].engine_version
 
-    draft = json.loads(_EXAMPLE_DRAFT.read_text(encoding="utf-8"))["result"]
+    draft = json.loads(_EXAMPLE_DRAFT.read_text(encoding="utf-8"))
     first_id = accepted[0].image_id
     draft["product_id"] = str(product_id)
     draft["source_images"] = [s.model_dump(mode="json") for s in sources]

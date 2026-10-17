@@ -2,29 +2,23 @@
 
 成功：直接回資料本體（各交接點的模型），不另外包一層。
 失敗：一律回 ErrorResponse。
-長時間工作（辨識、報告生成）：POST 回 202 ＋ JobAccepted，前端每 2 秒 GET 一次 JobResponse。
-評估（06）是確定性計算、不需要等，所以同步回傳；只有 LLM 產生的報告（08）才走工作編號。
+所有網址同步回傳：辨識（保健食品、藥包）、評估、LLM 報告都是前端顯示「處理中…」等回應，不建工作編號。
+辨識服務逾時或失敗 → ErrorResponse(code = extraction_failed)。
+全部照片都沒通過品質檢查 → 不回草稿，改回 ErrorResponse(code = all_images_rejected)，
+details 每張照片一行，例如 "img-02：反光"。
 
-端點一覽：
+端點一覽（現在已有）：
   GET  /api/catalog                               → CatalogResponse
-  POST /api/extractions            (multipart)    → ExtractionAccepted
-  GET  /api/extractions/{job_id}                  → JobResponse[ExtractionDraft]
   POST /api/products               (第一週手動輸入) ← VerificationSubmission → ProductCreated
   PUT  /api/products/{product_id}/verification    ← VerificationSubmission → 204
-  POST /api/assessments                           ← AssessmentRequest → Assessment（確定性計算，很快，同步回傳）
-  POST /api/assessments/{case_id}/report  (W3)    → JobAccepted（LLM 敘述很慢，才用工作編號）
-  GET  /api/assessments/jobs/{job_id}     (W3)    → JobResponse[Report]
+  POST /api/assessments                           ← AssessmentRequest → Assessment（確定性計算，同步回傳）
+其餘 v4 網址由下一張工單補上。
 """
 
-from typing import Generic, TypeVar
 from uuid import UUID
 
-from pydantic import model_validator
-
 from app.schemas.common import StrictModel
-from app.schemas.enums import ErrorCode, JobStatus
-
-T = TypeVar("T")
+from app.schemas.enums import ErrorCode
 
 
 class ErrorBody(StrictModel):
@@ -39,22 +33,3 @@ class ErrorResponse(StrictModel):
 
 class ProductCreated(StrictModel):
     product_id: UUID
-
-
-class JobAccepted(StrictModel):
-    job_id: str
-
-
-class JobResponse(StrictModel, Generic[T]):
-    job_id: str
-    status: JobStatus
-    result: T | None = None  # 只在 done 時有值
-    error: ErrorBody | None = None  # 只在 failed 時有值
-
-    @model_validator(mode="after")
-    def _payload_matches_status(self) -> "JobResponse[T]":
-        if (self.status is JobStatus.DONE) != (self.result is not None):
-            raise ValueError("result 只在 status = done 時有值，且必有")
-        if (self.status is JobStatus.FAILED) != (self.error is not None):
-            raise ValueError("error 只在 status = failed 時有值，且必有")
-        return self

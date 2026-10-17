@@ -20,6 +20,7 @@ from app.schemas.enums import (
     DoseUnit,
     ElementalBasis,
     FrequencyType,
+    ImageKind,
     IngredientCode,
     LabelSection,
     QualityStatus,
@@ -39,7 +40,7 @@ def _check_scope(scope: ScopeStatus, code: IngredientCode | None, unit: Unit | N
         raise ValueError("範圍內成分的 unit 不可為 other")
 
 
-def _check_unique_rows(row_ids: list[str | None]) -> None:
+def check_unique_rows(row_ids: list[str | None]) -> None:
     present = [r for r in row_ids if r is not None]
     if len(present) != len(set(present)):
         raise ValueError("同一產品內 row_id 不可重複")
@@ -52,6 +53,7 @@ class SourceImage(StrictModel):
     image_id: str
     quality_status: QualityStatus
     reject_reason: RejectReason | None = None  # rejected 時必填；該圖不參與擷取
+    image_kind: ImageKind | None = None  # 上傳網址一定會填；辨識模組的內部測試可以不填
 
     @model_validator(mode="after")
     def _reason_iff_rejected(self) -> "SourceImage":
@@ -119,7 +121,7 @@ class NutrientDraft(StrictModel):
 
 
 class ExtractionDraft(StrictModel):
-    """GET /api/extractions/{job_id} 完成時的 result。"""
+    """保健食品照片上傳後，同步回傳的辨識草稿。"""
 
     product_id: UUID
     product_name: str | None = None  # 不參與計算；未填時前端顯示「保健食品 N」
@@ -131,16 +133,8 @@ class ExtractionDraft(StrictModel):
 
     @model_validator(mode="after")
     def _unique_rows(self) -> "ExtractionDraft":
-        _check_unique_rows([n.row_id for n in self.nutrients])
+        check_unique_rows([n.row_id for n in self.nutrients])
         return self
-
-
-class ExtractionAccepted(StrictModel):
-    """POST /api/extractions（multipart 上傳圖片）的回應。品質檢查同步完成。"""
-
-    job_id: str | None  # 全部圖片都被拒時為 null，前端要求重拍
-    product_id: UUID
-    source_images: list[SourceImage]
 
 
 # ═══ ⑤ 核對後送出（HITL 前端產出）════════════════════════════
@@ -205,7 +199,7 @@ class VerificationSubmission(StrictModel):
 
     @model_validator(mode="after")
     def _unique_rows(self) -> "VerificationSubmission":
-        _check_unique_rows([n.row_id for n in self.nutrients])
+        check_unique_rows([n.row_id for n in self.nutrients])
         return self
 
 
@@ -271,7 +265,7 @@ class ComputedNutrient(FrozenModel):
     compound_code: str | None = None  # estimated 時記錄所用化合物
     elemental_ratio: float | None = None  # estimated 時記錄所用比率
     peak_daily_amount: float | None  # ★上限比對使用★
-    average_daily_amount: float | None  # 重複補充與一般呈現使用
+    average_daily_amount: float | None  # 一般呈現使用
     ul_applicable: bool  # 無 UL（鉀、B12）或允許成分為 false
 
 

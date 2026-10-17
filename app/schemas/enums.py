@@ -144,6 +144,15 @@ class RejectReason(StrEnum):
     SKEW = "skew"
     LOW_RESOLUTION = "low_resolution"
     UNSUPPORTED_LABEL = "unsupported_label"  # 不是台灣中文營養標示
+    LOW_LIGHT = "low_light"  # 光線不足
+
+
+class ImageKind(StrEnum):
+    """使用者上傳時就選好的圖片種類。"""
+
+    SUPPLEMENT_INGREDIENTS = "supplement_ingredients"  # 保健食品成分表
+    SUPPLEMENT_NUTRITION = "supplement_nutrition"  # 保健食品營養標示
+    DRUG_PACKAGE = "drug_package"  # 藥包
 
 
 class LabelSection(StrEnum):
@@ -289,19 +298,11 @@ class NarrationKind(StrEnum):
     """LLM 敘述對應到報告的哪一段。"""
 
     SUMMARY = "summary"
-    DUPLICATE = "duplicate"
     NUTRIENT = "nutrient"
     INTERACTION = "interaction"
 
 
 # ─── API ────────────────────────────────────────────────────
-
-
-class JobStatus(StrEnum):
-    PENDING = "pending"
-    RUNNING = "running"
-    DONE = "done"
-    FAILED = "failed"
 
 
 class ErrorCode(StrEnum):
@@ -310,5 +311,5 @@ class ErrorCode(StrEnum):
     UNAUTHORIZED = "unauthorized"
     ALL_IMAGES_REJECTED = "all_images_rejected"
     PRODUCT_NOT_VERIFIED = "product_not_verified"
-    JOB_FAILED = "job_failed"
+    EXTRACTION_FAILED = "extraction_failed"  # 辨識服務逾時或失敗
     INTERNAL_ERROR = "internal_error"  # 伺服器沒預期到的錯誤；message 固定，不洩漏內部細節

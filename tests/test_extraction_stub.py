@@ -10,7 +10,7 @@ from app.schemas.label import ExtractionDraft, SourceImage
 
 PRODUCT_ID = UUID("b2000000-0000-4000-8000-000000000002")
 IMAGES = [ImageInput(image_id="p01-img01", content=b"fake"), ImageInput(image_id="p01-img02", content=b"fake")]
-QUALITY = check_quality(IMAGES)  # 上傳時（04a）的結果
+QUALITY = check_quality(IMAGES)  # 上傳時的品質檢查結果
 
 
 def test_check_quality_returns_one_result_per_image():
@@ -74,7 +74,7 @@ def test_extract_uses_upload_quality_results_and_skips_rejected():
         SourceImage(image_id="p01-img02", quality_status=QualityStatus.REJECTED, reject_reason=RejectReason.BLUR),
     ]
     draft = extract(PRODUCT_ID, IMAGES, quality)
-    assert draft.source_images == quality  # 與上傳時回給前端的結果一致（04a = 04b）
+    assert draft.source_images == quality  # 與上傳時回給前端的結果一致
     assert {n.source_image_id for n in draft.nutrients} == {"p01-img01"}
 
 
