@@ -25,7 +25,7 @@ from app.store import TEST_USER_ID, Store, get_store
 
 router = APIRouter(tags=["評估"])
 
-_UNKNOWN_PRODUCT_MESSAGE = "有保健食品尚未核對完成，請回到前一步重新確認"
+_UNKNOWN_PRODUCT_MESSAGE = "部分保健食品資料已失效，請重新上傳後再評估"
 _VALIDATION_MESSAGE = "送出的資料有欄位需要修正"
 
 
@@ -45,7 +45,7 @@ def _freeze_drugs(request: AssessmentRequest, catalog: CatalogSource) -> Exclusi
         "年齡、性別、慢性病由後端從帳號讀。後端凍結個案、重新對照藥名並同步計算，回傳評估結果。"
     ),
     responses={
-        409: {"model": ErrorResponse, "description": "有保健食品尚未核對完成"},
+        409: {"model": ErrorResponse, "description": "有 product_id 查不到，details 列出是哪幾個"},
         422: {"model": ErrorResponse, "description": "送出的資料不完整，或帳號的年齡不在可評估範圍"},
     },
 )
@@ -56,8 +56,11 @@ def create_assessment(
     store: Store = Depends(get_store),
 ) -> Assessment:
     products = store.get_products(request.product_ids)
-    if len(products) != len(set(request.product_ids)):
-        raise ApiError(409, ErrorCode.PRODUCT_NOT_VERIFIED, _UNKNOWN_PRODUCT_MESSAGE)
+    found_ids = {p.product_id for p in products}
+    missing = [pid for pid in dict.fromkeys(request.product_ids) if pid not in found_ids]
+    if missing:
+        details = [f"product_ids：{pid}" for pid in missing]
+        raise ApiError(409, ErrorCode.PRODUCT_NOT_FOUND, _UNKNOWN_PRODUCT_MESSAGE, details)
 
     account = store.get_profile(TEST_USER_ID)
     created_at = datetime.now(UTC)

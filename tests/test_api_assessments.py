@@ -148,10 +148,14 @@ def test_assessment_freezes_drugs_with_rematched_scope():
     assert by_name["Zyloric 100mg"].scope_status == "unresolved"  # 目前產生不出 out_of_scope
 
 
-def test_assessment_unknown_product_returns_product_not_verified(client):
-    response = client.post("/api/assessments", json=_assessment_request([str(uuid4())]))
+def test_assessment_unknown_product_returns_product_not_found_listing_missing_ids(client):
+    known = _create_product(client)
+    missing = str(uuid4())
+    response = client.post("/api/assessments", json=_assessment_request([known, missing]))
     assert response.status_code == 409
-    assert response.json()["error"]["code"] == "product_not_verified"
+    error = response.json()["error"]
+    assert error["code"] == "product_not_found"
+    assert error["details"] == [f"product_ids：{missing}"]
 
 
 def test_assessment_unknown_drug_name_is_frozen_as_unresolved_not_an_error():
