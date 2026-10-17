@@ -3,13 +3,20 @@
 from fastapi import FastAPI
 
 from app.errors import register_error_handlers
-from app.routers import assessments, catalog, products
+from app.routers import assessments, catalog, drugs, products
+
+_DESCRIPTION = """
+- 所有網址都同步回傳：辨識、評估、產生報告都是等回應，不建工作編號。
+- 失敗格式統一：一律回 `ErrorResponse`（`error.code`、`error.message`、選填的 `error.details`）。
+- 還沒登入前，一律用測試帳號。
+"""
 
 
 def create_app() -> FastAPI:
-    app = FastAPI(title="補對了嗎？API")
+    app = FastAPI(title="補對了嗎？API", description=_DESCRIPTION)
     register_error_handlers(app)
     app.include_router(catalog.router)
+    app.include_router(drugs.router)
     app.include_router(products.router)
     app.include_router(assessments.router)
 

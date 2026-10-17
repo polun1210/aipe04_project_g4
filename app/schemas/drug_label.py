@@ -10,7 +10,8 @@ from pydantic import Field, model_validator
 
 from app.schemas.catalog import Code
 from app.schemas.common import BoundingBox, StrictModel
-from app.schemas.enums import ScopeStatus
+from app.schemas.case import SelectedDrug
+from app.schemas.enums import DrugClassCode, ScopeStatus
 from app.schemas.label import ExtractionMeta, SourceImage, check_unique_rows
 
 
@@ -44,3 +45,18 @@ class DrugDraft(StrictModel):
     def _unique_rows(self) -> "DrugDraft":
         check_unique_rows([r.row_id for r in self.rows])
         return self
+
+
+class DrugCandidate(StrictModel):
+    active_ingredient_code: Code
+    display_name_zh: str
+    english_name: str
+    matched_name: str  # 命中的那個名稱（可能是商品名），給前端顯示
+    drug_class_codes: list[DrugClassCode]
+
+
+class DrugLookupResponse(StrictModel):
+    """校對頁修改藥名時，同時拿到「這個名字現在對照成什麼」和「候選藥名」。"""
+
+    mapped: SelectedDrug  # 跟送出評估時的對照結果一模一樣（同一個 map_drug_name）
+    candidates: list[DrugCandidate] = Field(max_length=10)
