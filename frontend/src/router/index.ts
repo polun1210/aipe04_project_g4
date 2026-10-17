@@ -29,6 +29,16 @@ const router = createRouter({
       component: () => import('@/views/SettingsView.vue'),
     },
     {
+      path: '/medicine-upload',
+      name: 'medicine-upload',
+      component: () => import('@/views/MedicineUploadView.vue'),
+    },
+    {
+      path: '/medicine-review',
+      name: 'medicine-review',
+      component: () => import('@/views/MedicineReviewView.vue'),
+    },
+    {
       path: '/api-test',
       name: 'api-test',
       component: () => import('@/views/ApiTestView.vue'),

@@ -17,8 +17,7 @@ import { RouterLink } from 'vue-router'
       <h1 id="welcome-title">歡迎使用保健食品評估系統</h1>
       <p>協助使用者了解保健食品與用藥資訊。</p>
 
-      <!-- 未來連接藥圖片上傳頁，目前尚未建立對應路由。 -->
-      <button type="button" disabled>開始使用（尚未開放）</button>
+      <RouterLink to="/medicine-upload">開始使用</RouterLink>
     </section>
 
     <section aria-labelledby="guide-title">
