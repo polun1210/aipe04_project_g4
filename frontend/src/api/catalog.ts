@@ -1,3 +1,5 @@
+// API 串接練習，尚未接入正式頁面，待團隊整合
+
 import { apiRequest } from './client'
 
 export interface KnownCondition {
