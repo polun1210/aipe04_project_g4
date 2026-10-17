@@ -9,6 +9,7 @@ from app.drug_mapping import map_drug_name
 from app.errors import ApiError
 from app.schemas.assessment import Assessment
 from app.schemas.case import (
+    MAX_AGE,
     MIN_AGE,
     AssessmentRequest,
     BasicProfileSnapshot,
@@ -50,6 +51,8 @@ def create_assessment(
     age = age_on(account.birth_year, account.birth_month, created_at.date())
     if age < MIN_AGE:
         raise ApiError(422, ErrorCode.VALIDATION_ERROR, _VALIDATION_MESSAGE, [f"評估當天須年滿 {MIN_AGE} 歲"])
+    if age > MAX_AGE:
+        raise ApiError(422, ErrorCode.VALIDATION_ERROR, _VALIDATION_MESSAGE, ["出生年月不合理，請到設定頁確認"])
 
     case = CaseProfile(
         case_id=uuid4(),

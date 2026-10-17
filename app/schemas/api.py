@@ -7,12 +7,17 @@
 全部照片都沒通過品質檢查 → 不回草稿，改回 ErrorResponse(code = all_images_rejected)，
 details 每張照片一行，例如 "img-02：反光"。
 
-端點一覽（現在已有）：
+端點一覽（對照 docs/schemas/README.md）：
   GET  /api/catalog                               → CatalogResponse
-  POST /api/products               (第一週手動輸入) ← VerificationSubmission → ProductCreated
-  PUT  /api/products/{product_id}/verification    ← VerificationSubmission → 204
+  POST /api/drug-drafts          (multipart: images) → DrugDraft（201）
+  GET  /api/drugs/lookup?name=…                   → DrugLookupResponse
+  POST /api/supplement-drafts    (multipart: ingredient_images, nutrition_images, category) → ExtractionDraft（201）
+  POST /api/products                              ← VerificationSubmission → ProductCreated（201）
   POST /api/assessments                           ← AssessmentRequest → Assessment（確定性計算，同步回傳）
-其餘 v4 網址由下一張工單補上。
+  POST /api/assessments/{case_id}/report          → Report（201；已產生過回 200 與同一份）
+  GET  /api/reports?date_from=…&date_to=…         → list[ReportSummary]
+  GET  /api/reports/{report_id}                   → Report
+  GET  /api/health                                → {"status": "ok"}
 """
 
 from uuid import UUID

@@ -80,6 +80,19 @@ class BasicProfileSnapshot(FrozenModel):
         return self
 
 
+def check_drug_scope_fields(
+    scope_status: ScopeStatus, code: str | None, display_name_zh: str | None, drug_class_codes: list[DrugClassCode]
+) -> None:
+    """in_scope 必須代碼、中文名、類別都有；其他狀態三者都必須是空的。"""
+    has_all = bool(code and display_name_zh and drug_class_codes)
+    has_any = bool(code or display_name_zh or drug_class_codes)
+    if scope_status is ScopeStatus.IN_SCOPE:
+        if not has_all:
+            raise ValueError("in_scope 必須有代碼、中文名與至少一個用藥類別")
+    elif has_any:
+        raise ValueError("非 in_scope 的代碼、中文名、用藥類別都必須是空的")
+
+
 class SelectedDrug(FrozenModel):
     """使用者確認的藥名 ＋ 後端凍結當下重新對照的結果。"""
 
@@ -93,13 +106,9 @@ class SelectedDrug(FrozenModel):
 
     @model_validator(mode="after")
     def _scope_matches_fields(self) -> "SelectedDrug":
-        has_all = bool(self.active_ingredient_code and self.display_name_zh and self.drug_class_codes)
-        has_any = bool(self.active_ingredient_code or self.display_name_zh or self.drug_class_codes)
-        if self.scope_status is ScopeStatus.IN_SCOPE:
-            if not has_all:
-                raise ValueError("in_scope 必須有代碼、中文名與至少一個用藥類別")
-        elif has_any:
-            raise ValueError("非 in_scope 的代碼、中文名、用藥類別都必須是空的")
+        check_drug_scope_fields(
+            self.scope_status, self.active_ingredient_code, self.display_name_zh, self.drug_class_codes
+        )
         return self
 
 
