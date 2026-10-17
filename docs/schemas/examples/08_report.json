@@ -22,6 +22,8 @@
     "known_conditions_none": false,
     "drugs": [
       {
+        "raw_name": "Dichlotride",
+        "scope_status": "in_scope",
         "active_ingredient_code": "hydrochlorothiazide",
         "display_name_zh": "氫氯噻嗪",
         "drug_class_codes": [
@@ -29,6 +31,8 @@
         ]
       },
       {
+        "raw_name": "可悅您",
+        "scope_status": "in_scope",
         "active_ingredient_code": "losartan",
         "display_name_zh": "洛沙坦",
         "drug_class_codes": [
@@ -36,6 +40,8 @@
         ]
       },
       {
+        "raw_name": "立普妥",
+        "scope_status": "in_scope",
         "active_ingredient_code": "atorvastatin",
         "display_name_zh": "阿托伐他汀",
         "drug_class_codes": [
@@ -43,6 +49,8 @@
         ]
       },
       {
+        "raw_name": "耐適恩",
+        "scope_status": "in_scope",
         "active_ingredient_code": "esomeprazole",
         "display_name_zh": "埃索美拉唑",
         "drug_class_codes": [
@@ -50,11 +58,20 @@
         ]
       },
       {
+        "raw_name": "氧化鎂錠",
+        "scope_status": "in_scope",
         "active_ingredient_code": "magnesium_oxide",
         "display_name_zh": "氧化鎂",
         "drug_class_codes": [
           "antacid_laxative"
         ]
+      },
+      {
+        "raw_name": "Zyloric 100mg",
+        "scope_status": "out_of_scope",
+        "active_ingredient_code": null,
+        "display_name_zh": null,
+        "drug_class_codes": []
       }
     ],
     "drugs_none": false
@@ -73,35 +90,7 @@
       "display_name": "紅麴膠囊"
     }
   ],
-  "summary": "你目前服用的保健食品中，鈣與維生素D各有兩項產品重複；紅麴與你服用的降血脂藥作用機轉相同，是這次最需要優先處理的項目。",
-  "duplicates": [
-    {
-      "ingredient_code": "calcium",
-      "source_product_ids": [
-        "a1000000-0000-4000-8000-000000000001",
-        "a1000000-0000-4000-8000-000000000002"
-      ],
-      "total_peak_intake": 620.0,
-      "total_average_intake": 620.0,
-      "unit": "mg",
-      "basis": "estimated",
-      "display_name_zh": "鈣",
-      "narration": "綜合維他命錠與檸檬酸鈣＋D3都含有鈣，兩者合計每日約620毫克，其中一部分是依化合物比率推估的數值。"
-    },
-    {
-      "ingredient_code": "vitamin_d",
-      "source_product_ids": [
-        "a1000000-0000-4000-8000-000000000001",
-        "a1000000-0000-4000-8000-000000000002"
-      ],
-      "total_peak_intake": 35.0,
-      "total_average_intake": 35.0,
-      "unit": "ug",
-      "basis": "not_applicable",
-      "display_name_zh": "維生素 D",
-      "narration": null
-    }
-  ],
+  "summary": "你目前服用的保健食品中，紅麴與你服用的降血脂藥作用機轉相同，是這次最需要優先處理的項目。",
   "nutrients": [
     {
       "nutrient_code": "calcium",
@@ -550,13 +539,10 @@
     "unresolved_ingredients": [
       "海藻鈣粉"
     ],
-    "uncovered_common_drugs": [
-      "DPP-4 抑制劑",
-      "磺醯脲類",
-      "傳統 NSAIDs",
-      "抗凝血劑與抗血小板藥",
-      "骨質疏鬆用藥"
+    "out_of_scope_drugs": [
+      "Zyloric 100mg"
     ],
+    "unresolved_drugs": [],
     "drug_source_not_counted": [
       "calcium",
       "magnesium",

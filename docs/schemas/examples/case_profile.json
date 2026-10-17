@@ -7,11 +7,12 @@
   "conditions": { "selected": ["hypertension", "dyslipidemia"], "none_selected": false },
   "drugs": {
     "selected": [
-      { "active_ingredient_code": "hydrochlorothiazide", "display_name_zh": "氫氯噻嗪", "drug_class_codes": ["thiazide_diuretic"] },
-      { "active_ingredient_code": "losartan", "display_name_zh": "洛沙坦", "drug_class_codes": ["acei_arb"] },
-      { "active_ingredient_code": "atorvastatin", "display_name_zh": "阿托伐他汀", "drug_class_codes": ["statin"] },
-      { "active_ingredient_code": "esomeprazole", "display_name_zh": "埃索美拉唑", "drug_class_codes": ["ppi"] },
-      { "active_ingredient_code": "magnesium_oxide", "display_name_zh": "氧化鎂", "drug_class_codes": ["antacid_laxative"], "dose_mg": 250, "times_per_day": 2 }
+      { "raw_name": "Dichlotride", "scope_status": "in_scope", "active_ingredient_code": "hydrochlorothiazide", "display_name_zh": "氫氯噻嗪", "drug_class_codes": ["thiazide_diuretic"] },
+      { "raw_name": "可悅您", "scope_status": "in_scope", "active_ingredient_code": "losartan", "display_name_zh": "洛沙坦", "drug_class_codes": ["acei_arb"] },
+      { "raw_name": "立普妥", "scope_status": "in_scope", "active_ingredient_code": "atorvastatin", "display_name_zh": "阿托伐他汀", "drug_class_codes": ["statin"] },
+      { "raw_name": "耐適恩", "scope_status": "in_scope", "active_ingredient_code": "esomeprazole", "display_name_zh": "埃索美拉唑", "drug_class_codes": ["ppi"] },
+      { "raw_name": "氧化鎂錠", "scope_status": "in_scope", "active_ingredient_code": "magnesium_oxide", "display_name_zh": "氧化鎂", "drug_class_codes": ["antacid_laxative"], "dose_mg": 250, "times_per_day": 2 },
+      { "raw_name": "Zyloric 100mg", "scope_status": "out_of_scope", "active_ingredient_code": null, "display_name_zh": null, "drug_class_codes": [] }
     ],
     "none_selected": false
   },

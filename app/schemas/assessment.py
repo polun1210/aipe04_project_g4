@@ -70,17 +70,6 @@ class RelevantNutrient(FrozenModel):
         return self
 
 
-class DuplicateFinding(FrozenModel):
-    """同一成分出現在兩個以上產品。偵測不需要規則表。"""
-
-    ingredient_code: IngredientCode
-    source_product_ids: list[UUID] = Field(min_length=2)
-    total_peak_intake: float | None = None  # 允許成分只判有無，為 null
-    total_average_intake: float | None = None  # 兩值分別加總，不可混用
-    unit: Unit | None = None
-    basis: ElementalBasis | None = None
-
-
 class Trigger(FrozenModel):
     rule_id: str
     condition_type: ConditionType
@@ -120,21 +109,21 @@ class Disclosures(FrozenModel):
     covered_drug_classes: list[DrugClassCode]
     covered_nutrients: list[IngredientCode]
     known_conditions_none: bool  # 「你未勾選本系統涵蓋的 5 種慢性病」，不可寫「你沒有疾病」
-    drugs_none: bool
+    drugs_none: bool  # 略過藥包辨識 → 報告寫「你沒有提供用藥資料」，不可寫「你沒有用藥」
     healthy_population_caveat: bool  # 勾了任一慢性病 → DRIs 為健康族群參考值
     peak_same_day_assumption: bool  # 有非每日服用的產品時，峰值假設同日服用
     out_of_scope_ingredients: list[str]  # raw_name，中性語氣
     unresolved_ingredients: list[str]  # raw_name，警示語氣＋建議諮詢藥師
-    uncovered_common_drugs: list[str]
+    out_of_scope_drugs: list[str]  # raw_name；中性語氣「不在本系統評估範圍」
+    unresolved_drugs: list[str]  # raw_name；寫明「無法判斷是否有交互作用」
     drug_source_not_counted: list[IngredientCode]
 
 
 class Assessment(FrozenModel):
-    """存 assessments.assessment JSONB。報告版面順序：重複 → 營養素與上限 → 交互作用 → 揭露。"""
+    """存 assessments.assessment JSONB。報告版面順序：營養素與上限 → 交互作用 → 揭露。"""
 
     case_id: UUID
     decision_data_version: str
-    duplicates: list[DuplicateFinding]
     relevant_nutrients: list[RelevantNutrient]
     interactions: list[InteractionFinding]
     disclosures: Disclosures

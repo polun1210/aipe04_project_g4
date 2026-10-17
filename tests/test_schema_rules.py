@@ -1,13 +1,22 @@
 """模型內建的約束：每一條都是規格裡寫死的規則，破了就該報錯。"""
 
+from datetime import date
+
 import pytest
 from pydantic import ValidationError
 
-from app.schemas.api import JobResponse
 from app.schemas.assessment import InteractionFinding
-from app.schemas.case import AssessmentRequest, BasicProfile, BasicProfileSnapshot
+from app.schemas.case import (
+    AccountProfile,
+    AssessmentRequest,
+    BasicProfileSnapshot,
+    ConfirmedDrug,
+    SelectedDrug,
+    age_on,
+)
 from app.schemas.common import ExclusiveSelection
 from app.schemas.enums import ConditionCode
+from app.schemas.drug_label import DrugDraft
 from app.schemas.label import NutrientConfirmed, NutrientDraft, UserIntake, VerificationSubmission
 from app.schemas.rules import Rule
 
@@ -40,9 +49,17 @@ def test_unanswered_selection_is_rejected():
         ExclusiveSelection[ConditionCode](selected=[], none_selected=False)
 
 
-def test_under_19_is_rejected():
+def test_birth_month_out_of_range_is_rejected():
     with pytest.raises(ValidationError):
-        BasicProfile(age=18, sex="male")
+        AccountProfile(birth_year=1954, birth_month=13, sex="male", conditions={"none_selected": True})
+
+
+def test_age_on_counts_birth_month_as_already_passed():
+    assert age_on(2000, 10, date(2026, 10, 17)) == 26
+
+
+def test_age_on_before_birth_month_is_one_year_younger():
+    assert age_on(2000, 11, date(2026, 10, 17)) == 25
 
 
 def test_age_band_must_match_age():
@@ -53,10 +70,55 @@ def test_age_band_must_match_age():
 def test_assessment_needs_at_least_one_product():
     with pytest.raises(ValidationError):
         AssessmentRequest(
-            basic_profile={"age": 72, "sex": "male"},
-            conditions={"none_selected": True},
             drugs={"none_selected": True},
             product_ids=[],
+        )
+
+
+def test_old_format_request_with_basic_profile_is_rejected():
+    with pytest.raises(ValidationError):
+        AssessmentRequest(
+            basic_profile={"age": 72, "sex": "male"},
+            drugs={"none_selected": True},
+            product_ids=["a1000000-0000-4000-8000-000000000001"],
+        )
+
+
+def test_in_scope_drug_without_code_is_rejected():
+    with pytest.raises(ValidationError):
+        SelectedDrug(raw_name="立普妥", scope_status="in_scope")
+
+
+def test_unresolved_drug_with_code_is_rejected():
+    with pytest.raises(ValidationError):
+        SelectedDrug(
+            raw_name="亂打", scope_status="unresolved", active_ingredient_code="statin_x",
+            display_name_zh="某藥", drug_class_codes=["statin"],
+        )
+
+
+@pytest.mark.parametrize("fields", [
+    {"draft_id": "d1000000-0000-4000-8000-000000000001"},
+    {"row_id": "d01"},
+    {"dose_mg": 250},
+    {"times_per_day": 2},
+])
+def test_confirmed_drug_paired_fields_must_come_together(fields):
+    with pytest.raises(ValidationError):
+        ConfirmedDrug(name="立普妥", **fields)
+
+
+def test_duplicate_drug_draft_row_ids_rejected():
+    row = {"row_id": "d01", "raw_name": "立普妥", "source_image_id": "img-01", "scope_status": "unresolved"}
+    with pytest.raises(ValidationError):
+        DrugDraft(
+            draft_id="d1000000-0000-4000-8000-000000000001",
+            source_images=[{"image_id": "img-01", "quality_status": "accepted"}],
+            rows=[row, row],
+            extraction_meta={
+                "ocr_version": "x", "rule_layer_version": "x", "synonym_table_version": "x",
+                "extracted_at": "2026-10-17T09:00:00+08:00",
+            },
         )
 
 
@@ -137,11 +199,6 @@ def test_aggregated_severity_must_be_the_highest():
         )
 
 
-def test_done_job_must_carry_result():
-    with pytest.raises(ValidationError):
-        JobResponse[dict](job_id="j1", status="done")
-
-
 def test_unknown_field_is_rejected():
     with pytest.raises(ValidationError):
-        BasicProfile(age=72, sex="male", height_cm=170)
+        ConfirmedDrug(name="立普妥", height_cm=170)

@@ -1,4 +1,5 @@
 import json
+from datetime import UTC, datetime
 from pathlib import Path
 from uuid import UUID, uuid4
 
@@ -8,7 +9,7 @@ from fastapi.testclient import TestClient
 from app.calculator import FakeCalculator, get_calculator
 from app.main import create_app
 from app.schemas.assessment import Assessment
-from app.schemas.case import CaseProfile
+from app.schemas.case import AccountProfile, CaseProfile, age_on
 from app.schemas.label import VerificationSubmission, VerifiedProduct
 from app.store import TEST_USER_ID, InMemoryStore, get_store
 
@@ -107,24 +108,44 @@ def test_assessment_is_saved_with_test_user(client, store):
     assert str(case.case_id) == body["case_id"] == str(assessment.case_id)
 
 
-def test_assessment_freezes_profile_and_drugs_into_case(client):
+def _run_with_spy():
     app = create_app()
-    store = InMemoryStore()
     spy = SpyCalculator(FakeCalculator())
+    store = InMemoryStore()
     app.dependency_overrides[get_store] = lambda: store
     app.dependency_overrides[get_calculator] = lambda: spy
-    test_client = TestClient(app, raise_server_exceptions=False)
+    return TestClient(app, raise_server_exceptions=False), spy
+
+
+def test_assessment_freezes_profile_from_test_account():
+    test_client, spy = _run_with_spy()
     product_id = _create_product(test_client)
 
     test_client.post("/api/assessments", json=_assessment_request([product_id]))
 
     [case] = spy.cases
-    assert case.basic_profile.age == 72
-    assert case.basic_profile.age_band == "71+"
-    ppi = next(d for d in case.drugs.selected if d.active_ingredient_code == "esomeprazole")
-    assert ppi.drug_class_codes == ["ppi"]
-    assert ppi.display_name_zh
+    account = InMemoryStore().get_profile(TEST_USER_ID)
+    assert case.basic_profile.age == age_on(account.birth_year, account.birth_month, case.created_at.date())
+    assert case.basic_profile.sex == account.sex
+    assert case.conditions == account.conditions
     assert [str(p.product_id) for p in case.supplements] == [product_id]
+
+
+def test_assessment_freezes_drugs_with_rematched_scope():
+    test_client, spy = _run_with_spy()
+    product_id = _create_product(test_client)
+
+    test_client.post("/api/assessments", json=_assessment_request([product_id]))
+
+    [case] = spy.cases
+    by_name = {d.raw_name: d for d in case.drugs.selected}
+    ppi = by_name["耐適恩"]
+    assert ppi.scope_status == "in_scope"
+    assert ppi.active_ingredient_code == "esomeprazole"
+    assert ppi.drug_class_codes == ["ppi"]
+    antacid = by_name["氧化鎂錠"]
+    assert (antacid.dose_mg, antacid.times_per_day) == (250, 2)
+    assert by_name["Zyloric 100mg"].scope_status == "unresolved"  # 目前產生不出 out_of_scope
 
 
 def test_assessment_unknown_product_returns_product_not_verified(client):
@@ -133,14 +154,42 @@ def test_assessment_unknown_product_returns_product_not_verified(client):
     assert response.json()["error"]["code"] == "product_not_verified"
 
 
-def test_assessment_unknown_drug_returns_validation_error(client):
-    product_id = _create_product(client)
+def test_assessment_unknown_drug_name_is_frozen_as_unresolved_not_an_error():
+    test_client, spy = _run_with_spy()
+    product_id = _create_product(test_client)
     body = _assessment_request([product_id])
-    body["drugs"]["selected"][0]["active_ingredient_code"] = "not_a_real_drug"
-    response = client.post("/api/assessments", json=body)
+    body["drugs"]["selected"][0]["name"] = "完全亂打的藥"
+
+    response = test_client.post("/api/assessments", json=body)
+
+    assert response.status_code == 200
+    [case] = spy.cases
+    unknown = next(d for d in case.drugs.selected if d.raw_name == "完全亂打的藥")
+    assert unknown.scope_status == "unresolved"
+    assert unknown.active_ingredient_code is None
+
+
+def test_assessment_under_19_account_returns_validation_error(store):
+    store.get_profile = lambda user_id: AccountProfile(
+        birth_year=datetime.now(UTC).year - 18, birth_month=1, sex="male", conditions={"none_selected": True}
+    )
+    app = create_app()
+    app.dependency_overrides[get_store] = lambda: store
+    test_client = TestClient(app, raise_server_exceptions=False)
+    product_id = _create_product(test_client)
+
+    response = test_client.post("/api/assessments", json=_assessment_request([product_id]))
+
     assert response.status_code == 422
     assert response.json()["error"]["code"] == "validation_error"
-    assert "not_a_real_drug" in response.json()["error"]["details"][0]
+    assert "19" in response.json()["error"]["details"][0]
+
+
+def test_assessment_rejects_old_format_with_basic_profile(client):
+    product_id = _create_product(client)
+    body = {**_assessment_request([product_id]), "basic_profile": {"age": 72, "sex": "male"}}
+    response = client.post("/api/assessments", json=body)
+    assert response.status_code == 422
 
 
 def test_assessment_rejects_empty_product_ids(client):

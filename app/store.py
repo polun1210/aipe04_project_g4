@@ -9,7 +9,9 @@ from typing import Protocol
 from uuid import UUID
 
 from app.schemas.assessment import Assessment
-from app.schemas.case import CaseProfile
+from app.schemas.case import AccountProfile, CaseProfile
+from app.schemas.common import ExclusiveSelection
+from app.schemas.enums import ConditionCode, Sex
 from app.schemas.label import VerifiedProduct
 
 TEST_USER_ID = UUID("b0000000-0000-4000-8000-000000000001")  # 同 case_profile.json 範例
@@ -20,6 +22,10 @@ class Store(Protocol):
 
     def get_products(self, product_ids: list[UUID]) -> list[VerifiedProduct]:
         """依傳入順序回傳；找不到的編號直接略過，由呼叫端比對。"""
+        ...
+
+    def get_profile(self, user_id: UUID) -> AccountProfile:
+        """評估時從帳號讀出的基本資料。"""
         ...
 
     def save_assessment(self, case: CaseProfile, assessment: Assessment) -> None: ...
@@ -35,6 +41,17 @@ class InMemoryStore:
 
     def get_products(self, product_ids: list[UUID]) -> list[VerifiedProduct]:
         return [self._products[pid] for pid in product_ids if pid in self._products]
+
+    def get_profile(self, user_id: UUID) -> AccountProfile:
+        """第一週沒有登入：固定回測試帳號，和範例個案一致。"""
+        return AccountProfile(
+            birth_year=1954,
+            birth_month=3,
+            sex=Sex.MALE,
+            conditions=ExclusiveSelection[ConditionCode](
+                selected=[ConditionCode.HYPERTENSION, ConditionCode.DYSLIPIDEMIA], none_selected=False
+            ),
+        )
 
     def save_assessment(self, case: CaseProfile, assessment: Assessment) -> None:
         self.assessments.append((case, assessment))

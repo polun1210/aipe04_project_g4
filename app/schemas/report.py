@@ -9,13 +9,12 @@ from uuid import UUID
 
 from app.schemas.assessment import (
     Disclosures,
-    DuplicateFinding,
     InteractionFinding,
     RelevantNutrient,
     Trigger,
 )
 from app.schemas.common import FrozenModel
-from app.schemas.enums import AgeBand, ConditionCode, DrugClassCode, Sex
+from app.schemas.enums import AgeBand, ConditionCode, DrugClassCode, ScopeStatus, Sex
 from app.schemas.rules import Citation
 
 
@@ -25,8 +24,10 @@ class ReportCondition(FrozenModel):
 
 
 class ReportDrug(FrozenModel):
-    active_ingredient_code: str
-    display_name_zh: str
+    raw_name: str  # 報告第 ① 段列出所有辨識到的藥名
+    scope_status: ScopeStatus
+    active_ingredient_code: str | None = None
+    display_name_zh: str | None = None
     drug_class_codes: list[DrugClassCode]
 
 
@@ -43,11 +44,6 @@ class ReportProfile(FrozenModel):
 class ReportProduct(FrozenModel):
     product_id: UUID
     display_name: str  # product_name，未填時為「保健食品 N」
-
-
-class ReportDuplicate(DuplicateFinding):
-    display_name_zh: str
-    narration: str | None
 
 
 class ReportNutrient(RelevantNutrient):
@@ -77,8 +73,7 @@ class Report(FrozenModel):
     profile: ReportProfile
     products: list[ReportProduct]
     summary: str
-    # 版面順序固定：重複補充 → 營養素與上限 → 交互作用 → 涵蓋範圍聲明
-    duplicates: list[ReportDuplicate]
+    # 版面順序固定：營養素與上限 → 交互作用 → 涵蓋範圍聲明
     nutrients: list[ReportNutrient]
     interactions: list[ReportInteraction]
     disclosures: Disclosures

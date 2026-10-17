@@ -7,11 +7,12 @@ import pytest
 from pydantic import BaseModel, TypeAdapter
 
 from app.schemas import catalog, rules
-from app.schemas.api import ErrorResponse, JobResponse
+from app.schemas.api import ErrorResponse
 from app.schemas.assessment import Assessment
 from app.schemas.case import AssessmentRequest, CaseProfile
 from app.schemas.csv_io import load_csv
-from app.schemas.label import ExtractionAccepted, ExtractionDraft, LabelCorrection, VerificationSubmission
+from app.schemas.drug_label import DrugDraft
+from app.schemas.label import ExtractionDraft, LabelCorrection, VerificationSubmission
 from app.schemas.narration import BANNED_PHRASES, NarrationOutput
 from app.schemas.report import Report
 
@@ -19,8 +20,8 @@ EXAMPLES = Path(__file__).parent.parent / "docs" / "schemas" / "examples"
 
 JSON_EXAMPLES: dict[str, TypeAdapter] = {
     "03_assessment_request.json": TypeAdapter(AssessmentRequest),
-    "04a_extraction_accepted.json": TypeAdapter(ExtractionAccepted),
-    "04b_extraction_job_done.json": TypeAdapter(JobResponse[ExtractionDraft]),
+    "04_supplement_draft.json": TypeAdapter(ExtractionDraft),
+    "04_drug_draft.json": TypeAdapter(DrugDraft),
     "05a_verification_submission.json": TypeAdapter(VerificationSubmission),
     "05b_label_corrections.json": TypeAdapter(list[LabelCorrection]),
     "case_profile.json": TypeAdapter(CaseProfile),
@@ -78,6 +79,15 @@ def test_rule_citations_exist():
     citation_ids = {c.citation_id for c in load_csv(EXAMPLES / "catalog" / "citations.csv", rules.Citation)}
     for rule in rule_rows:
         assert set(rule.citation_ids) <= citation_ids, rule.rule_id
+
+
+def test_request_drug_names_match_drug_draft_rows():
+    request = json.loads((EXAMPLES / "03_assessment_request.json").read_text(encoding="utf-8"))
+    draft = json.loads((EXAMPLES / "04_drug_draft.json").read_text(encoding="utf-8"))
+    draft_rows = {r["row_id"] for r in draft["rows"]}
+    linked = [d for d in request["drugs"]["selected"] if d["row_id"] is not None]
+    assert linked and all(d["draft_id"] == draft["draft_id"] and d["row_id"] in draft_rows for d in linked)
+    assert any(d["row_id"] is None for d in request["drugs"]["selected"])  # 至少一筆使用者自己新增
 
 
 def test_narration_example_has_no_banned_phrases():

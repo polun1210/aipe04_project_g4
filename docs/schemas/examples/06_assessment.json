@@ -1,14 +1,6 @@
 {
   "case_id": "c0000000-0000-4000-8000-000000000001",
   "decision_data_version": "seed-2026w40.1",
-  "duplicates": [
-    { "ingredient_code": "calcium",
-      "source_product_ids": ["a1000000-0000-4000-8000-000000000001", "a1000000-0000-4000-8000-000000000002"],
-      "total_peak_intake": 620, "total_average_intake": 620, "unit": "mg", "basis": "estimated" },
-    { "ingredient_code": "vitamin_d",
-      "source_product_ids": ["a1000000-0000-4000-8000-000000000001", "a1000000-0000-4000-8000-000000000002"],
-      "total_peak_intake": 35, "total_average_intake": 35, "unit": "ug", "basis": "not_applicable" }
-  ],
   "relevant_nutrients": [
     { "nutrient_code": "calcium", "is_supplemented": true, "triggered_by_drug": true,
       "peak_intake_from_supplements": 620, "average_intake_from_supplements": 620, "intake_from_drugs": null,
@@ -101,7 +93,8 @@
     "peak_same_day_assumption": false,
     "out_of_scope_ingredients": ["維生素A", "葉黃素(金盞花萃取物)", "硬脂酸鎂"],
     "unresolved_ingredients": ["海藻鈣粉"],
-    "uncovered_common_drugs": ["DPP-4 抑制劑", "磺醯脲類", "傳統 NSAIDs", "抗凝血劑與抗血小板藥", "骨質疏鬆用藥"],
+    "out_of_scope_drugs": ["Zyloric 100mg"],
+    "unresolved_drugs": [],
     "drug_source_not_counted": ["calcium", "magnesium", "iron"]
   }
 }

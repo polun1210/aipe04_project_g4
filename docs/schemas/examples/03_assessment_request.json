@@ -1,16 +1,12 @@
 {
-  "basic_profile": { "age": 72, "sex": "male" },
-  "conditions": {
-    "selected": ["hypertension", "dyslipidemia"],
-    "none_selected": false
-  },
   "drugs": {
     "selected": [
-      { "active_ingredient_code": "hydrochlorothiazide" },
-      { "active_ingredient_code": "losartan" },
-      { "active_ingredient_code": "atorvastatin" },
-      { "active_ingredient_code": "esomeprazole" },
-      { "active_ingredient_code": "magnesium_oxide", "dose_mg": 250, "times_per_day": 2 }
+      { "draft_id": "d1000000-0000-4000-8000-000000000001", "row_id": "d05", "name": "Dichlotride" },
+      { "draft_id": "d1000000-0000-4000-8000-000000000001", "row_id": "d02", "name": "可悅您" },
+      { "draft_id": "d1000000-0000-4000-8000-000000000001", "row_id": "d01", "name": "立普妥" },
+      { "draft_id": "d1000000-0000-4000-8000-000000000001", "row_id": "d03", "name": "耐適恩" },
+      { "draft_id": null, "row_id": null, "name": "氧化鎂錠", "dose_mg": 250, "times_per_day": 2 },
+      { "draft_id": "d1000000-0000-4000-8000-000000000001", "row_id": "d04", "name": "Zyloric 100mg" }
     ],
     "none_selected": false
   },

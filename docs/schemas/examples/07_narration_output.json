@@ -1,9 +1,7 @@
 {
   "items": [
     { "kind": "summary", "ingredient_code": null,
-      "text": "你目前服用的保健食品中，鈣與維生素D各有兩項產品重複；紅麴與你服用的降血脂藥作用機轉相同，是這次最需要優先處理的項目。" },
-    { "kind": "duplicate", "ingredient_code": "calcium",
-      "text": "綜合維他命錠與檸檬酸鈣＋D3都含有鈣，兩者合計每日約620毫克，其中一部分是依化合物比率推估的數值。" },
+      "text": "你目前服用的保健食品中，紅麴與你服用的降血脂藥作用機轉相同，是這次最需要優先處理的項目。" },
     { "kind": "nutrient", "ingredient_code": "vitamin_d",
       "text": "維生素D的補充劑來源已達上限攝取量的70%，這個比例尚未包含飲食。" },
     { "kind": "interaction", "ingredient_code": "red_yeast_rice",
