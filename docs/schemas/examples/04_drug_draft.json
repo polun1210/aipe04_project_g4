@@ -1,0 +1,30 @@
+{
+  "draft_id": "d1000000-0000-4000-8000-000000000001",
+  "source_images": [
+    { "image_id": "img-01", "quality_status": "accepted", "reject_reason": null, "image_kind": "drug_package" },
+    { "image_id": "img-02", "quality_status": "accepted", "reject_reason": null, "image_kind": "drug_package" }
+  ],
+  "rows": [
+    { "row_id": "d01", "raw_name": "立普妥", "generic_name_raw": "Atorvastatin", "source_image_id": "img-01",
+      "bbox": { "x": 120, "y": 210, "width": 260, "height": 48 }, "extraction_confidence": 0.97,
+      "active_ingredient_code": "atorvastatin", "scope_status": "in_scope" },
+    { "row_id": "d02", "raw_name": "可悅您", "generic_name_raw": null, "source_image_id": "img-01",
+      "bbox": { "x": 120, "y": 420, "width": 200, "height": 48 }, "extraction_confidence": 0.95,
+      "active_ingredient_code": "losartan", "scope_status": "in_scope" },
+    { "row_id": "d03", "raw_name": "耐適恩", "generic_name_raw": null, "source_image_id": "img-02",
+      "bbox": { "x": 98, "y": 188, "width": 210, "height": 46 }, "extraction_confidence": 0.94,
+      "active_ingredient_code": "esomeprazole", "scope_status": "in_scope" },
+    { "row_id": "d04", "raw_name": "Zyloric 100mg", "generic_name_raw": null, "source_image_id": "img-02",
+      "bbox": { "x": 98, "y": 402, "width": 300, "height": 46 }, "extraction_confidence": 0.92,
+      "active_ingredient_code": null, "scope_status": "out_of_scope" },
+    { "row_id": "d05", "raw_name": "Dichlotrde", "generic_name_raw": null, "source_image_id": "img-02",
+      "bbox": { "x": 98, "y": 610, "width": 240, "height": 46 }, "extraction_confidence": 0.58,
+      "active_ingredient_code": null, "scope_status": "unresolved" }
+  ],
+  "extraction_meta": {
+    "ocr_version": "paddleocr-x.y",
+    "rule_layer_version": "label-rules-v1",
+    "synonym_table_version": "syn-2026w40",
+    "extracted_at": "2026-09-29T09:10:30+08:00"
+  }
+}
