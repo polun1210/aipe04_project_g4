@@ -1,5 +1,8 @@
 # 兩方案小測：Cloud Vision vs Gemini（W1）
 
+> **歷史紀錄**：2026-10-13 起藥物與保健食品辨識統一走 VLM，Cloud Vision 路線停用。
+> 這份保留作為選路線的依據；VLM 型號的選定另見選模型 ADR。
+
 - 照片：10 張；錄製資料：`tests/fixtures/engine_responses`；標準答案：`ocr/w1-gold-set` 分支 `tests/fixtures/labels/`
 - 還沒有規則層，下表只比較引擎原始結果看得到的東西（說明見 scripts/compare_routes.py）
 

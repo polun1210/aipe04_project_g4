@@ -1,7 +1,7 @@
 # 補對了嗎？— AI 個人化營養補充評估系統
 
-年長者（以及協助他們的家人、朋友）告知自己的慢性病與用藥，並上傳正在服用的保健食品包裝照片，
-系統檢查補充劑有沒有**重複補充、接近上限、跟用藥相衝**，並給出方向性的改善建議。
+年長者（以及協助他們的家人、朋友）註冊時告知自己的慢性病，再上傳藥包與正在服用的保健食品包裝照片，
+系統檢查補充劑**加總起來有沒有接近上限、跟用藥有沒有相衝**，並給出方向性的改善建議。
 
 這個 repo 收的是大家已有共識的資訊：**產品說明、資料格式、設計決策，以及開發環境**。
 各模組怎麼做，由負責的人自己決定。
@@ -24,6 +24,7 @@ uv run pytest      # 看到 passed、沒有 failed，就表示環境沒問題
 | 想知道 | 看 |
 |---|---|
 | 這個系統做什麼、給誰用、使用者怎麼走一遍 | [docs/prd.md](docs/prd.md) |
+| 有哪些頁面、每頁長怎樣 | [docs/frontend/sitemap_v4.md](docs/frontend/sitemap_v4.md)、[wireframe_v4.md](docs/frontend/wireframe_v4.md) |
 | 某個詞是什麼意思 | [CONTEXT.md](CONTEXT.md) |
 | 支援哪些藥、營養素、成分 | [docs/v1-scope-checklist.md](docs/v1-scope-checklist.md) |
 | 各模組之間傳什麼資料（JSON／CSV） | [docs/schemas/README.md](docs/schemas/README.md) |
@@ -40,12 +41,18 @@ uv run pytest      # 看到 passed、沒有 failed，就表示環境沒問題
 ## 專案結構
 
 ```
-app/schemas/          所有 JSON／CSV 的資料格式（Pydantic 模型）
+app/                  後端（FastAPI）
+  schemas/            所有 JSON／CSV 的資料格式（Pydantic 模型）
+  routers/            API 網址
+  extraction/         照片辨識（VLM）
+frontend/             前端（Vue 3 + Vite）
 tests/                自動檢查：範例與格式規則有沒有被破壞
 docs/
   prd.md              產品需求文件
+  frontend/           頁面架構與線框（v4）
   schemas/            資料格式的說明與範例
   adr/                設計決策紀錄
+  ocr/                辨識路線比較紀錄
   v1-scope-checklist.md
   dris-reference-notes.md
   uv-guide.md

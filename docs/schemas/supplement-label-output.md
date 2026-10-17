@@ -92,7 +92,7 @@
 | `alternate_days` | `times_per_day × amount_per_time` | peak ÷ 2 |
 | `weekly_n_times` | `times_per_day × amount_per_time` | peak × `days_per_week` ÷ 7 |
 | `cyclic_on_off` | `times_per_day × amount_per_time` | peak × on ÷ (on + off) |
-| `as_needed` | `null` | `null`（`is_quantifiable = false`） |
+| `as_needed` | `null` | `null`（`is_quantifiable = false`）。**第一版不支援**，前端不提供此選項，送出時回錯誤 |
 
 **上限攝取量比對一律用 `peak_daily_amount`。** 兩值相同時報告不需區分；
 不同時，措辭須為「你**服用當日**來自補充劑的攝取量已達上限的 X%」。
