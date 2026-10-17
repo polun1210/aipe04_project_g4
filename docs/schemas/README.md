@@ -5,14 +5,7 @@
 目前的格式是**第一版**，由後端先整理出來，目的是讓大家可以開工。
 **覺得欄位不夠用、命名不順、或有更好的做法，都歡迎提出來討論**，怎麼改見文末。
 
-> **v4 改版中（2026-10-13 決定）**：下列格式變動由後端在 W2 處理，`app/schemas/` 改完前，範例檔仍是舊版：
-> - 拿掉重複補充：`DuplicateFinding`、`Assessment.duplicates`、`ReportDuplicate`、`NarrationKind.DUPLICATE`
-> - 藥物加範圍狀態：`SelectedDrug` 加 `raw_name`、`scope_status`；`drug_class_codes` 只有 `in_scope` 必填
-> - 新增藥包辨識草稿（每行有 `row_id`、藥包原文、學名、對照到的有效成分、範圍狀態、信心分數）
-> - `AssessmentRequest` 改成「確認後的藥名清單（或沒有用藥）＋ `product_ids`」；年齡、性別、慢性病改從帳號讀
-> - 辨識改成同步呼叫，不再有工作編號（`04a`／`04b` 會改寫）
-> - `RejectReason` 加「光線不足」；`SourceImage` 加圖片種類（成分表／營養標示／藥包）
-> - `Disclosures` 改成列出使用者實際吃的範圍外藥物、無法確認的藥物
+> 2026-10-17 已改成 v4。
 
 ---
 
@@ -37,21 +30,20 @@
 ## 有哪些檔案
 
 範例都放在 `docs/schemas/examples/`，對應的規則寫在 `app/schemas/`（Pydantic 模型）。
-所有範例都是同一個個案：72 歲男性、高血壓＋高血脂、5 種藥、3 罐保健食品。
+所有範例都是同一個個案：72 歲男性、高血壓＋高血脂、6 筆藥名（含 1 筆範圍外）、3 罐保健食品。
 **數值與規則命中都是示意**，不是覆核過的醫療結論。
 
 ### JSON：系統執行時流動的資料
 
 | # | 範例檔 | 一句話 | 流向 | 對應模型 |
 |---|---|---|---|---|
-| ③ | `03_assessment_request` | 使用者送出評估的資料：確認後的藥名、要評估的產品（v4 起年齡、性別、慢性病改從帳號讀，改版中） | 前端 → 後端 | `AssessmentRequest`（`case.py`） |
-| ④ | `04a_extraction_accepted` | （舊版，v4 改成同步呼叫後會改寫）使用者上傳照片後立即的回覆：工作編號與品質檢查結果 | 後端 → 前端 | `ExtractionAccepted`（`label.py`） |
-| ④ | `04b_extraction_job_done` | 辨識完成後的結果：每份量、建議吃法、逐列成分（含座標） | 標示辨識 → 後端 → 核對介面 | `JobResponse[ExtractionDraft]`（`api.py`、`label.py`） |
-| ④ | （新增中） | 藥包辨識草稿：每行藥包原文、學名、對照到的有效成分、範圍狀態 | 藥包辨識 → 後端 → 核對介面 | 待新增 |
+| ③ | `03_assessment_request` | 使用者送出評估的資料：確認後的藥名、要評估的產品（年齡、性別、慢性病由後端從帳號讀，不由前端送） | 前端 → 後端 | `AssessmentRequest`（`case.py`） |
+| ④ | `04_supplement_draft` | 保健食品照片上傳後，同步回傳的辨識草稿：每份量、建議吃法、逐列成分（含座標） | 標示辨識 → 後端 → 核對介面 | `ExtractionDraft`（`label.py`） |
+| ④ | `04_drug_draft` | 藥包照片上傳後，同步回傳的辨識草稿：每行藥包原文、學名、對照到的有效成分、範圍狀態 | 藥包辨識 → 後端 → 核對介面 | `DrugDraft`（`drug_label.py`） |
 | ⑤ | `05a_verification_submission` | 使用者核對、修正完後送出的資料（不含計算值） | 核對介面 → 後端 | `VerificationSubmission`（`label.py`） |
 | ⑤ | `05b_label_corrections` | 後端比對「辨識草稿」與「使用者送出」後產生的**修正紀錄**（改前、改後），用來量測辨識準確率 | 後端內部 | `LabelCorrection`（`label.py`） |
 | — | `case_profile` | **凍結的評估個案**：基本資料、用藥、所有已核對產品的完整快照，是計算層的唯一輸入 | 後端內部 | `CaseProfile`（`case.py`） |
-| ⑥ | `06_assessment` | 計算層與規則引擎的結論：營養素與上限（跨產品加總）、交互作用、揭露事項。等級與數字在這裡就確定（範例仍含重複補充，改版中） | 後端 → 敘述層 | `Assessment`（`assessment.py`） |
+| ⑥ | `06_assessment` | 計算層與規則引擎的結論：營養素與上限（跨產品加總）、交互作用、揭露事項。等級與數字在這裡就確定 | 後端 → 敘述層 | `Assessment`（`assessment.py`） |
 | ⑦ | `07_narration_output` | LLM 寫的白話說明，加上所用模型與 prompt 版本；先過輸出檢查才會進報告 | 敘述層 → 後端 | `NarrationOutput`（`narration.py`） |
 | ⑧ | `08_report` | 最終報告：評估結果＋顯示名稱＋展開的出處＋通過檢查的敘述 | 後端 → 報告頁／PDF | `Report`（`report.py`） |
 | — | `api_error` | 所有 API 失敗時的統一錯誤格式 | 後端 → 前端 | `ErrorResponse`（`api.py`） |
@@ -82,7 +74,7 @@
 ## 哪一頁 → 哪個網址 → 用哪個範例檔
 
 頁面編號對應 `docs/frontend/sitemap_v4.md` 的 PG-xxx。網址前綴一律是 `/api`；失敗時一律回 `api_error` 格式。
-「狀態」欄：**已完成**＝已經能呼叫；**改版中**＝已能呼叫，但格式要依 v4 調整；**之後**＝還沒做，網址待定。
+「狀態」欄：**已完成**＝已經能呼叫；**之後**＝還沒做，網址待定。
 
 ### 已經能呼叫的網址
 
@@ -90,8 +82,8 @@
 |---|---|---|---|---|---|
 | PG-003 註冊頁 | 載入慢性病選項 | `GET /api/catalog` | — | `CatalogResponse`（`catalog/` 底下 CSV 的內容） | 已完成 |
 | PG-007 保健食品人工校對頁 | 全部鎖定後按「下一步」，存一罐產品 | `POST /api/products` | `05a_verification_submission` | `product_id`（之後送評估時用），HTTP 201 | 已完成（計算為假版本） |
-| PG-007 → PG-008 | 最後一罐確認後，開始評估 | `POST /api/assessments` | `03_assessment_request`（`product_ids` 放前面存好的產品） | `06_assessment` | 改版中（藥名、帳號） |
-| PG-008 報告呈現頁 | 顯示評估結果 | 同上一列的回傳 | — | `06_assessment` | 改版中（拿掉重複補充） |
+| PG-007 → PG-008 | 最後一罐確認後，開始評估 | `POST /api/assessments` | `03_assessment_request`（確認後的藥名；`product_ids` 放前面存好的產品） | `06_assessment` | 已完成（計算為假版本） |
+| PG-008 報告呈現頁 | 顯示評估結果 | 同上一列的回傳 | — | `06_assessment` | 已完成（計算為假版本） |
 
 PG-008 顯示「每天吃多少」「佔上限幾 %」，用 `06_assessment` 的 `relevant_nutrients`，每個營養素一筆：
 
@@ -108,9 +100,9 @@ PG-008 顯示「每天吃多少」「佔上限幾 %」，用 `06_assessment` 的
 
 | 頁面 | 動作 | 要用的範例檔 | 狀態 |
 |---|---|---|---|
-| PG-004 藥圖片上傳頁 | 上傳藥包照片，同步等辨識＋藥名對照結果 | 藥包辨識草稿（新增中） | 之後 |
+| PG-004 藥圖片上傳頁 | 上傳藥包照片，同步等辨識＋藥名對照結果 | `04_drug_draft` | 之後 |
 | PG-005 藥人工校對頁 | 修改藥名時查候選藥名 | 待定 | 之後 |
-| PG-006 保健食品圖片上傳頁 | 上傳成分表與營養標示照片，同步等辨識結果 | `04b_extraction_job_done` 的草稿部分（改版中） | 之後 |
+| PG-006 保健食品圖片上傳頁 | 上傳成分表與營養標示照片，同步等辨識結果 | `04_supplement_draft` | 之後 |
 | PG-008 報告呈現頁、PG-012 報告記錄詳細資料頁 | 顯示完整報告（5 段固定版面，含白話敘述與出處） | `08_report` | 之後 |
 | PG-011 報告記錄查詢頁 | 依日期範圍列出歷史報告 | 待定 | 之後 |
 | PG-002／003／010 登入、註冊、設定 | 帳號管理（出生年月、性別、慢性病） | 待定（昊昀負責） | 之後 |
@@ -179,7 +171,7 @@ uv run python -c "from app.schemas.label import ExtractionDraft; ExtractionDraft
 | 魚油 | EPA、DHA、魚油總量各一列，代碼都是 `omega_3`，用 `nutrient_form_code` 區分 |
 | 計算值由後端算 | 元素量、每日攝取量、上限比例一律由後端計算，前端送來的不會被採用 |
 | findings 不放攝取量 | `interactions` 裡唯一允許的數字是 `separation_hours` |
-| 峰值與平均 | 上限比對一律用 peak，且先跨產品加總再比；跨產品加總時兩個合計都存（ADR-0005） |
+| 峰值與平均 | 上限比對一律用 peak，且先跨產品加總再比（ADR-0005） |
 | 「以上皆無」 | 一律用 `{selected: [...], none_selected: bool}`，兩者互斥、必須作答 |
 
 ---
@@ -200,11 +192,12 @@ uv run python -c "from app.schemas.label import ExtractionDraft; ExtractionDraft
 | `common.py` | ✅ | |
 | `catalog.py` | ⏳ | 化合物與型態（`nutrient_form_code`、`compound_code`）目前是自由字串，尚無對應的目錄；其餘穩定 |
 | `rules.py` | ✅ | `severity`、`evidence_tier` 的「值」待建表規範，欄位本身不受影響 |
-| `case.py` | ⏳ | v4 改版：`SelectedDrug` 加範圍狀態、`AssessmentRequest` 改成藥名＋產品 |
-| `label.py` | ⏳ | v4 改版：辨識改同步、圖片種類、光線不足 |
-| `assessment.py` | ⏳ | v4 改版：拿掉 `DuplicateFinding`；揭露事項加範圍外與無法確認的藥 |
-| `narration.py` | ⏳ | v4 改版：拿掉 `NarrationKind.DUPLICATE` |
-| `report.py` | ⏳ | v4 改版：拿掉 `ReportDuplicate`；其餘穩定 |
+| `case.py` | ➕ | |
+| `label.py` | ➕ | |
+| `assessment.py` | ✅ | |
+| `narration.py` | ✅ | |
+| `report.py` | ✅ | |
+| `drug_label.py` | ➕ | |
 | `api.py` | ✅ | |
 | `csv_io.py` | ✅ | |
 
