@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 
 import pytest
-from pydantic import BaseModel, TypeAdapter
+from pydantic import BaseModel, TypeAdapter, ValidationError
 
 from app.schemas import catalog, rules
 from app.schemas.api import ErrorResponse
@@ -14,7 +14,7 @@ from app.schemas.csv_io import load_csv
 from app.schemas.drug_label import DrugDraft
 from app.schemas.label import ExtractionDraft, LabelCorrection, VerificationSubmission
 from app.schemas.narration import BANNED_PHRASES, NarrationOutput
-from app.schemas.report import Report
+from app.schemas.report import Report, ReportDrug
 
 EXAMPLES = Path(__file__).parent.parent / "docs" / "schemas" / "examples"
 
@@ -107,3 +107,10 @@ def test_report_numbers_match_assessment():
     assert [f["severity"] for f in report["interactions"]] == [
         f["severity"] for f in assessment["interactions"]
     ]
+
+
+def test_report_drug_rejects_inconsistent_scope_fields():
+    with pytest.raises(ValidationError):
+        ReportDrug(raw_name="立普妥", scope_status="in_scope", drug_class_codes=[])
+    with pytest.raises(ValidationError):
+        ReportDrug(raw_name="亂打", scope_status="unresolved", display_name_zh="阿托伐他汀", drug_class_codes=[])

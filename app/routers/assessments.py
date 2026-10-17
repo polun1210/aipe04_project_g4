@@ -7,8 +7,10 @@ from app.calculator import Calculator, get_calculator
 from app.catalog_source import CatalogSource, get_catalog_source
 from app.drug_mapping import map_drug_name
 from app.errors import ApiError
+from app.schemas.api import ErrorResponse
 from app.schemas.assessment import Assessment
 from app.schemas.case import (
+    MAX_AGE,
     MIN_AGE,
     AssessmentRequest,
     BasicProfileSnapshot,
@@ -21,7 +23,7 @@ from app.schemas.common import ExclusiveSelection
 from app.schemas.enums import ErrorCode
 from app.store import TEST_USER_ID, Store, get_store
 
-router = APIRouter()
+router = APIRouter(tags=["評估"])
 
 _UNKNOWN_PRODUCT_MESSAGE = "有保健食品尚未核對完成，請回到前一步重新確認"
 _VALIDATION_MESSAGE = "送出的資料有欄位需要修正"
@@ -34,7 +36,19 @@ def _freeze_drugs(request: AssessmentRequest, catalog: CatalogSource) -> Exclusi
     return ExclusiveSelection[SelectedDrug](selected=selected, none_selected=request.drugs.none_selected)
 
 
-@router.post("/api/assessments", response_model=Assessment)
+@router.post(
+    "/api/assessments",
+    response_model=Assessment,
+    summary="開始評估",
+    description=(
+        "PG-007 最後一罐保健食品確認後呼叫（接 PG-008 報告呈現頁）。送出確認後的藥名與已核對的產品編號，"
+        "年齡、性別、慢性病由後端從帳號讀。後端凍結個案、重新對照藥名並同步計算，回傳評估結果。"
+    ),
+    responses={
+        409: {"model": ErrorResponse, "description": "有保健食品尚未核對完成"},
+        422: {"model": ErrorResponse, "description": "送出的資料不完整，或帳號的年齡不在可評估範圍"},
+    },
+)
 def create_assessment(
     request: AssessmentRequest,
     calculator: Calculator = Depends(get_calculator),
@@ -50,6 +64,8 @@ def create_assessment(
     age = age_on(account.birth_year, account.birth_month, created_at.date())
     if age < MIN_AGE:
         raise ApiError(422, ErrorCode.VALIDATION_ERROR, _VALIDATION_MESSAGE, [f"評估當天須年滿 {MIN_AGE} 歲"])
+    if age > MAX_AGE:
+        raise ApiError(422, ErrorCode.VALIDATION_ERROR, _VALIDATION_MESSAGE, ["出生年月不合理，請到設定頁確認"])
 
     case = CaseProfile(
         case_id=uuid4(),

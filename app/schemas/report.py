@@ -7,12 +7,15 @@
 from datetime import datetime
 from uuid import UUID
 
+from pydantic import model_validator
+
 from app.schemas.assessment import (
     Disclosures,
     InteractionFinding,
     RelevantNutrient,
     Trigger,
 )
+from app.schemas.case import check_drug_scope_fields
 from app.schemas.common import FrozenModel
 from app.schemas.enums import AgeBand, ConditionCode, DrugClassCode, ScopeStatus, Sex
 from app.schemas.rules import Citation
@@ -29,6 +32,13 @@ class ReportDrug(FrozenModel):
     active_ingredient_code: str | None = None
     display_name_zh: str | None = None
     drug_class_codes: list[DrugClassCode]
+
+    @model_validator(mode="after")
+    def _scope_matches_fields(self) -> "ReportDrug":
+        check_drug_scope_fields(
+            self.scope_status, self.active_ingredient_code, self.display_name_zh, self.drug_class_codes
+        )
+        return self
 
 
 class ReportProfile(FrozenModel):
@@ -77,3 +87,13 @@ class Report(FrozenModel):
     nutrients: list[ReportNutrient]
     interactions: list[ReportInteraction]
     disclosures: Disclosures
+
+
+class ReportSummary(FrozenModel):
+    """報告記錄查詢頁的一列。"""
+
+    report_id: UUID
+    case_id: UUID
+    generated_at: datetime
+    drug_count: int  # profile.drugs 的筆數（含範圍外與無法確認）
+    product_count: int  # products 的筆數

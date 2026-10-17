@@ -75,7 +75,7 @@
     }
   ],
   "extraction_meta": {
-    "ocr_version": "paddleocr-x.y",
+    "ocr_version": "openrouter:google/gemini-3.8-flash",
     "rule_layer_version": "label-rules-v1",
     "synonym_table_version": "syn-2026w40",
     "extracted_at": "2026-09-29T09:14:02+08:00"

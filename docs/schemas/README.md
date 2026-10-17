@@ -73,17 +73,24 @@
 
 ## 哪一頁 → 哪個網址 → 用哪個範例檔
 
-頁面編號對應 `docs/frontend/sitemap_v4.md` 的 PG-xxx。網址前綴一律是 `/api`；失敗時一律回 `api_error` 格式。
-「狀態」欄：**已完成**＝已經能呼叫；**之後**＝還沒做，網址待定。
+頁面編號對應 `docs/frontend/sitemap_v4.md` 的 PG-xxx。網址前綴一律是 `/api`；所有網址同步回傳；失敗時一律回 `api_error` 格式。
+「讀寫的資料」是 `app/store.py` 的 `Store` 方法名稱，之後換成資料庫時，每個方法都帶 `user_id`（還沒登入前一律用測試帳號）。
+「狀態」欄：**已完成**＝回真資料；**已完成（假版本）**＝網址與格式正確，內容是範例資料，真版本由負責的組員替換；**之後**＝別的組員負責，這一階段不做。
 
-### 已經能呼叫的網址
-
-| 頁面 | 動作 | 方法與網址 | 送出 | 收到 | 狀態 |
+| 頁面 | 方法與網址 | 送出 | 收到 | 讀寫的資料 | 狀態 |
 |---|---|---|---|---|---|
-| PG-003 註冊頁 | 載入慢性病選項 | `GET /api/catalog` | — | `CatalogResponse`（`catalog/` 底下 CSV 的內容） | 已完成 |
-| PG-007 保健食品人工校對頁 | 全部鎖定後按「下一步」，存一罐產品 | `POST /api/products` | `05a_verification_submission` | `product_id`（之後送評估時用），HTTP 201 | 已完成（計算為假版本） |
-| PG-007 → PG-008 | 最後一罐確認後，開始評估 | `POST /api/assessments` | `03_assessment_request`（確認後的藥名；`product_ids` 放前面存好的產品） | `06_assessment` | 已完成（計算為假版本） |
-| PG-008 報告呈現頁 | 顯示評估結果 | 同上一列的回傳 | — | `06_assessment` | 已完成（計算為假版本） |
+| PG-003 註冊頁、PG-009 用藥校對頁 | `GET /api/catalog` | — | `CatalogResponse`（`catalog/` 底下 CSV 的內容） | `CatalogSource.load` | 已完成 |
+| PG-004 藥圖片上傳頁 | `POST /api/drug-drafts` | multipart：`images`（1 張以上） | `04_drug_draft`，HTTP 201 | `save_drug_draft` | 已完成（假版本） |
+| PG-005 藥人工校對頁 | `GET /api/drugs/lookup?name=…` | query：`name` | `mapped`（與評估時一致的對照結果）＋ `candidates`（候選藥名，最多 10 筆） | `CatalogSource.load` | 已完成 |
+| PG-006 保健食品圖片上傳頁 | `POST /api/supplement-drafts` | multipart：`ingredient_images`、`nutrition_images`（合計 1 張以上）、`category`（選填，只當顯示名稱） | `04_supplement_draft`，HTTP 201 | `save_supplement_draft` | 已完成（假版本） |
+| PG-007 保健食品人工校對頁 | `POST /api/products` | `05a_verification_submission` | `product_id`，HTTP 201 | `save_product` | 已完成（假版本） |
+| PG-007 → PG-008 | `POST /api/assessments` | `03_assessment_request`（確認後的藥名；`product_ids` 放前面存好的產品） | `06_assessment` | `get_products`、`get_profile`、`save_assessment` | 已完成（假版本） |
+| PG-008 報告呈現頁 | `POST /api/assessments/{case_id}/report` | — | `08_report`；第一次 201，已產生過回 200 與同一份 | `get_report_by_case`、`get_case`、`save_report` | 已完成（假版本） |
+| PG-011 報告記錄查詢頁 | `GET /api/reports?date_from=…&date_to=…` | query：兩個日期（選填、含當天、台灣時間） | `list[ReportSummary]`，新到舊 | `list_reports` | 已完成 |
+| PG-012 報告記錄詳細資料頁 | `GET /api/reports/{report_id}` | — | `08_report` | `get_report` | 已完成（假版本） |
+| PG-002／003／010 登入、註冊、設定 | 待定（昊昀負責） | — | — | — | 之後（別的組員負責） |
+
+PDF 用瀏覽器列印，不需要網址。不屬於自己的資料（個案、報告）一律回 404，不回 403。
 
 PG-008 顯示「每天吃多少」「佔上限幾 %」，用 `06_assessment` 的 `relevant_nutrients`，每個營養素一筆：
 
@@ -95,19 +102,6 @@ PG-008 顯示「每天吃多少」「佔上限幾 %」，用 `06_assessment` 的
 | 是否超過上限 | `ul.exceeded` |
 
 注意：`ul` 可能是 `null`（鉀、維生素 B12 沒有上限），前端要先判斷再讀；`basis` 是 `estimated` 時畫面要標「推估」；措辭依 `ul.phrasing`，不可自己寫「安全」。
-
-### 之後的階段
-
-| 頁面 | 動作 | 要用的範例檔 | 狀態 |
-|---|---|---|---|
-| PG-004 藥圖片上傳頁 | 上傳藥包照片，同步等辨識＋藥名對照結果 | `04_drug_draft` | 之後 |
-| PG-005 藥人工校對頁 | 修改藥名時查候選藥名 | 待定 | 之後 |
-| PG-006 保健食品圖片上傳頁 | 上傳成分表與營養標示照片，同步等辨識結果 | `04_supplement_draft` | 之後 |
-| PG-008 報告呈現頁、PG-012 報告記錄詳細資料頁 | 顯示完整報告（5 段固定版面，含白話敘述與出處） | `08_report` | 之後 |
-| PG-011 報告記錄查詢頁 | 依日期範圍列出歷史報告 | 待定 | 之後 |
-| PG-002／003／010 登入、註冊、設定 | 帳號管理（出生年月、性別、慢性病） | 待定（昊昀負責） | 之後 |
-
-還沒有登入之前，後端先用固定的測試帳號（`user_id`）存資料。
 
 ---
 

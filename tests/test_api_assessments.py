@@ -185,6 +185,23 @@ def test_assessment_under_19_account_returns_validation_error(store):
     assert "19" in response.json()["error"]["details"][0]
 
 
+def test_assessment_over_max_age_account_returns_validation_error(store):
+    # AccountProfile 的出生年下限是 1900，用最老的合法值（足歲超過 MAX_AGE）
+    store.get_profile = lambda user_id: AccountProfile(
+        birth_year=1900, birth_month=1, sex="male", conditions={"none_selected": True}
+    )
+    app = create_app()
+    app.dependency_overrides[get_store] = lambda: store
+    test_client = TestClient(app, raise_server_exceptions=False)
+    product_id = _create_product(test_client)
+
+    response = test_client.post("/api/assessments", json=_assessment_request([product_id]))
+
+    assert response.status_code == 422
+    assert response.json()["error"]["code"] == "validation_error"
+    assert response.json()["error"]["details"] == ["出生年月不合理，請到設定頁確認"]
+
+
 def test_assessment_rejects_old_format_with_basic_profile(client):
     product_id = _create_product(client)
     body = {**_assessment_request([product_id]), "basic_profile": {"age": 72, "sex": "male"}}
