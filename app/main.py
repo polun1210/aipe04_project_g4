@@ -3,7 +3,7 @@
 from fastapi import FastAPI
 
 from app.errors import register_error_handlers
-from app.routers import assessments, catalog, drugs, products
+from app.routers import assessments, catalog, drugs, products, supplements
 
 _DESCRIPTION = """
 - 所有網址都同步回傳：辨識、評估、產生報告都是等回應，不建工作編號。
@@ -18,6 +18,7 @@ def create_app() -> FastAPI:
     app.include_router(catalog.router)
     app.include_router(drugs.router)
     app.include_router(products.router)
+    app.include_router(supplements.router)
     app.include_router(assessments.router)
 
     @app.get("/api/health")
