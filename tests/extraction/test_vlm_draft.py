@@ -110,11 +110,12 @@ def test_標示寫含量範圍時取第一個數字並要使用者確認():
     assert (monacolin.per_serving, monacolin.unit, monacolin.requires_user_input) == (11, Unit.MG, True)
 
 
-def test_目錄沒有的寫法照完全比對原則不認():
-    """名稱標準化只做完全比對：目錄的紅麴同義詞沒有「紅麴粉末」，成分欄這一列就不是允許成分。
-    要認得這種寫法，得由成分目錄負責人在目錄加同義詞，不在規則層猜。"""
+def test_目錄有的寫法才認得_沒有的照完全比對原則不認(tmp_path):
+    """名稱標準化只做完全比對：「紅麴粉末」在目錄同義詞裡就認得，目錄沒有的寫法不在規則層猜。"""
     red = _by_name(_replay("p08-img01"), "紅麴粉末")
-    assert (red.scope_status, red.standard_code) == (ScopeStatus.OUT_OF_SCOPE, None)
+    assert (red.scope_status, red.standard_code) == (ScopeStatus.IN_SCOPE, "red_yeast_rice")
+    other = _crafted(tmp_path, [_row("紅麴萃取粉", section=LabelSection.INGREDIENT_LIST)]).nutrients[0]
+    assert (other.scope_status, other.standard_code) == (ScopeStatus.OUT_OF_SCOPE, None)
 
 
 # ─── 比較集沒有的寫法 ────────────────────────────────────────
