@@ -15,6 +15,7 @@
 | [0006](0006-evidence-sources-build-time-only.md) | 為什麼評估時不即時查 SUPP.AI、TFDA 等外部資料庫？ |
 | [0007](0007-interaction-rules-may-reference-non-target-ingredients.md) | 為什麼紅麴、葡萄糖胺、魚油不在 13 項目標營養素裡，卻會被檢查？ |
 | [0009](0009-rule-aggregation-max-severity-never-downgrade.md) | 同一成分被多條規則命中時，為什麼只顯示最高等級？ |
+| [0010](0010-recognition-route-vlm-gemini-flash.md) | 為什麼辨識用 Gemini 3.8 Flash 這類 VLM 直接看圖，而不是 OCR 加規則、或自己訓練 OCR？ |
 
 ## 想做的事和某份 ADR 不同，怎麼辦？
 
