@@ -1,0 +1,149 @@
+{
+  "product_id": "d22821b7-534f-5a9b-9f29-4f04dde1b5ce",
+  "product_name": "Nature Made 萊萃美 全方位維生素B群加C",
+  "source_images": [
+    {
+      "image_id": "p10-img01",
+      "quality_status": "accepted"
+    }
+  ],
+  "serving_info": {
+    "serving_size": 1.0,
+    "dose_unit": "tablet",
+    "source_image_id": "p10-img01"
+  },
+  "nutrients": [
+    {
+      "row_id": "r01",
+      "raw_name": "維生素B1 Vitamin B1",
+      "label_section": "nutrition_table",
+      "source_image_id": "p10-img01",
+      "scope_status": "out_of_scope",
+      "per_serving": 35.0,
+      "unit": "mg",
+      "percent_dv": 2500.0,
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r02",
+      "raw_name": "維生素B2 Vitamin B2",
+      "label_section": "nutrition_table",
+      "source_image_id": "p10-img01",
+      "scope_status": "out_of_scope",
+      "per_serving": 50.0,
+      "unit": "mg",
+      "percent_dv": 3125.0,
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r03",
+      "raw_name": "維生素B6 Vitamin B6",
+      "label_section": "nutrition_table",
+      "source_image_id": "p10-img01",
+      "standard_code": "vitamin_b6",
+      "scope_status": "in_scope",
+      "per_serving": 50.0,
+      "unit": "mg",
+      "percent_dv": 3125.0,
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r04",
+      "raw_name": "維生素B12 Vitamin B12",
+      "label_section": "nutrition_table",
+      "source_image_id": "p10-img01",
+      "standard_code": "vitamin_b12",
+      "scope_status": "in_scope",
+      "per_serving": 50.0,
+      "unit": "ug",
+      "percent_dv": 2083.0,
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r05",
+      "raw_name": "維生素C Vitamin C",
+      "label_section": "nutrition_table",
+      "source_image_id": "p10-img01",
+      "standard_code": "vitamin_c",
+      "scope_status": "in_scope",
+      "per_serving": 300.0,
+      "unit": "mg",
+      "percent_dv": 300.0,
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r06",
+      "raw_name": "菸鹼素 Niacin",
+      "label_section": "nutrition_table",
+      "source_image_id": "p10-img01",
+      "standard_code": "niacin",
+      "scope_status": "in_scope",
+      "per_serving": 30.0,
+      "unit": "mg_ne",
+      "percent_dv": 167.0,
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r07",
+      "raw_name": "葉酸 Folic Acid",
+      "label_section": "nutrition_table",
+      "source_image_id": "p10-img01",
+      "standard_code": "folate",
+      "scope_status": "in_scope",
+      "per_serving": 400.0,
+      "unit": "ug",
+      "percent_dv": 100.0,
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r08",
+      "raw_name": "泛酸 Pantothenic Acid",
+      "label_section": "nutrition_table",
+      "source_image_id": "p10-img01",
+      "scope_status": "out_of_scope",
+      "per_serving": 100.0,
+      "unit": "mg",
+      "percent_dv": 2000.0,
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r09",
+      "raw_name": "生物素 Biotin",
+      "label_section": "nutrition_table",
+      "source_image_id": "p10-img01",
+      "scope_status": "out_of_scope",
+      "per_serving": 100.0,
+      "unit": "ug",
+      "percent_dv": 333.0,
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r10",
+      "raw_name": "鈣 Calcium",
+      "label_section": "nutrition_table",
+      "source_image_id": "p10-img01",
+      "standard_code": "calcium",
+      "scope_status": "in_scope",
+      "per_serving": 26.0,
+      "unit": "mg",
+      "percent_dv": 2.0,
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r11",
+      "raw_name": "肌醇 Inositol",
+      "label_section": "nutrition_table",
+      "source_image_id": "p10-img01",
+      "scope_status": "out_of_scope",
+      "per_serving": 25.0,
+      "unit": "mg",
+      "requires_user_input": false
+    }
+  ],
+  "extraction_meta": {
+    "ocr_version": "gold-annotation",
+    "rule_layer_version": "gold-annotation",
+    "synonym_table_version": "gold-annotation",
+    "extracted_at": "2026-10-05T10:09:29.003668Z"
+  }
+}

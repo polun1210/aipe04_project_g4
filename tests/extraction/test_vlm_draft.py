@@ -350,3 +350,31 @@ def test_OpenRouter回傳的每一份量是文字時草稿留空但保留位置�
     serving = _openrouter_draft(label, make_jpeg).serving_info
     assert (serving.serving_size, serving.dose_unit) == (None, None)
     assert serving.bbox is not None
+
+
+# ─── 審查補充：整字比對、括號裡的單位、評估基準 ───────────────────────
+
+
+@pytest.mark.parametrize("name", ["Liver repair complex", "Hepatica", "Adhatoda 萃取物"])
+def test_英文字裡剛好有_epa_dha_不算魚油(tmp_path, name):
+    row = _crafted(tmp_path, [_row(name, 100, "毫克")]).nutrients[0]
+    assert (row.standard_code, row.nutrient_form_code) == (None, None)
+
+
+def test_獨立的_EPA_仍算魚油(tmp_path):
+    row = _crafted(tmp_path, [_row("EPA", 180, "毫克")]).nutrients[0]
+    assert (row.standard_code, row.nutrient_form_code) == ("omega_3", "epa")
+
+
+@pytest.mark.parametrize(("unit", "expected"), [("毫克(α-TE)", Unit.MG_ATE), ("mg(NE)", Unit.MG_NE), ("微克(800IU)", Unit.UG)])
+def test_單位括號裡的_aTE_NE_要保留(tmp_path, unit, expected):
+    row = _crafted(tmp_path, [_row("維生素E", 10, unit)]).nutrients[0]
+    assert row.unit is expected
+
+
+def test_比較集範圍內成分全部讀對():
+    """評估基準守在 CI：標準答案（只有文字，不含照片）放在 tests/fixtures/gold_w1。"""
+    from scripts.eval_drafts import evaluate
+
+    t = evaluate()
+    assert t["in_full"] == t["gold_in"] == 42 and t["missing"] == 0 and t["extra"] == 0

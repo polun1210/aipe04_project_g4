@@ -1,6 +1,6 @@
 """評估：錄製的 VLM 結果 → extract() 產出的辨識草稿，與標準答案逐欄比對。不呼叫付費服務。
 
-    uv run python scripts/eval_drafts.py [--engine openrouter] [--gold data/gold_w1]
+    uv run python scripts/eval_drafts.py [--engine openrouter] [--gold tests/fixtures/gold_w1]
 
 比較集是可以拿來調規則的資料，所以這裡的數字偏樂觀；正式驗收要用沒調過規則的保留集。
 逐欄正確 ＝ 範圍狀態、標準代碼、每份含量、單位都對（名稱、數值、單位都對才算對）。
@@ -53,7 +53,7 @@ def _pair(draft_rows: list[NutrientDraft], gold_rows: list[NutrientDraft]):
     return pairs, missing, left
 
 
-def evaluate(engine_dir: str = "openrouter", gold_dir: Path = ROOT / "data" / "gold_w1") -> dict:
+def evaluate(engine_dir: str = "openrouter", gold_dir: Path = ROOT / "tests" / "fixtures" / "gold_w1") -> dict:
     totals = dict(gold=0, matched=0, missing=0, extra=0, full=0, scope=0, amount=0, unit=0, dv=0, section=0,
                   gold_in=0, in_found=0, in_full=0, draft_in=0, draft_in_wrong=0, serving=0, dose=0, images=0)
     problems: list[str] = []
@@ -110,7 +110,7 @@ def main() -> None:
     sys.stdout.reconfigure(encoding="utf-8")  # type: ignore[attr-defined]
     parser = argparse.ArgumentParser(description="辨識草稿對標準答案逐欄比對（錄製結果重播，不花錢）")
     parser.add_argument("--engine", default="openrouter", help="tests/fixtures/engine_responses/ 底下的引擎資料夾")
-    parser.add_argument("--gold", type=Path, default=ROOT / "data" / "gold_w1", help="標準答案資料夾")
+    parser.add_argument("--gold", type=Path, default=ROOT / "tests" / "fixtures" / "gold_w1", help="標準答案資料夾")
     args = parser.parse_args()
     t = evaluate(args.engine, args.gold)
     print(f"比較集 {t['images']} 張（可調規則的資料，數字偏樂觀）")

@@ -34,13 +34,17 @@ def map_unit(raw: str | None) -> Unit | None:
     """單位原文 → Unit。讀不到為 None；看得到但不認得為 OTHER（只允許出現在範圍外成分）。"""
     if not raw:
         return None
-    u = re.sub(r"\s+", "", _strip_parens(_norm(raw))).lower().replace("µ", "μ")
-    # 中英並列的寫法：「毫克mg」「微克mcg」「毫克mg NE」→ 只留中文單位
-    u = re.sub(r"^(毫克)mg|^(微克)(?:mcg|μg|ug)|^(公克)g|^(大卡)kcal", lambda m: next(g for g in m.groups() if g), u)
-    if re.fullmatch(r"(mg|毫克)(α-?te|a-?te|ate)", u):
-        return Unit.MG_ATE
-    if re.fullmatch(r"(mg|毫克)ne", u):
-        return Unit.MG_NE
+    def compact(text: str) -> str:
+        text = re.sub(r"\s+", "", text).lower().replace("µ", "μ")
+        # 中英並列的寫法：「毫克mg」「微克mcg」「毫克mg NE」→ 只留中文單位
+        return re.sub(r"^(毫克)mg|^(微克)(?:mcg|μg|ug)|^(公克)g|^(大卡)kcal", lambda m: next(g for g in m.groups() if g), text)
+
+    # 先看括號裡是不是 α-TE／NE（「毫克(α-TE)」），再去括號（「微克(800IU)」的括號只是說明）
+    for u in (compact(re.sub(r"[()（）]", "", _norm(raw))), compact(_strip_parens(_norm(raw)))):
+        if re.fullmatch(r"(mg|毫克)(α-?te|a-?te|ate)", u):
+            return Unit.MG_ATE
+        if re.fullmatch(r"(mg|毫克)ne", u):
+            return Unit.MG_NE
     table = {
         "mg": Unit.MG, "毫克": Unit.MG,
         "μg": Unit.UG, "ug": Unit.UG, "mcg": Unit.UG, "微克": Unit.UG,
@@ -176,14 +180,17 @@ def match_name(raw_name: str, names: Names) -> NameMatch:
 
 
 _N3_TOTAL = re.compile(r"ω-?3|omega-?3|n-?3\s*(?:多元)?(?:不飽和)?脂肪酸")
-_MONACOLIN = re.compile(r"monacolin|莫納可林")
+# 英文要整個字對上，避免 repair、Hepatica 這類字裡的 epa 被當成魚油
+_MONACOLIN = re.compile(r"(?<![a-z])monacolin(?:k)?(?![a-z])|莫納可林")
+_EPA = re.compile(r"(?<![a-z])epa(?![a-z])|二十碳五烯酸")
+_DHA = re.compile(r"(?<![a-z])dha(?![a-z])|二十二碳六烯酸")
 _HCL = re.compile(r"鹽酸|\bhcl\b|hydrochloride")
 
 
 def _omega_form(text: str, code: IngredientCode | None) -> str | None:
-    if "epa" in text or "二十碳五烯酸" in text:
+    if _EPA.search(text):
         return "epa"
-    if "dha" in text or "二十二碳六烯酸" in text:
+    if _DHA.search(text):
         return "dha"
     if _N3_TOTAL.search(text):
         return "n3_total"  # 標示寫 ω-3 脂肪酸總量（不是魚油總量）

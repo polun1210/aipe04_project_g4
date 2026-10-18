@@ -1,0 +1,121 @@
+{
+  "product_id": "0733769c-a35b-54e4-afac-90386609c0eb",
+  "product_name": "永信 HAC 檸檬酸鈣錠",
+  "source_images": [
+    {
+      "image_id": "p12-img01",
+      "quality_status": "accepted"
+    }
+  ],
+  "serving_info": {
+    "serving_size": 2.0,
+    "dose_unit": "tablet",
+    "source_image_id": "p12-img01"
+  },
+  "nutrients": [
+    {
+      "row_id": "r01",
+      "raw_name": "維生素D",
+      "label_section": "nutrition_table",
+      "source_image_id": "p12-img01",
+      "standard_code": "vitamin_d",
+      "scope_status": "in_scope",
+      "per_serving": 6.0,
+      "unit": "ug",
+      "percent_dv": 60.0,
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r02",
+      "raw_name": "鈣",
+      "label_section": "nutrition_table",
+      "source_image_id": "p12-img01",
+      "standard_code": "calcium",
+      "scope_status": "in_scope",
+      "per_serving": 300.0,
+      "unit": "mg",
+      "percent_dv": 25.0,
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r03",
+      "raw_name": "鎂",
+      "label_section": "nutrition_table",
+      "source_image_id": "p12-img01",
+      "standard_code": "magnesium",
+      "scope_status": "in_scope",
+      "per_serving": 150.0,
+      "unit": "mg",
+      "percent_dv": 38.0,
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r04",
+      "raw_name": "鋅",
+      "label_section": "nutrition_table",
+      "source_image_id": "p12-img01",
+      "standard_code": "zinc",
+      "scope_status": "in_scope",
+      "per_serving": 3.0,
+      "unit": "mg",
+      "percent_dv": 20.0,
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r05",
+      "raw_name": "銅",
+      "label_section": "nutrition_table",
+      "source_image_id": "p12-img01",
+      "scope_status": "out_of_scope",
+      "per_serving": 0.6,
+      "unit": "mg",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r06",
+      "raw_name": "錳",
+      "label_section": "nutrition_table",
+      "source_image_id": "p12-img01",
+      "scope_status": "out_of_scope",
+      "per_serving": 0.6,
+      "unit": "mg",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r07",
+      "raw_name": "大豆胜肽",
+      "label_section": "per_unit_note",
+      "source_image_id": "p12-img01",
+      "scope_status": "out_of_scope",
+      "per_serving": 40.0,
+      "unit": "mg",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r08",
+      "raw_name": "納豆發酵物(含維生素K2)",
+      "label_section": "per_unit_note",
+      "source_image_id": "p12-img01",
+      "scope_status": "out_of_scope",
+      "per_serving": 30.0,
+      "unit": "mg",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r09",
+      "raw_name": "菊苣根萃取物(含寡多醣)",
+      "label_section": "per_unit_note",
+      "source_image_id": "p12-img01",
+      "scope_status": "out_of_scope",
+      "per_serving": 20.0,
+      "unit": "mg",
+      "requires_user_input": false
+    }
+  ],
+  "extraction_meta": {
+    "ocr_version": "gold-annotation",
+    "rule_layer_version": "gold-annotation",
+    "synonym_table_version": "gold-annotation",
+    "extracted_at": "2026-10-05T10:09:29.003668Z"
+  }
+}

@@ -1,7 +1,7 @@
 """標示辨識模組（E）。對外只有兩個函式：check_quality（上傳時的品質檢查）與 extract（交接點 04_supplement_draft）。
 
 VLM 引擎（直接讀出結構，例如 OpenRouter 的 Gemini 3.8 Flash）經規則層（rules.py）整理成真實的辨識草稿；
-沒指定引擎、或引擎只有文字區塊（OCR）時，仍回傳 docs/schemas/examples/ 的固定內容（T01 假版本）。
+沒指定引擎時，仍回傳 docs/schemas/examples/ 的固定內容（T01 假版本）；引擎只有文字區塊（OCR）時回錯誤。
 品質檢查仍是假版本（每張都判為 accepted）。
 位置框座標系 ＝ 依 EXIF 方向轉正後的圖。
 """
@@ -55,8 +55,9 @@ def extract(
     所以草稿裡的品質結果與 check_quality 一定一致；只處理 quality_status = accepted 的圖。
 
     指定 VLM 引擎時：實際呼叫它，經規則層產出真實草稿，三個版本欄位記錄引擎、規則層與同義詞表的版本。
-    沒指定引擎、或引擎只回傳文字區塊（OCR，還沒有規則層）時：回傳範例草稿，product_id 與照片編號換成呼叫者給的；
-    規則層與同義詞表的版本欄位標為 stub，避免串接期間的修正紀錄被誤認為真實辨識結果。
+    引擎只回傳文字區塊（OCR，沒有規則層）時：回 ExtractionError，不回假草稿。
+    沒指定引擎時：回傳範例草稿，product_id 與照片編號換成呼叫者給的；
+    三個版本欄位都標為 stub，避免串接期間的修正紀錄被誤認為真實辨識結果。
     位置框是範例圖的座標，不對應真實照片。
     """
     by_id = {img.image_id: img for img in images}
@@ -67,12 +68,12 @@ def extract(
         raise ExtractionError("沒有通過品質檢查的照片")
     sources = quality
 
-    ocr_version = _STUB_VERSION
     if engine is not None:
         results = [_run_engine(engine, img) for img in accepted]
-        ocr_version = results[0].engine_version
-        if all(r.reading is not None for r in results):
-            return _vlm_draft(product_id, sources, results)
+        if any(r.reading is None for r in results):
+            # 只有文字區塊（OCR）、沒有結構化結果：不回範例草稿，免得假成分配上真的引擎版本
+            raise ExtractionError("辨識引擎沒有回傳結構化結果")
+        return _vlm_draft(product_id, sources, results)
 
     draft = json.loads(_EXAMPLE_DRAFT.read_text(encoding="utf-8"))
     first_id = accepted[0].image_id
@@ -82,7 +83,7 @@ def extract(
     for row in draft["nutrients"]:
         row["source_image_id"] = first_id
     draft["extraction_meta"] = {
-        "ocr_version": ocr_version,
+        "ocr_version": _STUB_VERSION,
         "rule_layer_version": _STUB_VERSION,
         "synonym_table_version": _STUB_VERSION,
         "extracted_at": datetime.now(timezone.utc).isoformat(),
