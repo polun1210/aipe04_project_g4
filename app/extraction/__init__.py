@@ -35,7 +35,7 @@ _STUB_VERSION = "stub-t01"
 
 
 def check_quality(images: list[ImageInput]) -> list[SourceImage]:
-    """POST /api/extractions 時同步呼叫。不呼叫任何付費 API。
+    """上傳照片時同步呼叫。不呼叫任何付費 API。
 
     假版本：每張都判為 accepted。
     """
