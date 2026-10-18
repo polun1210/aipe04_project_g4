@@ -277,27 +277,40 @@ def test_每一份量沒有容錯時照常填入(tmp_path):
     assert (info.serving_size, info.dose_unit) == (2, DoseUnit.TABLET)
 
 
-def test_多張照片時優先採用沒有容錯的每一份量(tmp_path):
-    def result(image_id, serving):
-        return EngineResult(
+def _multi(tmp_path, servings: list[ServingReading | None]) -> ExtractionDraft:
+    ids = [f"a-img{i + 1:02d}" for i in range(len(servings))]
+    for image_id, serving in zip(ids, servings):
+        result = EngineResult(
             image_id=image_id,
             engine_version="openrouter/test/test/prompt-g1",
             blocks=[],
             reading=LabelReading(serving=serving, rows=[_row("鈣", 200, "毫克")]),
         )
-
-    shaky = ServingReading(raw_text="2±1 錠", serving_size=2, dose_unit_raw="錠", needs_review=True)
-    clear = ServingReading(raw_text="每一份量 3 錠", serving_size=3, dose_unit_raw="錠")
-    for image_id, serving in (("a-img01", shaky), ("a-img02", clear)):
-        (tmp_path / f"{image_id}.json").write_text(result(image_id, serving).model_dump_json(), encoding="utf-8")
-    ids = ["a-img01", "a-img02"]
-    draft = extract(
+        (tmp_path / f"{image_id}.json").write_text(result.model_dump_json(), encoding="utf-8")
+    return extract(
         PRODUCT,
         [ImageInput(image_id=i, content=b"replay") for i in ids],
         [SourceImage(image_id=i, quality_status=QualityStatus.ACCEPTED) for i in ids],
         engine=ReplayEngine(tmp_path),
     )
+
+
+def test_多張照片時優先採用沒有容錯的每一份量(tmp_path):
+    shaky = ServingReading(raw_text="2±1 錠", serving_size=2, dose_unit_raw="錠", needs_review=True)
+    clear = ServingReading(raw_text="每一份量 3 錠", serving_size=3, dose_unit_raw="錠")
+    draft = _multi(tmp_path, [shaky, clear])
     assert (draft.serving_info.serving_size, draft.serving_info.source_image_id) == (3, "a-img02")
+
+
+def test_每一份量都容錯過時保留讀到的那張照片讓使用者定位(tmp_path):
+    shaky = ServingReading(raw_text="2±1 錠", serving_size=2, dose_unit_raw="錠", needs_review=True)
+    draft = _multi(tmp_path, [None, shaky])
+    assert (draft.serving_info.serving_size, draft.serving_info.source_image_id) == (None, "a-img02")
+
+
+def test_名稱中間的片段不算命中(tmp_path):
+    row = _crafted(tmp_path, [_row("高效 鈣 配方", 200, "毫克")]).nutrients[0]
+    assert (row.standard_code, row.scope_status) == (None, ScopeStatus.UNRESOLVED)
 
 
 # ─── 轉接器 → extract() 一路接起來（假的連線，不需要金鑰）────────────

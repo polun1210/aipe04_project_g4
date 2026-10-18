@@ -100,7 +100,11 @@ def _vlm_draft(product_id: UUID, sources: list[SourceImage], results: list[Engin
             for image_id, rd in readings
             if rd.serving and rd.serving.serving_size and not rd.serving.needs_review
         ),
-        rules.serving_info(readings[0][1].serving, readings[0][0]),
+        # 都不可信時取第一個有讀到每一份量的（數字會留空），保留它的照片與位置框讓使用者定位
+        next(
+            (rules.serving_info(rd.serving, image_id) for image_id, rd in readings if rd.serving),
+            rules.serving_info(None, readings[0][0]),
+        ),
     )
     intake = next((rules.suggested_intake(rd.suggested_intake_raw) for _, rd in readings if rd.suggested_intake_raw), None)
     return ExtractionDraft(

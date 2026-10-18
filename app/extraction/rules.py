@@ -136,11 +136,12 @@ def load_names(catalog_dir: Path = CATALOG_DIR) -> Names:
 
 
 def _candidates(raw_name: str) -> list[str]:
-    """完全比對的候選：去括號後整串、依空白切開的每一段、第一個空白後的英文部分。"""
+    """完全比對的候選：去括號後整串、第一段、最後一段、第一個空白後的部分（中英並列）。
+    不拿中間的片段比對，免得「高效 鈣 配方」這類文字只因含「鈣」就被判成鈣。"""
     base = _strip_parens(_norm(raw_name))
     parts = [p for p in re.split(r"\s+", base) if p]
     tail = base.split(None, 1)[1] if len(parts) > 1 else ""
-    return [_key(c) for c in [base, *parts, tail] if c]
+    return [_key(c) for c in [base, parts[0] if parts else "", parts[-1] if parts else "", tail] if c]
 
 
 @dataclass(frozen=True)
