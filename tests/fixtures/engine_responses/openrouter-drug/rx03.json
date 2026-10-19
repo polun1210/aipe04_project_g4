@@ -1,0 +1,74 @@
+{
+ "image_id": "rx03",
+ "engine": "openrouter-drug",
+ "request": {
+  "model": "google/gemini-3.8-flash",
+  "provider": "google-ai-studio",
+  "prompt_version": "d1",
+  "temperature": 0.0
+ },
+ "response": {
+  "id": "gen-1792382795-T1AVyk1p1iEzuQF6MWoJ",
+  "object": "chat.completion",
+  "created": 1792382795,
+  "model": "google/gemini-3.8-flash",
+  "provider": "Google AI Studio",
+  "system_fingerprint": null,
+  "service_tier": "default",
+  "choices": [
+   {
+    "index": 0,
+    "logprobs": null,
+    "finish_reason": "stop",
+    "native_finish_reason": "STOP",
+    "message": {
+     "role": "assistant",
+     "content": "{\"items\":[{\"raw_name\":\"ATOTIN 20mg F.C. TAB【學名】＂健喬信元＂\",\"brand_name\":\"ATOTIN\",\"generic_names\":[\"ATORVASTATIN Ca\"],\"box_2d\":[34,9,63,904]}]}",
+     "refusal": null,
+     "reasoning": "**Identifying the Medication**\n\nI've homed in on the specifics: ATOTIN 20mg F.C. TAB, which is \"健喬信元\". Its active ingredient is ATORVASTATIN Ca 20mg F.C. TAB, also known as 立脂定膜衣錠 20MG. I'm taking the whole list into account.\n\n\n",
+     "reasoning_details": [
+      {
+       "type": "reasoning.text",
+       "text": "**Identifying the Medication**\n\nI've homed in on the specifics: ATOTIN 20mg F.C. TAB, which is \"健喬信元\". Its active ingredient is ATORVASTATIN Ca 20mg F.C. TAB, also known as 立脂定膜衣錠 20MG. I'm taking the whole list into account.\n\n\n",
+       "format": "google-gemini-v1",
+       "index": 0
+      },
+      {
+       "type": "reasoning.encrypted",
+       "data": "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",
+       "format": "google-gemini-v1",
+       "index": 1
+      }
+     ]
+    }
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 1367,
+   "completion_tokens": 573,
+   "total_tokens": 1940,
+   "cost": 0.003174,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.003174,
+    "upstream_inference_prompt_cost": 0.00102525,
+    "upstream_inference_completions_cost": 0.00214875
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 507,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ },
+ "image_width": 1818,
+ "image_height": 2752,
+ "latency_ms": 7492.330100008985,
+ "recorded_at": "2026-10-19T04:06:43.570044Z"
+}

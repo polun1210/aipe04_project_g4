@@ -1,0 +1,74 @@
+{
+ "image_id": "rx10",
+ "engine": "openrouter-drug",
+ "request": {
+  "model": "google/gemini-3.8-flash",
+  "provider": "google-ai-studio",
+  "prompt_version": "d1",
+  "temperature": 0.0
+ },
+ "response": {
+  "id": "gen-1792382863-J1FFf1AGRmCYqaVNlvVZ",
+  "object": "chat.completion",
+  "created": 1792382863,
+  "model": "google/gemini-3.8-flash",
+  "provider": "Google AI Studio",
+  "system_fingerprint": null,
+  "service_tier": "default",
+  "choices": [
+   {
+    "index": 0,
+    "logprobs": null,
+    "finish_reason": "stop",
+    "native_finish_reason": "STOP",
+    "message": {
+     "role": "assistant",
+     "content": "{\"items\":[{\"raw_name\":\"ALPHAGAN P OPH SOLN 0.15% 5 ML\",\"brand_name\":\"ALPHAGAN P\",\"generic_names\":[],\"box_2d\":[313,215,331,498]},{\"raw_name\":\"MIKELAN LA OPH SOLN 2% 2.5 ML\",\"brand_name\":\"MIKELAN LA\",\"generic_names\":[],\"box_2d\":[331,214,349,490]},{\"raw_name\":\"XALATAN OPH SOLN 0.005% 2.5 ML\",\"brand_name\":\"XALATAN\",\"generic_names\":[],\"box_2d\":[348,214,367,498]}]}",
+     "refusal": null,
+     "reasoning": "**Analyzing Prescription Data**\n\nI'm currently focused on extracting drug information from prescription data. My initial goal is to accurately identify drug details from the prescription and format them into a JSON schema. The image parsing is underway, starting with the prescription details section, particularly the medication names. I'm prioritizing the `BC236` entry in the central-left medication name column.\n\n\n**Extracting Drug Details**\n\nI've pinpointed more drug entries, like \"ALPHAGAN P\" and \"MIKELAN LA.\" I am extracting relevant information: the raw name, brand name, and associated bounding box. The generic names are currently empty. I'm focusing on the structural consistency of the data and its relevance to downstream processing. I'm moving toward a more structured JSON output.\n\n\n",
+     "reasoning_details": [
+      {
+       "type": "reasoning.text",
+       "text": "**Analyzing Prescription Data**\n\nI'm currently focused on extracting drug information from prescription data. My initial goal is to accurately identify drug details from the prescription and format them into a JSON schema. The image parsing is underway, starting with the prescription details section, particularly the medication names. I'm prioritizing the `BC236` entry in the central-left medication name column.\n\n\n**Extracting Drug Details**\n\nI've pinpointed more drug entries, like \"ALPHAGAN P\" and \"MIKELAN LA.\" I am extracting relevant information: the raw name, brand name, and associated bounding box. The generic names are currently empty. I'm focusing on the structural consistency of the data and its relevance to downstream processing. I'm moving toward a more structured JSON output.\n\n\n",
+       "format": "google-gemini-v1",
+       "index": 0
+      },
+      {
+       "type": "reasoning.encrypted",
+       "data": "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",
+       "format": "google-gemini-v1",
+       "index": 1
+      }
+     ]
+    }
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 1349,
+   "completion_tokens": 1006,
+   "total_tokens": 2355,
+   "cost": 0.00478425,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00478425,
+    "upstream_inference_prompt_cost": 0.00101175,
+    "upstream_inference_completions_cost": 0.0037725
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 825,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ },
+ "image_width": 960,
+ "image_height": 960,
+ "latency_ms": 7941.091599990614,
+ "recorded_at": "2026-10-19T04:07:51.293158Z"
+}

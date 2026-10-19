@@ -27,7 +27,7 @@ from datetime import datetime, timezone
 from time import perf_counter
 from typing import Any
 
-from pydantic import ValidationError
+from pydantic import BaseModel, ValidationError
 
 from app.extraction.engines.base import EngineRecording, EngineResult
 from app.extraction.engines.gemini import PROMPT, _blocks, _GeminiLabel, _to_reading
@@ -82,12 +82,18 @@ def _strict(schema: Any, defs: dict[str, Any]) -> Any:
     return out
 
 
-def _response_schema() -> dict[str, Any]:
-    schema = _GeminiLabel.model_json_schema()
+def _response_schema(model: type[BaseModel] = _GeminiLabel) -> dict[str, Any]:
+    schema = model.model_json_schema()
     return _strict(schema, schema.get("$defs", {}))
 
 
 class OpenRouterEngine:
+    # 子類別換掉這四項就能讀別種文件（例如藥包），呼叫、備援、逾時、縮圖都共用
+    engine_name = ENGINE_NAME
+    prompt = PROMPT
+    prompt_version = PROMPT_VERSION
+    output_model: type[BaseModel] = _GeminiLabel
+
     def __init__(self, transport: Transport, primary: Route, fallback: Route | None = None) -> None:
         self._send = transport
         self.primary = primary
@@ -115,14 +121,14 @@ class OpenRouterEngine:
             "provider": {"only": [route.provider], "allow_fallbacks": False},
             "response_format": {
                 "type": "json_schema",
-                "json_schema": {"name": "label_reading", "strict": True, "schema": _response_schema()},
+                "json_schema": {"name": "reading", "strict": True, "schema": _response_schema(self.output_model)},
             },
             "messages": [
                 {
                     "role": "user",
                     "content": [
                         {"type": "image_url", "image_url": {"url": data_url}},
-                        {"type": "text", "text": PROMPT},
+                        {"type": "text", "text": self.prompt},
                     ],
                 }
             ],
@@ -150,14 +156,14 @@ class OpenRouterEngine:
         request: dict[str, Any] = {
             "model": route.model,
             "provider": route.provider,
-            "prompt_version": PROMPT_VERSION,
+            "prompt_version": self.prompt_version,
             "temperature": TEMPERATURE,
         }
         if primary_error is not None:
             request["fallback_from"] = {"model": self.primary.model, "error": primary_error}
         return EngineRecording(
             image_id=image.image_id,
-            engine=ENGINE_NAME,
+            engine=self.engine_name,
             request=request,
             response=response,
             image_width=upright.width,

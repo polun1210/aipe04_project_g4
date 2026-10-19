@@ -1,0 +1,74 @@
+{
+ "image_id": "rx21",
+ "engine": "openrouter-drug",
+ "request": {
+  "model": "google/gemini-3.8-flash",
+  "provider": "google-ai-studio",
+  "prompt_version": "d1",
+  "temperature": 0.0
+ },
+ "response": {
+  "id": "gen-1792382945-Bt2099qnZNk7Wob9QC79",
+  "object": "chat.completion",
+  "created": 1792382945,
+  "model": "google/gemini-3.8-flash",
+  "provider": "Google AI Studio",
+  "system_fingerprint": null,
+  "service_tier": "default",
+  "choices": [
+   {
+    "index": 0,
+    "logprobs": null,
+    "finish_reason": "stop",
+    "native_finish_reason": "STOP",
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"items\": [\n    {\n      \"raw_name\": \"Sennosides 12mg (Through 12mg) 便通樂\",\n      \"brand_name\": \"便通樂\",\n      \"generic_names\": [\n        \"Sennosides\"\n      ],\n      \"box_2d\": [\n        296,\n        62,\n        345,\n        319\n      ]\n    }\n  ]\n}",
+     "refusal": null,
+     "reasoning": "**Extracting Pharmacy Data**\n\nI'm currently focused on extracting drug information from Taiwanese pharmacy labels. My goal is to parse raw names, brand names, generic names, and the box's 2D information, outputting the data in JSON format. I am now concentrating on accurately locating specific medications and their respective contents.\n\n\n**Analyzing Drug Presentation**\n\nI've been analyzing raw name presentations, specifically how drug names are formatted on labels. I'm noting the common patterns, like \"Sennosides 12mg\" followed by \"(Through 12mg) 便通樂,\" sometimes on separate lines. I'm considering different approaches for extracting information like generic names (\"Sennosides\"), and the brand name (\"Through\" or \"便通樂\"), considering the product's English and Chinese names.\n\n\n",
+     "reasoning_details": [
+      {
+       "type": "reasoning.text",
+       "text": "**Extracting Pharmacy Data**\n\nI'm currently focused on extracting drug information from Taiwanese pharmacy labels. My goal is to parse raw names, brand names, generic names, and the box's 2D information, outputting the data in JSON format. I am now concentrating on accurately locating specific medications and their respective contents.\n\n\n**Analyzing Drug Presentation**\n\nI've been analyzing raw name presentations, specifically how drug names are formatted on labels. I'm noting the common patterns, like \"Sennosides 12mg\" followed by \"(Through 12mg) 便通樂,\" sometimes on separate lines. I'm considering different approaches for extracting information like generic names (\"Sennosides\"), and the brand name (\"Through\" or \"便通樂\"), considering the product's English and Chinese names.\n\n\n",
+       "format": "google-gemini-v1",
+       "index": 0
+      },
+      {
+       "type": "reasoning.encrypted",
+       "data": "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",
+       "format": "google-gemini-v1",
+       "index": 1
+      }
+     ]
+    }
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 1333,
+   "completion_tokens": 945,
+   "total_tokens": 2278,
+   "cost": 0.0045435,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.0045435,
+    "upstream_inference_prompt_cost": 0.00099975,
+    "upstream_inference_completions_cost": 0.00354375
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 835,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ },
+ "image_width": 640,
+ "image_height": 812,
+ "latency_ms": 8802.310099999886,
+ "recorded_at": "2026-10-19T04:09:14.667642Z"
+}

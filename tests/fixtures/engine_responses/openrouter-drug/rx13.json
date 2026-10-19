@@ -1,0 +1,74 @@
+{
+ "image_id": "rx13",
+ "engine": "openrouter-drug",
+ "request": {
+  "model": "google/gemini-3.8-flash",
+  "provider": "google-ai-studio",
+  "prompt_version": "d1",
+  "temperature": 0.0
+ },
+ "response": {
+  "id": "gen-1792382882-6iuetR1e56muC9zI54Yb",
+  "object": "chat.completion",
+  "created": 1792382882,
+  "model": "google/gemini-3.8-flash",
+  "provider": "Google AI Studio",
+  "system_fingerprint": null,
+  "service_tier": "default",
+  "choices": [
+   {
+    "index": 0,
+    "logprobs": null,
+    "finish_reason": "stop",
+    "native_finish_reason": "STOP",
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"items\": [\n    {\n      \"raw_name\": \"Aspirin Protect 100mg Tab#\",\n      \"brand_name\": \"Aspirin Protect\",\n      \"generic_names\": [\n        \"ASPIRIN\",\n        \"ACETYLSALICYLIC ACID\"\n      ],\n      \"box_2d\": [\n        553,\n        244,\n        596,\n        730\n      ]\n    }\n  ]\n}",
+     "refusal": null,
+     "reasoning": "**Identifying the Medication**\n\nI've identified the medication in the photograph. It's Aspirin Protect 100mg Tab#. The generic name is ASPIRIN (ACETYLSALICYLIC ACID), and the Chinese name is 阿斯匹林(白色圓凸形)腸溶膜衣錠. I've also noted the raw name as \"Aspirin Protect 1\".\n\n\n",
+     "reasoning_details": [
+      {
+       "type": "reasoning.text",
+       "text": "**Identifying the Medication**\n\nI've identified the medication in the photograph. It's Aspirin Protect 100mg Tab#. The generic name is ASPIRIN (ACETYLSALICYLIC ACID), and the Chinese name is 阿斯匹林(白色圓凸形)腸溶膜衣錠. I've also noted the raw name as \"Aspirin Protect 1\".\n\n\n",
+       "format": "google-gemini-v1",
+       "index": 0
+      },
+      {
+       "type": "reasoning.encrypted",
+       "data": "Et4ICtsIAWkUfRM7C4Ukz5HOIoZfChruLJgacJVP8TR5dhPfJVOcOt7unyp3QZFVu/XAJC7bmCngyWkojl9v5dLN/ydKNdpNs5FvQ9tBxnRs301mGuOK/oOmfntYzpRW60NY1sKRS0aFTsqR/ARgYhLt9UvHqrH/uLNlssu7rZfDrqmFkckb7VRABPIbQChCKxJX2rE0xw4Zy+XngY1ujiLUNCwarp03g4DTh1xLRJfGu1B6qxBQB+7+FKpxpnwmSsFFv9UG6wb4d+EUoIs2kN1w+RWVariIqO1T3djeJmJHp5fVaVR8WIu2w96AR4N8FN4LnUdLu4J6UOkw2zUe+mmdCOE4dHf7BMUKDgX4IJM3MyfnjLsU2r8XKPGcNGsjiMDt4/paTH5TOoHX+5nHSfqC2+7zJPiM8EOceVT5yqkKUJUAajgq82bSOAeU3fNbbhoREUbPwIGvFdxiWjd7kJiBUocT2HlrMGcVfPjeFkAlSmWcTqqCWjx5VvbJCW5u5yG0XTwFvnZu9W26/Zr6gm0bNK7jjBezm8J+wxfB+0hykrXJNRGS9x4dkC5APXasYGVelUJqSbiCDF3zTWLmmXUJwcKZsXyoMAs88k967CPmV+bKCoPcP5DxXMmD3R4QMRNJ+XqUL8BrvWfVRErrb5t6MxB1XwxGs9uG89yxazkpjH3uJ1FoC2RW9YkT1AcVGQ0QAgGYOBlpY1FelWFYYk67qPkiIjAZ5m65zIPRkmSYFFtR7MTlTT9oeTKeuI2KSUi0ZK0HeOk9wlOmSGocysOHLCbO9g/NJSzL5FtFnxHP3nKtyHNpEDRpar8LQ4mTCQrRGzTpTuv7NodEL/cgTrT5mtI6RnDjYKVAgxrQQ7I+TZiVQZNSr7X6pclobvc78AEmcLvYslMjD2NLFrJ8EGQQF8keQKkqzcvWM6+DwROPynnxlcUyfHZMS21nlWLHCFYccq6BwI/q4qBq9V+g9qPLxj8+GRXCC6FIUld+TIw9uTK1XC9hW9dmSGSFXhXKYG0TQJtIH3JG6KDQOOXjJUocbzK6v8IETunMCPWxCSmw2xyBwNFFmkuq+emYTc05zv4cx3NLr8R+fb1G9rGPD+NKIAuNauTmL0GPTfGIp1V2pE7f00aaRVKTrBc/NHR6A7wDQREpw5u/BCoBTmHIq7Ur1iSv2ea2x29IQWJsu2l5mbs5HcaWm+eGbtsf9XKsuTzy9FNOuB691rwmkuIhM7W2eK3qq1l20BRW3Ouhfl22Sk3FQeJyaUQZKfnISgknZTdA5oV8WMDhSmcyqdKIzaRD1uHNx7qSGT8yRP7Hdgu33IIxSqK00ADD996W3rlAPmLTOZeHL2KSSQZ498CoOJzcWY2HHPmJ6LkTTQ01dsjfT8IP0y/B6tAXacPidcT1WzEdDNygZpzvy5u1zYxM+WB9KdMAndc+tDWLGdQKG2sFUC1g/HdohQXkfApfj8z+oWA+bkBPjP9pewtTeOdAfxo=",
+       "format": "google-gemini-v1",
+       "index": 1
+      }
+     ]
+    }
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 1345,
+   "completion_tokens": 436,
+   "total_tokens": 1781,
+   "cost": 0.00264375,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00264375,
+    "upstream_inference_prompt_cost": 0.00100875,
+    "upstream_inference_completions_cost": 0.001635
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 320,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ },
+ "image_width": 483,
+ "image_height": 551,
+ "latency_ms": 5999.916100001428,
+ "recorded_at": "2026-10-19T04:08:08.747701Z"
+}

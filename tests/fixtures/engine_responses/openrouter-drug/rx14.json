@@ -1,0 +1,74 @@
+{
+ "image_id": "rx14",
+ "engine": "openrouter-drug",
+ "request": {
+  "model": "google/gemini-3.8-flash",
+  "provider": "google-ai-studio",
+  "prompt_version": "d1",
+  "temperature": 0.0
+ },
+ "response": {
+  "id": "gen-1792382888-adq9Rh5Pq77QVnQyqRRv",
+  "object": "chat.completion",
+  "created": 1792382888,
+  "model": "google/gemini-3.8-flash",
+  "provider": "Google AI Studio",
+  "system_fingerprint": null,
+  "service_tier": "default",
+  "choices": [
+   {
+    "index": 0,
+    "logprobs": null,
+    "finish_reason": "stop",
+    "native_finish_reason": "STOP",
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"items\": [\n    {\n      \"raw_name\": \"Norvasc【脈優】 脈優錠\",\n      \"brand_name\": \"Norvasc 脈優\",\n      \"generic_names\": [\n        \"Amlodipine\"\n      ],\n      \"box_2d\": [\n        338,\n        191,\n        394,\n        438\n      ]\n    }\n  ]\n}",
+     "refusal": null,
+     "reasoning": "**Defining the Focus**\n\nI'm currently focused on defining the core task: extracting medication details from an image. I've pinpointed the target data: `raw_name`, `brand_name`, `generic_names`, and `box_2d`. My approach will be strictly based on the image's text, with no need for patient information.\n\n\n**Analyzing Image Data**\n\nI've moved on to analyzing the image data. I'm extracting key information like the hospital name, 学名含量 (generic content), and 商品名 (brand name). The goal is determining the `raw_name`. I'm comparing how different prescription layouts might affect the best way to extract that data. I'm focusing on \"Norvasc【脈優】脈優錠\" and \"Amlodipine 5mg/tab Norvasc【脈優】\", considering Taiwanese prescription practices.\n\n\n**Examining Text Elements**\n\nI'm now zeroing in on the text within the bounding boxes. I've confirmed that \"Norvasc【脈優】脈優錠\" and \"Amlodipine\" are key. I'm focusing on defining `raw_name` as \"Norvasc【脈優】 脈優錠\" and the `brand_name` as \"Norvasc\" (or \"Norvasc【脈優】\"). My `generic_names` list contains \"Amlodipine\". I need to determine the ideal `raw_name` extraction strategy.\n\n\n**Refining Data Structures**\n\nI'm now refining the data structures. I've confirmed `raw_name` as \"Norvasc【脈優】 脈優錠\" and, after checking the instructions, I've updated `brand_name` to just \"Norvasc【脈優】\". `generic_names` remains `[\"Amlodipine\"]`. I'm using `box_2d` to extract the drug name, specifically [339, 193, 394, 437], or the label too [339, 82, 394, 437].\n\n\n**Revising Drug Identifiers**\n\nI'm revisiting the drug identifiers, specifically the `raw_name`. I'm considering multiple formats, like \"Norvasc【脈優】 脈優錠\" versus \"Norvasc【脈優】\". I'm also grappling with whether to include \"Amlodipine 5mg/tab\" in the raw name, given the image layout. The whole block might be included. I'm focusing on \"商品名\" and the bounding box around the text. The examples, \"立普妥\", \"Lipitor\", \"HYZAAR\", are making me rethink some assumptions.\n\n\n",
+     "reasoning_details": [
+      {
+       "type": "reasoning.text",
+       "text": "**Defining the Focus**\n\nI'm currently focused on defining the core task: extracting medication details from an image. I've pinpointed the target data: `raw_name`, `brand_name`, `generic_names`, and `box_2d`. My approach will be strictly based on the image's text, with no need for patient information.\n\n\n**Analyzing Image Data**\n\nI've moved on to analyzing the image data. I'm extracting key information like the hospital name, 学名含量 (generic content), and 商品名 (brand name). The goal is determining the `raw_name`. I'm comparing how different prescription layouts might affect the best way to extract that data. I'm focusing on \"Norvasc【脈優】脈優錠\" and \"Amlodipine 5mg/tab Norvasc【脈優】\", considering Taiwanese prescription practices.\n\n\n**Examining Text Elements**\n\nI'm now zeroing in on the text within the bounding boxes. I've confirmed that \"Norvasc【脈優】脈優錠\" and \"Amlodipine\" are key. I'm focusing on defining `raw_name` as \"Norvasc【脈優】 脈優錠\" and the `brand_name` as \"Norvasc\" (or \"Norvasc【脈優】\"). My `generic_names` list contains \"Amlodipine\". I need to determine the ideal `raw_name` extraction strategy.\n\n\n**Refining Data Structures**\n\nI'm now refining the data structures. I've confirmed `raw_name` as \"Norvasc【脈優】 脈優錠\" and, after checking the instructions, I've updated `brand_name` to just \"Norvasc【脈優】\". `generic_names` remains `[\"Amlodipine\"]`. I'm using `box_2d` to extract the drug name, specifically [339, 193, 394, 437], or the label too [339, 82, 394, 437].\n\n\n**Revising Drug Identifiers**\n\nI'm revisiting the drug identifiers, specifically the `raw_name`. I'm considering multiple formats, like \"Norvasc【脈優】 脈優錠\" versus \"Norvasc【脈優】\". I'm also grappling with whether to include \"Amlodipine 5mg/tab\" in the raw name, given the image layout. The whole block might be included. I'm focusing on \"商品名\" and the bounding box around the text. The examples, \"立普妥\", \"Lipitor\", \"HYZAAR\", are making me rethink some assumptions.\n\n\n",
+       "format": "google-gemini-v1",
+       "index": 0
+      },
+      {
+       "type": "reasoning.encrypted",
+       "data": "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",
+       "format": "google-gemini-v1",
+       "index": 1
+      }
+     ]
+    }
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 1370,
+   "completion_tokens": 1785,
+   "total_tokens": 3155,
+   "cost": 0.00772125,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00772125,
+    "upstream_inference_prompt_cost": 0.0010275,
+    "upstream_inference_completions_cost": 0.00669375
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 1678,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ },
+ "image_width": 800,
+ "image_height": 994,
+ "latency_ms": 13168.426999996882,
+ "recorded_at": "2026-10-19T04:08:21.922136Z"
+}

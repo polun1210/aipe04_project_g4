@@ -1,0 +1,74 @@
+{
+ "image_id": "rx06",
+ "engine": "openrouter-drug",
+ "request": {
+  "model": "google/gemini-3.8-flash",
+  "provider": "google-ai-studio",
+  "prompt_version": "d1",
+  "temperature": 0.0
+ },
+ "response": {
+  "id": "gen-1792382816-lYrvFWjbAMArLB4wdmEb",
+  "object": "chat.completion",
+  "created": 1792382816,
+  "model": "google/gemini-3.8-flash",
+  "provider": "Google AI Studio",
+  "system_fingerprint": null,
+  "service_tier": "default",
+  "choices": [
+   {
+    "index": 0,
+    "logprobs": null,
+    "finish_reason": "stop",
+    "native_finish_reason": "STOP",
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"items\": [\n    {\n      \"raw_name\": \"LOSARTAN 【50MG】 F. C. TAB. “中化”【學名】\",\n      \"brand_name\": \"那寶\",\n      \"generic_names\": [\n        \"LOSARTAN K\"\n      ],\n      \"box_2d\": [47, 31, 71, 934]\n    }\n  ]\n}",
+     "refusal": null,
+     "reasoning": "**Analyzing User Goals**\n\nI'm currently focused on parsing image-based drug information. My primary objective is to accurately extract drug names from images and represent the data in JSON format, adhering to a pre-defined schema. I'm starting by analyzing the provided sample string which contains the drug name and some other key data. I'm working to understand how to reliably identify and isolate the relevant information.\n\n\n**Interpreting Drug Data**\n\nI'm now diving deeper into how to handle drug names, especially with examples in different languages. I'm noting the distinction between the raw name as it appears in the image, and the more structured representations of the drug's name, its brand name (like \"那寶\"), and the active ingredient (LOSARTAN). It's crucial to identify the main product name correctly, even when the brand is a different language. I will make a decision tree for extracting data.\n\n\n",
+     "reasoning_details": [
+      {
+       "type": "reasoning.text",
+       "text": "**Analyzing User Goals**\n\nI'm currently focused on parsing image-based drug information. My primary objective is to accurately extract drug names from images and represent the data in JSON format, adhering to a pre-defined schema. I'm starting by analyzing the provided sample string which contains the drug name and some other key data. I'm working to understand how to reliably identify and isolate the relevant information.\n\n\n**Interpreting Drug Data**\n\nI'm now diving deeper into how to handle drug names, especially with examples in different languages. I'm noting the distinction between the raw name as it appears in the image, and the more structured representations of the drug's name, its brand name (like \"那寶\"), and the active ingredient (LOSARTAN). It's crucial to identify the main product name correctly, even when the brand is a different language. I will make a decision tree for extracting data.\n\n\n",
+       "format": "google-gemini-v1",
+       "index": 0
+      },
+      {
+       "type": "reasoning.encrypted",
+       "data": "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",
+       "format": "google-gemini-v1",
+       "index": 1
+      }
+     ]
+    }
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 1352,
+   "completion_tokens": 815,
+   "total_tokens": 2167,
+   "cost": 0.00407025,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00407025,
+    "upstream_inference_prompt_cost": 0.001014,
+    "upstream_inference_completions_cost": 0.00305625
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 711,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ },
+ "image_width": 427,
+ "image_height": 678,
+ "latency_ms": 8303.267999988748,
+ "recorded_at": "2026-10-19T04:07:05.009805Z"
+}

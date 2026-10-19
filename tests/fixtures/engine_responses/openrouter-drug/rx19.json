@@ -1,0 +1,74 @@
+{
+ "image_id": "rx19",
+ "engine": "openrouter-drug",
+ "request": {
+  "model": "google/gemini-3.8-flash",
+  "provider": "google-ai-studio",
+  "prompt_version": "d1",
+  "temperature": 0.0
+ },
+ "response": {
+  "id": "gen-1792382930-ieN0G8kECWXg5iWuyLVP",
+  "object": "chat.completion",
+  "created": 1792382930,
+  "model": "google/gemini-3.8-flash",
+  "provider": "Google AI Studio",
+  "system_fingerprint": null,
+  "service_tier": "default",
+  "choices": [
+   {
+    "index": 0,
+    "logprobs": null,
+    "finish_reason": "stop",
+    "native_finish_reason": "STOP",
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"items\": [\n    {\n      \"raw_name\": \"1.Glucophage 警500mg/Tab <Metformin>\",\n      \"brand_name\": \"Glucophage\",\n      \"generic_names\": [\n        \"Metformin\"\n      ],\n      \"box_2d\": [433, 202, 447, 495]\n    }\n  ]\n}",
+     "refusal": null,
+     "reasoning": "**Identifying Drug Information**\n\nI'm currently focused on extracting drug information, specifically raw_name, brand_name, generic_names, and box_2d from the image. I've located the section labeled \"Drug Name / Clinical use / Instructions,\" which seems promising. I'm now diving deeper into this section to pinpoint these key data points. My approach is to meticulously analyze the text following this label.\n\n\n",
+     "reasoning_details": [
+      {
+       "type": "reasoning.text",
+       "text": "**Identifying Drug Information**\n\nI'm currently focused on extracting drug information, specifically raw_name, brand_name, generic_names, and box_2d from the image. I've located the section labeled \"Drug Name / Clinical use / Instructions,\" which seems promising. I'm now diving deeper into this section to pinpoint these key data points. My approach is to meticulously analyze the text following this label.\n\n\n",
+       "format": "google-gemini-v1",
+       "index": 0
+      },
+      {
+       "type": "reasoning.encrypted",
+       "data": "ErALCq0LAWkUfRPStKK2WFPskmkvDWRv47+v0NqfJIxL512crlSoApATJl8mCd0LW14pT6grMCR9d04D0s3q2odkpgC0cdNSuGPJqYEdzeA+K7bzfTh6MFSOxv5VPKX/TBPdXZ2bH31vTXo/xcLtOUI9m+NAiOiqppFpuQkRzt0cYZl1i2lH/AoHgUbSYH0Bm4ZyBkPKwQ9pfgocUiCU2xYj5+/Pg/YoX0JOOvbR/g1iuv0hcHwvT3IwrFDqEP7nuKcZ9DPo77g2qYdxbKVHRpX6SnY8mG+U1jySIZBNeT47Wes0mOzHTFF1sarnQwD/cc++rW2UhKWGY/gtwiXKSU09JDOe5D2EElY7EbgbQrVWzNKjR7+lk0HQZQgdsqcEQGUMM9z5EO/GqeAdNeH7wGg+WYwt2yriQx6pu/WL0YMOXa3xzaanfn3BcnbNUdmSuQUx6aLF+y49fWO7r+U0NRC4J9nq+RfEO0I7OdVG6WnAA/wxCZUrDKN/7ainh+jN249yndAdEE7QkMvgJIaQxZAOYtrtAsrUi2Fmye8Q0pOC5BARQc9Un4FNsKhpp+GJEd3jPaiBq7wah+H0T+UbiaOS1A9imEb8623wJXGtpyVHn2ZAHAvhyCdChVkhtSStZFCtj/s9DGcyWSNBncwEmmhz/V4WKIMTN/RxEwoeebgbI9q+neAOcmqthdf7god37gXWmvEaZzQ2S6O/joTNyCD3hz6Y5+gmLI3qltySqtW5SZbhgSepDOIxY1vp3q1vyL1COykPF5kP2k1iojaM4Ki/Z1qT1Imp4oBlvjMA9DxpSAKXWtbiZOr7MJzRGDf7mgg7QWlgFDqZ4lYmtvPa0bSE7aONd5SBKYWZNf8hwEafaD8eIXFXywll5hCqU1k5uLHBGeWCGCM4KI9Lr+q5AnKTGZmmYjxmrqm0k+OwrUopKKlboPWxmsyUIQjQOlPf3ggKjdUfPxzkpfmgj6B4e82TIs8XdJ/f5gqgNsFLKfgX8/ki6kSmqTR8HOZ3YbGtL9smi8WXxf27B+ah3XBCyjR8XE9MR7Txm3Gbi/xDUOriCECT8VVu9BjhnAc1yCSR8O7IrLAMAZraBdHnKeSsD/I/ZUqHPsxEkdAij0aeII/GXO9ZTuJttwz15OlXiB3O2pIcI7WcLtWFErm3ytMghrB+AGwKzOVGxoO5fbHoG1FgRaRv8kSK0vcj0kcrjDuAFbw1OhUrCxdjRbi4zHcT2Rm8nyAz2LYa1qQTS+kQVgGdQMGTlOD9t/ebEUMxXKdDBrSBe1Nwce6SCsLweJhvGbS4U1e2mi289AnNinHYe26nkh2X16b570lc+F/zKccC7eeO/2I8JWweghI7TyO90/aTZ53sMJRW9A/bu330NYxwAHnzlbLzzlrcdnVdJJuIrpkhUnkv6RKYq1oX6it5dUF4vI6kn5H387miuvluEmUWmKgThTZwMQyX0s1JX/8ZuX6JAL7PLkXBYTttrGeViPxHu6na4ECrZOtfDZmZR+eDPImq0wq3CanoFe9ezFgXiEiqkOHEubamjHqZRBYYSGU8SL1I3V9iCngMcQo+s9HAGGUaLjp90u+z6rLU9uY5AAiiN1kdTdLPR+Epv00OiTZHIfi/U/NK9hpoy0Lw7/YQFqAN+RzKejaysGHNcdHEMx3KJmMPfDlsPPKmjQO1i5zxqmIYy+DTCpfIPM04iEt2+73YjgaYiFPK1Nn1VaQjhSe0fIdLoOjrYp2wgbLumi8zItX4HDu0hJTB+E0RjiSb+qdthgxl8YlU0/+ZNYmengW8T0B3c8vIlZOnbhc2/HVjdYWISxyPV7eVvHsG96/ZJkLQYPBwwFwtLj0MFlPXyCMzN0gmPfi5SbT7iLljL2MNRh/f7Lk2PlMptEhwnB++pDjGJ0aIoBBpj8Ni+66KpIUEsPsYvykrewxBskIo4HN+Ww==",
+       "format": "google-gemini-v1",
+       "index": 1
+      }
+     ]
+    }
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 1352,
+   "completion_tokens": 500,
+   "total_tokens": 1852,
+   "cost": 0.002889,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.002889,
+    "upstream_inference_prompt_cost": 0.001014,
+    "upstream_inference_completions_cost": 0.001875
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 400,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ },
+ "image_width": 1024,
+ "image_height": 1428,
+ "latency_ms": 6608.70710000745,
+ "recorded_at": "2026-10-19T04:08:56.904906Z"
+}

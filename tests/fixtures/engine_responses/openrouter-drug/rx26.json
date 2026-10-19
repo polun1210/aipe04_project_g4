@@ -1,0 +1,74 @@
+{
+ "image_id": "rx26",
+ "engine": "openrouter-drug",
+ "request": {
+  "model": "google/gemini-3.8-flash",
+  "provider": "google-ai-studio",
+  "prompt_version": "d1",
+  "temperature": 0.0
+ },
+ "response": {
+  "id": "gen-1792382981-5usVRd6CeiaVKGrRepsB",
+  "object": "chat.completion",
+  "created": 1792382981,
+  "model": "google/gemini-3.8-flash",
+  "provider": "Google AI Studio",
+  "system_fingerprint": null,
+  "service_tier": "default",
+  "choices": [
+   {
+    "index": 0,
+    "logprobs": null,
+    "finish_reason": "stop",
+    "native_finish_reason": "STOP",
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"items\": [\n    {\n      \"raw_name\": \"癲通 長效膜衣錠 200毫克(卡巴氮平) TEGRETOL CR. FC * tab 200 mg (Carbamazepine)\",\n      \"brand_name\": \"癲通\",\n      \"generic_names\": [\n        \"Carbamazepine\"\n      ],\n      \"box_2d\": [\n        421,\n        169,\n        464,\n        717\n      ]\n    }\n  ]\n}",
+     "refusal": null,
+     "reasoning": "**Analyzing Drug Entries**\n\nI'm currently focused on dissecting drug entries. Specifically, I'm examining how drug names are formatted, looking at combined Chinese and English representations like \"癲通 長效膜衣錠 200毫克(卡巴氮平)\" and \"TEGRETOL CR. FC * tab 200 mg (Carbamazepine).\" My goal is to extract the raw drug name component.\n\n\n",
+     "reasoning_details": [
+      {
+       "type": "reasoning.text",
+       "text": "**Analyzing Drug Entries**\n\nI'm currently focused on dissecting drug entries. Specifically, I'm examining how drug names are formatted, looking at combined Chinese and English representations like \"癲通 長效膜衣錠 200毫克(卡巴氮平)\" and \"TEGRETOL CR. FC * tab 200 mg (Carbamazepine).\" My goal is to extract the raw drug name component.\n\n\n",
+       "format": "google-gemini-v1",
+       "index": 0
+      },
+      {
+       "type": "reasoning.encrypted",
+       "data": "EtQKCtEKAWkUfRMSg+doHx2sBmKAARJylXeHoAXmOck9K1zYim/DJeorAsOBE4S4VYfEUdrO0SiXUQsM1cXqKTPYeBjEMLem3/Td34NL5QJTOQb8kd1/0d98UIwA0A3dEsuAYBhORqzBa3jO99gjZDAmm50gRZLKnEwCQkhgJb/p3Wp95uAZzWRgYPxVXSuYW0Y/fWZElPFAXO0z2P8Hn42ZKDUEYBbxsDXY5bQedLDJkfZrwhnOAZUzS9WbCZ8obZZilZNfVyfkdOwdX/9czy7oTTQccM+98wFL9PjKlJptgh1spgXYmVZWqokVAMa6nRVR01TakTTSdsrY8j6Qux2CWkSyxMRn42QLsS4UxLui3cTBHJHaV0hMNiUdEwGiJwiJ2rN0ADAk9KUgD+9Pwk1wD6CwZfwGUk12ZNgxxiCqM62ouktyStwk+b/u9gcV99PtuA3rUJ2pye0TCNpYUr50iyTErm7IqtdiA+4WLtayyaFwlzucfTdrYMt9DitG1JgVDzZuT4aKTB7tFT7253TTqlHTSnL+T0P2NehrZP8w1ZqdL16DcE3v92vEukbwrV+Wt7x2HaF0B9SBipXrlCxXO5C3t3Vb7GAEvyGGFiQIzKeUInV6rr+JK5+AZJ+d52VT//3pz7e5E0D0xBSa4+1M5K+sOQXBeyKiRyyRBXXLqcvLaF4/IAPZ3KyscTWvHGIImcCYRTLJRAEtNocTAbTcrtQnpgnyItz1jESyQTV8Y5noHoGEBWaCMXJtKRsH7IuwS6j+bGkYmB/4Cq7Th2YN9y+o/2zi17BpBy0RE+2INgWljsyRzTkU+51PtR0B7oFRp/QGNK1woflWOKYJx6dtNhrry9K74OEpGSpAlHhdaQQCWGi9EjnGeCiXNaV1zibMNdZNgpitmblrD6eQjcnMN3LttIydMfxa/1+G2yDx8CE4RYyv9hM1b2NT2jxajGzmBWn9BP2XpW2aJdXZgOkP0j9wlfOlQOfdcTKsSUXWta0mXzdbIxg5cLAbqc1/gLS9SqyLjRMEzIMcypgNjStxo/BmcnzXJVegr80bgzeCCXdzwFgtRhnD8qVNY+32z2LXdKqhjbCu5h3+p4mKVYKBNJf3IDQ2ZhOXlgZE+VP3iULeIlmrw+A0vT7XeRItcnHkNrSvducnM7fx87b9E+qdSDcZFIGlw8uhrPLTEhiNTx4jX/2rzrtPx03jfBF2bdu3AKOZNVmSeD01zF3uOejLBkwoExBXmvJhqnx8FRjtM6gEvZgXk9xDvbhydPIDfvFI2szvsg5KTE9g5ZtcyVYR9nYSXkMIVircXnw6yhmirCcU/Dv6lh3rcICYzkhesV+flSiJ/ZV/9rG894S6s4gkW584c/WfROApeMF/CmDxuxqJrvowmhORxoNEK6lO0JTbuSf86o7LmDEpu+1zRqce0QkwLXeIiTYpqTK7yLHGGpNHInC0kvgY4aG+M2fXjDuY102KKG37Fcff5qJ4Qs4QbBbbWF/6ut+PCHnyA7aKF6vo2d+mVM8rVdLsiW0cq6Vzo3LqC5V+Os1YNU/3B05ZqXvnyjaU8ivzSKsS0Rt5PiLjSmQfszf5ukp2rMPMt7Mls+6KzxOKibN6VIcRDIrIPdnrHsH4/wyXZOc0ytfDU+yHAn6Ks8KugFJ3UqDcAeIbNOlWqqeejhpe9rBSqkaRUTvDP4tT1k4eb7xVpXK6WTS4g3tAf0mqrLRuYUxATsR2x3ZAjrLYO9jCYRadf1GBeY9QbAshrIjjSZaGld60BwO2kTogkOYrWcaAyc+WmDq6aXbS3EPn4/fy9KCGr0ZAA2rlSSQ=",
+       "format": "google-gemini-v1",
+       "index": 1
+      }
+     ]
+    }
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 1324,
+   "completion_tokens": 525,
+   "total_tokens": 1849,
+   "cost": 0.00296175,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00296175,
+    "upstream_inference_prompt_cost": 0.000993,
+    "upstream_inference_completions_cost": 0.00196875
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 395,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ },
+ "image_width": 1151,
+ "image_height": 1551,
+ "latency_ms": 6229.204000002937,
+ "recorded_at": "2026-10-19T04:09:48.209583Z"
+}

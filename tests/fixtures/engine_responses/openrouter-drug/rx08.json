@@ -1,0 +1,74 @@
+{
+ "image_id": "rx08",
+ "engine": "openrouter-drug",
+ "request": {
+  "model": "google/gemini-3.8-flash",
+  "provider": "google-ai-studio",
+  "prompt_version": "d1",
+  "temperature": 0.0
+ },
+ "response": {
+  "id": "gen-1792382844-i0TDJIkdrDC4gcxPZquk",
+  "object": "chat.completion",
+  "created": 1792382844,
+  "model": "google/gemini-3.8-flash",
+  "provider": "Google AI Studio",
+  "system_fingerprint": null,
+  "service_tier": "default",
+  "choices": [
+   {
+    "index": 0,
+    "logprobs": null,
+    "finish_reason": "stop",
+    "native_finish_reason": "STOP",
+    "message": {
+     "role": "assistant",
+     "content": "{\"items\": [{\"raw_name\": \"慢 Alendronate+Colecalciferol(70mg/5600IU)/tab\", \"brand_name\": null, \"generic_names\": [\"Alendronate\", \"Colecalciferol\"], \"box_2d\": [442, 28, 471, 455]}, {\"raw_name\": \"慢 All-right calcium suspension 180ml/bot\", \"brand_name\": \"All-right\", \"generic_names\": [\"calcium\"], \"box_2d\": [482, 28, 511, 394]}, {\"raw_name\": \"慢 Celecoxib 200mg/cap【NSAID】\", \"brand_name\": null, \"generic_names\": [\"Celecoxib\"], \"box_2d\": [522, 28, 552, 340]}]}",
+     "refusal": null,
+     "reasoning": "**Analyzing Item Attributes**\n\nI've begun analyzing item attributes, such as raw names and bounding box data. So far, I've identified \"Alendronate+Colecalciferol\" as a generic name, with \"Alendronate\" and \"Colecalciferol\" recognized. I am noting the lack of a brand name for this item. I am still working on the second item.\n\n\n",
+     "reasoning_details": [
+      {
+       "type": "reasoning.text",
+       "text": "**Analyzing Item Attributes**\n\nI've begun analyzing item attributes, such as raw names and bounding box data. So far, I've identified \"Alendronate+Colecalciferol\" as a generic name, with \"Alendronate\" and \"Colecalciferol\" recognized. I am noting the lack of a brand name for this item. I am still working on the second item.\n\n\n",
+       "format": "google-gemini-v1",
+       "index": 0
+      },
+      {
+       "type": "reasoning.encrypted",
+       "data": "EoUHCoIHAWkUfRPuK0PpmukGTnYsNUNPX5x2nkVRtktnsNDnZhyNCWmcydYbAAiu8M5TQQvLjjIfQrqtzNrQKXaNVt+jgU9k99NDUZjMgjJh5FFoVPpln1uEEotGWFh19VxtGanCwRC7oBSiUQ6k/svWNOYbi0yaqHysqD8qrLB1Sn+EZMxciNXmL//Pet4ZjvmKxEOO+M0ZM/xJj8bdldRhcovmgutmMwVtVbBREAQXXWMVn8oUa5gAGrCB2UGs/iR6wrJtFKyZsJvvW060ndh+HFWR6bfBJNYQPDN12nmIqlciAB1b/vruXO/99ndcwVSI7bfhTGO/k6Ak7vHG1Vr1rkkfQhf5SfYJ0U2vSFi+8TkenzJPyu4UtK7JgxDxMyXQjYrC+/N9/ziznLxUOtZOHXaTt2gqwGuSW+SqgMqDbcIzb3JfeGmc9nV/rUmqka0B4OlvSoGRPllfZ0Dj5B6laog7RgyGVrHHWwVFdAGClo9iNrah9xB35X8no7Zv1WmOfMaAnRXgVf1vFO3cWDOZuSn7Sq9P263gvqXGudDEPL0Fmu7NKU8VApBZUtXYwqFxjOfAA9Qfp0tCtbwEC5EZPkvVL9SwVGOfMiJfkiyphTAzW0wInDg2yNccyzsSkzeQeZRkxzdNMimrahoqNLinGDGlEBNFalQtsHA5X60qj8BCQhwO9q9JPHUVzxserK7igA70e4v0GMZ8b9wcw87eQUYwV/rxn95Q704H4ceSAUJ/xLH1cb84WFeQSBNWWWzb3IwjirthK/UWobqjyPZbZ/Pzw0JGN2h9CXtnvi/qfx49L16i89bIk9GnAw2BQ2RcFkAGjVbNfsUE+tEZgm3N5U2z9Uma5FM2i+vQ+UsKnYHT3DypSn73t+c11vQl8iSkEJvO1etiGIDSe2/5X7XJQIiKW/oH35+TpK1ruQSVMTkcHLOLnlAd/9N23l5QhhlCRs8N8DPhVS8rs37hqG9EMe9IO1H8qARnBwZj8irYGUPefSqGqSfeNz3pRGJ0MR8eHAJzVKV3lJ/T2BxiEG52SvlK3NlToTjXmQkPRqEhYBTaPMf6KAUy6/vxbeIQIzCd4HITkTUNDEhwH6Kj/eIQXdeYB25vxNmKwmOfkaix337cmV/TzMfieVtPvAkbFQ5X+SI68KL3oUZZEyPsHlj8IsAUBwaxLz43aE4Rc0kkTa7wmp3eKA==",
+       "format": "google-gemini-v1",
+       "index": 1
+      }
+     ]
+    }
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 1340,
+   "completion_tokens": 477,
+   "total_tokens": 1817,
+   "cost": 0.00279375,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00279375,
+    "upstream_inference_prompt_cost": 0.001005,
+    "upstream_inference_completions_cost": 0.00178875
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 267,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ },
+ "image_width": 1464,
+ "image_height": 977,
+ "latency_ms": 6080.693700001575,
+ "recorded_at": "2026-10-19T04:07:31.399808Z"
+}

@@ -1,0 +1,74 @@
+{
+ "image_id": "rx16",
+ "engine": "openrouter-drug",
+ "request": {
+  "model": "google/gemini-3.8-flash",
+  "provider": "google-ai-studio",
+  "prompt_version": "d1",
+  "temperature": 0.0
+ },
+ "response": {
+  "id": "gen-1792382908-zIN3twpt5VpD0pmbec65",
+  "object": "chat.completion",
+  "created": 1792382908,
+  "model": "google/gemini-3.8-flash",
+  "provider": "Google AI Studio",
+  "system_fingerprint": null,
+  "service_tier": "default",
+  "choices": [
+   {
+    "index": 0,
+    "logprobs": null,
+    "finish_reason": "stop",
+    "native_finish_reason": "STOP",
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"items\": [\n    {\n      \"raw_name\": \"Fynadin/60/Allegra\",\n      \"brand_name\": \"Fynadin\",\n      \"generic_names\": [],\n      \"box_2d\": [448, 33, 497, 313]\n    },\n    {\n      \"raw_name\": \"Methylephedrine25mg\",\n      \"brand_name\": null,\n      \"generic_names\": [\n        \"Methylephedrine\"\n      ],\n      \"box_2d\": [569, 32, 617, 353]\n    },\n    {\n      \"raw_name\": \"Nasonex 50mcg INCS\",\n      \"brand_name\": \"Nasonex\",\n      \"generic_names\": [],\n      \"box_2d\": [694, 30, 740, 349]\n    }\n  ]\n}",
+     "refusal": null,
+     "reasoning": "**Analyzing Drug Identifiers**\n\nI'm currently focused on dissecting drug names extracted from the image. I've pinpointed \"Fynadin/60/Allegra\" and am trying to disambiguate the raw name, understanding that \"Fynadin\" is commonly used in Taiwan, and if \"Allegra\" is also another name. I am also working on categorizing the drug based on the provided indication as an anti-allergy medication.\n\n\n**Refining Drug Brand Names**\n\nI'm now refining the brand name extraction. I see \"Fynadin/60/Allegra\" and I understand \"Fynadin\" is a Taiwan-specific name and \"Allegra\" is the original name. The rule is to only include the name itself, so I'm deciding between \"Fynadin,\" \"Allegra,\" or a combination. The generic name, fexofenadine, isn't listed. Considering \"Fynadin\" is the primary name, should I fill brand\\_name with \"Fynadin\" or null? I'm also examining \"Methylephedrine25mg\" which appears to have a slight covering, but the generic name is clear.\n\n\n",
+     "reasoning_details": [
+      {
+       "type": "reasoning.text",
+       "text": "**Analyzing Drug Identifiers**\n\nI'm currently focused on dissecting drug names extracted from the image. I've pinpointed \"Fynadin/60/Allegra\" and am trying to disambiguate the raw name, understanding that \"Fynadin\" is commonly used in Taiwan, and if \"Allegra\" is also another name. I am also working on categorizing the drug based on the provided indication as an anti-allergy medication.\n\n\n**Refining Drug Brand Names**\n\nI'm now refining the brand name extraction. I see \"Fynadin/60/Allegra\" and I understand \"Fynadin\" is a Taiwan-specific name and \"Allegra\" is the original name. The rule is to only include the name itself, so I'm deciding between \"Fynadin,\" \"Allegra,\" or a combination. The generic name, fexofenadine, isn't listed. Considering \"Fynadin\" is the primary name, should I fill brand\\_name with \"Fynadin\" or null? I'm also examining \"Methylephedrine25mg\" which appears to have a slight covering, but the generic name is clear.\n\n\n",
+       "format": "google-gemini-v1",
+       "index": 0
+      },
+      {
+       "type": "reasoning.encrypted",
+       "data": "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",
+       "format": "google-gemini-v1",
+       "index": 1
+      }
+     ]
+    }
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 1362,
+   "completion_tokens": 1199,
+   "total_tokens": 2561,
+   "cost": 0.00551775,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00551775,
+    "upstream_inference_prompt_cost": 0.0010215,
+    "upstream_inference_completions_cost": 0.00449625
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 967,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ },
+ "image_width": 2729,
+ "image_height": 2103,
+ "latency_ms": 11458.185700001195,
+ "recorded_at": "2026-10-19T04:08:39.799511Z"
+}

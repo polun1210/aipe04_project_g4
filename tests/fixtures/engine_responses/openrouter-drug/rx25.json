@@ -1,0 +1,74 @@
+{
+ "image_id": "rx25",
+ "engine": "openrouter-drug",
+ "request": {
+  "model": "google/gemini-3.8-flash",
+  "provider": "google-ai-studio",
+  "prompt_version": "d1",
+  "temperature": 0.0
+ },
+ "response": {
+  "id": "gen-1792382977-yKMb6F4KMUKHquBZ2yDs",
+  "object": "chat.completion",
+  "created": 1792382977,
+  "model": "google/gemini-3.8-flash",
+  "provider": "Google AI Studio",
+  "system_fingerprint": null,
+  "service_tier": "default",
+  "choices": [
+   {
+    "index": 0,
+    "logprobs": null,
+    "finish_reason": "stop",
+    "native_finish_reason": "STOP",
+    "message": {
+     "role": "assistant",
+     "content": "{\"items\": [{\"raw_name\": \"糖德仕 注射劑 300單位／毫升 1.5毫升(胰島素) Toujeo soln for #* inj 300 iu/ml 1.5 ml (Insulin glargine)\", \"brand_name\": \"糖德仕\", \"generic_names\": [\"Insulin glargine\"], \"box_2d\": [426, 184, 471, 868]}]}",
+     "refusal": null,
+     "reasoning": "**Analyzing Drug Data**\n\nI've identified a single medication bag in the photo. The critical data point is the \"Drug Name\" field. I've successfully extracted both the Chinese and English names for the medication: \"糖德仕 注射劑 300單位／毫升 1.5毫升(胰島素)\" and \"Toujeo soln for #* inj 300 iu/ml 1.5 ml (Insulin glargine),\" respectively. I have also located the bounding box.\n\n\n",
+     "reasoning_details": [
+      {
+       "type": "reasoning.text",
+       "text": "**Analyzing Drug Data**\n\nI've identified a single medication bag in the photo. The critical data point is the \"Drug Name\" field. I've successfully extracted both the Chinese and English names for the medication: \"糖德仕 注射劑 300單位／毫升 1.5毫升(胰島素)\" and \"Toujeo soln for #* inj 300 iu/ml 1.5 ml (Insulin glargine),\" respectively. I have also located the bounding box.\n\n\n",
+       "format": "google-gemini-v1",
+       "index": 0
+      },
+      {
+       "type": "reasoning.encrypted",
+       "data": "EvcFCvQFAWkUfROCVaNjwGdEXg6Fdhb2iwl4EPFam9uvAyibaGqtWgwwrMCK5As7Q8x6KEyzRw4aQ4t+RnI+++lIpPjzMP65HvB5CWlnL9m/wjLjWCOCYT6ASUFcgZBHydI6Dz0URR+XtDPLUGt7ELfDhYPCgXivGHTTny6bFE25QouhWwLujGlga9bojH4xlwvliCAwfamYuvbCZXTv330spVF0p5IIScuRk//qEru+wx2bkyjt9fEhP9MtXk8aOZRZ3c+Mxv9+4vXV1hxIiyQB4tg2dkpfi+TefDV5I0iNzPm4439plD+NGbamOc5WPJf1L87c71PsykUnDtCI52FPUheJvpVOwMy1/jSIA3bteh+Tfmgu28PQxFCP0pO6Q6EkmwYPtZQWAlA6uKhxGXc0p60w/aqKUPNspDQKJf1t1gHvMdbu1x7ARSfz++4MZfAhj/I5moi/XHod2gIhYiCrYMY852NANER9DMa/GC+x6dVbfTVI8T0FH5FpHoZO7xk8xAFmETNsx6pMXuLRz8tbFdWOxgIGVC2+czgg8Xo9Gjr20AJgNTFohGgJUsGczE/0UdZc0VW2O7UfYt4VDw5KSHgkW3B//yBaGsWlH9WmuGXrrsnfKDucvh6Aj7brrFpGtEZfTgkRtH34t8OrXe/CwYxcBnwokuiwLqh1wMbzvw/rKhAzwO9MKItmrUI3VENIijHXFZcHh4lpIQ3EhiRyQbfiUXk3Rao2GtcDZyD8kcm8diUT/9yv0bjdHU9IFxEBb9WvEnteU6PBPuRn8OVxf6oaBr5Qljt0cLEo8O01nJnoIavoGqgg1y8bMsETUgEMkOQdCs46Rz3kpgXRSB8kL9O/t5bQL3CBjxzawAA28k14Rsgb2cbeoZejfvl0DrnbaXVCPhNH8xOBjz0ZIndykjyLbQdAOG+w0bZOI2w76wtUuMwpRwaZqdqa06VAlDX2unTy6ETHunNUY07UUIvgNcAgcV/OY9WfFbOPfwr3eVFh0fHTp/lD",
+       "format": "google-gemini-v1",
+       "index": 1
+      }
+     ]
+    }
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 1333,
+   "completion_tokens": 324,
+   "total_tokens": 1657,
+   "cost": 0.00221475,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00221475,
+    "upstream_inference_prompt_cost": 0.00099975,
+    "upstream_inference_completions_cost": 0.001215
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 214,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ },
+ "image_width": 802,
+ "image_height": 1011,
+ "latency_ms": 4584.581800008891,
+ "recorded_at": "2026-10-19T04:09:41.970746Z"
+}

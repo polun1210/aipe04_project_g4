@@ -1,0 +1,74 @@
+{
+ "image_id": "rx24",
+ "engine": "openrouter-drug",
+ "request": {
+  "model": "google/gemini-3.8-flash",
+  "provider": "google-ai-studio",
+  "prompt_version": "d1",
+  "temperature": 0.0
+ },
+ "response": {
+  "id": "gen-1792382970-DQ4pLTFzpl08lEUGgEcM",
+  "object": "chat.completion",
+  "created": 1792382970,
+  "model": "google/gemini-3.8-flash",
+  "provider": "Google AI Studio",
+  "system_fingerprint": null,
+  "service_tier": "default",
+  "choices": [
+   {
+    "index": 0,
+    "logprobs": null,
+    "finish_reason": "stop",
+    "native_finish_reason": "STOP",
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"items\": [\n    {\n      \"raw_name\": \"癲通 長效膜衣錠 200毫克(卡巴氮平) TEGRETOL CR.FC * tab 200 mg (Carbamazepine)\",\n      \"brand_name\": \"癲通\",\n      \"generic_names\": [\n        \"Carbamazepine\"\n      ],\n      \"box_2d\": [\n        224,\n        57,\n        278,\n        732\n      ]\n    }\n  ]\n}",
+     "refusal": null,
+     "reasoning": "**Identifying the Drug Details**\n\nI've zeroed in on the key information: the image is of a medication label from Taipei Veterans General Hospital. I quickly pinpointed the medication name fields. The Chinese name is \"癲通 長效膜衣錠 200毫克(卡巴氮平),\" and the English translation is also present.\n\n\n",
+     "reasoning_details": [
+      {
+       "type": "reasoning.text",
+       "text": "**Identifying the Drug Details**\n\nI've zeroed in on the key information: the image is of a medication label from Taipei Veterans General Hospital. I quickly pinpointed the medication name fields. The Chinese name is \"癲通 長效膜衣錠 200毫克(卡巴氮平),\" and the English translation is also present.\n\n\n",
+       "format": "google-gemini-v1",
+       "index": 0
+      },
+      {
+       "type": "reasoning.encrypted",
+       "data": "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",
+       "format": "google-gemini-v1",
+       "index": 1
+      }
+     ]
+    }
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 1333,
+   "completion_tokens": 605,
+   "total_tokens": 1938,
+   "cost": 0.0032685,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.0032685,
+    "upstream_inference_prompt_cost": 0.00099975,
+    "upstream_inference_completions_cost": 0.00226875
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 476,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ },
+ "image_width": 860,
+ "image_height": 1080,
+ "latency_ms": 6247.229699976742,
+ "recorded_at": "2026-10-19T04:09:37.381533Z"
+}

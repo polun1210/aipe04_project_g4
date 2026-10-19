@@ -1,0 +1,74 @@
+{
+ "image_id": "rx23",
+ "engine": "openrouter-drug",
+ "request": {
+  "model": "google/gemini-3.8-flash",
+  "provider": "google-ai-studio",
+  "prompt_version": "d1",
+  "temperature": 0.0
+ },
+ "response": {
+  "id": "gen-1792382963-DOwSKqwXyL9J1cXTcrDZ",
+  "object": "chat.completion",
+  "created": 1792382963,
+  "model": "google/gemini-3.8-flash",
+  "provider": "Google AI Studio",
+  "system_fingerprint": null,
+  "service_tier": "default",
+  "choices": [
+   {
+    "index": 0,
+    "logprobs": null,
+    "finish_reason": "stop",
+    "native_finish_reason": "STOP",
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"items\": [\n    {\n      \"raw_name\": \"{複方} ★Trajenta DUO 2.5 & 850mg/膜衣錠 (Linagliptin & Metformin) 糖倍平膜衣錠\",\n      \"brand_name\": \"Trajenta DUO\",\n      \"generic_names\": [\n        \"Linagliptin\",\n        \"Metformin\"\n      ],\n      \"box_2d\": [156, 236, 298, 716]\n    }\n  ]\n}",
+     "refusal": null,
+     "reasoning": "**Extracting Medication Details**\n\nI'm currently focused on extracting medication information from images. I've identified the \"藥名 Medication 藥庫\" field. The content there presents a challenge. I need to parse `{複方} ★Trajenta DUO 2.5 & 850mg/膜衣錠 (Linagliptin & Metformin)` and `糖倍平膜衣錠`, correctly isolating the drug name and associated details. My initial plan is to deal with the structure I see in the first example, and make it work for a generic example as well.\n\n\n",
+     "reasoning_details": [
+      {
+       "type": "reasoning.text",
+       "text": "**Extracting Medication Details**\n\nI'm currently focused on extracting medication information from images. I've identified the \"藥名 Medication 藥庫\" field. The content there presents a challenge. I need to parse `{複方} ★Trajenta DUO 2.5 & 850mg/膜衣錠 (Linagliptin & Metformin)` and `糖倍平膜衣錠`, correctly isolating the drug name and associated details. My initial plan is to deal with the structure I see in the first example, and make it work for a generic example as well.\n\n\n",
+       "format": "google-gemini-v1",
+       "index": 0
+      },
+      {
+       "type": "reasoning.encrypted",
+       "data": "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",
+       "format": "google-gemini-v1",
+       "index": 1
+      }
+     ]
+    }
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 1370,
+   "completion_tokens": 767,
+   "total_tokens": 2137,
+   "cost": 0.00390375,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00390375,
+    "upstream_inference_prompt_cost": 0.0010275,
+    "upstream_inference_completions_cost": 0.00287625
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 634,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ },
+ "image_width": 581,
+ "image_height": 715,
+ "latency_ms": 7674.673700006679,
+ "recorded_at": "2026-10-19T04:09:31.126656Z"
+}

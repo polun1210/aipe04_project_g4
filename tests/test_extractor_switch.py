@@ -37,9 +37,3 @@ def test_切換值打錯時報錯(monkeypatch):
     monkeypatch.setenv("EXTRACTOR", "openrouterr")
     with pytest.raises(ValueError, match="EXTRACTOR"):
         get_extractor()
-
-
-def test_真辨識模式下藥包還沒做好就回錯誤而不是範例藥名():
-    extractor = OpenRouterExtractor(engine=None)  # 藥包不會用到引擎
-    with pytest.raises(ExtractionError, match="藥包"):
-        extractor.extract_drugs(None, [], [])

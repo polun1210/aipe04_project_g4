@@ -1,0 +1,74 @@
+{
+ "image_id": "rx22",
+ "engine": "openrouter-drug",
+ "request": {
+  "model": "google/gemini-3.8-flash",
+  "provider": "google-ai-studio",
+  "prompt_version": "d1",
+  "temperature": 0.0
+ },
+ "response": {
+  "id": "gen-1792382954-6y0Eb32lYAgHvZfgWBx1",
+  "object": "chat.completion",
+  "created": 1792382954,
+  "model": "google/gemini-3.8-flash",
+  "provider": "Google AI Studio",
+  "system_fingerprint": null,
+  "service_tier": "default",
+  "choices": [
+   {
+    "index": 0,
+    "logprobs": null,
+    "finish_reason": "stop",
+    "native_finish_reason": "STOP",
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"items\": [\n    {\n      \"raw_name\": \"Lipitor/立普妥\",\n      \"brand_name\": \"Lipitor/立普妥\",\n      \"generic_names\": [\n        \"Atorvastatin\"\n      ],\n      \"box_2d\": [\n        251,\n        47,\n        276,\n        362\n      ]\n    }\n  ]\n}",
+     "refusal": null,
+     "reasoning": "**Identifying Drug Information**\n\nI've homed in on extracting the core drug details from the image. I've pinpointed the generic name, Atorvastatin, and the brand/Chinese brand name, Lipitor/立普妥, alongside the strength information, which is 40mg per tablet. I now need to work on parsing the image.\n\n\n**Refining Drug Nomenclature**\n\nI'm now focusing on refining the naming conventions. Considering \"劑型: 口服/錠劑\" and \"總量: 28,\" I'm determining the best format for the raw_name. Should I stick to \"Atorvastatin\" or \"Lipitor/立普妥,\" or a combined version? Analysis of the label format suggests I should prioritize the most prominent name. I'm leaning toward \"Lipitor/立普妥\" to align with common practices.\n\n\n",
+     "reasoning_details": [
+      {
+       "type": "reasoning.text",
+       "text": "**Identifying Drug Information**\n\nI've homed in on extracting the core drug details from the image. I've pinpointed the generic name, Atorvastatin, and the brand/Chinese brand name, Lipitor/立普妥, alongside the strength information, which is 40mg per tablet. I now need to work on parsing the image.\n\n\n**Refining Drug Nomenclature**\n\nI'm now focusing on refining the naming conventions. Considering \"劑型: 口服/錠劑\" and \"總量: 28,\" I'm determining the best format for the raw_name. Should I stick to \"Atorvastatin\" or \"Lipitor/立普妥,\" or a combined version? Analysis of the label format suggests I should prioritize the most prominent name. I'm leaning toward \"Lipitor/立普妥\" to align with common practices.\n\n\n",
+       "format": "google-gemini-v1",
+       "index": 0
+      },
+      {
+       "type": "reasoning.encrypted",
+       "data": "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",
+       "format": "google-gemini-v1",
+       "index": 1
+      }
+     ]
+    }
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 1340,
+   "completion_tokens": 917,
+   "total_tokens": 2257,
+   "cost": 0.00444375,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00444375,
+    "upstream_inference_prompt_cost": 0.001005,
+    "upstream_inference_completions_cost": 0.00343875
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 817,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ },
+ "image_width": 473,
+ "image_height": 564,
+ "latency_ms": 8778.280700003961,
+ "recorded_at": "2026-10-19T04:09:23.448750Z"
+}

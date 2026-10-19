@@ -1,0 +1,74 @@
+{
+ "image_id": "rx15",
+ "engine": "openrouter-drug",
+ "request": {
+  "model": "google/gemini-3.8-flash",
+  "provider": "google-ai-studio",
+  "prompt_version": "d1",
+  "temperature": 0.0
+ },
+ "response": {
+  "id": "gen-1792382901-8X2nmDFXmM3YTBXj57hi",
+  "object": "chat.completion",
+  "created": 1792382901,
+  "model": "google/gemini-3.8-flash",
+  "provider": "Google AI Studio",
+  "system_fingerprint": null,
+  "service_tier": "default",
+  "choices": [
+   {
+    "index": 0,
+    "logprobs": null,
+    "finish_reason": "stop",
+    "native_finish_reason": "STOP",
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"items\": [\n    {\n      \"raw_name\": \"Oxethazine 5mg & Polymigel 224mg (Strocain) <Strocain Tablets (息痛佳音)>\",\n      \"brand_name\": \"息痛佳音\",\n      \"generic_names\": [\n        \"Oxethazine\",\n        \"Polymigel\"\n      ],\n      \"box_2d\": [\n        351,\n        84,\n        399,\n        666\n      ]\n    }\n  ]\n}",
+     "refusal": null,
+     "reasoning": "**Initiating Medication Extraction**\n\nI'm now focused on extracting medication details from the image of the Taiwan medicine bag. Specifically, I'm examining Section 2 (標籤 2) to locate the relevant text data. My goal is to extract the raw_name, brand_name, generic_names, and box_2d following the provided guidelines.\n\n\n**Refining Medication Data**\n\nI've refined the medication details extracted from the image. The raw name is confirmed as \"Oxethazine 5mg & Polymigel 224mg (Strocain) <Strocain Tablets (息痛佳音)>\". I've finalized the brand name as \"Strocain\" (or potentially \"息痛佳音\"). The generic names are identified as \"Oxethazine\" and \"Polymigel.\" I am still working on the bounding box coordinates, but ymin is approximately 348, xmin is ~86, ymax is ~399, and xmax is ~668.\n\n\n",
+     "reasoning_details": [
+      {
+       "type": "reasoning.text",
+       "text": "**Initiating Medication Extraction**\n\nI'm now focused on extracting medication details from the image of the Taiwan medicine bag. Specifically, I'm examining Section 2 (標籤 2) to locate the relevant text data. My goal is to extract the raw_name, brand_name, generic_names, and box_2d following the provided guidelines.\n\n\n**Refining Medication Data**\n\nI've refined the medication details extracted from the image. The raw name is confirmed as \"Oxethazine 5mg & Polymigel 224mg (Strocain) <Strocain Tablets (息痛佳音)>\". I've finalized the brand name as \"Strocain\" (or potentially \"息痛佳音\"). The generic names are identified as \"Oxethazine\" and \"Polymigel.\" I am still working on the bounding box coordinates, but ymin is approximately 348, xmin is ~86, ymax is ~399, and xmax is ~668.\n\n\n",
+       "format": "google-gemini-v1",
+       "index": 0
+      },
+      {
+       "type": "reasoning.encrypted",
+       "data": "EocQCoQQAWkUfRMeEHBVF2+cAQO+BZ/35owpa6SPx6N8dbjbllrinarfW8iyeEJ930CuABki9+eNy6uzgon9EtRUeqyKWY1aB9W9uw0QdFWZy4UxI6lxDW5D1+r9bnHGQ/IEK/+vPdjtblqcKYZdHPVsqAWx/khrBQqtij9PWyWN6gqziWr7aEo3QzwNjN1Eho+9+fLifyspWh9pR/+0eRkdUTYqyZ3zUl6EuXfAdUT1o0WwfoDre0z1Ye0+HVJFllBn99FTxanX1DPI/bZxvL8cjk41Nom0tWn1WPEeYJy4D0gOHIXDwPtsP2MtVkxfm7V35Aj3RFCGCcu7Zxlh5n2MinvTdFsLxXZULyyDrHwowNBhsPSMK/aunjZ5tSWQwHrJJGJ9yOFVvzTE8SLRoSCNtg6VH2cPVSwSKawBCGNgrVa9nZif6s/IbDCuM1+CldOp5q2kFzV8B6fE6/2adaCyeraoPZCdz92S4qIDlisIC3ifuGyWJNqrJxjECa2YmICob0txhWdygT4cI/mANMWjEJZOMNyKfzy13GRMYBFNA4BLxswlEujn2RoWqQpHeSCck7MOjAxmT2HJu1ATUbJ9BzYNUH5Nf9nPO6NV/3wJLAIeHuUAo9gI4mOrAcpmGyrpFZ6RnInmy3+dUr10vovfrELJF5T8C47AuzNUa3izQkar8eRSo2LF6y8eChjll0IQMm7OMVVQ5Z/LRYqq6E8kC31VBtCnspz8YEGeLawpSgWiy48M9Lv4bGMIEozZ4/xjmNQH7bpwWZcxGSM7I8rxOuRadrU56nldbl2vmtDsApSfqUk7ktNm0bYUKXaaQwIAnWpmmeNrddNKNz/ScH1WTZ9WADH2JPSFdN26aQEIbXTJImGSF5TkkF1l42iLuEQSM8gawMGQ/mqkoG0AZYKqcWGvv7I4bsldIaD5Moc3Y7fkc3bK7yfS9yRL5bbdZ0dB+lYbIaWTpfpqzedgEZHSYoHwviJ2Z6lY7Z4iDekeRRX6iSTrhOWvIodhAhNmsaYuwJvFNy2DCc5WqhXbKccnbsGsU0CVQoFZycsWOD0uGFxADufhDfSpe6FyaQqCgp6QW7/HM6nZShCWUEyCT9qgzjbpYBf04juHSnRP2UZ3GACd6z4BJt8kT19FAITqJ2LpBeSqvhkhl0FD5/FmSd6xoBRHNp0twhmTvp5Ztc1P9JdCa/OatsdVzCt3NNUlz7MooU6G/8eG5rgxSH/RJAvBPZiYjL7dTIGnRi6WH85Rnnhn8GhbSMBHW5RCkebGpor9leiyLeuA3e86mQNS4wFlaxDMWaB8cZRJv3JTpbyW8/8BGwMzMc8DRHmzDcf2beVXx1rgdcnwU/SYiWuaQQwythDrdxUr605DDz7Kvwn+ZH37YbLx9Wl68iPG6hDxC4gZneiHLQn0kg/AeBKRm/BAe7Vgq6gy0U/NZ5FUeB0wowx6j+xQ/BXlsfDoJXsb6MhjKOx4UtO0rV7LuIqTBMrQ8Qg9NgSsMfLKNTwCyrp0k6rJuP10oOol5PICrZ3U2z9vjKul+tJgAbo0w1VGnLs3YJIlOEBzpd7mceveBNM6rxc9ma3kbUVMRmJIGdMxIdmtEJIQaYiCktiEHKHm2okgN6pDMOOHGCMaIDs7zv8RkEzqK8ePKdmuEE7po789wK4ilH7xJaizPT2L4bSoiHSbHbH555CPsHBoXWm30biRx+Yyn7ROsOMfdx6qx+hQieQTIdw/rB14lExmsVmhNY1bGHb4s6N49RuUfOEeOeC+8ldKVts2oG+RtQ8Qha7D55J60QHZ1qEyRngOlG9ZuU7ErVzistAUDyDSKZs3Z9NhNy6j44tbD2MH7HUnc3mHxeuh8ulm2yjPr62K1qXpOcaHL65qcr79uePa9syccrYIGIkU2OpANqR7Uj0pEbfheGs06JqugWFPuzAIZMwhEqy3EkHwQs+Z2ou+gmQUgZXYTB86r4hMwPY1KgfCBulmZbLoSI913wBQkWt6h+z59f1LB17o+6oP1n6vmU3rolXz+sqAyUa/cvWopZko3MJEPhFRUWPQU5E8GAbOZtXSFfbNUmqaf29hvJlBXryMdNdau1t5tmfZeYQ5j4SumzGr2H46Z5zqIcqo+B0OYF03ckesiiVAz0ZPzAMTX7S/uk5Js4+kGWq6SIXxny5Ghu9NHW4OF0ZkAHaEU9/WQqYXuSzuRQR0nuzZ6btVL0UTG14svsfWDv4lNOzG/zf7t7IljA/mkJQJ/nr+8iYBTyvDRg0fdcDbevuhvI7PDxibhGtmPFUEdYS5o7g/H93KlqWsmQxIgMk+QC7HYPekdvJEkfgr+7mvXdJMFWOfEPy1gyCpR7JKHyLJ2CL4zSOsajGXeonzHzqXkZFjlsJPzPD8ek+4M68Wz5c4XhmjGGXBPlCkACvgsEmsQTOmZZoPYcm4wHIuX0vpN1gCAXGNVhLRJhKCnCZO/kTS+x1bXyRzgiQi8tHJ6wS6dUmnid+wNrF+9d/ov5PzMVOY1cJIe/rNUumw2xDc8fPvK9WcM6CsCnUB64GrZuGrEafS83k5TeZpTw1jreZEqh/cBjmN1QFWvn55YGU8HY/t4pzp5lfYpn12IiMgbzFy02XUlyhmK+lIBc0iOmKneRy6PgClgA+h8hwYU7Ow9gfOshdpWIv4ufpImVZ3vPC7u41eUi9HnftZXiAPu0jOZj5Y45X0LzrEf6H2UhZgd7sItR7yZacLZ1QeIOKYnDtwpv4F",
+       "format": "google-gemini-v1",
+       "index": 1
+      }
+     ]
+    }
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 1370,
+   "completion_tokens": 685,
+   "total_tokens": 2055,
+   "cost": 0.00359625,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00359625,
+    "upstream_inference_prompt_cost": 0.0010275,
+    "upstream_inference_completions_cost": 0.00256875
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 556,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ },
+ "image_width": 437,
+ "image_height": 538,
+ "latency_ms": 6312.918500014348,
+ "recorded_at": "2026-10-19T04:08:28.238937Z"
+}

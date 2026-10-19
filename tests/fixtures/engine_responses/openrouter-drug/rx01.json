@@ -1,0 +1,74 @@
+{
+ "image_id": "rx01",
+ "engine": "openrouter-drug",
+ "request": {
+  "model": "google/gemini-3.8-flash",
+  "provider": "google-ai-studio",
+  "prompt_version": "d1",
+  "temperature": 0.0
+ },
+ "response": {
+  "id": "gen-1792382781-1lLyYtFOHJtmlSKivcvw",
+  "object": "chat.completion",
+  "created": 1792382781,
+  "model": "google/gemini-3.8-flash",
+  "provider": "Google AI Studio",
+  "system_fingerprint": null,
+  "service_tier": "default",
+  "choices": [
+   {
+    "index": 0,
+    "logprobs": null,
+    "finish_reason": "stop",
+    "native_finish_reason": "STOP",
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"items\": [\n    {\n      \"raw_name\": \"ATORVA 10mg F. C. TAB. \\\"健喬信元\\\"【學名】\",\n      \"brand_name\": \"ATORVA\",\n      \"generic_names\": [\n        \"ATORVASTATIN\"\n      ],\n      \"box_2d\": [39, 29, 66, 921]\n    }\n  ]\n}",
+     "refusal": null,
+     "reasoning": "**Analyzing Image Content**\n\nI've been focusing on image content recognition. Currently, I'm identifying specific text strings within an image, like \"健保代碼: AC57267100\" and \"商品名: ATORVA 10mg F. C. TAB. \\\"健喬信元\\\"【學名】\". I've pinpointed a potential bounding box for the latter and started parsing the raw name.\n\n\n",
+     "reasoning_details": [
+      {
+       "type": "reasoning.text",
+       "text": "**Analyzing Image Content**\n\nI've been focusing on image content recognition. Currently, I'm identifying specific text strings within an image, like \"健保代碼: AC57267100\" and \"商品名: ATORVA 10mg F. C. TAB. \\\"健喬信元\\\"【學名】\". I've pinpointed a potential bounding box for the latter and started parsing the raw name.\n\n\n",
+       "format": "google-gemini-v1",
+       "index": 0
+      },
+      {
+       "type": "reasoning.encrypted",
+       "data": "EqoHCqcHAWkUfRM/xW4iECgwER5qVnzVtDpJwq5izVhfZs6agawkW0UOlsIVuHJYHlBk6rpsXSD9SmRRhD5d6lKRfpQ1qNWqBOIK3fFlf/XpCRWquvDi2Bnlp1IoVXXwwcxXrwCJDA4P6xx49fXwdEJX3HEwu/wJTSQlg5g5ZA+91xBNDwWfZLhM47L0N7CjMvhw9Mz3AcrMum8DrbpNWXW0ZvADTpvoEaViiVDEgynZWyDqa5tuWIGZFP4o6DvInHavU7smL4uj1/TklozJnqbSqRI250g/6qiQqvlBOqrrZezN7nrYSg45/GhTeQY26qLpiCR6BJ/CclahUKFiKwIfzILmH8JEO0ASAuhbHsw3PffIJPwl7sv2mAYmjz9Mrx+8IkNXZoxCjem1q6rgJdtOp9X6Axar2je9paLkJtkyQUMdmfj4uanNgGAZVU8sWBEZQqMgiJb7cFnjCcC6P/+YsrohRV9mnlZHWw/U50DA8YQKQhkr+11C77JXxEer0rCka/HcHq+Qf0zSHrr5cWlHO/acVRQ5NigCTumP9j4CqdMGTJsBmYWOT2p3FTDnQ0HK4pyFZ3GRaauub7lIytr9xz8UD4LIKFzAv9RMKDpShg0st5ULkgMW8jMPUikNJJXdTtQDTcvXyEb6rXcPPIyV/lj/Iy+7on3QuqzUcXFRsxZhDeKqmSLBCocg77saujH7p5PVL6NUtfwOmTaNtixUj/pEdUHtv1LRbWOjd2tWjrJa+fws+IQwLrXEE7AVVoAzzWG/nqAZ0jIChy43+HCWK/NPZSfHAT7q1f7pw/Yj11CyY7sPpuFNZUN2jmf0r2J7B7noAkaucdMRsVlLH7rZxNk3gJouYdKshlipPwmmV8zUfcXxOoMjBj9vhJi0sim4UoDQSPMAcDEiCHbiT4lJa6zY0kELkVHNkNNbNMGSErv3rMwHTyUmg/AvT1PJwZTSmJsRfPLhl6HTOz9Aa69BCQ4ckwm2EdA+fiaR/SRkphP8VApw+54yjrsMoCq4wKFroZOX38iiV101DLZmZa46Pa3o3zWEnuZ8QgkAaWv3DLZIkHx3cQZ65xPYE3+s5bqUarKKars5Y87Ej6ETKvpAQMBnDkJ4Kfl+MNvTFDh7xmRlWEeWAKgtdkkDwfwi58HRae/PVH1YvdGK13pPt73C74evNjAiY2k/xWpH9WsWuoaly9BDp/ZshHHeBzEVNMTfU9CofwuRealREgxjBP466zI/oFT1o2VfvtE=",
+       "format": "google-gemini-v1",
+       "index": 1
+      }
+     ]
+    }
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 1326,
+   "completion_tokens": 397,
+   "total_tokens": 1723,
+   "cost": 0.00248325,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00248325,
+    "upstream_inference_prompt_cost": 0.0009945,
+    "upstream_inference_completions_cost": 0.00148875
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 293,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ },
+ "image_width": 425,
+ "image_height": 666,
+ "latency_ms": 6465.522699989378,
+ "recorded_at": "2026-10-19T04:06:26.701308Z"
+}

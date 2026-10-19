@@ -1,0 +1,74 @@
+{
+ "image_id": "rx20",
+ "engine": "openrouter-drug",
+ "request": {
+  "model": "google/gemini-3.8-flash",
+  "provider": "google-ai-studio",
+  "prompt_version": "d1",
+  "temperature": 0.0
+ },
+ "response": {
+  "id": "gen-1792382936-dgzyhOD5o9MfMpAxesKr",
+  "object": "chat.completion",
+  "created": 1792382936,
+  "model": "google/gemini-3.8-flash",
+  "provider": "Google AI Studio",
+  "system_fingerprint": null,
+  "service_tier": "default",
+  "choices": [
+   {
+    "index": 0,
+    "logprobs": null,
+    "finish_reason": "stop",
+    "native_finish_reason": "STOP",
+    "message": {
+     "role": "assistant",
+     "content": "{\"items\":[{\"raw_name\":\"Cleocin 150mg/Cap\",\"brand_name\":\"Cleocin\",\"generic_names\":[\"Clindamycin\"],\"box_2d\":[411,101,513,318]},{\"raw_name\":\"Ergometrine Maleate 0.2mg/Tab\",\"brand_name\":null,\"generic_names\":[\"Ergometrine Maleate\",\"Ergometrine\"],\"box_2d\":[515,103,592,370]},{\"raw_name\":\"Ponstan 500mg\",\"brand_name\":\"Ponstan\",\"generic_names\":[\"Mefenamic Acid\"],\"box_2d\":[594,105,646,365]}]}",
+     "refusal": null,
+     "reasoning": "**Analyzing the Data**\n\nI'm currently focused on dissecting the visual data. The initial step involves identifying key elements within the image, such as the location of the medication name, indicated by a green box. Right now, I'm parsing the information within the first medication's name section, which contains the name `Cleocin 150mg/Cap`.\n\n\n**Extracting Drug Information**\n\nI've moved on to extracting information about the drugs. I've begun parsing the details for three medications. I've successfully identified the raw names, brand names, and generic names, including alternate names in Chinese. For the second drug, I'm noting the brand name is null since the name provided is a generic one. I've also stored the 2D bounding box data associated with each drug for further use.\n\n\n",
+     "reasoning_details": [
+      {
+       "type": "reasoning.text",
+       "text": "**Analyzing the Data**\n\nI'm currently focused on dissecting the visual data. The initial step involves identifying key elements within the image, such as the location of the medication name, indicated by a green box. Right now, I'm parsing the information within the first medication's name section, which contains the name `Cleocin 150mg/Cap`.\n\n\n**Extracting Drug Information**\n\nI've moved on to extracting information about the drugs. I've begun parsing the details for three medications. I've successfully identified the raw names, brand names, and generic names, including alternate names in Chinese. For the second drug, I'm noting the brand name is null since the name provided is a generic one. I've also stored the 2D bounding box data associated with each drug for further use.\n\n\n",
+       "format": "google-gemini-v1",
+       "index": 0
+      },
+      {
+       "type": "reasoning.encrypted",
+       "data": "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",
+       "format": "google-gemini-v1",
+       "index": 1
+      }
+     ]
+    }
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 1352,
+   "completion_tokens": 961,
+   "total_tokens": 2313,
+   "cost": 0.00461775,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00461775,
+    "upstream_inference_prompt_cost": 0.001014,
+    "upstream_inference_completions_cost": 0.00360375
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 794,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ },
+ "image_width": 1792,
+ "image_height": 1312,
+ "latency_ms": 8944.520499993814,
+ "recorded_at": "2026-10-19T04:09:05.860620Z"
+}

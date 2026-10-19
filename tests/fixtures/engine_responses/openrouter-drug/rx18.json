@@ -1,0 +1,74 @@
+{
+ "image_id": "rx18",
+ "engine": "openrouter-drug",
+ "request": {
+  "model": "google/gemini-3.8-flash",
+  "provider": "google-ai-studio",
+  "prompt_version": "d1",
+  "temperature": 0.0
+ },
+ "response": {
+  "id": "gen-1792382923-wMKwA91s0wdgqkw9nCV8",
+  "object": "chat.completion",
+  "created": 1792382923,
+  "model": "google/gemini-3.8-flash",
+  "provider": "Google AI Studio",
+  "system_fingerprint": null,
+  "service_tier": "default",
+  "choices": [
+   {
+    "index": 0,
+    "logprobs": null,
+    "finish_reason": "stop",
+    "native_finish_reason": "STOP",
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"items\": [\n    {\n      \"raw_name\": \"Patcal eye lotions\",\n      \"brand_name\": \"Patcal eye\",\n      \"generic_names\": [],\n      \"box_2d\": [346, 30, 383, 331]\n    }\n  ]\n}",
+     "refusal": null,
+     "reasoning": "**Analyzing the Prescription Details**\n\nI'm now focusing on deciphering the prescription details. Specifically, I'm breaking down the components: the medication name and its dosage specifics (unit, route, quantity, total amount, and administration method). Currently, I'm parsing \"Patcal eye lotions OU 2 2.0 = 1天,\" paying close attention to any ambiguities, like missing dots or strokes within the text. My next step is to examine the information following this line.\n\n\n",
+     "reasoning_details": [
+      {
+       "type": "reasoning.text",
+       "text": "**Analyzing the Prescription Details**\n\nI'm now focusing on deciphering the prescription details. Specifically, I'm breaking down the components: the medication name and its dosage specifics (unit, route, quantity, total amount, and administration method). Currently, I'm parsing \"Patcal eye lotions OU 2 2.0 = 1天,\" paying close attention to any ambiguities, like missing dots or strokes within the text. My next step is to examine the information following this line.\n\n\n",
+       "format": "google-gemini-v1",
+       "index": 0
+      },
+      {
+       "type": "reasoning.encrypted",
+       "data": "EuMICuAIAWkUfRPWYk7whL/F7XuOcngnPr5rNo9oo4Xte2b3+KW4s7MiiSSrysXfsDRdQvprHaRp184KJh02Hzyhfpnq/MkvOmXGnWpUDZucDr89143p11QTTuZGHiiwBuIv48wceiuSP+XX14AIcI2q/KR0bfE+lRrzGdgxr/K5RXOIvuIwsXQvM8PZsYJOiC795wsnMNBo0GNkY/7+DCHyMV4ToHjUmu6k6naLqyjEuEfeCASgeUpnPNYAGSTmSLHWN8XBJ/TNhmaYukqhn+MsqwMTUO0TXlfhhYGDQlWUX7+e9WHGbc7Ffu69+dWWSZOp/yJBDhBetvS+ys2z6TQ25hQZS3oec8xgpPaWnbskf8a+e4IefLBAppn35OhUiwBjVZ9pEhjspVNAEhksaclrweCrYDyWCR4aFLFumzsqDu3zirVUJtXqF5PsQPThmmYMhp5HNbvPEfDjyz+nKSR9WqAUi7zHZlQSOKzXQ5ot0V+5Doiztm0QoE2VUnPBFjmYfa0eUi2rTkek108yQUt01UZ+q6E69zK38gGKD4SPMtfqd3hdz7AhKhO8LCqjYs5UR/3+23jpDfDLklBcW/ISa/rdrf6KUIn9yE3oxPiXlgZDj7m0hRKlB2rEshRSGderAFGV/8pqI0h3zYJyMdxNZHV7rcQmQLyBN6iCL26+G5UpmEdn5qhalkT9VNy7oyFop22Q3z2Uk5+5n6/ZWRj3RXDDL69MGksXlWREtPW2E/6VDRic0EAIo6Ai+sOfAfQYdlXYf6eSfNpTacgGoMwmYeYUjBrlZsVY9MGN0mhaYBIWlb2isS115VGSZk2haeCneHfNxatxqzePrGCbZgcjmMPCRPROUQFJq4VYKyHpN/WG7AEGvr7jnPWZgmO13Q9KaXbtZj+k3YH1xd9z+ioIuNnJnj/hKJuYb99wbvsRiBO+djxd2ydI+KChtDphnDQNcHEvdEaSQZG29jDuTxr906EE/aoHbdHim5L3/baaMtILfmHXlEW1yUydlN03J2XyHbH720fXvfLwg8i4au4wf7dme5jHWpmsR7try10opd/WzJoXShf0VtaF3lLZBvnyUEnAAQwUPQN8zGPbV2hLWC8aFrASqKV49U+R8TFuUMAHd9JxzcMdOSwUznntvSCnsN0Yd3niiqkkimA5mWCVyMXfU3sUeSGOmuzXhzUn8XybFSgy7mXejVABYCyaOOfpQVV2VvUyU0cJD4tiT7AGdxcVu/GbxKrq4VNr+INoYvBrisQsGPPVnwuZ3ruUy9RiqgsiBFkakS5uNm7NiMgB8sKLqLiRJnXc036TwmXhO/H2VCTBMaDauRWRpXB47kWHkzYe9oOhhaAHjIc84UrQBT9wkG7z8u1CIPfVs6pf3qrUfQOqckDt1dNR9bJobgdpnH8acxJSu/8seGJ4pfQMsGlYlZapg+Nnu5ADO4CSnaTB8nynzfj7b7Ye6NHICSpy0jYPOQN1orgWLQwVT+QwToTmQQ==",
+       "format": "google-gemini-v1",
+       "index": 1
+      }
+     ]
+    }
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 1345,
+   "completion_tokens": 380,
+   "total_tokens": 1725,
+   "cost": 0.00243375,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00243375,
+    "upstream_inference_prompt_cost": 0.00100875,
+    "upstream_inference_completions_cost": 0.001425
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 302,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ },
+ "image_width": 600,
+ "image_height": 538,
+ "latency_ms": 5931.459599989466,
+ "recorded_at": "2026-10-19T04:08:50.287694Z"
+}

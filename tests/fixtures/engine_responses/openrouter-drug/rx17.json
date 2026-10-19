@@ -1,0 +1,68 @@
+{
+ "image_id": "rx17",
+ "engine": "openrouter-drug",
+ "request": {
+  "model": "google/gemini-3.8-flash",
+  "provider": "google-ai-studio",
+  "prompt_version": "d1",
+  "temperature": 0.0
+ },
+ "response": {
+  "id": "gen-1792382919-iAuKWYZh2ki0EULCrxj2",
+  "object": "chat.completion",
+  "created": 1792382919,
+  "model": "google/gemini-3.8-flash",
+  "provider": "Google AI Studio",
+  "system_fingerprint": null,
+  "service_tier": "default",
+  "choices": [
+   {
+    "index": 0,
+    "logprobs": null,
+    "finish_reason": "stop",
+    "native_finish_reason": "STOP",
+    "message": {
+     "role": "assistant",
+     "content": "{\"items\": [{\"raw_name\": \"Norvasc 5 mg/tab (Amlodipine Besylate)\", \"brand_name\": \"Norvasc\", \"generic_names\": [\"Amlodipine Besylate\"], \"box_2d\": [368, 103, 417, 326]}, {\"raw_name\": \"5警 Coumadin 5 mg/tab (Warfarin Sodium)\", \"brand_name\": \"Coumadin\", \"generic_names\": [\"Warfarin Sodium\"], \"box_2d\": [429, 103, 477, 352]}]}",
+     "refusal": null,
+     "reasoning": null,
+     "reasoning_details": [
+      {
+       "type": "reasoning.encrypted",
+       "data": "EtoECtcEAWkUfRMtH8g+pjqbHZ2S4Wu8NARKSDA8byvVnxk3QnR1BLbXHLfKhCG3WvcpKnK+NZM0KyUE3uZ3r/HeDmy4BTndp5p1BY7vW6D67vLXHtBYexlQJEKU09A91zDQ1u7bIj74Y3xk/tWT9he82+VCsWMbrHOlLqpK/YZtBkFQEauqZPWffPIuzcYjSNHInNq/VEaLyVoOPcmAniTWUjUWEJqnCZamsmSxwatENaZwMxhy5RsjiRjM3WMh7gS24MW8qaHHXg2HWHDhSf+Y0Gu80AgyluZiYnYvc4FgcHo3WAcYJ1FyH8insupkIyXAGhPDdbes0J8ReCQn46PfkO12Dxz7y6qkGp4tCen1NFUVmV60AdKvBGNUOMU+59ovvSfAB9g77dAP1W7YcWD1BBsTnYrCY+z+Pwe5L9MYepd9VPd+c5PaEEguC0oHpFnFk51z9YlFzLBGMOq6hbSUHtlgQ2j4YeZM2GN5OBGF4uzBPSHmoz1P/S42Lpr3xVaGQZvIuNc0wsz7hLqAq3OXYv6/ZL+74HZN4oDa//RYBtCIfopoN2I2K8FnkGzCUtaa2ujrHOFmhPHNKF4xYi8zyT089O6ljBVBztzFWrxB6NDlSOgpU6US0h5CWFIcGYkZfFjcYv5F2X3HY30lhwrwnvZuzHDKXjiHiLShKUpc+XLjJqOmSx4dAUy7xv6gGyvjZyPurcejS0Hip0VyUf7gezwapINcGxpWOQomT7NOHk13O2bRkTSiYcJmCrrI6PpNwEDoj5vNn4ekj+YLF26isfgAinZRMjkHTns=",
+       "format": "google-gemini-v1",
+       "index": 0
+      }
+     ]
+    }
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 1349,
+   "completion_tokens": 322,
+   "total_tokens": 1671,
+   "cost": 0.00221925,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00221925,
+    "upstream_inference_prompt_cost": 0.00101175,
+    "upstream_inference_completions_cost": 0.0012075
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 180,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ },
+ "image_width": 691,
+ "image_height": 684,
+ "latency_ms": 4549.6816000086255,
+ "recorded_at": "2026-10-19T04:08:44.353278Z"
+}

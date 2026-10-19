@@ -1,0 +1,74 @@
+{
+ "image_id": "rx05",
+ "engine": "openrouter-drug",
+ "request": {
+  "model": "google/gemini-3.8-flash",
+  "provider": "google-ai-studio",
+  "prompt_version": "d1",
+  "temperature": 0.0
+ },
+ "response": {
+  "id": "gen-1792382811-19AKoh5KgQdNC4YgfPNI",
+  "object": "chat.completion",
+  "created": 1792382811,
+  "model": "google/gemini-3.8-flash",
+  "provider": "Google AI Studio",
+  "system_fingerprint": null,
+  "service_tier": "default",
+  "choices": [
+   {
+    "index": 0,
+    "logprobs": null,
+    "finish_reason": "stop",
+    "native_finish_reason": "STOP",
+    "message": {
+     "role": "assistant",
+     "content": "{\"items\": [{\"raw_name\": \"HYZAAR 【100+12. 5】 FC TAB. “默沙東”\", \"brand_name\": \"HYZAAR\", \"generic_names\": [\"LOSARTAN POTASSIUM\", \"HYDROCHLOROTHIAZIDE\"], \"box_2d\": [36, 43, 64, 833]}]}",
+     "refusal": null,
+     "reasoning": "**Extracting Drug Information**\n\nI've successfully extracted key drug information from the image. I've identified the product name as \"HYZAAR 【100+12. 5】 FC TAB. “默沙東”\". Furthermore, I've correctly extracted the active ingredients, which are \"LOSARTAN POTASSIUM… 100mg\" and \"HYDROCHLOROTHIAZIDE… 12. 5mg\". My focus is now on structuring this data.\n\n\n",
+     "reasoning_details": [
+      {
+       "type": "reasoning.text",
+       "text": "**Extracting Drug Information**\n\nI've successfully extracted key drug information from the image. I've identified the product name as \"HYZAAR 【100+12. 5】 FC TAB. “默沙東”\". Furthermore, I've correctly extracted the active ingredients, which are \"LOSARTAN POTASSIUM… 100mg\" and \"HYDROCHLOROTHIAZIDE… 12. 5mg\". My focus is now on structuring this data.\n\n\n",
+       "format": "google-gemini-v1",
+       "index": 0
+      },
+      {
+       "type": "reasoning.encrypted",
+       "data": "ErQICrEIAWkUfRMTjYLI4gvgwWI/LmyCKwezSdnLHvsqH+4q9XRfnkA1ybR6wRMyIlz8Ijqi1vtIig6tLJ5qqom6IeF8DqwkPvNZi8GYsVDikMZLDrHUtJvF5tjG12FzKNxMV4cOxw95yoj+dvNoh2n4u73yUhQ0T6xv1cz8H+MILGu4jcKpRBcmhoc2BuI69BfkpPrlDxRrNoJMyDXrfreBgjjv3ZqL9sXDWeFORnlZ9k/9NxJ18hd5xfx6t2Y2AYDYCTOW1Za9LOi6V4LPAT17OdjIMA2A0hosftydTPoILjtuXKvSp57oa63V+0amKCvH3W9geCLFL7eyjbq5zLaDOzjaMOHJ0NxcuBoVjFFV5aTqAJoSAs9SDA0x7+10EzPqSYEr5thj/NJ9Rl147LSnwQ/IkBgUO0+6nSaK6yop+g/PlQoiY5aW6WWMN7yceH8cnDGnHjt7uIX0QbbzoNmOnrz0ySgbLxbSxO/M4w33QFCAeqMRDr7QjLkLMHHXEfIfxDWJThBMtB1M+gLgI7otbu39i46aEff8uOAOgE8FVw86kskrA+XkXOMy3MIfADx/0xBCBTeJzYcwoHsvAIEspQRESTEGjHHy+gs0c6hg37rAglLiaYjTL/1FW4UTUERnHKLCIi8x9hrjHDiwywCTtyI1gsCGZEHc5IuKQ0XMQSR4jxe3wSlUi2bg866KMOq0CTVDIa8vLJ4cLQ8OUm8VEwzMZNT8LtdEjlr4GRcVBai/5SktFmWN2j5om1kk1OKA/u6HSPl+6G5/ukiri+lgDOMK7itxXZFzxWh4uxvuSH2LPNsEPcmR1W73x2zTM1+/zvLKdHwd5KQ2fvLBj22voH3HwUVJxGAjEk+mSnb1wKCb0rmWGzA0Wu3vA45TwLXWU0Vpk+G19pdSM6z067yuiTBegysvgclOKAaEy7710WS+4fZgxOVL+y48bjbHnnQ6RaTrSD02c9yOQA9LN44CTbGv3yiJYPrXkuZ7HXDZLlyOeUQAMcawB9LtbwoorIzG2S3iJPrNOwV4WVGtDD6nRlY6e52gn3pSvYZqTepd1zrVvpL578kZEU3pcnPAvoKE1U5EJQ+HzimKUPUFQ5SlhAJa6NMUs2xLB8/DhZn1k1owqhmnMWF/WXfNhOVCbDw1h1hL1xwbxIamYMlf+jeDjyih8ZB6rmzKsnz1USJSgMwqIqbLIUwLuUUQeNrmD6N6ox3dZu2zZbogLrzkJ/3nCFGCZAcvm8ek7fqdtlYJS7k93WZxS9XVXQeX9fn5r9gk5ZskHmO8jQjljbVq6LQNzNyQItngC6oZAodFTIER2mdlK3dDjrVliu0AiHNw6naO2/UGxypUQR9jioYWie7YdywdexWoMAiXOhbqpyEgYO4lqKdQMXR5vkCg1FISFnCPAlH9/Dhnl/OunHWmfxg0OWWRyO8=",
+       "format": "google-gemini-v1",
+       "index": 1
+      }
+     ]
+    }
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 1340,
+   "completion_tokens": 399,
+   "total_tokens": 1739,
+   "cost": 0.00250125,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00250125,
+    "upstream_inference_prompt_cost": 0.001005,
+    "upstream_inference_completions_cost": 0.00149625
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 311,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ },
+ "image_width": 424,
+ "image_height": 629,
+ "latency_ms": 4799.002199986717,
+ "recorded_at": "2026-10-19T04:06:56.702801Z"
+}

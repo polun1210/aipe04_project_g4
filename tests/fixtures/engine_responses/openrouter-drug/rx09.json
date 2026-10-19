@@ -1,0 +1,74 @@
+{
+ "image_id": "rx09",
+ "engine": "openrouter-drug",
+ "request": {
+  "model": "google/gemini-3.8-flash",
+  "provider": "google-ai-studio",
+  "prompt_version": "d1",
+  "temperature": 0.0
+ },
+ "response": {
+  "id": "gen-1792382851-gIQxzyPMWY81vYpKYhBq",
+  "object": "chat.completion",
+  "created": 1792382851,
+  "model": "google/gemini-3.8-flash",
+  "provider": "Google AI Studio",
+  "system_fingerprint": null,
+  "service_tier": "default",
+  "choices": [
+   {
+    "index": 0,
+    "logprobs": null,
+    "finish_reason": "stop",
+    "native_finish_reason": "STOP",
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"items\": [\n    {\n      \"raw_name\": \"Insulin determir 300IU/3ml/pen Levemir FlexPen【綠藍】\",\n      \"brand_name\": \"Levemir FlexPen\",\n      \"generic_names\": [\"Insulin determir\"],\n      \"box_2d\": [243, 58, 262, 511]\n    },\n    {\n      \"raw_name\": \"Sitagliptin 50mg+ Metformin 500mg/tab Janumet【複方】\",\n      \"brand_name\": \"Janumet\",\n      \"generic_names\": [\"Sitagliptin\", \"Metformin\"],\n      \"box_2d\": [289, 58, 307, 456]\n    },\n    {\n      \"raw_name\": \"Pitavastatin 2mg/F.C. Tab Livalo\",\n      \"brand_name\": \"Livalo\",\n      \"generic_names\": [\"Pitavastatin\"],\n      \"box_2d\": [312, 58, 330, 383]\n    }\n  ]\n}",
+     "refusal": null,
+     "reasoning": "**Analyzing Prescription Data**\n\nI'm currently focused on extracting drug information from prescription images. My goal is to parse the data from the prescription tables, specifically identifying and cataloging each medication without duplication. I'm paying close attention to the table columns: [自費], [學名], [商品名], [次量], [單位], [用法], [天數], and [總量] to ensure accurate extraction for the required JSON output.\n\n\n**Refining Drug Extraction**\n\nI've refined my approach to handle variations in drug prescriptions. Specifically, I'm focusing on consolidating duplicate drug entries that have different usages (QD vs. HS). The focus is now extracting the primary drug information, raw_name, and consolidating the drug entry, not repeating them due to different dosages. The current method now extracts and consolidates the drug names, with an example entry being \"Insulin determir 300IU/3ml/pen Levemir FlexPen【綠藍】\".\n\n\n",
+     "reasoning_details": [
+      {
+       "type": "reasoning.text",
+       "text": "**Analyzing Prescription Data**\n\nI'm currently focused on extracting drug information from prescription images. My goal is to parse the data from the prescription tables, specifically identifying and cataloging each medication without duplication. I'm paying close attention to the table columns: [自費], [學名], [商品名], [次量], [單位], [用法], [天數], and [總量] to ensure accurate extraction for the required JSON output.\n\n\n**Refining Drug Extraction**\n\nI've refined my approach to handle variations in drug prescriptions. Specifically, I'm focusing on consolidating duplicate drug entries that have different usages (QD vs. HS). The focus is now extracting the primary drug information, raw_name, and consolidating the drug entry, not repeating them due to different dosages. The current method now extracts and consolidates the drug names, with an example entry being \"Insulin determir 300IU/3ml/pen Levemir FlexPen【綠藍】\".\n\n\n",
+       "format": "google-gemini-v1",
+       "index": 0
+      },
+      {
+       "type": "reasoning.encrypted",
+       "data": "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",
+       "format": "google-gemini-v1",
+       "index": 1
+      }
+     ]
+    }
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 1340,
+   "completion_tokens": 1349,
+   "total_tokens": 2689,
+   "cost": 0.00606375,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00606375,
+    "upstream_inference_prompt_cost": 0.001005,
+    "upstream_inference_completions_cost": 0.00505875
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 1068,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ },
+ "image_width": 1074,
+ "image_height": 1259,
+ "latency_ms": 11937.47770000482,
+ "recorded_at": "2026-10-19T04:07:43.344540Z"
+}

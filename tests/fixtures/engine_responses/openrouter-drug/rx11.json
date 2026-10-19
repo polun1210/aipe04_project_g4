@@ -1,0 +1,74 @@
+{
+ "image_id": "rx11",
+ "engine": "openrouter-drug",
+ "request": {
+  "model": "google/gemini-3.8-flash",
+  "provider": "google-ai-studio",
+  "prompt_version": "d1",
+  "temperature": 0.0
+ },
+ "response": {
+  "id": "gen-1792382870-nYE86YSz3G45qFqp1mLF",
+  "object": "chat.completion",
+  "created": 1792382870,
+  "model": "google/gemini-3.8-flash",
+  "provider": "Google AI Studio",
+  "system_fingerprint": null,
+  "service_tier": "default",
+  "choices": [
+   {
+    "index": 0,
+    "logprobs": null,
+    "finish_reason": "stop",
+    "native_finish_reason": "STOP",
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"items\": [\n    {\n      \"raw_name\": \"感冒膠囊\",\n      \"brand_name\": \"感冒膠囊\",\n      \"generic_names\": [\n        \"Acetaminophen\"\n      ],\n      \"box_2d\": [\n        442,\n        324,\n        471,\n        580\n      ]\n    }\n  ]\n}",
+     "refusal": null,
+     "reasoning": "**Analyzing Image Contents**\n\nI've extracted the key information from the image. It's a medication bag sample. I've noted the drug name as \"Cold Capsule,\" the dosage (Acetaminophen 300mg), the quantity (9 pills), and the usage instructions: 1 pill, 3 times daily, for 3 days. The intended use is for the relief of cold symptoms.\n\n\n",
+     "reasoning_details": [
+      {
+       "type": "reasoning.text",
+       "text": "**Analyzing Image Contents**\n\nI've extracted the key information from the image. It's a medication bag sample. I've noted the drug name as \"Cold Capsule,\" the dosage (Acetaminophen 300mg), the quantity (9 pills), and the usage instructions: 1 pill, 3 times daily, for 3 days. The intended use is for the relief of cold symptoms.\n\n\n",
+       "format": "google-gemini-v1",
+       "index": 0
+      },
+      {
+       "type": "reasoning.encrypted",
+       "data": "EqUHCqIHAWkUfRNId6XJCmoNSDiAbe3lMaKqn6LcerMHwjEwc1uoE/BOPY24qHDj1wWhH91cfEpmVPv8gT930baJU2Cix2rUTZf2FGm9zVvZJ1smu2VwXjL4F7hNZjxovnrMlIjEsZFLi7S1jzpuVsYm8yObZR4y8RxqPSsCKitL8aXCc9fdHzXt4ZH2sFPXtVxXZi+ZE62DqB6V5J2ihMAzl7/8rbpA56xeM12l4pYsEhvasUqUNWlZpmnKeB/VeX4iWT2aU1ODQdWr0YHdbnpYNWkE4Usx1Io5Z0zJJMRO1+3Icy19IxY0QVYINiKVneWX7NMp0w9rszBMsyIKWFjegOWRfNAnJyRuh9jUQReCFPByrx6w8DKIn/Ol2qtz6m61xdbrhPb7Nmk+TlqstzMMisB81iMlpjwMt9AiOYO0zDTDHKWgB8/hdP065yxrS8IE6sx9aJg5tfmCAlBd8LERHxw0hDrHacFw4DPw1mB/TYsWeTwd7OHi7JzO1i5UJJY6UzVhrGnvs4J1ftUjziHTLu4Fxs4bCsQblWwD7MLRVKtnfJdbwqchX1fXWB+B4fbUExpy6KgMT17+1/gzm6ODBVDIID/aIwvqffsN+QvdDwKYjFudcf14WCN4X7157RoXi0eNTx5Mc21pKa/pTj3N8lur0Pz8H4d8Egm8VGAoywEBr3u6UwSfjDAhAPXBlPhtHu8GksVUrTyX0ba5BMZrl5H5Ioh9SA1I2ZDkhPBrpgLJdTtocFsMhC3Ju+ZzVupzeVnJJWmgL4b/Pq2ZmZ/k7ln/mJnrJyy8sSl/6PvpwFtC17VWMuirjaFI9EnJRZIfsM9sDQk6988nP1yanXLOjfqph+Gu2o+WNzV483ccYTN18AWlw3bHOC83JOmdioSuSTkfwVIomHsa9GHkIR06rIoMTqU4mIhoOIq1Z7A8x/6itcm6lyKIv53SUV+q7QNaZHs8nU5eqhNzJKgsJ3epFqyyXQdcTkmB/hfwjTSX9en9VxZcDDfzCXQP8yy31hdUOFitfoVKzhZ2fT6uRp3nhGxr0lnkv64rVHASGsZcWO61Oat9zZr2Cihj3ExqnpOkHlGBbWOGENZaRR+If6a8v7Z5Geo4c3ozMbEVHFxxDiu8TsoaVe/VuwRqiV024zBmTO9A8WQkkvELa4fNCgm97Jq+f1wDwWY6Sw4G3vZ3U71ecUgFAnSicOszZQrM40br0sfjn2uhzyLuCJiEfgrUL/LBT0oD",
+       "format": "google-gemini-v1",
+       "index": 1
+      }
+     ]
+    }
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 1349,
+   "completion_tokens": 338,
+   "total_tokens": 1687,
+   "cost": 0.00227925,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.00227925,
+    "upstream_inference_prompt_cost": 0.00101175,
+    "upstream_inference_completions_cost": 0.0012675
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 242,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ },
+ "image_width": 1134,
+ "image_height": 1134,
+ "latency_ms": 4940.8994000114035,
+ "recorded_at": "2026-10-19T04:07:56.240487Z"
+}

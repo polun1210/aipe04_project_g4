@@ -1,0 +1,74 @@
+{
+ "image_id": "rx12",
+ "engine": "openrouter-drug",
+ "request": {
+  "model": "google/gemini-3.8-flash",
+  "provider": "google-ai-studio",
+  "prompt_version": "d1",
+  "temperature": 0.0
+ },
+ "response": {
+  "id": "gen-1792382875-bnETFVDK1TFQzssZN2vH",
+  "object": "chat.completion",
+  "created": 1792382875,
+  "model": "google/gemini-3.8-flash",
+  "provider": "Google AI Studio",
+  "system_fingerprint": null,
+  "service_tier": "default",
+  "choices": [
+   {
+    "index": 0,
+    "logprobs": null,
+    "finish_reason": "stop",
+    "native_finish_reason": "STOP",
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"items\": [\n    {\n      \"raw_name\": \"Spiriva Respimat 2.5mcg/puff, 60puff/bot(tiotropium) 適喘樂舒噴吸入劑\",\n      \"brand_name\": \"Spiriva Respimat\",\n      \"generic_names\": [\n        \"tiotropium\"\n      ],\n      \"box_2d\": [\n        205,\n        203,\n        272,\n        618\n      ]\n    }\n  ]\n}",
+     "refusal": null,
+     "reasoning": "**Analyzing Image Data**\n\nI'm currently working on extracting medication information from the image. My focus right now is on identifying the medication name region. I've located \"藥名 Medication\" and am processing the text to its right, which currently reads \"Spiriva Respimat 2.5mcg/puff, 60puff/bot(tiotropium)\".\n\n\n",
+     "reasoning_details": [
+      {
+       "type": "reasoning.text",
+       "text": "**Analyzing Image Data**\n\nI'm currently working on extracting medication information from the image. My focus right now is on identifying the medication name region. I've located \"藥名 Medication\" and am processing the text to its right, which currently reads \"Spiriva Respimat 2.5mcg/puff, 60puff/bot(tiotropium)\".\n\n\n",
+       "format": "google-gemini-v1",
+       "index": 0
+      },
+      {
+       "type": "reasoning.encrypted",
+       "data": "EtMLCtALAWkUfRObu/HGWbSh8pDs/hU4fIvkZXCRIL7GGnHjpPv9WIaUnsVmlI8SIMR6mjyJMgATlCQHec+BA3v4bzM4NJf3uCuS8fe8oTGplRFV2h7oO3D45SbsVEjNKD8mZ/P7GBp+O2qaYiy8wwGPAaAP9lIuLYB5NuEqSKzl25H9zP+PfwPhFaaiaRpJPv9I1Kb83Y4Ie+JEdx/RBboGMo7ZoVUOB6rC5gLd7Nh19V7lawZFdGKB/yR7RpwWKUiXnGDEjHpGDjVbRzEstOdRe0WKprbxjrmiymRz5K/zKdrn9VKrB4RsgsAMNizYLX9FtSG8kY915iyQVPGchIkIyJpcX1ccTtcIDiFQKXTt9VK7cCedSUaUOdsgpeclQp9AD0i7u9Trz9QyTVN0PwStj90rpliARNJvU+p5nlKejWdqqYEgjVt2IjppsDy3K2jK8J859NkbbzAjcgK00McI5gmk0bYz9oZhL1wqe7eCU5iQw5K70ON2ikihNOeeCX61SNKdXQY39FWSITQ6IOb0EY4650nGtsxR397YTIyYkcSh20T5WTnA0ODc7qT0mTO/KB/SYM+uPHjoNgMMmf4FPngF02ZqAZr1xLYITFv8Dr6EO9lCKKIJsDp4oxNpu0jFW3/vhF9WnKYhDZ/B+1smI/tXahFSID+S2SACiCyAro4Ur7KzzRFq4CAXCothhsUjA9bpfo/0bXLqzO8QJZX1Ys3fAYpchvLiEbCrm1EFOefCRszLVWSbkNGplrvUmIPmYTDeyFpAcWedUcJb9xz2VsdCDjM4dN0eBbGeiuiK4rEafrLNDqybwykC79Y2IfgFJW+L21TI2cbDuH9vGwXbjQ89PMbcs2GtvwKkMBZydPiROyGEYAMpCOJXNfr5e6MyRsTDS5123FGqy2c0TdW0ZJdTbvzgCMLQPtqfb7Ik3f7cwBWTooKId/Ctqi650QD6+ATcsr/kZ6WM/Pcy97kTQzdsTWaN4U2CeE5eADxIfE4lohXRWpz7xPrn/RPLqqsZyPSB27PQse3klVU3kdyvNDHeZ9fqp0nWl+GP2T2Z5pXlGRxoEdq7U6nx6wAfD6CgDIOJ9o6rmc9aMEm8DLxRRCE8alI99FBSjtFl4Xne4suUs/gjzA9hLGe5GAUpCiIDlzmERMJAlOHq4JChv3zmi9kK/go4t+ZTkqVodOPi4EnAKbsrcQkXhyCSozO5F9E1QHhihxPjLTFe4Lw8Go7tanwbfjmyf/Jd6hExmJjOLVPlZoy48Vj+xM+xkWvIdzhFrb4BRpu5BtTg74gN9QSsadmPKaBLUManMm1hlm+t3j/vHm4BuvKLQZ9S3OGkbeV1KoZU6LUrqSNRjI98/7erzDnv5DFiso2aS37lS7X2NFJW/DnEgQyPuRJ2roataDvObkfB1tDAhOWqlb9svs5nwb/Q4Wujkh/Tcm1XUNzpPxWXpVsIp/zyxd7LryLuLVQ/ZxPa1Sfoh9+8P0yf7pu45f55uxfs4bLXWE6c34RUcHFDV2oEB+j7tw2JZQT7A8/oK1XNK2flQLJ0SfYY/Qa3KdVaKv1BLUqgckWbhgiex2YAGfUL3GT2cunvR4TsdNN2bcRCP5dtAWn/dD/n1pFYIYw0udRvznS/clBvk/DmKiuxSzHMi14E9AgjO0E5kXYjoddhoILhTrv1DgQIL7hc7iaLhbr8g55DvZoOeSxW9mMGbNQfSyvl4OVNzz91dxc7m/sqgZNXeTZBoHvzuvwpEG1SODAm6Si+9w1zruWKS0E/rtcYbykFbm4WhWtaNNSOMjwZ3cI0e8aXlH/VytQkdCvSrwak+mLtvID2HQ3VF/vEYGNLPj6JLVIWHtSXQQnknseuR+VkIQngieLCiVdhYXDftUKg5BRa4+XqBlzdwoHo8rzIFviVmJ3/B4dg/noR073StXl1Kn7l1Xh6me9+I7Eb6Y/+USr92ZYj1Rr8qHoSk19Hce0cS7FPhPRrTDodPz42",
+       "format": "google-gemini-v1",
+       "index": 1
+      }
+     ]
+    }
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 1352,
+   "completion_tokens": 556,
+   "total_tokens": 1908,
+   "cost": 0.003099,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.003099,
+    "upstream_inference_prompt_cost": 0.001014,
+    "upstream_inference_completions_cost": 0.002085
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 429,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ },
+ "image_width": 595,
+ "image_height": 825,
+ "latency_ms": 6501.880800002255,
+ "recorded_at": "2026-10-19T04:08:02.745374Z"
+}

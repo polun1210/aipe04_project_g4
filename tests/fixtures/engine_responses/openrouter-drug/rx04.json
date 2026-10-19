@@ -1,0 +1,74 @@
+{
+ "image_id": "rx04",
+ "engine": "openrouter-drug",
+ "request": {
+  "model": "google/gemini-3.8-flash",
+  "provider": "google-ai-studio",
+  "prompt_version": "d1",
+  "temperature": 0.0
+ },
+ "response": {
+  "id": "gen-1792382803-IR5Q6OKWgkJOyxuMPmku",
+  "object": "chat.completion",
+  "created": 1792382803,
+  "model": "google/gemini-3.8-flash",
+  "provider": "Google AI Studio",
+  "system_fingerprint": null,
+  "service_tier": "default",
+  "choices": [
+   {
+    "index": 0,
+    "logprobs": null,
+    "finish_reason": "stop",
+    "native_finish_reason": "STOP",
+    "message": {
+     "role": "assistant",
+     "content": "{\n  \"items\": [\n    {\n      \"raw_name\": \"ATORVA 10mg F. C. TAB. 〝生達〞\",\n      \"brand_name\": \"ATORVA\",\n      \"generic_names\": [\n        \"ATORVASTATIN\"\n      ],\n      \"box_2d\": [34, 15, 60, 705]\n    }\n  ]\n}",
+     "refusal": null,
+     "reasoning": "**Identifying Drug Attributes**\n\nI've identified the drug's key attributes. I've got the brand name (ATORVA 10mg F.C. TAB. \"生達\"), the ingredient name (ATORVASTATIN 10mg F. C. TAB.), and its Chinese name (立舒脂膜衣錠 10mg(H:30#)), along with the NHI code (AC55272100). The \"raw_name\" field seems promising for initial processing.\n\n\n",
+     "reasoning_details": [
+      {
+       "type": "reasoning.text",
+       "text": "**Identifying Drug Attributes**\n\nI've identified the drug's key attributes. I've got the brand name (ATORVA 10mg F.C. TAB. \"生達\"), the ingredient name (ATORVASTATIN 10mg F. C. TAB.), and its Chinese name (立舒脂膜衣錠 10mg(H:30#)), along with the NHI code (AC55272100). The \"raw_name\" field seems promising for initial processing.\n\n\n",
+       "format": "google-gemini-v1",
+       "index": 0
+      },
+      {
+       "type": "reasoning.encrypted",
+       "data": "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",
+       "format": "google-gemini-v1",
+       "index": 1
+      }
+     ]
+    }
+   }
+  ],
+  "usage": {
+   "prompt_tokens": 1367,
+   "completion_tokens": 577,
+   "total_tokens": 1944,
+   "cost": 0.003189,
+   "is_byok": false,
+   "prompt_tokens_details": {
+    "cached_tokens": 0,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0,
+    "video_tokens": 0
+   },
+   "cost_details": {
+    "upstream_inference_cost": 0.003189,
+    "upstream_inference_prompt_cost": 0.00102525,
+    "upstream_inference_completions_cost": 0.00216375
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 478,
+    "image_tokens": 0,
+    "audio_tokens": 0
+   }
+  }
+ },
+ "image_width": 1045,
+ "image_height": 1600,
+ "latency_ms": 8320.808899996337,
+ "recorded_at": "2026-10-19T04:06:51.901406Z"
+}
