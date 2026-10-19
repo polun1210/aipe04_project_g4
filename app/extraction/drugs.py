@@ -56,9 +56,10 @@ class DrugOpenRouterEngine(OpenRouterEngine):
 
 # 鹽類字尾：目錄只收有效成分（「LOSARTAN POTASSIUM」→ losartan）。
 # 先比原名再比去掉鹽類的名稱，「Calcium carbonate」這類本身就是成分的名稱不會被拆壞
+# 只去掉名稱結尾的鹽類字（「Calcium Atorvastatin」開頭的 calcium 不動）
 _SALTS = re.compile(
-    r"\b(potassium|k|sodium|na|hcl|hydrochloride|besylate|besilate|maleate|"
-    r"tartrate|tar|mesylate|succinate|fumarate|calcium|ca)\b\.?"
+    r"(?:\s+(?:potassium|k|sodium|na|hcl|hydrochloride|besylate|besilate|maleate|"
+    r"tartrate|tar|mesylate|succinate|fumarate|calcium|ca)\.?)+$"
 )
 
 
@@ -69,15 +70,17 @@ def _clean(name: str) -> str:
 
 def _variants(name: str) -> list[str]:
     plain = _clean(name)
-    stripped = re.sub(r"\s+", " ", _SALTS.sub(" ", plain)).strip(" .")
+    stripped = _SALTS.sub("", plain).strip(" .")
     return [v for v in dict.fromkeys([plain, stripped]) if v]
 
 
 def map_item(raw_name: str, brand: str | None, generics: list[str], drug_items: list[DrugItem]) -> str | None:
     """依序用商品名、複方合寫、單一學名、原文對照目錄，回傳第一個命中的有效成分代碼。
 
-    複方只用「A + B」合寫比對，不拆開比單一成分，免得複方被當成其中一個單方。
+    圖上寫了多個學名（複方）時，只接受成分數相同的複方品項：不拆開比單一成分，
+    商品名或原文對到單方也不算，免得複方被當成其中一個單方。
     """
+    by_code = {i.active_ingredient_code: i for i in drug_items}
     variants = [v for v in (_variants(g) for g in generics) if v]
     if len(variants) > 1:
         combo = [" + ".join(v[0] for v in variants), " + ".join(v[-1] for v in variants)]
@@ -86,7 +89,10 @@ def map_item(raw_name: str, brand: str | None, generics: list[str], drug_items: 
     for name in [brand or "", *combo, raw_name]:
         if name.strip():
             mapped = map_drug_name(name, drug_items)
-            if mapped.scope_status is ScopeStatus.IN_SCOPE:
+            if mapped.scope_status is not ScopeStatus.IN_SCOPE:
+                continue
+            parts = len(by_code[mapped.active_ingredient_code].english_name.split("+"))
+            if len(variants) <= 1 or parts == len(variants):
                 return mapped.active_ingredient_code
     return None
 

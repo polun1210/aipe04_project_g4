@@ -70,6 +70,14 @@ def test_不該對到目錄的名稱(generics):
     assert map_item("原文", None, generics, ITEMS) is None
 
 
+def test_學名是複方時商品名或原文對到單方也不算():
+    assert map_item("Losartan", "可悅您", ["Losartan", "Amlodipine"], ITEMS) is None
+
+
+def test_名稱開頭的鹽類字不去掉():
+    assert map_item("原文", None, ["Calcium Atorvastatin"], ITEMS) is None
+
+
 def test_沒有通過品質檢查時回錯誤():
     engine = DrugOpenRouterEngine(lambda body: {}, Route("google/gemini-3.8-flash", "google-ai-studio"))
     with pytest.raises(ExtractionError, match="品質檢查"):
