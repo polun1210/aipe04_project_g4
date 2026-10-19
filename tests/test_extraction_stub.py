@@ -41,12 +41,12 @@ def test_extract_without_images_raises_extraction_error():
         extract(PRODUCT_ID, [], [])
 
 
-def test_extract_with_replay_engine_records_engine_version(tmp_path):
+def test_引擎只有文字區塊時回錯誤而不是範例草稿(tmp_path):
     for img in IMAGES:
         recorded = EngineResult(image_id=img.image_id, engine_version="replay-test-1", blocks=[])
         (tmp_path / f"{img.image_id}.json").write_text(recorded.model_dump_json(), encoding="utf-8")
-    draft = extract(PRODUCT_ID, IMAGES, QUALITY, engine=ReplayEngine(tmp_path))
-    assert draft.extraction_meta.ocr_version == "replay-test-1"
+    with pytest.raises(ExtractionError, match="結構化"):
+        extract(PRODUCT_ID, IMAGES, QUALITY, engine=ReplayEngine(tmp_path))
 
 
 def test_missing_recording_raises_extraction_error(tmp_path):

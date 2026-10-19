@@ -1,0 +1,374 @@
+{
+  "image_id": "p11-img01",
+  "engine_version": "openrouter/google/gemini-3.8-flash/google-ai-studio/prompt-g1",
+  "blocks": [
+    {
+      "text": "營養標示與成分",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "營養標示",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "品名",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "內容量",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "食用方式",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "內容物名稱",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "過敏原資訊",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "保存條件",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "有效日期",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "保存期間",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "注意事項",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "服務專線",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "原產地",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "地址",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "每一份量 1錠",
+      "bbox": {
+        "x": 43,
+        "y": 386,
+        "width": 153,
+        "height": 31
+      },
+      "confidence": null
+    },
+    {
+      "text": "每日1錠，餐後食用，一日請勿超過1錠，多食無益。",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "維生素D 20微克(800IU) 200%",
+      "bbox": {
+        "x": 39,
+        "y": 521,
+        "width": 403,
+        "height": 28
+      },
+      "confidence": null
+    },
+    {
+      "text": "鋅 0.023毫克 0%",
+      "bbox": {
+        "x": 40,
+        "y": 553,
+        "width": 402,
+        "height": 29
+      },
+      "confidence": null
+    },
+    {
+      "text": "鎂 0.24毫克 0%",
+      "bbox": {
+        "x": 39,
+        "y": 586,
+        "width": 403,
+        "height": 28
+      },
+      "confidence": null
+    },
+    {
+      "text": "鈣 0.06毫克 0%",
+      "bbox": {
+        "x": 39,
+        "y": 619,
+        "width": 403,
+        "height": 28
+      },
+      "confidence": null
+    },
+    {
+      "text": "錳 0.007毫克 *",
+      "bbox": {
+        "x": 39,
+        "y": 652,
+        "width": 403,
+        "height": 28
+      },
+      "confidence": null
+    },
+    {
+      "text": "微結晶狀α-纖維素",
+      "bbox": {
+        "x": 469,
+        "y": 416,
+        "width": 500,
+        "height": 53
+      },
+      "confidence": null
+    },
+    {
+      "text": "美國AES發酵物[大豆發酵物(大豆發酵萃取物、氧化鎂、乳酸鈣、葡萄糖酸鋅、葡萄糖酸錳)]",
+      "bbox": {
+        "x": 469,
+        "y": 444,
+        "width": 500,
+        "height": 76
+      },
+      "confidence": null
+    },
+    {
+      "text": "維生素D3[辛烯基丁二酸鈉澱粉、蔗糖、L-抗壞血酸鈉(抗氧化劑)、中鏈三酸甘油酯、二氧化矽、DL-α-生育醇(抗氧化劑)、維生素D3]",
+      "bbox": {
+        "x": 469,
+        "y": 499,
+        "width": 505,
+        "height": 113
+      },
+      "confidence": null
+    },
+    {
+      "text": "二氧化矽",
+      "bbox": {
+        "x": 608,
+        "y": 587,
+        "width": 107,
+        "height": 26
+      },
+      "confidence": null
+    },
+    {
+      "text": "硬脂酸鎂",
+      "bbox": {
+        "x": 729,
+        "y": 587,
+        "width": 110,
+        "height": 26
+      },
+      "confidence": null
+    }
+  ],
+  "reading": {
+    "serving": {
+      "raw_text": "每一份量 1錠",
+      "serving_size": 1.0,
+      "dose_unit_raw": "錠",
+      "bbox": {
+        "x": 43,
+        "y": 386,
+        "width": 153,
+        "height": 31
+      },
+      "needs_review": false
+    },
+    "rows": [
+      {
+        "raw_text": "維生素D 20微克(800IU) 200%",
+        "raw_name": "維生素D",
+        "amount": 20.0,
+        "unit_raw": "微克(800IU)",
+        "percent_dv": 200.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 39,
+          "y": 521,
+          "width": 403,
+          "height": 28
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "鋅 0.023毫克 0%",
+        "raw_name": "鋅",
+        "amount": 0.023,
+        "unit_raw": "毫克",
+        "percent_dv": 0.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 40,
+          "y": 553,
+          "width": 402,
+          "height": 29
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "鎂 0.24毫克 0%",
+        "raw_name": "鎂",
+        "amount": 0.24,
+        "unit_raw": "毫克",
+        "percent_dv": 0.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 39,
+          "y": 586,
+          "width": 403,
+          "height": 28
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "鈣 0.06毫克 0%",
+        "raw_name": "鈣",
+        "amount": 0.06,
+        "unit_raw": "毫克",
+        "percent_dv": 0.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 39,
+          "y": 619,
+          "width": 403,
+          "height": 28
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "錳 0.007毫克 *",
+        "raw_name": "錳",
+        "amount": 0.007,
+        "unit_raw": "毫克",
+        "percent_dv": null,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 39,
+          "y": 652,
+          "width": 403,
+          "height": 28
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "微結晶狀α-纖維素",
+        "raw_name": "微結晶狀α-纖維素",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 469,
+          "y": 416,
+          "width": 500,
+          "height": 53
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "美國AES發酵物[大豆發酵物(大豆發酵萃取物、氧化鎂、乳酸鈣、葡萄糖酸鋅、葡萄糖酸錳)]",
+        "raw_name": "美國AES發酵物[大豆發酵物(大豆發酵萃取物、氧化鎂、乳酸鈣、葡萄糖酸鋅、葡萄糖酸錳)]",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 469,
+          "y": 444,
+          "width": 500,
+          "height": 76
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "維生素D3[辛烯基丁二酸鈉澱粉、蔗糖、L-抗壞血酸鈉(抗氧化劑)、中鏈三酸甘油酯、二氧化矽、DL-α-生育醇(抗氧化劑)、維生素D3]",
+        "raw_name": "維生素D3[辛烯基丁二酸鈉澱粉、蔗糖、L-抗壞血酸鈉(抗氧化劑)、中鏈三酸甘油酯、二氧化矽、DL-α-生育醇(抗氧化劑)、維生素D3]",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 469,
+          "y": 499,
+          "width": 505,
+          "height": 113
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "二氧化矽",
+        "raw_name": "二氧化矽",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 608,
+          "y": 587,
+          "width": 107,
+          "height": 26
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "硬脂酸鎂",
+        "raw_name": "硬脂酸鎂",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 729,
+          "y": 587,
+          "width": 110,
+          "height": 26
+        },
+        "needs_review": false
+      }
+    ],
+    "suggested_intake_raw": "每日1錠，餐後食用，一日請勿超過1錠，多食無益。",
+    "headings": [
+      "營養標示與成分",
+      "營養標示",
+      "品名",
+      "內容量",
+      "食用方式",
+      "內容物名稱",
+      "過敏原資訊",
+      "保存條件",
+      "有效日期",
+      "保存期間",
+      "注意事項",
+      "服務專線",
+      "原產地",
+      "地址"
+    ]
+  }
+}

@@ -1,0 +1,272 @@
+{
+  "image_id": "p12-img01",
+  "engine_version": "openrouter/google/gemini-3.8-flash/google-ai-studio/prompt-g1",
+  "blocks": [
+    {
+      "text": "營養標示",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "成分添加量(每日4錠含:)",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "每一份量2錠",
+      "bbox": {
+        "x": 16,
+        "y": 96,
+        "width": 159,
+        "height": 29
+      },
+      "confidence": null
+    },
+    {
+      "text": "維生素D 6 微克(240 IU) 60%",
+      "bbox": {
+        "x": 16,
+        "y": 230,
+        "width": 648,
+        "height": 30
+      },
+      "confidence": null
+    },
+    {
+      "text": "鈣 300 毫克 25%",
+      "bbox": {
+        "x": 16,
+        "y": 260,
+        "width": 648,
+        "height": 30
+      },
+      "confidence": null
+    },
+    {
+      "text": "鎂 150 毫克 38%",
+      "bbox": {
+        "x": 16,
+        "y": 289,
+        "width": 648,
+        "height": 30
+      },
+      "confidence": null
+    },
+    {
+      "text": "鋅 3 毫克 20%",
+      "bbox": {
+        "x": 16,
+        "y": 318,
+        "width": 648,
+        "height": 29
+      },
+      "confidence": null
+    },
+    {
+      "text": "銅 0.6 毫克 *",
+      "bbox": {
+        "x": 16,
+        "y": 347,
+        "width": 648,
+        "height": 30
+      },
+      "confidence": null
+    },
+    {
+      "text": "錳 0.6 毫克 *",
+      "bbox": {
+        "x": 16,
+        "y": 377,
+        "width": 648,
+        "height": 29
+      },
+      "confidence": null
+    },
+    {
+      "text": "大豆胜肽 40 毫克",
+      "bbox": {
+        "x": 16,
+        "y": 498,
+        "width": 648,
+        "height": 30
+      },
+      "confidence": null
+    },
+    {
+      "text": "納豆發酵物(含維生素K2) 30 毫克",
+      "bbox": {
+        "x": 16,
+        "y": 528,
+        "width": 648,
+        "height": 29
+      },
+      "confidence": null
+    },
+    {
+      "text": "菊苣根萃取物(含寡多醣) 20 毫克",
+      "bbox": {
+        "x": 16,
+        "y": 557,
+        "width": 648,
+        "height": 30
+      },
+      "confidence": null
+    }
+  ],
+  "reading": {
+    "serving": {
+      "raw_text": "每一份量2錠",
+      "serving_size": 2.0,
+      "dose_unit_raw": "錠",
+      "bbox": {
+        "x": 16,
+        "y": 96,
+        "width": 159,
+        "height": 29
+      },
+      "needs_review": false
+    },
+    "rows": [
+      {
+        "raw_text": "維生素D 6 微克(240 IU) 60%",
+        "raw_name": "維生素D",
+        "amount": 6.0,
+        "unit_raw": "微克(240 IU)",
+        "percent_dv": 60.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 16,
+          "y": 230,
+          "width": 648,
+          "height": 30
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "鈣 300 毫克 25%",
+        "raw_name": "鈣",
+        "amount": 300.0,
+        "unit_raw": "毫克",
+        "percent_dv": 25.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 16,
+          "y": 260,
+          "width": 648,
+          "height": 30
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "鎂 150 毫克 38%",
+        "raw_name": "鎂",
+        "amount": 150.0,
+        "unit_raw": "毫克",
+        "percent_dv": 38.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 16,
+          "y": 289,
+          "width": 648,
+          "height": 30
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "鋅 3 毫克 20%",
+        "raw_name": "鋅",
+        "amount": 3.0,
+        "unit_raw": "毫克",
+        "percent_dv": 20.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 16,
+          "y": 318,
+          "width": 648,
+          "height": 29
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "銅 0.6 毫克 *",
+        "raw_name": "銅",
+        "amount": 0.6,
+        "unit_raw": "毫克",
+        "percent_dv": null,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 16,
+          "y": 347,
+          "width": 648,
+          "height": 30
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "錳 0.6 毫克 *",
+        "raw_name": "錳",
+        "amount": 0.6,
+        "unit_raw": "毫克",
+        "percent_dv": null,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 16,
+          "y": 377,
+          "width": 648,
+          "height": 29
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "大豆胜肽 40 毫克",
+        "raw_name": "大豆胜肽",
+        "amount": 40.0,
+        "unit_raw": "毫克",
+        "percent_dv": null,
+        "label_section": "per_unit_note",
+        "bbox": {
+          "x": 16,
+          "y": 498,
+          "width": 648,
+          "height": 30
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "納豆發酵物(含維生素K2) 30 毫克",
+        "raw_name": "納豆發酵物(含維生素K2)",
+        "amount": 30.0,
+        "unit_raw": "毫克",
+        "percent_dv": null,
+        "label_section": "per_unit_note",
+        "bbox": {
+          "x": 16,
+          "y": 528,
+          "width": 648,
+          "height": 29
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "菊苣根萃取物(含寡多醣) 20 毫克",
+        "raw_name": "菊苣根萃取物(含寡多醣)",
+        "amount": 20.0,
+        "unit_raw": "毫克",
+        "percent_dv": null,
+        "label_section": "per_unit_note",
+        "bbox": {
+          "x": 16,
+          "y": 557,
+          "width": 648,
+          "height": 30
+        },
+        "needs_review": false
+      }
+    ],
+    "suggested_intake_raw": null,
+    "headings": [
+      "營養標示",
+      "成分添加量(每日4錠含:)"
+    ]
+  }
+}

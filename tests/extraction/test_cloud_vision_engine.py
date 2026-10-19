@@ -14,7 +14,7 @@ from app.extraction.engines.base import EngineRecording
 from app.extraction.engines.cloud_vision import CloudVisionEngine, to_engine_result
 from app.schemas.common import BoundingBox
 from app.schemas.enums import QualityStatus
-from app.schemas.label import ExtractionDraft, SourceImage
+from app.schemas.label import SourceImage
 
 
 class FakeVisionClient:
@@ -151,14 +151,13 @@ def test_不是圖片的檔案拋出辨識錯誤(table):
 # ── 和重播引擎、辨識函式接得起來 ───────────────────────────────────
 
 
-def test_轉換結果可存成錄製檔交給辨識函式重播(table, tmp_path):
+def test_只有文字區塊的錄製檔交給辨識函式時回錯誤(table, tmp_path):
     result = to_engine_result(table)
     (tmp_path / "p01-img01.json").write_text(result.model_dump_json(), encoding="utf-8")
-    draft = extract(
-        UUID("b2000000-0000-4000-8000-000000000002"),
-        [ImageInput(image_id="p01-img01", content=b"fake")],
-        [SourceImage(image_id="p01-img01", quality_status=QualityStatus.ACCEPTED)],
-        engine=ReplayEngine(tmp_path),
-    )
-    ExtractionDraft.model_validate(draft.model_dump())
-    assert draft.extraction_meta.ocr_version == result.engine_version
+    with pytest.raises(ExtractionError, match="結構化"):
+        extract(
+            UUID("b2000000-0000-4000-8000-000000000002"),
+            [ImageInput(image_id="p01-img01", content=b"fake")],
+            [SourceImage(image_id="p01-img01", quality_status=QualityStatus.ACCEPTED)],
+            engine=ReplayEngine(tmp_path),
+        )

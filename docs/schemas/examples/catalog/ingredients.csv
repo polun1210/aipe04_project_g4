@@ -12,6 +12,6 @@ niacin,target_nutrient,菸鹼素,mg_ne,mg_ne|mg,菸鹼素|菸鹼酸|菸鹼醯胺
 vitamin_c,target_nutrient,維生素 C,mg,mg,維生素C|維他命C|Vitamin C,total_intake
 vitamin_b6,target_nutrient,維生素 B6,mg,mg,維生素B6|維他命B6|Vitamin B6,total_intake
 selenium,target_nutrient,硒,ug,ug,硒|Selenium,total_intake
-red_yeast_rice,allowed_ingredient,紅麴,,,紅麴|紅麴菌發酵米|Monascus|red yeast rice|monacolin K,
+red_yeast_rice,allowed_ingredient,紅麴,,,紅麴|紅麴粉|紅麴粉末|紅麴菌發酵米|Monascus|red yeast rice|monacolin K,
 glucosamine,allowed_ingredient,葡萄糖胺,,,葡萄糖胺|胺基葡萄糖|Glucosamine,
 omega_3,allowed_ingredient,魚油 n-3,,,魚油|EPA|DHA|Omega-3|n-3 脂肪酸,
