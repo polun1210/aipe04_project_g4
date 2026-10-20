@@ -10,17 +10,14 @@ from app.schemas.label import ExtractionDraft, SourceImage
 
 PRODUCT_ID = UUID("b2000000-0000-4000-8000-000000000002")
 IMAGES = [ImageInput(image_id="p01-img01", content=b"fake"), ImageInput(image_id="p01-img02", content=b"fake")]
-QUALITY = check_quality(IMAGES)  # 上傳時的品質檢查結果
+# 上傳時的品質檢查結果（這裡的圖片內容是假的，直接當作都通過）
+QUALITY = [SourceImage(image_id=i.image_id, quality_status=QualityStatus.ACCEPTED) for i in IMAGES]
 
 
 def test_check_quality_returns_one_result_per_image():
     results = check_quality(IMAGES)
     assert [r.image_id for r in results] == ["p01-img01", "p01-img02"]
     assert all(isinstance(r, SourceImage) for r in results)
-
-
-def test_stub_accepts_every_image():
-    assert all(r.quality_status is QualityStatus.ACCEPTED for r in check_quality(IMAGES))
 
 
 def test_extract_returns_valid_draft_for_given_product():

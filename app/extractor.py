@@ -41,7 +41,11 @@ class Extractor(Protocol):
 
 class StubExtractor:
     def check_quality(self, images: list[ImageInput]) -> list[SourceImage]:
-        return extraction.check_quality(images)
+        # 假版本每張都通過：開發與測試常送假的圖片內容，不能被真的品質檢查擋掉
+        return [
+            SourceImage(image_id=i.image_id, quality_status=QualityStatus.ACCEPTED, image_kind=i.image_kind)
+            for i in images
+        ]
 
     def extract_supplement(
         self, product_id: UUID, images: list[ImageInput], quality: list[SourceImage]
@@ -67,11 +71,14 @@ class StubExtractor:
 
 
 class OpenRouterExtractor(StubExtractor):
-    """保健食品與藥包走真辨識。品質檢查仍是假版本（每張都通過）。"""
+    """品質檢查、保健食品與藥包都走真版本。"""
 
     def __init__(self, engine: OpenRouterEngine, drug_engine: DrugOpenRouterEngine) -> None:
         self.engine = engine
         self.drug_engine = drug_engine
+
+    def check_quality(self, images: list[ImageInput]) -> list[SourceImage]:
+        return extraction.check_quality(images)
 
     def extract_supplement(
         self, product_id: UUID, images: list[ImageInput], quality: list[SourceImage]

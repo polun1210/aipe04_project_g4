@@ -2,7 +2,7 @@
 
 VLM 引擎（直接讀出結構，例如 OpenRouter 的 Gemini 3.8 Flash）經規則層（rules.py）整理成真實的辨識草稿；
 沒指定引擎時，仍回傳 docs/schemas/examples/ 的固定內容（T01 假版本）；引擎只有文字區塊（OCR）時回錯誤。
-品質檢查仍是假版本（每張都判為 accepted）。
+品質檢查是真實版本（解析度、光線、模糊、反光，見 quality.py）。
 位置框座標系 ＝ 依 EXIF 方向轉正後的圖。
 """
 
@@ -12,7 +12,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from uuid import UUID
 
-from app.extraction import rules
+from app.extraction import quality, rules
 from app.extraction.engines import Engine, EngineResult, ReplayEngine, TextBlock
 from app.extraction.types import ExtractionError, ImageInput
 from app.schemas.enums import QualityStatus
@@ -36,14 +36,15 @@ _STUB_VERSION = "stub-t01"
 
 
 def check_quality(images: list[ImageInput]) -> list[SourceImage]:
-    """上傳照片時同步呼叫。不呼叫任何付費 API。
-
-    假版本：每張都判為 accepted。
-    """
-    return [
-        SourceImage(image_id=img.image_id, quality_status=QualityStatus.ACCEPTED, image_kind=img.image_kind)
-        for img in images
-    ]
+    """上傳照片時同步呼叫。不呼叫任何付費 API；門檻與校準依據見 quality.py。"""
+    results = []
+    for img in images:
+        reason = quality.assess(img.content)
+        status = QualityStatus.REJECTED if reason else QualityStatus.ACCEPTED
+        results.append(
+            SourceImage(image_id=img.image_id, quality_status=status, reject_reason=reason, image_kind=img.image_kind)
+        )
+    return results
 
 
 def extract(
