@@ -34,16 +34,19 @@ MIN_SHORT_EDGE = 200
 BLUR_LONG_EDGE = 1024
 MIN_LAPLACIAN_VAR = 100.0
 
-# ── 太暗（最亮 1% 像素的灰階）─────────────────────────────────
-# 所有原圖最低 225；整張亮度乘 0.35 的版本最高 89。門檻 120。
-MIN_HIGHLIGHT_LEVEL = 120.0
+# ── 太暗（第 90 百分位的灰階）─────────────────────────────────
+# 用第 90 百分位而不是最亮的像素：暗照片角落有一盞燈（約 1%）也不會被當成夠亮、接著誤判成模糊。
+# 所有原圖最低 196；整張亮度乘 0.35 再加一塊 1% 的燈光，最高 89。門檻 120。
+# 不用中位數：紅底的網路商品圖中位數只有 74。
+MIN_BRIGHTNESS = 120.0
 
 # ── 反光（接近全白像素比例；接近全白＝灰階 ≥ 250）────────────────
 # 1. 整張接近全白比例：網路圖本來就是白底（最高約 0.87），門檻 0.94 只抓幾乎全白的過曝照片
 # 2. 沒有清楚邊緣時分辨模糊與過曝：過曝連最暗的字都變淡（最暗 1% 像素 ≥ 180）；清楚照片最高約 130
 # 3. 照片中間一塊沒有字的白斑：不碰圖邊、內部沒有字的接近全白區塊，最大一塊占整張 ≥ 0.08。
 #    原圖最高約 0.05；加 12% 白斑的版本最低約 0.09。白底網路圖的空白連到圖邊，不算。
-#    已知限制：白斑碰到圖邊或和白底連在一起就量不到
+#    已知限制：白斑碰到圖邊或和白底連在一起就量不到；表格裡占整張 8% 以上的大空白格會被誤判成反光
+#    （校準的 56 張真實照片沒有發生）
 GLARE_LEVEL = 250
 MAX_WHITE_RATIO = 0.94
 WASHED_OUT_INK_LEVEL = 180.0
@@ -60,7 +63,7 @@ class QualityMeasure:
     white_ratio: float
     glare_blob_ratio: float
     ink_level: float  # 最暗 1% 像素的灰階（字的顏色）
-    highlight_level: float  # 最亮 1% 像素的灰階
+    brightness_p90: float  # 第 90 百分位的灰階
 
 
 def load_upright_gray(content: bytes) -> np.ndarray | None:
@@ -68,8 +71,8 @@ def load_upright_gray(content: bytes) -> np.ndarray | None:
     try:
         img = Image.open(BytesIO(content))
         img.load()
-    except (UnidentifiedImageError, OSError):
-        return None
+    except (UnidentifiedImageError, OSError, ValueError, Image.DecompressionBombError):
+        return None  # 壞檔、格式不支援、像素多到像壓縮炸彈，都當作讀不出來
     return np.asarray(ImageOps.exif_transpose(img).convert("L"))
 
 
@@ -85,7 +88,7 @@ def measure_gray(gray: np.ndarray) -> QualityMeasure:
         white_ratio=float((gray >= GLARE_LEVEL).mean()),
         glare_blob_ratio=_largest_interior_blob(norm),
         ink_level=float(np.percentile(gray, 1)),
-        highlight_level=float(np.percentile(gray, 99)),
+        brightness_p90=float(np.percentile(gray, 90)),
     )
 
 
@@ -94,7 +97,7 @@ def judge(m: QualityMeasure) -> RejectReason | None:
         return RejectReason.LOW_RESOLUTION
     if m.white_ratio >= MAX_WHITE_RATIO:
         return RejectReason.GLARE
-    if m.highlight_level < MIN_HIGHLIGHT_LEVEL:
+    if m.brightness_p90 < MIN_BRIGHTNESS:
         return RejectReason.LOW_LIGHT
     if m.laplacian_var < MIN_LAPLACIAN_VAR:
         return RejectReason.GLARE if m.ink_level >= WASHED_OUT_INK_LEVEL else RejectReason.BLUR

@@ -54,6 +54,13 @@ def test_壞照片以應有的原因被拒(make, reason):
     assert assess(_jpeg(make(_label()))) is reason
 
 
+def test_暗照片角落有一盞燈仍算太暗而不是模糊():
+    g = _label() * 0.3
+    h, w = g.shape
+    g[: h // 10, : w // 10] = 255
+    assert assess(_jpeg(g)) is RejectReason.LOW_LIGHT
+
+
 def test_照片中間一塊白斑算反光():
     g = _label().copy()
     h, w = g.shape
