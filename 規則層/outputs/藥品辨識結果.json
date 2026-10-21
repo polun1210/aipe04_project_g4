@@ -1,0 +1,23 @@
+{
+  "schema_version": "1.0",
+  "medications": [
+    {
+      "input_name": "Losartan",
+      "matched": false,
+      "medication_name": null,
+      "category": null
+    },
+    {
+      "input_name": "Metformin",
+      "matched": false,
+      "medication_name": null,
+      "category": null
+    }
+  ],
+  "query_names": [],
+  "unmatched_names": [
+    "Losartan",
+    "Metformin"
+  ],
+  "query_results": null
+}

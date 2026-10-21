@@ -1,0 +1,1471 @@
+{
+  "schema_version": "1.0",
+  "source": {
+    "daily_references": "規則.md（依國人膳食營養素參考攝取量第八版總表）",
+    "upper_limits": "規則.py 中的 UL（依同一總表第 2 頁）",
+    "official_url": "https://www.hpa.gov.tw/Pages/List.aspx?nodeid=4613"
+  },
+  "age_bands": [
+    {
+      "key": "19-30",
+      "min_age": 19,
+      "max_age": 30
+    },
+    {
+      "key": "31-50",
+      "min_age": 31,
+      "max_age": 50
+    },
+    {
+      "key": "51-70",
+      "min_age": 51,
+      "max_age": 70
+    },
+    {
+      "key": "71+",
+      "min_age": 71,
+      "max_age": null
+    }
+  ],
+  "nutrients": [
+    {
+      "name_zh": "蛋白質",
+      "name_en": "Protein",
+      "aliases_en": [],
+      "input_unit": "g",
+      "daily_references": [
+        {
+          "label_zh": "蛋白質",
+          "unit": "g",
+          "by_age_and_sex": {
+            "19-30": {
+              "male": 70,
+              "female": 60
+            },
+            "31-50": {
+              "male": 70,
+              "female": 60
+            },
+            "51-70": {
+              "male": 70,
+              "female": 60
+            },
+            "71+": {
+              "male": 70,
+              "female": 60
+            }
+          }
+        }
+      ],
+      "upper_limit": null
+    },
+    {
+      "name_zh": "碳水化合物",
+      "name_en": "Carbohydrate",
+      "aliases_en": [
+        "Carbohydrates"
+      ],
+      "input_unit": "g",
+      "daily_references": [
+        {
+          "label_zh": "碳水化合物 EAR",
+          "unit": "g",
+          "by_age_and_sex": {
+            "19-30": {
+              "male": 100,
+              "female": 100
+            },
+            "31-50": {
+              "male": 100,
+              "female": 100
+            },
+            "51-70": {
+              "male": 100,
+              "female": 100
+            },
+            "71+": {
+              "male": 100,
+              "female": 100
+            }
+          }
+        },
+        {
+          "label_zh": "碳水化合物 RDA",
+          "unit": "g",
+          "by_age_and_sex": {
+            "19-30": {
+              "male": 130,
+              "female": 130
+            },
+            "31-50": {
+              "male": 130,
+              "female": 130
+            },
+            "51-70": {
+              "male": 130,
+              "female": 130
+            },
+            "71+": {
+              "male": 130,
+              "female": 130
+            }
+          }
+        },
+        {
+          "label_zh": "碳水化合物 AMDR",
+          "unit": "總熱量 %",
+          "by_age_and_sex": {
+            "19-30": {
+              "male": {
+                "min": 50,
+                "max": 65
+              },
+              "female": {
+                "min": 50,
+                "max": 65
+              }
+            },
+            "31-50": {
+              "male": {
+                "min": 50,
+                "max": 65
+              },
+              "female": {
+                "min": 50,
+                "max": 65
+              }
+            },
+            "51-70": {
+              "male": {
+                "min": 50,
+                "max": 65
+              },
+              "female": {
+                "min": 50,
+                "max": 65
+              }
+            },
+            "71+": {
+              "male": {
+                "min": 50,
+                "max": 65
+              },
+              "female": {
+                "min": 50,
+                "max": 65
+              }
+            }
+          }
+        }
+      ],
+      "upper_limit": null
+    },
+    {
+      "name_zh": "膳食纖維",
+      "name_en": "Dietary fiber",
+      "aliases_en": [
+        "Dietary fibre",
+        "Fiber"
+      ],
+      "input_unit": "g",
+      "daily_references": [
+        {
+          "activity": "低",
+          "unit": "g",
+          "by_age_and_sex": {
+            "19-30": {
+              "male": 26,
+              "female": 20
+            },
+            "31-50": {
+              "male": 25,
+              "female": 20
+            },
+            "51-70": {
+              "male": 24,
+              "female": 20
+            },
+            "71+": {
+              "male": 23,
+              "female": 18
+            }
+          }
+        },
+        {
+          "activity": "稍低",
+          "unit": "g",
+          "by_age_and_sex": {
+            "19-30": {
+              "male": 30,
+              "female": 23
+            },
+            "31-50": {
+              "male": 29,
+              "female": 23
+            },
+            "51-70": {
+              "male": 27,
+              "female": 22
+            },
+            "71+": {
+              "male": 27,
+              "female": 21
+            }
+          }
+        },
+        {
+          "activity": "適度",
+          "unit": "g",
+          "by_age_and_sex": {
+            "19-30": {
+              "male": 34,
+              "female": 27
+            },
+            "31-50": {
+              "male": 34,
+              "female": 27
+            },
+            "51-70": {
+              "male": 32,
+              "female": 25
+            },
+            "71+": {
+              "male": 30,
+              "female": 24
+            }
+          }
+        },
+        {
+          "activity": "高",
+          "unit": "g",
+          "by_age_and_sex": {
+            "19-30": {
+              "male": 38,
+              "female": 29
+            },
+            "31-50": {
+              "male": 37,
+              "female": 29
+            },
+            "51-70": {
+              "male": 35,
+              "female": 28
+            },
+            "71+": {
+              "male": null,
+              "female": null
+            }
+          }
+        }
+      ],
+      "upper_limit": null
+    },
+    {
+      "name_zh": "脂質",
+      "name_en": "Total fat",
+      "aliases_en": [
+        "Fat",
+        "Lipids"
+      ],
+      "input_unit": "g",
+      "daily_references": [
+        {
+          "label_zh": "脂質",
+          "unit": "總熱量 %",
+          "by_age_and_sex": {
+            "19-30": {
+              "male": {
+                "min": 20,
+                "max": 30
+              },
+              "female": {
+                "min": 20,
+                "max": 30
+              }
+            },
+            "31-50": {
+              "male": {
+                "min": 20,
+                "max": 30
+              },
+              "female": {
+                "min": 20,
+                "max": 30
+              }
+            },
+            "51-70": {
+              "male": {
+                "min": 20,
+                "max": 30
+              },
+              "female": {
+                "min": 20,
+                "max": 30
+              }
+            },
+            "71+": {
+              "male": {
+                "min": 20,
+                "max": 30
+              },
+              "female": {
+                "min": 20,
+                "max": 30
+              }
+            }
+          }
+        }
+      ],
+      "upper_limit": null
+    },
+    {
+      "name_zh": "飽和脂肪酸",
+      "name_en": "Saturated fatty acids",
+      "aliases_en": [
+        "Saturated fat"
+      ],
+      "input_unit": "g",
+      "daily_references": [
+        {
+          "label_zh": "飽和脂肪酸",
+          "unit": "總熱量 %",
+          "by_age_and_sex": {
+            "19-30": {
+              "male": {
+                "operator": "<",
+                "value": 10
+              },
+              "female": {
+                "operator": "<",
+                "value": 10
+              }
+            },
+            "31-50": {
+              "male": {
+                "operator": "<",
+                "value": 10
+              },
+              "female": {
+                "operator": "<",
+                "value": 10
+              }
+            },
+            "51-70": {
+              "male": {
+                "operator": "<",
+                "value": 10
+              },
+              "female": {
+                "operator": "<",
+                "value": 10
+              }
+            },
+            "71+": {
+              "male": {
+                "operator": "<",
+                "value": 10
+              },
+              "female": {
+                "operator": "<",
+                "value": 10
+              }
+            }
+          }
+        }
+      ],
+      "upper_limit": null
+    },
+    {
+      "name_zh": "n-6 多元不飽和脂肪酸",
+      "name_en": "Omega-6 polyunsaturated fatty acids",
+      "aliases_en": [
+        "n-6 polyunsaturated fatty acids"
+      ],
+      "input_unit": "g",
+      "daily_references": [
+        {
+          "label_zh": "n-6 多元不飽和脂肪酸",
+          "unit": "總熱量 %",
+          "by_age_and_sex": {
+            "19-30": {
+              "male": {
+                "min": 4,
+                "max": 8
+              },
+              "female": {
+                "min": 4,
+                "max": 8
+              }
+            },
+            "31-50": {
+              "male": {
+                "min": 4,
+                "max": 8
+              },
+              "female": {
+                "min": 4,
+                "max": 8
+              }
+            },
+            "51-70": {
+              "male": {
+                "min": 4,
+                "max": 8
+              },
+              "female": {
+                "min": 4,
+                "max": 8
+              }
+            },
+            "71+": {
+              "male": {
+                "min": 4,
+                "max": 8
+              },
+              "female": {
+                "min": 4,
+                "max": 8
+              }
+            }
+          }
+        }
+      ],
+      "upper_limit": null
+    },
+    {
+      "name_zh": "n-3 多元不飽和脂肪酸",
+      "name_en": "Omega-3 polyunsaturated fatty acids",
+      "aliases_en": [
+        "n-3 polyunsaturated fatty acids"
+      ],
+      "input_unit": "g",
+      "daily_references": [
+        {
+          "label_zh": "n-3 多元不飽和脂肪酸",
+          "unit": "總熱量 %",
+          "by_age_and_sex": {
+            "19-30": {
+              "male": {
+                "min": 0.6,
+                "max": 1.2
+              },
+              "female": {
+                "min": 0.6,
+                "max": 1.2
+              }
+            },
+            "31-50": {
+              "male": {
+                "min": 0.6,
+                "max": 1.2
+              },
+              "female": {
+                "min": 0.6,
+                "max": 1.2
+              }
+            },
+            "51-70": {
+              "male": {
+                "min": 0.6,
+                "max": 1.2
+              },
+              "female": {
+                "min": 0.6,
+                "max": 1.2
+              }
+            },
+            "71+": {
+              "male": {
+                "min": 0.6,
+                "max": 1.2
+              },
+              "female": {
+                "min": 0.6,
+                "max": 1.2
+              }
+            }
+          }
+        }
+      ],
+      "upper_limit": null
+    },
+    {
+      "name_zh": "反式脂肪酸",
+      "name_en": "Trans fatty acids",
+      "aliases_en": [
+        "Trans fat"
+      ],
+      "input_unit": "g",
+      "daily_references": [
+        {
+          "label_zh": "反式脂肪酸",
+          "unit": "總熱量 %",
+          "by_age_and_sex": {
+            "19-30": {
+              "male": {
+                "operator": "<",
+                "value": 1
+              },
+              "female": {
+                "operator": "<",
+                "value": 1
+              }
+            },
+            "31-50": {
+              "male": {
+                "operator": "<",
+                "value": 1
+              },
+              "female": {
+                "operator": "<",
+                "value": 1
+              }
+            },
+            "51-70": {
+              "male": {
+                "operator": "<",
+                "value": 1
+              },
+              "female": {
+                "operator": "<",
+                "value": 1
+              }
+            },
+            "71+": {
+              "male": {
+                "operator": "<",
+                "value": 1
+              },
+              "female": {
+                "operator": "<",
+                "value": 1
+              }
+            }
+          }
+        }
+      ],
+      "upper_limit": null
+    },
+    {
+      "name_zh": "維生素 A",
+      "name_en": "Vitamin A",
+      "aliases_en": [],
+      "input_unit": "µg RE",
+      "daily_references": [
+        {
+          "label_zh": "維生素 A",
+          "unit": "µg RE",
+          "by_age_and_sex": {
+            "19-30": {
+              "male": 600,
+              "female": 500
+            },
+            "31-50": {
+              "male": 600,
+              "female": 500
+            },
+            "51-70": {
+              "male": 600,
+              "female": 500
+            },
+            "71+": {
+              "male": 600,
+              "female": 500
+            }
+          }
+        }
+      ],
+      "upper_limit": {
+        "unit": "µg RE",
+        "scope": "total_intake",
+        "by_age_band": {
+          "19-30": 3000,
+          "31-50": 3000,
+          "51-70": 3000,
+          "71+": 3000
+        }
+      }
+    },
+    {
+      "name_zh": "維生素 D",
+      "name_en": "Vitamin D",
+      "aliases_en": [],
+      "input_unit": "µg",
+      "daily_references": [
+        {
+          "label_zh": "維生素 D",
+          "unit": "µg",
+          "by_age_and_sex": {
+            "19-30": {
+              "male": 10,
+              "female": 10
+            },
+            "31-50": {
+              "male": 10,
+              "female": 10
+            },
+            "51-70": {
+              "male": 15,
+              "female": 15
+            },
+            "71+": {
+              "male": 15,
+              "female": 15
+            }
+          }
+        }
+      ],
+      "upper_limit": {
+        "unit": "µg",
+        "scope": "total_intake",
+        "by_age_band": {
+          "19-30": 50,
+          "31-50": 50,
+          "51-70": 50,
+          "71+": 50
+        }
+      }
+    },
+    {
+      "name_zh": "維生素 E",
+      "name_en": "Vitamin E",
+      "aliases_en": [],
+      "input_unit": "mg α-TE",
+      "daily_references": [
+        {
+          "label_zh": "維生素 E",
+          "unit": "mg α-TE",
+          "by_age_and_sex": {
+            "19-30": {
+              "male": 12,
+              "female": 12
+            },
+            "31-50": {
+              "male": 12,
+              "female": 12
+            },
+            "51-70": {
+              "male": 12,
+              "female": 12
+            },
+            "71+": {
+              "male": 12,
+              "female": 12
+            }
+          }
+        }
+      ],
+      "upper_limit": {
+        "unit": "mg α-TE",
+        "scope": "total_intake",
+        "by_age_band": {
+          "19-30": 1000,
+          "31-50": 1000,
+          "51-70": 1000,
+          "71+": 1000
+        }
+      }
+    },
+    {
+      "name_zh": "維生素 K",
+      "name_en": "Vitamin K",
+      "aliases_en": [],
+      "input_unit": "µg",
+      "daily_references": [
+        {
+          "label_zh": "維生素 K",
+          "unit": "µg",
+          "by_age_and_sex": {
+            "19-30": {
+              "male": 120,
+              "female": 90
+            },
+            "31-50": {
+              "male": 120,
+              "female": 90
+            },
+            "51-70": {
+              "male": 120,
+              "female": 90
+            },
+            "71+": {
+              "male": 120,
+              "female": 90
+            }
+          }
+        }
+      ],
+      "upper_limit": null
+    },
+    {
+      "name_zh": "維生素 C",
+      "name_en": "Vitamin C",
+      "aliases_en": [],
+      "input_unit": "mg",
+      "daily_references": [
+        {
+          "label_zh": "維生素 C",
+          "unit": "mg",
+          "by_age_and_sex": {
+            "19-30": {
+              "male": 100,
+              "female": 100
+            },
+            "31-50": {
+              "male": 100,
+              "female": 100
+            },
+            "51-70": {
+              "male": 100,
+              "female": 100
+            },
+            "71+": {
+              "male": 100,
+              "female": 100
+            }
+          }
+        }
+      ],
+      "upper_limit": {
+        "unit": "mg",
+        "scope": "total_intake",
+        "by_age_band": {
+          "19-30": 2000,
+          "31-50": 2000,
+          "51-70": 2000,
+          "71+": 2000
+        }
+      }
+    },
+    {
+      "name_zh": "維生素 B1",
+      "name_en": "Vitamin B1",
+      "aliases_en": [
+        "Thiamin",
+        "Thiamine"
+      ],
+      "input_unit": "mg",
+      "daily_references": [
+        {
+          "label_zh": "維生素 B1",
+          "unit": "mg",
+          "by_age_and_sex": {
+            "19-30": {
+              "male": 1.2,
+              "female": 0.9
+            },
+            "31-50": {
+              "male": 1.2,
+              "female": 0.9
+            },
+            "51-70": {
+              "male": 1.2,
+              "female": 0.9
+            },
+            "71+": {
+              "male": 1.2,
+              "female": 0.9
+            }
+          }
+        }
+      ],
+      "upper_limit": null
+    },
+    {
+      "name_zh": "維生素 B2",
+      "name_en": "Vitamin B2",
+      "aliases_en": [
+        "Riboflavin"
+      ],
+      "input_unit": "mg",
+      "daily_references": [
+        {
+          "label_zh": "維生素 B2",
+          "unit": "mg",
+          "by_age_and_sex": {
+            "19-30": {
+              "male": 1.3,
+              "female": 1
+            },
+            "31-50": {
+              "male": 1.3,
+              "female": 1
+            },
+            "51-70": {
+              "male": 1.3,
+              "female": 1
+            },
+            "71+": {
+              "male": 1.3,
+              "female": 1
+            }
+          }
+        }
+      ],
+      "upper_limit": null
+    },
+    {
+      "name_zh": "菸鹼素",
+      "name_en": "Niacin",
+      "aliases_en": [
+        "Vitamin B3"
+      ],
+      "input_unit": "mg NE",
+      "daily_references": [
+        {
+          "label_zh": "菸鹼素",
+          "unit": "mg NE",
+          "by_age_and_sex": {
+            "19-30": {
+              "male": 16,
+              "female": 14
+            },
+            "31-50": {
+              "male": 16,
+              "female": 14
+            },
+            "51-70": {
+              "male": 16,
+              "female": 14
+            },
+            "71+": {
+              "male": 16,
+              "female": 14
+            }
+          }
+        }
+      ],
+      "upper_limit": {
+        "unit": "mg NE",
+        "scope": "total_intake",
+        "by_age_band": {
+          "19-30": 35,
+          "31-50": 35,
+          "51-70": 35,
+          "71+": 35
+        }
+      }
+    },
+    {
+      "name_zh": "維生素 B6",
+      "name_en": "Vitamin B6",
+      "aliases_en": [],
+      "input_unit": "mg",
+      "daily_references": [
+        {
+          "label_zh": "維生素 B6",
+          "unit": "mg",
+          "by_age_and_sex": {
+            "19-30": {
+              "male": 1.5,
+              "female": 1.5
+            },
+            "31-50": {
+              "male": 1.5,
+              "female": 1.5
+            },
+            "51-70": {
+              "male": 1.6,
+              "female": 1.6
+            },
+            "71+": {
+              "male": 1.6,
+              "female": 1.6
+            }
+          }
+        }
+      ],
+      "upper_limit": {
+        "unit": "mg",
+        "scope": "total_intake",
+        "by_age_band": {
+          "19-30": 80,
+          "31-50": 80,
+          "51-70": 80,
+          "71+": 80
+        }
+      }
+    },
+    {
+      "name_zh": "維生素 B12",
+      "name_en": "Vitamin B12",
+      "aliases_en": [],
+      "input_unit": "µg",
+      "daily_references": [
+        {
+          "label_zh": "維生素 B12",
+          "unit": "µg",
+          "by_age_and_sex": {
+            "19-30": {
+              "male": 2.4,
+              "female": 2.4
+            },
+            "31-50": {
+              "male": 2.4,
+              "female": 2.4
+            },
+            "51-70": {
+              "male": 2.4,
+              "female": 2.4
+            },
+            "71+": {
+              "male": 2.4,
+              "female": 2.4
+            }
+          }
+        }
+      ],
+      "upper_limit": null
+    },
+    {
+      "name_zh": "葉酸",
+      "name_en": "Folate",
+      "aliases_en": [],
+      "input_unit": "µg",
+      "daily_references": [
+        {
+          "label_zh": "葉酸",
+          "unit": "µg",
+          "by_age_and_sex": {
+            "19-30": {
+              "male": 400,
+              "female": 400
+            },
+            "31-50": {
+              "male": 400,
+              "female": 400
+            },
+            "51-70": {
+              "male": 400,
+              "female": 400
+            },
+            "71+": {
+              "male": 400,
+              "female": 400
+            }
+          }
+        }
+      ],
+      "upper_limit": {
+        "unit": "µg",
+        "scope": "total_intake",
+        "by_age_band": {
+          "19-30": 1000,
+          "31-50": 1000,
+          "51-70": 1000,
+          "71+": 1000
+        }
+      }
+    },
+    {
+      "name_zh": "膽素",
+      "name_en": "Choline",
+      "aliases_en": [],
+      "input_unit": "mg",
+      "daily_references": [
+        {
+          "label_zh": "膽素",
+          "unit": "mg",
+          "by_age_and_sex": {
+            "19-30": {
+              "male": 450,
+              "female": 390
+            },
+            "31-50": {
+              "male": 450,
+              "female": 390
+            },
+            "51-70": {
+              "male": 450,
+              "female": 390
+            },
+            "71+": {
+              "male": 450,
+              "female": 390
+            }
+          }
+        }
+      ],
+      "upper_limit": {
+        "unit": "mg",
+        "scope": "total_intake",
+        "by_age_band": {
+          "19-30": 3500,
+          "31-50": 3500,
+          "51-70": 3500,
+          "71+": 3500
+        }
+      }
+    },
+    {
+      "name_zh": "生物素",
+      "name_en": "Biotin",
+      "aliases_en": [],
+      "input_unit": "µg",
+      "daily_references": [
+        {
+          "label_zh": "生物素",
+          "unit": "µg",
+          "by_age_and_sex": {
+            "19-30": {
+              "male": 30,
+              "female": 30
+            },
+            "31-50": {
+              "male": 30,
+              "female": 30
+            },
+            "51-70": {
+              "male": 30,
+              "female": 30
+            },
+            "71+": {
+              "male": 30,
+              "female": 30
+            }
+          }
+        }
+      ],
+      "upper_limit": null
+    },
+    {
+      "name_zh": "泛酸",
+      "name_en": "Pantothenic acid",
+      "aliases_en": [
+        "Vitamin B5"
+      ],
+      "input_unit": "mg",
+      "daily_references": [
+        {
+          "label_zh": "泛酸",
+          "unit": "mg",
+          "by_age_and_sex": {
+            "19-30": {
+              "male": 5,
+              "female": 5
+            },
+            "31-50": {
+              "male": 5,
+              "female": 5
+            },
+            "51-70": {
+              "male": 5,
+              "female": 5
+            },
+            "71+": {
+              "male": 5,
+              "female": 5
+            }
+          }
+        }
+      ],
+      "upper_limit": null
+    },
+    {
+      "name_zh": "鈣",
+      "name_en": "Calcium",
+      "aliases_en": [],
+      "input_unit": "mg",
+      "daily_references": [
+        {
+          "label_zh": "鈣",
+          "unit": "mg",
+          "by_age_and_sex": {
+            "19-30": {
+              "male": 1000,
+              "female": 1000
+            },
+            "31-50": {
+              "male": 1000,
+              "female": 1000
+            },
+            "51-70": {
+              "male": 1000,
+              "female": 1000
+            },
+            "71+": {
+              "male": 1000,
+              "female": 1000
+            }
+          }
+        }
+      ],
+      "upper_limit": {
+        "unit": "mg",
+        "scope": "total_intake",
+        "by_age_band": {
+          "19-30": 2500,
+          "31-50": 2500,
+          "51-70": 2500,
+          "71+": 2500
+        }
+      }
+    },
+    {
+      "name_zh": "磷",
+      "name_en": "Phosphorus",
+      "aliases_en": [],
+      "input_unit": "mg",
+      "daily_references": [
+        {
+          "label_zh": "磷",
+          "unit": "mg",
+          "by_age_and_sex": {
+            "19-30": {
+              "male": 800,
+              "female": 800
+            },
+            "31-50": {
+              "male": 800,
+              "female": 800
+            },
+            "51-70": {
+              "male": 800,
+              "female": 800
+            },
+            "71+": {
+              "male": 800,
+              "female": 800
+            }
+          }
+        }
+      ],
+      "upper_limit": {
+        "unit": "mg",
+        "scope": "total_intake",
+        "by_age_band": {
+          "19-30": 4000,
+          "31-50": 4000,
+          "51-70": 4000,
+          "71+": 3000
+        }
+      }
+    },
+    {
+      "name_zh": "鎂",
+      "name_en": "Magnesium",
+      "aliases_en": [],
+      "input_unit": "mg",
+      "daily_references": [
+        {
+          "label_zh": "鎂",
+          "unit": "mg",
+          "by_age_and_sex": {
+            "19-30": {
+              "male": 380,
+              "female": 320
+            },
+            "31-50": {
+              "male": 380,
+              "female": 320
+            },
+            "51-70": {
+              "male": 360,
+              "female": 310
+            },
+            "71+": {
+              "male": 350,
+              "female": 300
+            }
+          }
+        }
+      ],
+      "upper_limit": {
+        "unit": "mg",
+        "scope": "non_food_sources",
+        "by_age_band": {
+          "19-30": 350,
+          "31-50": 350,
+          "51-70": 350,
+          "71+": 350
+        }
+      }
+    },
+    {
+      "name_zh": "鐵",
+      "name_en": "Iron",
+      "aliases_en": [],
+      "input_unit": "mg",
+      "daily_references": [
+        {
+          "label_zh": "鐵",
+          "unit": "mg",
+          "by_age_and_sex": {
+            "19-30": {
+              "male": 10,
+              "female": 15
+            },
+            "31-50": {
+              "male": 10,
+              "female": 15
+            },
+            "51-70": {
+              "male": 10,
+              "female": 10
+            },
+            "71+": {
+              "male": 10,
+              "female": 10
+            }
+          }
+        }
+      ],
+      "upper_limit": {
+        "unit": "mg",
+        "scope": "fortified_food_and_supplements",
+        "by_age_band": {
+          "19-30": 40,
+          "31-50": 40,
+          "51-70": 40,
+          "71+": 40
+        }
+      }
+    },
+    {
+      "name_zh": "鋅",
+      "name_en": "Zinc",
+      "aliases_en": [],
+      "input_unit": "mg",
+      "daily_references": [
+        {
+          "label_zh": "鋅",
+          "unit": "mg",
+          "by_age_and_sex": {
+            "19-30": {
+              "male": 15,
+              "female": 12
+            },
+            "31-50": {
+              "male": 15,
+              "female": 12
+            },
+            "51-70": {
+              "male": 15,
+              "female": 12
+            },
+            "71+": {
+              "male": 15,
+              "female": 12
+            }
+          }
+        }
+      ],
+      "upper_limit": {
+        "unit": "mg",
+        "scope": "total_intake",
+        "by_age_band": {
+          "19-30": 35,
+          "31-50": 35,
+          "51-70": 35,
+          "71+": 35
+        }
+      }
+    },
+    {
+      "name_zh": "碘",
+      "name_en": "Iodine",
+      "aliases_en": [],
+      "input_unit": "µg",
+      "daily_references": [
+        {
+          "label_zh": "碘",
+          "unit": "µg",
+          "by_age_and_sex": {
+            "19-30": {
+              "male": 150,
+              "female": 150
+            },
+            "31-50": {
+              "male": 150,
+              "female": 150
+            },
+            "51-70": {
+              "male": 150,
+              "female": 150
+            },
+            "71+": {
+              "male": 150,
+              "female": 150
+            }
+          }
+        }
+      ],
+      "upper_limit": {
+        "unit": "µg",
+        "scope": "total_intake",
+        "by_age_band": {
+          "19-30": 1000,
+          "31-50": 1000,
+          "51-70": 1000,
+          "71+": 1000
+        }
+      }
+    },
+    {
+      "name_zh": "硒",
+      "name_en": "Selenium",
+      "aliases_en": [],
+      "input_unit": "µg",
+      "daily_references": [
+        {
+          "label_zh": "硒",
+          "unit": "µg",
+          "by_age_and_sex": {
+            "19-30": {
+              "male": 55,
+              "female": 55
+            },
+            "31-50": {
+              "male": 55,
+              "female": 55
+            },
+            "51-70": {
+              "male": 55,
+              "female": 55
+            },
+            "71+": {
+              "male": 55,
+              "female": 55
+            }
+          }
+        }
+      ],
+      "upper_limit": {
+        "unit": "µg",
+        "scope": "total_intake",
+        "by_age_band": {
+          "19-30": 400,
+          "31-50": 400,
+          "51-70": 400,
+          "71+": 400
+        }
+      }
+    },
+    {
+      "name_zh": "氟",
+      "name_en": "Fluoride",
+      "aliases_en": [],
+      "input_unit": "mg",
+      "daily_references": [
+        {
+          "label_zh": "氟",
+          "unit": "mg",
+          "by_age_and_sex": {
+            "19-30": {
+              "male": 3,
+              "female": 3
+            },
+            "31-50": {
+              "male": 3,
+              "female": 3
+            },
+            "51-70": {
+              "male": 3,
+              "female": 3
+            },
+            "71+": {
+              "male": 3,
+              "female": 3
+            }
+          }
+        }
+      ],
+      "upper_limit": {
+        "unit": "mg",
+        "scope": "total_intake",
+        "by_age_band": {
+          "19-30": 10,
+          "31-50": 10,
+          "51-70": 10,
+          "71+": 10
+        }
+      }
+    },
+    {
+      "name_zh": "鈉",
+      "name_en": "Sodium",
+      "aliases_en": [],
+      "input_unit": "mg",
+      "daily_references": [
+        {
+          "label_zh": "鈉 CDRR",
+          "unit": "mg",
+          "by_age_and_sex": {
+            "19-30": {
+              "male": 2300,
+              "female": 2300
+            },
+            "31-50": {
+              "male": 2300,
+              "female": 2300
+            },
+            "51-70": {
+              "male": 2300,
+              "female": 2300
+            },
+            "71+": {
+              "male": 2300,
+              "female": 2300
+            }
+          }
+        }
+      ],
+      "upper_limit": null
+    },
+    {
+      "name_zh": "鉀",
+      "name_en": "Potassium",
+      "aliases_en": [],
+      "input_unit": "mg",
+      "daily_references": [
+        {
+          "label_zh": "鉀",
+          "unit": "mg",
+          "by_age_and_sex": {
+            "19-30": {
+              "male": 2800,
+              "female": 2500
+            },
+            "31-50": {
+              "male": 2800,
+              "female": 2500
+            },
+            "51-70": {
+              "male": 2800,
+              "female": 2500
+            },
+            "71+": {
+              "male": 2800,
+              "female": 2500
+            }
+          }
+        }
+      ],
+      "upper_limit": null
+    },
+    {
+      "name_zh": "紅麴",
+      "name_en": "Red yeast rice",
+      "aliases_en": [],
+      "input_unit": "mg",
+      "daily_references": [],
+      "upper_limit": null
+    },
+    {
+      "name_zh": "葡萄糖胺",
+      "name_en": "Glucosamine",
+      "aliases_en": [],
+      "input_unit": "mg",
+      "daily_references": [],
+      "upper_limit": null
+    },
+    {
+      "name_zh": "魚油",
+      "name_en": "Fish oil",
+      "aliases_en": [],
+      "input_unit": "mg",
+      "daily_references": [],
+      "upper_limit": null
+    }
+  ]
+}
