@@ -1,6 +1,5 @@
-// API 串接練習，尚未接入正式頁面，待團隊整合
-
 import { apiRequest } from './client'
+import type { Unit } from './supplements'
 
 export interface KnownCondition {
   condition_code: string
@@ -24,7 +23,15 @@ export interface CatalogResponse {
   drug_classes: unknown[]
   drug_items: DrugItem[]
   drug_nutrient_doses: unknown[]
-  ingredients: unknown[]
+  ingredients: Ingredient[]
+}
+
+export interface Ingredient {
+  code: string
+  category: 'target_nutrient' | 'allowed_ingredient'
+  display_name_zh: string
+  standard_unit: Unit | null
+  accepted_units: Unit[]
 }
 
 export function getCatalog() {

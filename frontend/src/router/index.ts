@@ -44,6 +44,7 @@ const router = createRouter({
       component: () => import('@/views/ApiTestView.vue'),
     },
     { path: '/supplement-upload', name: 'supplement-upload', component: () => import('@/views/SupplementUploadView.vue') },
+    { path: '/supplement-review', name: 'supplement-review', component: () => import('@/views/SupplementReviewView.vue') },
   ],
 })
 

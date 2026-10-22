@@ -4,6 +4,10 @@ import type { ExtractionMeta, SourceImage, ScopeStatus } from './drugs'
 export type Unit = 'mg' | 'ug' | 'g' | 'kcal' | 'iu' | 'mg_ate' | 'mg_ne' | 'other'
 export type DoseUnit =
   'capsule' | 'tablet' | 'softgel' | 'gummy' | 'sachet' | 'scoop' | 'ml' | 'drop' | 'g'
+export type Frequency =
+  'daily' | 'alternate_days' | 'weekly_n_times' | 'cyclic_on_off' | 'as_needed'
+export type Numeric = number | '' | null
+
 // 現有保健食品假辨識回 stub-t01；藥包假辨識回 stub。
 export function isTestExtraction(version: string) {
   return version === 'stub' || version.startsWith('stub-')
@@ -38,6 +42,20 @@ export interface SupplementDraft {
   } | null
   nutrients: NutrientDraft[]
   extraction_meta: ExtractionMeta
+}
+
+export interface VerificationSubmission {
+  product_name: string | null
+  serving_info: { serving_size: number; dose_unit: DoseUnit }
+  user_intake: {
+    frequency_type: Frequency
+    times_per_day: number
+    amount_per_time: number
+    days_per_week: number | null
+    cycle_on_days: number | null
+    cycle_off_days: number | null
+  }
+  nutrients: NutrientConfirmed[]
 }
 
 export function uploadSupplementDraft(ingredients: File[], nutrition: File[], category: string) {
@@ -75,3 +93,33 @@ export function isUsableSupplementDraft(value: unknown, count: number): value is
   )
 }
 
+export function createProduct(body: VerificationSubmission) {
+  return apiRequest<{ product_id: string }>('/api/products', {
+    method: 'POST',
+    body: JSON.stringify(body),
+  })
+}
+
+export const doseLabels: Record<DoseUnit, string> = {
+  capsule: '膠囊',
+  tablet: '錠',
+  softgel: '軟膠囊',
+  gummy: '軟糖',
+  sachet: '包',
+  scoop: '匙',
+  ml: 'mL',
+  drop: '滴',
+  g: 'g',
+}
+export const doseAmounts: Record<DoseUnit, number[]> = {
+  capsule: [1, 2, 3, 4, 5],
+  tablet: [1, 2, 3, 4, 5],
+  softgel: [1, 2, 3, 4, 5],
+  gummy: [1, 2, 3, 4, 5],
+  sachet: [1, 2, 3, 4, 5],
+  scoop: [1, 2, 3, 4, 5],
+  ml: [1, 2, 5, 10, 15, 20, 30],
+  drop: [1, 2, 3, 4, 5, 10, 15, 20],
+  g: [1, 2, 3, 5, 10, 15, 20],
+}
+export const unitOptions: Unit[] = ['mg', 'ug', 'g', 'iu', 'mg_ate', 'mg_ne', 'kcal', 'other']

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onUnmounted, ref } from 'vue'
-import { onBeforeRouteLeave } from 'vue-router'
+import { onBeforeRouteLeave, useRouter } from 'vue-router'
 import { errorMessage } from '../api/client'
 import {
   isTestExtraction,
@@ -18,6 +18,7 @@ interface ImageSelection {
   kind: Kind
   loaded: boolean
 }
+const router = useRouter()
 const medicine = useMedicineFlowStore()
 const flow = useSupplementFlowStore()
 const category = ref('')
@@ -121,7 +122,14 @@ function nextBatch() {
   category.value = ''
   error.value = ''
 }
-function review() { dialog.value?.close() }
+async function review() {
+  error.value = ''
+  try {
+    await router.push('/supplement-review')
+  } catch {
+    error.value = '無法前往校對頁，已保存的批次仍保留。'
+  }
+}
 onBeforeRouteLeave(() => {
   if (busy.value) {
     error.value = '圖片正在辨識，請完成後再離開。'
@@ -200,8 +208,11 @@ onUnmounted(releaseImages)
       </fieldset>
     </form>
     <p v-if="busy" role="status">圖片上傳與辨識處理中…</p>
-    <p v-if="flow.products.length">已保存 {{ flow.products.length }} 罐，校對頁尚未開放。</p>
-    <button v-if="received" type="button" @click="nextBatch">新增下一罐</button>
+    <p v-if="flow.products.length && !received">
+      <RouterLink to="/supplement-review"
+        >前往保健食品人工校對（已保存 {{ flow.products.length }} 罐）</RouterLink
+      >
+    </p>
     <dialog ref="dialog" aria-labelledby="more-supplements" @cancel.prevent>
       <h2 id="more-supplements">是否還有其他保健食品？</h2>
       <p>已保存 {{ flow.products.length }} 罐，請繼續校對。</p>
