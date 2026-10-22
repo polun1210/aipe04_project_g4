@@ -279,8 +279,7 @@ def _merge(drafts: list[NutrientDraft]) -> list[NutrientDraft]:
         kept[key].row_id
         for d in in_scope
         for key in [(d.standard_code, d.nutrient_form_code)]
-        if d is not kept[key] and d.per_serving is not None
-        and (d.per_serving, d.unit) != (kept[key].per_serving, kept[key].unit)
+        if d is not kept[key] and _conflicts(kept[key], d)
     }
     winners = {id(d) for d in kept.values()}
     merged = []
@@ -294,6 +293,15 @@ def _merge(drafts: list[NutrientDraft]) -> list[NutrientDraft]:
             d = d.model_copy(update=dict(requires_user_input=True))
         merged.append(d)
     return merged
+
+
+def _conflicts(kept: NutrientDraft, other: NutrientDraft) -> bool:
+    """沒讀到（None）是未知，不算矛盾；只有留下的那列缺含量、另一列有時，才要使用者補。"""
+    if other.per_serving is None:
+        return False
+    if kept.per_serving is None or kept.per_serving != other.per_serving:
+        return True
+    return None not in (kept.unit, other.unit) and kept.unit != other.unit
 
 
 def _row(row: ReadingRow, image_id: str, row_id: str, names: Names, table_codes: set) -> NutrientDraft:

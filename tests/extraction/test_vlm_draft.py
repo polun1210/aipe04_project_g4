@@ -332,6 +332,11 @@ def test_單位不同也算衝突(tmp_path):
     assert _in_scope(draft) == [("a-img01", "鈣", 200, True)]
 
 
+def test_另一張沒讀到單位時不算衝突(tmp_path):
+    draft = _multi(tmp_path, [None, None], [[_row("鈣", 200, "毫克")], [_row("鈣", 200)]])
+    assert _in_scope(draft) == [("a-img01", "鈣", 200, False)]
+
+
 def test_依區塊優先序選_後一張的營養標示勝過前一張的正面文案(tmp_path):
     rows = [[_row("魚油", 1500, "毫克", LabelSection.FRONT)], [_row("魚油", 1000, "毫克")]]
     draft = _multi(tmp_path, [None, None], rows)
@@ -367,6 +372,13 @@ def test_兩張的每一份量相同時照常填入(tmp_path):
     two = ServingReading(raw_text="每一份量 2 錠", serving_size=2, dose_unit_raw="錠")
     draft = _multi(tmp_path, [two, two])
     assert draft.serving_info.serving_size == 2
+
+
+def test_另一張的每一份量沒讀到劑型時不算衝突(tmp_path):
+    two = ServingReading(raw_text="每一份量 2 錠", serving_size=2, dose_unit_raw="錠")
+    bare = ServingReading(raw_text="每一份量 2", serving_size=2)
+    draft = _multi(tmp_path, [two, bare])
+    assert (draft.serving_info.serving_size, draft.serving_info.dose_unit) == (2, DoseUnit.TABLET)
 
 
 def test_名稱中間的片段不算命中(tmp_path):
