@@ -42,7 +42,8 @@
 - VLM 只負責「標示上寫了什麼」；單位對映、名稱標準化、範圍判定仍由規則層（`app/extraction/rules.py`）以程式處理，
   依 `docs/schemas/supplement-label-output.md`「範圍判定」，結果可重現、可測試。
 - 錄製與重播：測試一律用錄製的引擎結果，不呼叫付費服務；只有評估工具會真實呼叫。
-- 備援：Gemini 失敗（503／500／逾時）時可改呼叫 Qwen3.8 Flash（營養標示）或 Claude Haiku 5.5（藥包），
+- 備援：Gemini 回 408／429／5xx 或連不上時，可改呼叫 Qwen3.8 Flash（營養標示）或 Claude Haiku 5.5（藥包），
+  每張照片（含備援）總共最多等 55 秒，主型號失敗時剩不到 15 秒就不換備援，所以等到逾時才失敗的不會換備援；
   用同一把 OpenRouter 金鑰，同樣要指定服務商；啟用時以 `OPENROUTER_FALLBACK_MODEL`、`OPENROUTER_FALLBACK_PROVIDER` 填完整 ID。
 - 不採用：自訓或微調 OCR（標註成本高、贏不過現成模型）；OCR ＋ 完整規則層（瓶頸在組回表格）；
   兩段式本機路線（PaddleOCR-VL 讀成文字再交給文字模型，84%，更慢更不準，只有「照片不能離開電腦」成為硬性要求時才值得重新考慮）；
