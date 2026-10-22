@@ -45,6 +45,11 @@ def _row(name, amount=None, unit=None, section=LabelSection.NUTRITION_TABLE, dv=
     return ReadingRow(raw_text=name, raw_name=name, amount=amount, unit_raw=unit, percent_dv=dv, label_section=section)
 
 
+def _each(tmp_path, rows: list[ReadingRow]) -> list:
+    """每一列各自一張照片辨識，測名稱對映用；同一成分的多種寫法放同一張會被多圖聯集合併成一列。"""
+    return [_crafted(tmp_path, [row]).nutrients[0] for row in rows]
+
+
 def _by_name(draft: ExtractionDraft, name: str):
     return next(n for n in draft.nutrients if n.raw_name == name)
 
@@ -62,7 +67,7 @@ def test_比較集每張都產出合法草稿並記錄三個版本(image_id):
     ExtractionDraft.model_validate(draft.model_dump())
     meta = draft.extraction_meta
     assert meta.ocr_version == "openrouter/google/gemini-3.8-flash/google-ai-studio/prompt-g1"
-    assert meta.rule_layer_version == "vlm-r1" and meta.synonym_table_version.startswith("syn-")
+    assert meta.rule_layer_version == "vlm-r2" and meta.synonym_table_version.startswith("syn-")
 
 
 def test_每日參考值百分比不會填進每份含量():
@@ -132,15 +137,8 @@ def test_允許成分可以從成分欄擷取(tmp_path):
 
 
 def test_元素量的三種寫法(tmp_path):
-    draft = _crafted(
-        tmp_path,
-        [
-            _row("檸檬酸鈣(含純鈣50mg)", 238, "毫克"),
-            _row("鈣(碳酸鈣)", 200, "毫克"),
-            _row("檸檬酸鈣", 2000, "毫克"),
-        ],
-    )
-    got = [(n.standard_code, n.nutrient_form_code, n.per_serving, n.stated_elemental_amount) for n in draft.nutrients]
+    rows = _each(tmp_path, [_row("檸檬酸鈣(含純鈣50mg)", 238, "毫克"), _row("鈣(碳酸鈣)", 200, "毫克"), _row("檸檬酸鈣", 2000, "毫克")])
+    got = [(n.standard_code, n.nutrient_form_code, n.per_serving, n.stated_elemental_amount) for n in rows]
     assert got == [
         ("calcium", "calcium_citrate", 238, 50),
         ("calcium", "calcium_carbonate", 200, 200),
@@ -197,14 +195,14 @@ def test_成分欄裡目標營養素的原料仍是範圍外(tmp_path):
 # ─── 型態代碼（supplement-label-output.md「型態代碼」）────────────
 
 
-def _forms(draft: ExtractionDraft) -> list[tuple]:
-    return [(n.raw_name, n.scope_status, n.standard_code, n.nutrient_form_code) for n in draft.nutrients]
+def _forms(rows: list) -> list[tuple]:
+    return [(n.raw_name, n.scope_status, n.standard_code, n.nutrient_form_code) for n in rows]
 
 
 def test_標示寫omega3脂肪酸總量時型態為n3_total而魚油總量為fish_oil(tmp_path):
     names = ["魚油", "魚油(含EPA 18%、DHA 12%)", "Omega-3脂肪酸總量", "ω-3 脂肪酸", "n-3多元不飽和脂肪酸", "EPA", "DHA"]
-    draft = _crafted(tmp_path, [_row(n, 100, "毫克") for n in names])
-    assert [(n.standard_code, n.nutrient_form_code) for n in draft.nutrients] == [
+    rows = _each(tmp_path, [_row(n, 100, "毫克") for n in names])
+    assert [(n.standard_code, n.nutrient_form_code) for n in rows] == [
         ("omega_3", "fish_oil"),
         ("omega_3", "fish_oil"),  # 括號裡的 EPA、DHA 只是說明，這一列是魚油總量
         ("omega_3", "n3_total"),
@@ -213,11 +211,11 @@ def test_標示寫omega3脂肪酸總量時型態為n3_total而魚油總量為fis
         ("omega_3", "epa"),
         ("omega_3", "dha"),
     ]
-    assert all(n.scope_status is ScopeStatus.IN_SCOPE for n in draft.nutrients)
+    assert all(n.scope_status is ScopeStatus.IN_SCOPE for n in rows)
 
 
 def test_紅麴的MonacolinK含量列型態為monacolin_k而只寫紅麴不填型態(tmp_path):
-    draft = _crafted(
+    rows = _each(
         tmp_path,
         [
             _row("紅麴", section=LabelSection.INGREDIENT_LIST),
@@ -225,7 +223,7 @@ def test_紅麴的MonacolinK含量列型態為monacolin_k而只寫紅麴不填�
             _row("莫納可林K", 2.4, "mg", section=LabelSection.PER_UNIT_NOTE),
         ],
     )
-    assert _forms(draft) == [
+    assert _forms(rows) == [
         ("紅麴", ScopeStatus.IN_SCOPE, "red_yeast_rice", None),
         ("Monacolin K", ScopeStatus.IN_SCOPE, "red_yeast_rice", "monacolin_k"),
         ("莫納可林K", ScopeStatus.IN_SCOPE, "red_yeast_rice", "monacolin_k"),
@@ -235,8 +233,7 @@ def test_紅麴的MonacolinK含量列型態為monacolin_k而只寫紅麴不填�
 def test_葡萄糖胺寫明鹽酸鹽才填glucosamine_hcl(tmp_path):
     section = LabelSection.INGREDIENT_LIST
     names = ["葡萄糖胺鹽酸鹽", "鹽酸葡萄糖胺", "Glucosamine HCl", "葡萄糖胺(鹽酸鹽)", "葡萄糖胺", "葡萄糖胺硫酸鹽"]
-    draft = _crafted(tmp_path, [_row(n, section=section) for n in names])
-    assert _forms(draft) == [
+    assert _forms(_each(tmp_path, [_row(n, section=section) for n in names])) == [
         ("葡萄糖胺鹽酸鹽", ScopeStatus.IN_SCOPE, "glucosamine", "glucosamine_hcl"),
         ("鹽酸葡萄糖胺", ScopeStatus.IN_SCOPE, "glucosamine", "glucosamine_hcl"),
         ("Glucosamine HCl", ScopeStatus.IN_SCOPE, "glucosamine", "glucosamine_hcl"),
@@ -279,14 +276,14 @@ def test_每一份量沒有容錯時照常填入(tmp_path):
     assert (info.serving_size, info.dose_unit) == (2, DoseUnit.TABLET)
 
 
-def _multi(tmp_path, servings: list[ServingReading | None]) -> ExtractionDraft:
+def _multi(tmp_path, servings: list[ServingReading | None], rows: list[list[ReadingRow]] | None = None) -> ExtractionDraft:
     ids = [f"a-img{i + 1:02d}" for i in range(len(servings))]
-    for image_id, serving in zip(ids, servings):
+    for i, (image_id, serving) in enumerate(zip(ids, servings)):
         result = EngineResult(
             image_id=image_id,
             engine_version="openrouter/test/test/prompt-g1",
             blocks=[],
-            reading=LabelReading(serving=serving, rows=[_row("鈣", 200, "毫克")]),
+            reading=LabelReading(serving=serving, rows=rows[i] if rows else [_row("鈣", 200, "毫克")]),
         )
         (tmp_path / f"{image_id}.json").write_text(result.model_dump_json(), encoding="utf-8")
     return extract(
@@ -308,6 +305,68 @@ def test_每一份量都容錯過時保留讀到的那張照片讓使用者定�
     shaky = ServingReading(raw_text="2±1 錠", serving_size=2, dose_unit_raw="錠", needs_review=True)
     draft = _multi(tmp_path, [None, shaky])
     assert (draft.serving_info.serving_size, draft.serving_info.source_image_id) == (None, "a-img02")
+
+
+# ─── 多圖聯集（supplement-label-output.md 第五節）───────────────
+
+
+def _in_scope(draft: ExtractionDraft) -> list[tuple]:
+    return [(n.source_image_id, n.raw_name, n.per_serving, n.requires_user_input)
+            for n in draft.nutrients if n.scope_status is ScopeStatus.IN_SCOPE]
+
+
+def test_兩張都有同一成分且數字相同時只算一列不要使用者確認(tmp_path):
+    draft = _multi(tmp_path, [None, None])
+    assert _in_scope(draft) == [("a-img01", "鈣", 200, False)]
+    # 另一張的列留著讓使用者看得到，但不進計算
+    assert [n.scope_status for n in draft.nutrients] == [ScopeStatus.IN_SCOPE, ScopeStatus.OUT_OF_SCOPE]
+
+
+def test_兩張數字不同時留下的那列要使用者確認(tmp_path):
+    draft = _multi(tmp_path, [None, None], [[_row("鈣", 200, "毫克")], [_row("鈣", 250, "毫克")]])
+    assert _in_scope(draft) == [("a-img01", "鈣", 200, True)]
+
+
+def test_單位不同也算衝突(tmp_path):
+    draft = _multi(tmp_path, [None, None], [[_row("鈣", 200, "毫克")], [_row("鈣", 200, "微克")]])
+    assert _in_scope(draft) == [("a-img01", "鈣", 200, True)]
+
+
+def test_依區塊優先序選_後一張的營養標示勝過前一張的正面文案(tmp_path):
+    rows = [[_row("魚油", 1500, "毫克", LabelSection.FRONT)], [_row("魚油", 1000, "毫克")]]
+    draft = _multi(tmp_path, [None, None], rows)
+    assert _in_scope(draft) == [("a-img02", "魚油", 1000, True)]
+
+
+def test_優先的那列沒寫含量而另一張有時要使用者確認(tmp_path):
+    rows = [[_row("紅麴", section=LabelSection.INGREDIENT_LIST)], [_row("紅麴", 500, "毫克", LabelSection.FRONT)]]
+    draft = _multi(tmp_path, [None, None], rows)
+    assert _in_scope(draft) == [("a-img01", "紅麴", None, True)]
+
+
+def test_次要的那列沒寫含量時不算衝突(tmp_path):
+    rows = [[_row("紅麴", 500, "毫克", LabelSection.PER_UNIT_NOTE)], [_row("紅麴", section=LabelSection.INGREDIENT_LIST)]]
+    draft = _multi(tmp_path, [None, None], rows)
+    assert _in_scope(draft) == [("a-img01", "紅麴", 500, False)]
+
+
+def test_同一成分不同型態各算一列(tmp_path):
+    rows = [[_row("EPA", 180, "毫克")], [_row("DHA", 120, "毫克")]]
+    draft = _multi(tmp_path, [None, None], rows)
+    assert [n for _, n, _, _ in _in_scope(draft)] == ["EPA", "DHA"]
+
+
+def test_兩張的每一份量不同時留空讓使用者填(tmp_path):
+    two = ServingReading(raw_text="每一份量 2 錠", serving_size=2, dose_unit_raw="錠")
+    one = ServingReading(raw_text="每一份量 1 錠", serving_size=1, dose_unit_raw="錠")
+    draft = _multi(tmp_path, [two, one])
+    assert (draft.serving_info.serving_size, draft.serving_info.source_image_id) == (None, "a-img01")
+
+
+def test_兩張的每一份量相同時照常填入(tmp_path):
+    two = ServingReading(raw_text="每一份量 2 錠", serving_size=2, dose_unit_raw="錠")
+    draft = _multi(tmp_path, [two, two])
+    assert draft.serving_info.serving_size == 2
 
 
 def test_名稱中間的片段不算命中(tmp_path):

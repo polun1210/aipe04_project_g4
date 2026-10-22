@@ -111,6 +111,11 @@ def _vlm_draft(product_id: UUID, sources: list[SourceImage], results: list[Engin
             rules.serving_info(None, readings[0][0]),
         ),
     )
+    # 多張圖讀到的每一份量不同：分不出哪張對，留空讓使用者在核對頁填（supplement-label-output.md 第五節）
+    read = [rules.serving_info(rd.serving, image_id) for image_id, rd in readings if rd.serving]
+    sizes = {(s.serving_size, s.dose_unit) for s in read if s.serving_size}
+    if len(sizes) > 1:
+        serving = serving.model_copy(update=dict(serving_size=None, dose_unit=None))
     intake = next((rules.suggested_intake(rd.suggested_intake_raw) for _, rd in readings if rd.suggested_intake_raw), None)
     return ExtractionDraft(
         product_id=product_id,

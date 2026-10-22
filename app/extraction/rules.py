@@ -19,7 +19,7 @@ from app.extraction.engines.base import LabelReading, ReadingRow, ServingReading
 from app.schemas.enums import ALLOWED_INGREDIENTS, DoseUnit, IngredientCode, LabelSection, ScopeStatus, Unit
 from app.schemas.label import LabelSuggestedIntake, NutrientDraft, ServingInfoDraft
 
-RULE_LAYER_VERSION = "vlm-r1"  # 改規則就要加版本，草稿的 rule_layer_version 會跟著變
+RULE_LAYER_VERSION = "vlm-r2"  # 改規則就要加版本，草稿的 rule_layer_version 會跟著變
 # 與 app/catalog_source.py 讀同一份成分目錄；DB 版目錄好了之後兩邊一起換
 CATALOG_DIR = Path(__file__).resolve().parents[2] / "docs" / "schemas" / "examples" / "catalog"
 
@@ -263,7 +263,37 @@ def build_rows(
             if not is_ingredient_row(row):
                 continue
             drafts.append(_row(row, image_id, f"r{len(drafts) + 1:02d}", names, table_codes))
-    return drafts
+    return _merge(drafts)
+
+
+def _merge(drafts: list[NutrientDraft]) -> list[NutrientDraft]:
+    """多圖聯集（supplement-label-output.md 第五節）：同一 (standard_code, nutrient_form_code) 只留一列範圍內，
+    依區塊優先序（LabelSection 的順序）選，同區塊取先出現的。其餘改成範圍外但留在草稿裡，核對頁看得到另一張的數字；
+    另一列有寫含量、而且數字或單位和留下的那列不同時，留下的那列要使用者確認。"""
+    order = list(LabelSection)
+    in_scope = [d for d in drafts if d.scope_status is ScopeStatus.IN_SCOPE]
+    kept: dict[tuple, NutrientDraft] = {}
+    for d in sorted(in_scope, key=lambda d: order.index(d.label_section)):  # sorted 是穩定排序，同區塊保持原順序
+        kept.setdefault((d.standard_code, d.nutrient_form_code), d)
+    conflicted = {
+        kept[key].row_id
+        for d in in_scope
+        for key in [(d.standard_code, d.nutrient_form_code)]
+        if d is not kept[key] and d.per_serving is not None
+        and (d.per_serving, d.unit) != (kept[key].per_serving, kept[key].unit)
+    }
+    winners = {id(d) for d in kept.values()}
+    merged = []
+    for d in drafts:
+        if d.scope_status is ScopeStatus.IN_SCOPE and id(d) not in winners:
+            d = d.model_copy(update=dict(
+                scope_status=ScopeStatus.OUT_OF_SCOPE, standard_code=None, nutrient_form_raw=None,
+                nutrient_form_code=None, stated_elemental_amount=None, requires_user_input=False,
+            ))
+        elif d.row_id in conflicted:
+            d = d.model_copy(update=dict(requires_user_input=True))
+        merged.append(d)
+    return merged
 
 
 def _row(row: ReadingRow, image_id: str, row_id: str, names: Names, table_codes: set) -> NutrientDraft:
