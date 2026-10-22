@@ -45,7 +45,7 @@ export interface SupplementDraft {
 }
 
 export interface VerificationSubmission {
-  product_name: string | null
+  product_name: string
   serving_info: { serving_size: number; dose_unit: DoseUnit }
   user_intake: {
     frequency_type: Frequency

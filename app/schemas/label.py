@@ -194,7 +194,7 @@ class NutrientConfirmed(StrictModel):
 
 
 class VerificationSubmission(StrictModel):
-    """PUT /api/products/{product_id}/verification"""
+    """POST /api/products"""
 
     product_name: ProductName  # 民眾在校對頁確認，必填；只有空白也擋
     serving_info: ServingInfo

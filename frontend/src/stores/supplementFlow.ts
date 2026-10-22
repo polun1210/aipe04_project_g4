@@ -77,6 +77,7 @@ export function nutrientError(value: NutrientValues, ingredients: Ingredient[]):
 }
 export function productReady(product: SupplementProduct, ingredients: Ingredient[]): boolean {
   return (
+    product.name.trim() !== '' &&
     positive(product.servingSize) &&
     !!product.doseUnit &&
     !!product.frequency &&
@@ -93,7 +94,7 @@ export function productReady(product: SupplementProduct, ingredients: Ingredient
 }
 export function submissionFor(product: SupplementProduct): VerificationSubmission {
   return {
-    product_name: product.name.trim() || null,
+    product_name: product.name.trim(),
     serving_info: {
       serving_size: Number(product.servingSize),
       dose_unit: product.doseUnit as DoseUnit,
