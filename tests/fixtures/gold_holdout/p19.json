@@ -1,0 +1,145 @@
+{
+  "product_id": "478b2e04-515a-5e71-8ec5-0fe15d683915",
+  "product_name": "三多 保固力Plus錠",
+  "source_images": [
+    {
+      "image_id": "p19-img01",
+      "quality_status": "accepted"
+    }
+  ],
+  "serving_info": {
+    "serving_size": 1.0,
+    "dose_unit": "tablet",
+    "source_image_id": "p19-img01"
+  },
+  "nutrients": [
+    {
+      "row_id": "r01",
+      "raw_name": "維生素D",
+      "label_section": "nutrition_table",
+      "source_image_id": "p19-img01",
+      "standard_code": "vitamin_d",
+      "scope_status": "in_scope",
+      "per_serving": 0.312,
+      "unit": "ug",
+      "percent_dv": 3.0,
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r02",
+      "raw_name": "維生素C",
+      "label_section": "nutrition_table",
+      "source_image_id": "p19-img01",
+      "standard_code": "vitamin_c",
+      "scope_status": "in_scope",
+      "per_serving": 5.0,
+      "unit": "mg",
+      "percent_dv": 5.0,
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r03",
+      "raw_name": "鈣",
+      "label_section": "nutrition_table",
+      "source_image_id": "p19-img01",
+      "standard_code": "calcium",
+      "scope_status": "in_scope",
+      "per_serving": 10.0,
+      "unit": "mg",
+      "percent_dv": 1.0,
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r04",
+      "raw_name": "鎂",
+      "label_section": "nutrition_table",
+      "source_image_id": "p19-img01",
+      "standard_code": "magnesium",
+      "scope_status": "in_scope",
+      "per_serving": 0.7,
+      "unit": "mg",
+      "percent_dv": 0.0,
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r05",
+      "raw_name": "鋅",
+      "label_section": "nutrition_table",
+      "source_image_id": "p19-img01",
+      "standard_code": "zinc",
+      "scope_status": "in_scope",
+      "per_serving": 0.5,
+      "unit": "mg",
+      "percent_dv": 3.0,
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r06",
+      "raw_name": "銅",
+      "label_section": "nutrition_table",
+      "source_image_id": "p19-img01",
+      "scope_status": "out_of_scope",
+      "per_serving": 0.07,
+      "unit": "mg",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r07",
+      "raw_name": "錳",
+      "label_section": "nutrition_table",
+      "source_image_id": "p19-img01",
+      "scope_status": "out_of_scope",
+      "per_serving": 0.05,
+      "unit": "mg",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r08",
+      "raw_name": "葡萄糖胺-鹽酸鹽",
+      "label_section": "per_unit_note",
+      "source_image_id": "p19-img01",
+      "standard_code": "glucosamine",
+      "scope_status": "in_scope",
+      "nutrient_form_code": "glucosamine_hcl",
+      "per_serving": 375.0,
+      "unit": "mg",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r09",
+      "raw_name": "甲基硫醯基甲烷MSM",
+      "label_section": "per_unit_note",
+      "source_image_id": "p19-img01",
+      "scope_status": "out_of_scope",
+      "per_serving": 375.0,
+      "unit": "mg",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r10",
+      "raw_name": "鯊魚軟骨",
+      "label_section": "per_unit_note",
+      "source_image_id": "p19-img01",
+      "scope_status": "out_of_scope",
+      "per_serving": 100.0,
+      "unit": "mg",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r11",
+      "raw_name": "膠原蛋白",
+      "label_section": "per_unit_note",
+      "source_image_id": "p19-img01",
+      "scope_status": "out_of_scope",
+      "per_serving": 1500.0,
+      "unit": "ug",
+      "requires_user_input": false
+    }
+  ],
+  "extraction_meta": {
+    "ocr_version": "gold-annotation",
+    "rule_layer_version": "gold-annotation",
+    "synonym_table_version": "gold-annotation",
+    "extracted_at": "2026-10-05T00:00:00+08:00"
+  }
+}

@@ -1,0 +1,599 @@
+{
+  "image_id": "p13-img01",
+  "engine_version": "openrouter/google/gemini-3.8-flash/google-ai-studio/prompt-g1",
+  "blocks": [
+    {
+      "text": "品 名",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "內容物成分",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "空膠囊成分",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "內 容 量",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "食用方式",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "保存方式",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "注意事項",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "警 語",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "產 地",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "保存期限",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "批 號",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "有效日期",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "營 養 標 示",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "保健功效相關成份含量",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "每一份量0.5公克(1粒)",
+      "bbox": {
+        "x": 587,
+        "y": 206,
+        "width": 179,
+        "height": 19
+      },
+      "confidence": null
+    },
+    {
+      "text": "每日2次，每次1顆，請於飯後搭配溫開水使用",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "熱量 2大卡 0%",
+      "bbox": {
+        "x": 588,
+        "y": 275,
+        "width": 358,
+        "height": 20
+      },
+      "confidence": null
+    },
+    {
+      "text": "蛋白質 0.1公克 0%",
+      "bbox": {
+        "x": 588,
+        "y": 298,
+        "width": 358,
+        "height": 19
+      },
+      "confidence": null
+    },
+    {
+      "text": "脂肪 0.004公克 0%",
+      "bbox": {
+        "x": 588,
+        "y": 321,
+        "width": 358,
+        "height": 19
+      },
+      "confidence": null
+    },
+    {
+      "text": "飽和脂肪 0.002公克 0%",
+      "bbox": {
+        "x": 606,
+        "y": 344,
+        "width": 340,
+        "height": 19
+      },
+      "confidence": null
+    },
+    {
+      "text": "反式脂肪 0公克 *",
+      "bbox": {
+        "x": 606,
+        "y": 366,
+        "width": 339,
+        "height": 19
+      },
+      "confidence": null
+    },
+    {
+      "text": "碳水化合物 0.4公克 0%",
+      "bbox": {
+        "x": 588,
+        "y": 389,
+        "width": 358,
+        "height": 19
+      },
+      "confidence": null
+    },
+    {
+      "text": "糖 0公克 *",
+      "bbox": {
+        "x": 600,
+        "y": 412,
+        "width": 345,
+        "height": 19
+      },
+      "confidence": null
+    },
+    {
+      "text": "鈉 4毫克 0%",
+      "bbox": {
+        "x": 588,
+        "y": 434,
+        "width": 358,
+        "height": 19
+      },
+      "confidence": null
+    },
+    {
+      "text": "每粒膠囊含HMG-CoA還原酵素抑制劑(Monacolin K) 3.0±0.6毫克/顆",
+      "bbox": {
+        "x": 579,
+        "y": 592,
+        "width": 367,
+        "height": 42
+      },
+      "confidence": null
+    },
+    {
+      "text": "紅麴粉末",
+      "bbox": {
+        "x": 171,
+        "y": 136,
+        "width": 81,
+        "height": 21
+      },
+      "confidence": null
+    },
+    {
+      "text": "微結晶狀 a-纖維素",
+      "bbox": {
+        "x": 272,
+        "y": 136,
+        "width": 174,
+        "height": 21
+      },
+      "confidence": null
+    },
+    {
+      "text": "硬脂酸鎂",
+      "bbox": {
+        "x": 171,
+        "y": 136,
+        "width": 357,
+        "height": 49
+      },
+      "confidence": null
+    },
+    {
+      "text": "羥丙基甲基纖維素",
+      "bbox": {
+        "x": 171,
+        "y": 193,
+        "width": 168,
+        "height": 21
+      },
+      "confidence": null
+    },
+    {
+      "text": "純水",
+      "bbox": {
+        "x": 360,
+        "y": 193,
+        "width": 43,
+        "height": 21
+      },
+      "confidence": null
+    },
+    {
+      "text": "鹿角菜膠",
+      "bbox": {
+        "x": 423,
+        "y": 193,
+        "width": 85,
+        "height": 21
+      },
+      "confidence": null
+    },
+    {
+      "text": "食用紅色六號",
+      "bbox": {
+        "x": 160,
+        "y": 220,
+        "width": 123,
+        "height": 21
+      },
+      "confidence": null
+    },
+    {
+      "text": "二氧化鈦",
+      "bbox": {
+        "x": 305,
+        "y": 220,
+        "width": 81,
+        "height": 21
+      },
+      "confidence": null
+    },
+    {
+      "text": "氯化鉀",
+      "bbox": {
+        "x": 407,
+        "y": 220,
+        "width": 61,
+        "height": 21
+      },
+      "confidence": null
+    },
+    {
+      "text": "食用藍色一號",
+      "bbox": {
+        "x": 160,
+        "y": 220,
+        "width": 368,
+        "height": 49
+      },
+      "confidence": null
+    }
+  ],
+  "reading": {
+    "serving": {
+      "raw_text": "每一份量0.5公克(1粒)",
+      "serving_size": 1.0,
+      "dose_unit_raw": "粒",
+      "bbox": {
+        "x": 587,
+        "y": 206,
+        "width": 179,
+        "height": 19
+      },
+      "needs_review": false
+    },
+    "rows": [
+      {
+        "raw_text": "熱量 2大卡 0%",
+        "raw_name": "熱量",
+        "amount": 2.0,
+        "unit_raw": "大卡",
+        "percent_dv": 0.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 588,
+          "y": 275,
+          "width": 358,
+          "height": 20
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "蛋白質 0.1公克 0%",
+        "raw_name": "蛋白質",
+        "amount": 0.1,
+        "unit_raw": "公克",
+        "percent_dv": 0.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 588,
+          "y": 298,
+          "width": 358,
+          "height": 19
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "脂肪 0.004公克 0%",
+        "raw_name": "脂肪",
+        "amount": 0.004,
+        "unit_raw": "公克",
+        "percent_dv": 0.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 588,
+          "y": 321,
+          "width": 358,
+          "height": 19
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "飽和脂肪 0.002公克 0%",
+        "raw_name": "飽和脂肪",
+        "amount": 0.002,
+        "unit_raw": "公克",
+        "percent_dv": 0.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 606,
+          "y": 344,
+          "width": 340,
+          "height": 19
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "反式脂肪 0公克 *",
+        "raw_name": "反式脂肪",
+        "amount": 0.0,
+        "unit_raw": "公克",
+        "percent_dv": null,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 606,
+          "y": 366,
+          "width": 339,
+          "height": 19
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "碳水化合物 0.4公克 0%",
+        "raw_name": "碳水化合物",
+        "amount": 0.4,
+        "unit_raw": "公克",
+        "percent_dv": 0.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 588,
+          "y": 389,
+          "width": 358,
+          "height": 19
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "糖 0公克 *",
+        "raw_name": "糖",
+        "amount": 0.0,
+        "unit_raw": "公克",
+        "percent_dv": null,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 600,
+          "y": 412,
+          "width": 345,
+          "height": 19
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "鈉 4毫克 0%",
+        "raw_name": "鈉",
+        "amount": 4.0,
+        "unit_raw": "毫克",
+        "percent_dv": 0.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 588,
+          "y": 434,
+          "width": 358,
+          "height": 19
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "每粒膠囊含HMG-CoA還原酵素抑制劑(Monacolin K) 3.0±0.6毫克/顆",
+        "raw_name": "HMG-CoA還原酵素抑制劑(Monacolin K)",
+        "amount": null,
+        "unit_raw": "毫克/顆",
+        "percent_dv": null,
+        "label_section": "per_unit_note",
+        "bbox": {
+          "x": 579,
+          "y": 592,
+          "width": 367,
+          "height": 42
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "紅麴粉末",
+        "raw_name": "紅麴粉末",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 171,
+          "y": 136,
+          "width": 81,
+          "height": 21
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "微結晶狀 a-纖維素",
+        "raw_name": "微結晶狀 a-纖維素",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 272,
+          "y": 136,
+          "width": 174,
+          "height": 21
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "硬脂酸鎂",
+        "raw_name": "硬脂酸鎂",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 171,
+          "y": 136,
+          "width": 357,
+          "height": 49
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "羥丙基甲基纖維素",
+        "raw_name": "羥丙基甲基纖維素",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 171,
+          "y": 193,
+          "width": 168,
+          "height": 21
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "純水",
+        "raw_name": "純水",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 360,
+          "y": 193,
+          "width": 43,
+          "height": 21
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "鹿角菜膠",
+        "raw_name": "鹿角菜膠",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 423,
+          "y": 193,
+          "width": 85,
+          "height": 21
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "食用紅色六號",
+        "raw_name": "食用紅色六號",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 160,
+          "y": 220,
+          "width": 123,
+          "height": 21
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "二氧化鈦",
+        "raw_name": "二氧化鈦",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 305,
+          "y": 220,
+          "width": 81,
+          "height": 21
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "氯化鉀",
+        "raw_name": "氯化鉀",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 407,
+          "y": 220,
+          "width": 61,
+          "height": 21
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "食用藍色一號",
+        "raw_name": "食用藍色一號",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 160,
+          "y": 220,
+          "width": 368,
+          "height": 49
+        },
+        "needs_review": false
+      }
+    ],
+    "suggested_intake_raw": "每日2次，每次1顆，請於飯後搭配溫開水使用",
+    "headings": [
+      "品 名",
+      "內容物成分",
+      "空膠囊成分",
+      "內 容 量",
+      "食用方式",
+      "保存方式",
+      "注意事項",
+      "警 語",
+      "產 地",
+      "保存期限",
+      "批 號",
+      "有效日期",
+      "營 養 標 示",
+      "保健功效相關成份含量"
+    ]
+  }
+}

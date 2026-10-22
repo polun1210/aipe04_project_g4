@@ -1,0 +1,481 @@
+{
+  "image_id": "p22-img01",
+  "engine_version": "openrouter/google/gemini-3.8-flash/google-ai-studio/prompt-g1",
+  "blocks": [
+    {
+      "text": "品 名",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "全 成 分",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "內 容 量",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "食用方法",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "保存方法",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "注意事項",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "批號、有效日期",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "有效期限",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "原 產 地",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "營養標示",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "成分添加量(每日2錠含:)",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "每一份量2錠",
+      "bbox": {
+        "x": 532,
+        "y": 146,
+        "width": 118,
+        "height": 22
+      },
+      "confidence": null
+    },
+    {
+      "text": "每次2錠，每日1次，於任一餐後以溫水配食。\n一日請勿超過2錠。",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "碳酸鈣",
+      "bbox": {
+        "x": 127,
+        "y": 129,
+        "width": 62,
+        "height": 22
+      },
+      "confidence": null
+    },
+    {
+      "text": "氧化鎂",
+      "bbox": {
+        "x": 206,
+        "y": 129,
+        "width": 62,
+        "height": 22
+      },
+      "confidence": null
+    },
+    {
+      "text": "微結晶狀α-纖維素",
+      "bbox": {
+        "x": 285,
+        "y": 129,
+        "width": 173,
+        "height": 23
+      },
+      "confidence": null
+    },
+    {
+      "text": "羥丙基纖維素",
+      "bbox": {
+        "x": 127,
+        "y": 129,
+        "width": 370,
+        "height": 51
+      },
+      "confidence": null
+    },
+    {
+      "text": "羧甲基澱粉鈉",
+      "bbox": {
+        "x": 246,
+        "y": 159,
+        "width": 122,
+        "height": 22
+      },
+      "confidence": null
+    },
+    {
+      "text": "膜衣成分(羥丙基甲基纖維素、二氧化鈦、微結晶狀α-纖維素、硬脂酸)",
+      "bbox": {
+        "x": 386,
+        "y": 159,
+        "width": 111,
+        "height": 81
+      },
+      "confidence": null
+    },
+    {
+      "text": "玉米澱粉",
+      "bbox": {
+        "x": 292,
+        "y": 220,
+        "width": 83,
+        "height": 22
+      },
+      "confidence": null
+    },
+    {
+      "text": "酪蛋白水解物(含酪蛋白磷酸胜肽)",
+      "bbox": {
+        "x": 126,
+        "y": 220,
+        "width": 371,
+        "height": 52
+      },
+      "confidence": null
+    },
+    {
+      "text": "二氧化矽",
+      "bbox": {
+        "x": 352,
+        "y": 250,
+        "width": 82,
+        "height": 22
+      },
+      "confidence": null
+    },
+    {
+      "text": "硬脂酸鎂",
+      "bbox": {
+        "x": 126,
+        "y": 250,
+        "width": 371,
+        "height": 52
+      },
+      "confidence": null
+    },
+    {
+      "text": "維生素D3",
+      "bbox": {
+        "x": 183,
+        "y": 280,
+        "width": 83,
+        "height": 23
+      },
+      "confidence": null
+    },
+    {
+      "text": "維生素D 10 微克 (400IU) 100%",
+      "bbox": {
+        "x": 531,
+        "y": 268,
+        "width": 425,
+        "height": 23
+      },
+      "confidence": null
+    },
+    {
+      "text": "鈣 600 毫克 50%",
+      "bbox": {
+        "x": 531,
+        "y": 294,
+        "width": 425,
+        "height": 22
+      },
+      "confidence": null
+    },
+    {
+      "text": "鎂 300 毫克 77%",
+      "bbox": {
+        "x": 531,
+        "y": 320,
+        "width": 425,
+        "height": 23
+      },
+      "confidence": null
+    },
+    {
+      "text": "酪蛋白水解物\n(酪蛋白磷酸胜肽(CPP)) 20 毫克",
+      "bbox": {
+        "x": 530,
+        "y": 412,
+        "width": 427,
+        "height": 51
+      },
+      "confidence": null
+    }
+  ],
+  "reading": {
+    "serving": {
+      "raw_text": "每一份量2錠",
+      "serving_size": 2.0,
+      "dose_unit_raw": "錠",
+      "bbox": {
+        "x": 532,
+        "y": 146,
+        "width": 118,
+        "height": 22
+      },
+      "needs_review": false
+    },
+    "rows": [
+      {
+        "raw_text": "碳酸鈣",
+        "raw_name": "碳酸鈣",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 127,
+          "y": 129,
+          "width": 62,
+          "height": 22
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "氧化鎂",
+        "raw_name": "氧化鎂",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 206,
+          "y": 129,
+          "width": 62,
+          "height": 22
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "微結晶狀α-纖維素",
+        "raw_name": "微結晶狀α-纖維素",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 285,
+          "y": 129,
+          "width": 173,
+          "height": 23
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "羥丙基纖維素",
+        "raw_name": "羥丙基纖維素",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 127,
+          "y": 129,
+          "width": 370,
+          "height": 51
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "羧甲基澱粉鈉",
+        "raw_name": "羧甲基澱粉鈉",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 246,
+          "y": 159,
+          "width": 122,
+          "height": 22
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "膜衣成分(羥丙基甲基纖維素、二氧化鈦、微結晶狀α-纖維素、硬脂酸)",
+        "raw_name": "膜衣成分(羥丙基甲基纖維素、二氧化鈦、微結晶狀α-纖維素、硬脂酸)",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 386,
+          "y": 159,
+          "width": 111,
+          "height": 81
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "玉米澱粉",
+        "raw_name": "玉米澱粉",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 292,
+          "y": 220,
+          "width": 83,
+          "height": 22
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "酪蛋白水解物(含酪蛋白磷酸胜肽)",
+        "raw_name": "酪蛋白水解物(含酪蛋白磷酸胜肽)",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 126,
+          "y": 220,
+          "width": 371,
+          "height": 52
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "二氧化矽",
+        "raw_name": "二氧化矽",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 352,
+          "y": 250,
+          "width": 82,
+          "height": 22
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "硬脂酸鎂",
+        "raw_name": "硬脂酸鎂",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 126,
+          "y": 250,
+          "width": 371,
+          "height": 52
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "維生素D3",
+        "raw_name": "維生素D3",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 183,
+          "y": 280,
+          "width": 83,
+          "height": 23
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "維生素D 10 微克 (400IU) 100%",
+        "raw_name": "維生素D",
+        "amount": 10.0,
+        "unit_raw": "微克",
+        "percent_dv": 100.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 531,
+          "y": 268,
+          "width": 425,
+          "height": 23
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "鈣 600 毫克 50%",
+        "raw_name": "鈣",
+        "amount": 600.0,
+        "unit_raw": "毫克",
+        "percent_dv": 50.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 531,
+          "y": 294,
+          "width": 425,
+          "height": 22
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "鎂 300 毫克 77%",
+        "raw_name": "鎂",
+        "amount": 300.0,
+        "unit_raw": "毫克",
+        "percent_dv": 77.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 531,
+          "y": 320,
+          "width": 425,
+          "height": 23
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "酪蛋白水解物\n(酪蛋白磷酸胜肽(CPP)) 20 毫克",
+        "raw_name": "酪蛋白水解物(酪蛋白磷酸胜肽(CPP))",
+        "amount": 20.0,
+        "unit_raw": "毫克",
+        "percent_dv": null,
+        "label_section": "per_unit_note",
+        "bbox": {
+          "x": 530,
+          "y": 412,
+          "width": 427,
+          "height": 51
+        },
+        "needs_review": false
+      }
+    ],
+    "suggested_intake_raw": "每次2錠，每日1次，於任一餐後以溫水配食。\n一日請勿超過2錠。",
+    "headings": [
+      "品 名",
+      "全 成 分",
+      "內 容 量",
+      "食用方法",
+      "保存方法",
+      "注意事項",
+      "批號、有效日期",
+      "有效期限",
+      "原 產 地",
+      "營養標示",
+      "成分添加量(每日2錠含:)"
+    ]
+  }
+}

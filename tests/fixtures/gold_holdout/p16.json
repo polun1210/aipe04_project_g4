@@ -1,0 +1,145 @@
+{
+  "product_id": "90d9069d-5894-599c-9a41-073df9a6ddaa",
+  "product_name": "德國頂級魚油（大研生醫）",
+  "source_images": [
+    {
+      "image_id": "p16-img01",
+      "quality_status": "accepted"
+    }
+  ],
+  "serving_info": {
+    "serving_size": 2.0,
+    "dose_unit": "softgel",
+    "source_image_id": "p16-img01"
+  },
+  "nutrients": [
+    {
+      "row_id": "r01",
+      "raw_name": "熱量",
+      "label_section": "nutrition_table",
+      "source_image_id": "p16-img01",
+      "scope_status": "out_of_scope",
+      "per_serving": 12.5,
+      "unit": "kcal",
+      "percent_dv": 1.0,
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r02",
+      "raw_name": "蛋白質",
+      "label_section": "nutrition_table",
+      "source_image_id": "p16-img01",
+      "scope_status": "out_of_scope",
+      "per_serving": 0.2,
+      "unit": "g",
+      "percent_dv": 0.0,
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r03",
+      "raw_name": "脂肪",
+      "label_section": "nutrition_table",
+      "source_image_id": "p16-img01",
+      "scope_status": "out_of_scope",
+      "per_serving": 1.3,
+      "unit": "g",
+      "percent_dv": 2.0,
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r04",
+      "raw_name": "飽和脂肪",
+      "label_section": "nutrition_table",
+      "source_image_id": "p16-img01",
+      "scope_status": "out_of_scope",
+      "per_serving": 0.0,
+      "unit": "g",
+      "percent_dv": 0.0,
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r05",
+      "raw_name": "反式脂肪",
+      "label_section": "nutrition_table",
+      "source_image_id": "p16-img01",
+      "scope_status": "out_of_scope",
+      "per_serving": 0.0,
+      "unit": "g",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r06",
+      "raw_name": "碳水化合物",
+      "label_section": "nutrition_table",
+      "source_image_id": "p16-img01",
+      "scope_status": "out_of_scope",
+      "per_serving": 0.0,
+      "unit": "g",
+      "percent_dv": 0.0,
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r07",
+      "raw_name": "糖",
+      "label_section": "nutrition_table",
+      "source_image_id": "p16-img01",
+      "scope_status": "out_of_scope",
+      "per_serving": 0.0,
+      "unit": "g",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r08",
+      "raw_name": "鈉",
+      "label_section": "nutrition_table",
+      "source_image_id": "p16-img01",
+      "scope_status": "out_of_scope",
+      "per_serving": 1.6,
+      "unit": "mg",
+      "percent_dv": 0.0,
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r09",
+      "raw_name": "Omega-3脂肪酸",
+      "label_section": "nutrition_table",
+      "source_image_id": "p16-img01",
+      "standard_code": "omega_3",
+      "scope_status": "in_scope",
+      "nutrient_form_code": "n3_total",
+      "per_serving": 1008.0,
+      "unit": "mg",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r10",
+      "raw_name": "EPA",
+      "label_section": "nutrition_table",
+      "source_image_id": "p16-img01",
+      "standard_code": "omega_3",
+      "scope_status": "in_scope",
+      "nutrient_form_code": "epa",
+      "per_serving": 576.0,
+      "unit": "mg",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r11",
+      "raw_name": "DHA",
+      "label_section": "nutrition_table",
+      "source_image_id": "p16-img01",
+      "standard_code": "omega_3",
+      "scope_status": "in_scope",
+      "nutrient_form_code": "dha",
+      "per_serving": 384.0,
+      "unit": "mg",
+      "requires_user_input": false
+    }
+  ],
+  "extraction_meta": {
+    "ocr_version": "gold-annotation",
+    "rule_layer_version": "gold-annotation",
+    "synonym_table_version": "gold-annotation",
+    "extracted_at": "2026-10-05T00:00:00+08:00"
+  }
+}

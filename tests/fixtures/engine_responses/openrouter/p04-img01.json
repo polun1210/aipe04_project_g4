@@ -1,0 +1,628 @@
+{
+  "image_id": "p04-img01",
+  "engine_version": "openrouter/google/gemini-3.8-flash/google-ai-studio/prompt-g1",
+  "blocks": [
+    {
+      "text": "營養標示",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "其他成分(每份)",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "成分",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "每一份量1錠",
+      "bbox": {
+        "x": 626,
+        "y": 1347,
+        "width": 139,
+        "height": 45
+      },
+      "confidence": null
+    },
+    {
+      "text": "維生素C 45毫克 45%",
+      "bbox": {
+        "x": 626,
+        "y": 1440,
+        "width": 579,
+        "height": 49
+      },
+      "confidence": null
+    },
+    {
+      "text": "鎂 52.5毫克 13%",
+      "bbox": {
+        "x": 626,
+        "y": 1470,
+        "width": 579,
+        "height": 52
+      },
+      "confidence": null
+    },
+    {
+      "text": "鋅 7.5毫克 50%",
+      "bbox": {
+        "x": 626,
+        "y": 1501,
+        "width": 579,
+        "height": 50
+      },
+      "confidence": null
+    },
+    {
+      "text": "銅 0.5毫克 *",
+      "bbox": {
+        "x": 626,
+        "y": 1530,
+        "width": 577,
+        "height": 49
+      },
+      "confidence": null
+    },
+    {
+      "text": "錳 1.8毫克 *",
+      "bbox": {
+        "x": 626,
+        "y": 1560,
+        "width": 577,
+        "height": 50
+      },
+      "confidence": null
+    },
+    {
+      "text": "UC-II®雞軟骨粉 40毫克",
+      "bbox": {
+        "x": 624,
+        "y": 1648,
+        "width": 323,
+        "height": 61
+      },
+      "confidence": null
+    },
+    {
+      "text": "微結晶狀α-纖維素",
+      "bbox": {
+        "x": 665,
+        "y": 1686,
+        "width": 167,
+        "height": 40
+      },
+      "confidence": null
+    },
+    {
+      "text": "氧化鎂",
+      "bbox": {
+        "x": 841,
+        "y": 1690,
+        "width": 69,
+        "height": 33
+      },
+      "confidence": null
+    },
+    {
+      "text": "抗壞血酸(維生素C)(維生素C、羥丙基甲基纖維素)",
+      "bbox": {
+        "x": 917,
+        "y": 1688,
+        "width": 298,
+        "height": 66
+      },
+      "confidence": null
+    },
+    {
+      "text": "UC-II®雞軟骨粉[雞軟骨粉(含非變性第二型膠原蛋白)、氯化鉀]",
+      "bbox": {
+        "x": 616,
+        "y": 1719,
+        "width": 596,
+        "height": 66
+      },
+      "confidence": null
+    },
+    {
+      "text": "氧化鋅",
+      "bbox": {
+        "x": 676,
+        "y": 1749,
+        "width": 71,
+        "height": 38
+      },
+      "confidence": null
+    },
+    {
+      "text": "硫酸錳",
+      "bbox": {
+        "x": 757,
+        "y": 1749,
+        "width": 71,
+        "height": 41
+      },
+      "confidence": null
+    },
+    {
+      "text": "羥丙基甲基纖維素",
+      "bbox": {
+        "x": 836,
+        "y": 1754,
+        "width": 182,
+        "height": 43
+      },
+      "confidence": null
+    },
+    {
+      "text": "二氧化鈦",
+      "bbox": {
+        "x": 1024,
+        "y": 1752,
+        "width": 87,
+        "height": 45
+      },
+      "confidence": null
+    },
+    {
+      "text": "滑石粉",
+      "bbox": {
+        "x": 1116,
+        "y": 1749,
+        "width": 73,
+        "height": 48
+      },
+      "confidence": null
+    },
+    {
+      "text": "交聯羧甲基纖維素鈉",
+      "bbox": {
+        "x": 616,
+        "y": 1768,
+        "width": 149,
+        "height": 64
+      },
+      "confidence": null
+    },
+    {
+      "text": "硫酸銅",
+      "bbox": {
+        "x": 772,
+        "y": 1785,
+        "width": 71,
+        "height": 35
+      },
+      "confidence": null
+    },
+    {
+      "text": "聚糊精",
+      "bbox": {
+        "x": 857,
+        "y": 1790,
+        "width": 71,
+        "height": 35
+      },
+      "confidence": null
+    },
+    {
+      "text": "硬脂酸鎂",
+      "bbox": {
+        "x": 940,
+        "y": 1792,
+        "width": 92,
+        "height": 38
+      },
+      "confidence": null
+    },
+    {
+      "text": "麥芽糊精",
+      "bbox": {
+        "x": 1045,
+        "y": 1792,
+        "width": 87,
+        "height": 40
+      },
+      "confidence": null
+    },
+    {
+      "text": "中鏈三酸甘油酯",
+      "bbox": {
+        "x": 617,
+        "y": 1792,
+        "width": 596,
+        "height": 45
+      },
+      "confidence": null
+    },
+    {
+      "text": "食用藍色二號鋁麗基",
+      "bbox": {
+        "x": 679,
+        "y": 1797,
+        "width": 203,
+        "height": 59
+      },
+      "confidence": null
+    },
+    {
+      "text": "食用藍色一號鋁麗基",
+      "bbox": {
+        "x": 889,
+        "y": 1816,
+        "width": 198,
+        "height": 42
+      },
+      "confidence": null
+    }
+  ],
+  "reading": {
+    "serving": {
+      "raw_text": "每一份量1錠",
+      "serving_size": 1.0,
+      "dose_unit_raw": "錠",
+      "bbox": {
+        "x": 626,
+        "y": 1347,
+        "width": 139,
+        "height": 45
+      },
+      "needs_review": false
+    },
+    "rows": [
+      {
+        "raw_text": "維生素C 45毫克 45%",
+        "raw_name": "維生素C",
+        "amount": 45.0,
+        "unit_raw": "毫克",
+        "percent_dv": 45.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 626,
+          "y": 1440,
+          "width": 579,
+          "height": 49
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "鎂 52.5毫克 13%",
+        "raw_name": "鎂",
+        "amount": 52.5,
+        "unit_raw": "毫克",
+        "percent_dv": 13.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 626,
+          "y": 1470,
+          "width": 579,
+          "height": 52
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "鋅 7.5毫克 50%",
+        "raw_name": "鋅",
+        "amount": 7.5,
+        "unit_raw": "毫克",
+        "percent_dv": 50.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 626,
+          "y": 1501,
+          "width": 579,
+          "height": 50
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "銅 0.5毫克 *",
+        "raw_name": "銅",
+        "amount": 0.5,
+        "unit_raw": "毫克",
+        "percent_dv": null,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 626,
+          "y": 1530,
+          "width": 577,
+          "height": 49
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "錳 1.8毫克 *",
+        "raw_name": "錳",
+        "amount": 1.8,
+        "unit_raw": "毫克",
+        "percent_dv": null,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 626,
+          "y": 1560,
+          "width": 577,
+          "height": 50
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "UC-II®雞軟骨粉 40毫克",
+        "raw_name": "UC-II®雞軟骨粉",
+        "amount": 40.0,
+        "unit_raw": "毫克",
+        "percent_dv": null,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 624,
+          "y": 1648,
+          "width": 323,
+          "height": 61
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "微結晶狀α-纖維素",
+        "raw_name": "微結晶狀α-纖維素",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 665,
+          "y": 1686,
+          "width": 167,
+          "height": 40
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "氧化鎂",
+        "raw_name": "氧化鎂",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 841,
+          "y": 1690,
+          "width": 69,
+          "height": 33
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "抗壞血酸(維生素C)(維生素C、羥丙基甲基纖維素)",
+        "raw_name": "抗壞血酸(維生素C)(維生素C、羥丙基甲基纖維素)",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 917,
+          "y": 1688,
+          "width": 298,
+          "height": 66
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "UC-II®雞軟骨粉[雞軟骨粉(含非變性第二型膠原蛋白)、氯化鉀]",
+        "raw_name": "UC-II®雞軟骨粉[雞軟骨粉(含非變性第二型膠原蛋白)、氯化鉀]",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 616,
+          "y": 1719,
+          "width": 596,
+          "height": 66
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "氧化鋅",
+        "raw_name": "氧化鋅",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 676,
+          "y": 1749,
+          "width": 71,
+          "height": 38
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "硫酸錳",
+        "raw_name": "硫酸錳",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 757,
+          "y": 1749,
+          "width": 71,
+          "height": 41
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "羥丙基甲基纖維素",
+        "raw_name": "羥丙基甲基纖維素",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 836,
+          "y": 1754,
+          "width": 182,
+          "height": 43
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "二氧化鈦",
+        "raw_name": "二氧化鈦",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 1024,
+          "y": 1752,
+          "width": 87,
+          "height": 45
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "滑石粉",
+        "raw_name": "滑石粉",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 1116,
+          "y": 1749,
+          "width": 73,
+          "height": 48
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "交聯羧甲基纖維素鈉",
+        "raw_name": "交聯羧甲基纖維素鈉",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 616,
+          "y": 1768,
+          "width": 149,
+          "height": 64
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "硫酸銅",
+        "raw_name": "硫酸銅",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 772,
+          "y": 1785,
+          "width": 71,
+          "height": 35
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "聚糊精",
+        "raw_name": "聚糊精",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 857,
+          "y": 1790,
+          "width": 71,
+          "height": 35
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "硬脂酸鎂",
+        "raw_name": "硬脂酸鎂",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 940,
+          "y": 1792,
+          "width": 92,
+          "height": 38
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "麥芽糊精",
+        "raw_name": "麥芽糊精",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 1045,
+          "y": 1792,
+          "width": 87,
+          "height": 40
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "中鏈三酸甘油酯",
+        "raw_name": "中鏈三酸甘油酯",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 617,
+          "y": 1792,
+          "width": 596,
+          "height": 45
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "食用藍色二號鋁麗基",
+        "raw_name": "食用藍色二號鋁麗基",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 679,
+          "y": 1797,
+          "width": 203,
+          "height": 59
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "食用藍色一號鋁麗基",
+        "raw_name": "食用藍色一號鋁麗基",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 889,
+          "y": 1816,
+          "width": 198,
+          "height": 42
+        },
+        "needs_review": false
+      }
+    ],
+    "suggested_intake_raw": null,
+    "headings": [
+      "營養標示",
+      "其他成分(每份)",
+      "成分"
+    ]
+  }
+}

@@ -1,0 +1,471 @@
+{
+  "image_id": "p15-img01",
+  "engine_version": "openrouter/google/gemini-3.8-flash/google-ai-studio/prompt-g1",
+  "blocks": [
+    {
+      "text": "品名",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "成分",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "數量",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "保存期限",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "原產地",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "營養標示",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "每一份量 1.9公克(1錠)",
+      "bbox": {
+        "x": 114,
+        "y": 549,
+        "width": 350,
+        "height": 37
+      },
+      "confidence": null
+    },
+    {
+      "text": "檸檬酸鈣",
+      "bbox": {
+        "x": 180,
+        "y": 147,
+        "width": 154,
+        "height": 39
+      },
+      "confidence": null
+    },
+    {
+      "text": "微晶纖維",
+      "bbox": {
+        "x": 369,
+        "y": 148,
+        "width": 154,
+        "height": 38
+      },
+      "confidence": null
+    },
+    {
+      "text": "氧化鎂",
+      "bbox": {
+        "x": 563,
+        "y": 148,
+        "width": 115,
+        "height": 38
+      },
+      "confidence": null
+    },
+    {
+      "text": "磷酸氫鈉",
+      "bbox": {
+        "x": 715,
+        "y": 149,
+        "width": 154,
+        "height": 37
+      },
+      "confidence": null
+    },
+    {
+      "text": "聚乙烯、吡咯烷酮",
+      "bbox": {
+        "x": 86,
+        "y": 193,
+        "width": 321,
+        "height": 40
+      },
+      "confidence": null
+    },
+    {
+      "text": "硬脂酸鎂",
+      "bbox": {
+        "x": 443,
+        "y": 194,
+        "width": 154,
+        "height": 38
+      },
+      "confidence": null
+    },
+    {
+      "text": "二氧化矽",
+      "bbox": {
+        "x": 635,
+        "y": 194,
+        "width": 144,
+        "height": 38
+      },
+      "confidence": null
+    },
+    {
+      "text": "氧化鋅",
+      "bbox": {
+        "x": 811,
+        "y": 194,
+        "width": 116,
+        "height": 38
+      },
+      "confidence": null
+    },
+    {
+      "text": "維生素D3(辛烯基丁二酸鈉澱粉、維生素D3、蔗糖、中鏈三酸甘油脂、濃縮d-α生育醇(抗氧化劑))",
+      "bbox": {
+        "x": 94,
+        "y": 239,
+        "width": 816,
+        "height": 130
+      },
+      "confidence": null
+    },
+    {
+      "text": "葡萄糖酸銅",
+      "bbox": {
+        "x": 178,
+        "y": 330,
+        "width": 154,
+        "height": 38
+      },
+      "confidence": null
+    },
+    {
+      "text": "交羧甲基纖維素鈉",
+      "bbox": {
+        "x": 378,
+        "y": 330,
+        "width": 321,
+        "height": 39
+      },
+      "confidence": null
+    },
+    {
+      "text": "維生素D 12.5微克(500IU) 125%",
+      "bbox": {
+        "x": 112,
+        "y": 697,
+        "width": 589,
+        "height": 35
+      },
+      "confidence": null
+    },
+    {
+      "text": "鈣 333毫克 28%",
+      "bbox": {
+        "x": 111,
+        "y": 738,
+        "width": 572,
+        "height": 34
+      },
+      "confidence": null
+    },
+    {
+      "text": "鎂 50.6毫克 13%",
+      "bbox": {
+        "x": 112,
+        "y": 778,
+        "width": 572,
+        "height": 34
+      },
+      "confidence": null
+    },
+    {
+      "text": "鋅 7.6毫克 51%",
+      "bbox": {
+        "x": 112,
+        "y": 818,
+        "width": 572,
+        "height": 34
+      },
+      "confidence": null
+    },
+    {
+      "text": "銅 0.5毫克 *",
+      "bbox": {
+        "x": 112,
+        "y": 857,
+        "width": 556,
+        "height": 35
+      },
+      "confidence": null
+    }
+  ],
+  "reading": {
+    "serving": {
+      "raw_text": "每一份量 1.9公克(1錠)",
+      "serving_size": 1.0,
+      "dose_unit_raw": "錠",
+      "bbox": {
+        "x": 114,
+        "y": 549,
+        "width": 350,
+        "height": 37
+      },
+      "needs_review": false
+    },
+    "rows": [
+      {
+        "raw_text": "檸檬酸鈣",
+        "raw_name": "檸檬酸鈣",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 180,
+          "y": 147,
+          "width": 154,
+          "height": 39
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "微晶纖維",
+        "raw_name": "微晶纖維",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 369,
+          "y": 148,
+          "width": 154,
+          "height": 38
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "氧化鎂",
+        "raw_name": "氧化鎂",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 563,
+          "y": 148,
+          "width": 115,
+          "height": 38
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "磷酸氫鈉",
+        "raw_name": "磷酸氫鈉",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 715,
+          "y": 149,
+          "width": 154,
+          "height": 37
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "聚乙烯、吡咯烷酮",
+        "raw_name": "聚乙烯、吡咯烷酮",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 86,
+          "y": 193,
+          "width": 321,
+          "height": 40
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "硬脂酸鎂",
+        "raw_name": "硬脂酸鎂",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 443,
+          "y": 194,
+          "width": 154,
+          "height": 38
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "二氧化矽",
+        "raw_name": "二氧化矽",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 635,
+          "y": 194,
+          "width": 144,
+          "height": 38
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "氧化鋅",
+        "raw_name": "氧化鋅",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 811,
+          "y": 194,
+          "width": 116,
+          "height": 38
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "維生素D3(辛烯基丁二酸鈉澱粉、維生素D3、蔗糖、中鏈三酸甘油脂、濃縮d-α生育醇(抗氧化劑))",
+        "raw_name": "維生素D3(辛烯基丁二酸鈉澱粉、維生素D3、蔗糖、中鏈三酸甘油脂、濃縮d-α生育醇(抗氧化劑))",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 94,
+          "y": 239,
+          "width": 816,
+          "height": 130
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "葡萄糖酸銅",
+        "raw_name": "葡萄糖酸銅",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 178,
+          "y": 330,
+          "width": 154,
+          "height": 38
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "交羧甲基纖維素鈉",
+        "raw_name": "交羧甲基纖維素鈉",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 378,
+          "y": 330,
+          "width": 321,
+          "height": 39
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "維生素D 12.5微克(500IU) 125%",
+        "raw_name": "維生素D",
+        "amount": 12.5,
+        "unit_raw": "微克",
+        "percent_dv": 125.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 112,
+          "y": 697,
+          "width": 589,
+          "height": 35
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "鈣 333毫克 28%",
+        "raw_name": "鈣",
+        "amount": 333.0,
+        "unit_raw": "毫克",
+        "percent_dv": 28.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 111,
+          "y": 738,
+          "width": 572,
+          "height": 34
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "鎂 50.6毫克 13%",
+        "raw_name": "鎂",
+        "amount": 50.6,
+        "unit_raw": "毫克",
+        "percent_dv": 13.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 112,
+          "y": 778,
+          "width": 572,
+          "height": 34
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "鋅 7.6毫克 51%",
+        "raw_name": "鋅",
+        "amount": 7.6,
+        "unit_raw": "毫克",
+        "percent_dv": 51.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 112,
+          "y": 818,
+          "width": 572,
+          "height": 34
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "銅 0.5毫克 *",
+        "raw_name": "銅",
+        "amount": 0.5,
+        "unit_raw": "毫克",
+        "percent_dv": null,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 112,
+          "y": 857,
+          "width": 556,
+          "height": 35
+        },
+        "needs_review": false
+      }
+    ],
+    "suggested_intake_raw": null,
+    "headings": [
+      "品名",
+      "成分",
+      "數量",
+      "保存期限",
+      "原產地",
+      "營養標示"
+    ]
+  }
+}

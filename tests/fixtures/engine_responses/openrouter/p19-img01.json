@@ -1,0 +1,322 @@
+{
+  "image_id": "p19-img01",
+  "engine_version": "openrouter/google/gemini-3.8-flash/google-ai-studio/prompt-g1",
+  "blocks": [
+    {
+      "text": "營養標示",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "每份量其它成分含量",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "每一份量 1錠",
+      "bbox": {
+        "x": 56,
+        "y": 77,
+        "width": 191,
+        "height": 28
+      },
+      "confidence": null
+    },
+    {
+      "text": "維生素D 0.312 微克 (12.5 IU) 3 %",
+      "bbox": {
+        "x": 56,
+        "y": 195,
+        "width": 542,
+        "height": 31
+      },
+      "confidence": null
+    },
+    {
+      "text": "維生素C 5 毫克 5 %",
+      "bbox": {
+        "x": 57,
+        "y": 230,
+        "width": 540,
+        "height": 31
+      },
+      "confidence": null
+    },
+    {
+      "text": "鈣 10 毫克 1 %",
+      "bbox": {
+        "x": 56,
+        "y": 266,
+        "width": 541,
+        "height": 30
+      },
+      "confidence": null
+    },
+    {
+      "text": "鎂 0.7 毫克 0 %",
+      "bbox": {
+        "x": 55,
+        "y": 303,
+        "width": 542,
+        "height": 29
+      },
+      "confidence": null
+    },
+    {
+      "text": "鋅 0.5 毫克 3 %",
+      "bbox": {
+        "x": 55,
+        "y": 339,
+        "width": 542,
+        "height": 29
+      },
+      "confidence": null
+    },
+    {
+      "text": "銅 0.07 毫克 *",
+      "bbox": {
+        "x": 55,
+        "y": 375,
+        "width": 543,
+        "height": 29
+      },
+      "confidence": null
+    },
+    {
+      "text": "錳 0.05 毫克 *",
+      "bbox": {
+        "x": 56,
+        "y": 410,
+        "width": 541,
+        "height": 29
+      },
+      "confidence": null
+    },
+    {
+      "text": "葡萄糖胺-鹽酸鹽 375 毫克",
+      "bbox": {
+        "x": 57,
+        "y": 546,
+        "width": 539,
+        "height": 31
+      },
+      "confidence": null
+    },
+    {
+      "text": "甲基硫醯基甲烷MSM 375 毫克",
+      "bbox": {
+        "x": 58,
+        "y": 583,
+        "width": 538,
+        "height": 30
+      },
+      "confidence": null
+    },
+    {
+      "text": "鯊魚軟骨 100 毫克",
+      "bbox": {
+        "x": 58,
+        "y": 619,
+        "width": 539,
+        "height": 30
+      },
+      "confidence": null
+    },
+    {
+      "text": "膠原蛋白 1500 微克",
+      "bbox": {
+        "x": 58,
+        "y": 655,
+        "width": 539,
+        "height": 30
+      },
+      "confidence": null
+    }
+  ],
+  "reading": {
+    "serving": {
+      "raw_text": "每一份量 1錠",
+      "serving_size": 1.0,
+      "dose_unit_raw": "錠",
+      "bbox": {
+        "x": 56,
+        "y": 77,
+        "width": 191,
+        "height": 28
+      },
+      "needs_review": false
+    },
+    "rows": [
+      {
+        "raw_text": "維生素D 0.312 微克 (12.5 IU) 3 %",
+        "raw_name": "維生素D",
+        "amount": 0.312,
+        "unit_raw": "微克 (12.5 IU)",
+        "percent_dv": 3.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 56,
+          "y": 195,
+          "width": 542,
+          "height": 31
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "維生素C 5 毫克 5 %",
+        "raw_name": "維生素C",
+        "amount": 5.0,
+        "unit_raw": "毫克",
+        "percent_dv": 5.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 57,
+          "y": 230,
+          "width": 540,
+          "height": 31
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "鈣 10 毫克 1 %",
+        "raw_name": "鈣",
+        "amount": 10.0,
+        "unit_raw": "毫克",
+        "percent_dv": 1.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 56,
+          "y": 266,
+          "width": 541,
+          "height": 30
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "鎂 0.7 毫克 0 %",
+        "raw_name": "鎂",
+        "amount": 0.7,
+        "unit_raw": "毫克",
+        "percent_dv": 0.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 55,
+          "y": 303,
+          "width": 542,
+          "height": 29
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "鋅 0.5 毫克 3 %",
+        "raw_name": "鋅",
+        "amount": 0.5,
+        "unit_raw": "毫克",
+        "percent_dv": 3.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 55,
+          "y": 339,
+          "width": 542,
+          "height": 29
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "銅 0.07 毫克 *",
+        "raw_name": "銅",
+        "amount": 0.07,
+        "unit_raw": "毫克",
+        "percent_dv": null,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 55,
+          "y": 375,
+          "width": 543,
+          "height": 29
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "錳 0.05 毫克 *",
+        "raw_name": "錳",
+        "amount": 0.05,
+        "unit_raw": "毫克",
+        "percent_dv": null,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 56,
+          "y": 410,
+          "width": 541,
+          "height": 29
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "葡萄糖胺-鹽酸鹽 375 毫克",
+        "raw_name": "葡萄糖胺-鹽酸鹽",
+        "amount": 375.0,
+        "unit_raw": "毫克",
+        "percent_dv": null,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 57,
+          "y": 546,
+          "width": 539,
+          "height": 31
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "甲基硫醯基甲烷MSM 375 毫克",
+        "raw_name": "甲基硫醯基甲烷MSM",
+        "amount": 375.0,
+        "unit_raw": "毫克",
+        "percent_dv": null,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 58,
+          "y": 583,
+          "width": 538,
+          "height": 30
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "鯊魚軟骨 100 毫克",
+        "raw_name": "鯊魚軟骨",
+        "amount": 100.0,
+        "unit_raw": "毫克",
+        "percent_dv": null,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 58,
+          "y": 619,
+          "width": 539,
+          "height": 30
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "膠原蛋白 1500 微克",
+        "raw_name": "膠原蛋白",
+        "amount": 1500.0,
+        "unit_raw": "微克",
+        "percent_dv": null,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 58,
+          "y": 655,
+          "width": 539,
+          "height": 30
+        },
+        "needs_review": false
+      }
+    ],
+    "suggested_intake_raw": null,
+    "headings": [
+      "營養標示",
+      "每份量其它成分含量"
+    ]
+  }
+}

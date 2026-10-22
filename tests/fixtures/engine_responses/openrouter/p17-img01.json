@@ -1,0 +1,458 @@
+{
+  "image_id": "p17-img01",
+  "engine_version": "openrouter/google/gemini-3.8-flash/google-ai-studio/prompt-g1",
+  "blocks": [
+    {
+      "text": "成份",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "食用方法",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "營養標示",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "每一份量1.5公克(1粒)，本包裝含60份",
+      "bbox": {
+        "x": 91,
+        "y": 351,
+        "width": 567,
+        "height": 34
+      },
+      "confidence": null
+    },
+    {
+      "text": "每天一次，每次1-2粒，於餐後以開水配食。一日請勿超過2粒，多食無益。",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "魚油(來自鯷魚、沙丁魚)",
+      "bbox": {
+        "x": 258,
+        "y": 58,
+        "width": 629,
+        "height": 34
+      },
+      "confidence": null
+    },
+    {
+      "text": "明膠",
+      "bbox": {
+        "x": 654,
+        "y": 58,
+        "width": 66,
+        "height": 33
+      },
+      "confidence": null
+    },
+    {
+      "text": "甘油",
+      "bbox": {
+        "x": 755,
+        "y": 58,
+        "width": 66,
+        "height": 33
+      },
+      "confidence": null
+    },
+    {
+      "text": "水",
+      "bbox": {
+        "x": 856,
+        "y": 58,
+        "width": 32,
+        "height": 33
+      },
+      "confidence": null
+    },
+    {
+      "text": "維生素E(抗氧化劑)",
+      "bbox": {
+        "x": 290,
+        "y": 102,
+        "width": 281,
+        "height": 32
+      },
+      "confidence": null
+    },
+    {
+      "text": "迷迭香萃取物",
+      "bbox": {
+        "x": 608,
+        "y": 102,
+        "width": 200,
+        "height": 32
+      },
+      "confidence": null
+    },
+    {
+      "text": "熱量 11大卡 1%",
+      "bbox": {
+        "x": 91,
+        "y": 464,
+        "width": 816,
+        "height": 33
+      },
+      "confidence": null
+    },
+    {
+      "text": "蛋白質 0.3公克 0%",
+      "bbox": {
+        "x": 91,
+        "y": 508,
+        "width": 816,
+        "height": 34
+      },
+      "confidence": null
+    },
+    {
+      "text": "脂肪 1公克 2%",
+      "bbox": {
+        "x": 91,
+        "y": 554,
+        "width": 816,
+        "height": 33
+      },
+      "confidence": null
+    },
+    {
+      "text": "飽和脂肪 0公克 0%",
+      "bbox": {
+        "x": 115,
+        "y": 599,
+        "width": 792,
+        "height": 33
+      },
+      "confidence": null
+    },
+    {
+      "text": "反式脂肪 0公克 *",
+      "bbox": {
+        "x": 116,
+        "y": 643,
+        "width": 790,
+        "height": 33
+      },
+      "confidence": null
+    },
+    {
+      "text": "碳水化合物 0.1公克 0%",
+      "bbox": {
+        "x": 91,
+        "y": 688,
+        "width": 816,
+        "height": 34
+      },
+      "confidence": null
+    },
+    {
+      "text": "糖 0公克 *",
+      "bbox": {
+        "x": 115,
+        "y": 734,
+        "width": 791,
+        "height": 33
+      },
+      "confidence": null
+    },
+    {
+      "text": "鈉 0毫克 0%",
+      "bbox": {
+        "x": 91,
+        "y": 779,
+        "width": 816,
+        "height": 33
+      },
+      "confidence": null
+    },
+    {
+      "text": "EPA 500毫克 *",
+      "bbox": {
+        "x": 93,
+        "y": 824,
+        "width": 813,
+        "height": 32
+      },
+      "confidence": null
+    },
+    {
+      "text": "DHA 250毫克 *",
+      "bbox": {
+        "x": 93,
+        "y": 869,
+        "width": 813,
+        "height": 32
+      },
+      "confidence": null
+    }
+  ],
+  "reading": {
+    "serving": {
+      "raw_text": "每一份量1.5公克(1粒)，本包裝含60份",
+      "serving_size": 1.0,
+      "dose_unit_raw": "粒",
+      "bbox": {
+        "x": 91,
+        "y": 351,
+        "width": 567,
+        "height": 34
+      },
+      "needs_review": false
+    },
+    "rows": [
+      {
+        "raw_text": "魚油(來自鯷魚、沙丁魚)",
+        "raw_name": "魚油(來自鯷魚、沙丁魚)",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 258,
+          "y": 58,
+          "width": 629,
+          "height": 34
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "明膠",
+        "raw_name": "明膠",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 654,
+          "y": 58,
+          "width": 66,
+          "height": 33
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "甘油",
+        "raw_name": "甘油",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 755,
+          "y": 58,
+          "width": 66,
+          "height": 33
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "水",
+        "raw_name": "水",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 856,
+          "y": 58,
+          "width": 32,
+          "height": 33
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "維生素E(抗氧化劑)",
+        "raw_name": "維生素E(抗氧化劑)",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 290,
+          "y": 102,
+          "width": 281,
+          "height": 32
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "迷迭香萃取物",
+        "raw_name": "迷迭香萃取物",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 608,
+          "y": 102,
+          "width": 200,
+          "height": 32
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "熱量 11大卡 1%",
+        "raw_name": "熱量",
+        "amount": 11.0,
+        "unit_raw": "大卡",
+        "percent_dv": 1.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 91,
+          "y": 464,
+          "width": 816,
+          "height": 33
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "蛋白質 0.3公克 0%",
+        "raw_name": "蛋白質",
+        "amount": 0.3,
+        "unit_raw": "公克",
+        "percent_dv": 0.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 91,
+          "y": 508,
+          "width": 816,
+          "height": 34
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "脂肪 1公克 2%",
+        "raw_name": "脂肪",
+        "amount": 1.0,
+        "unit_raw": "公克",
+        "percent_dv": 2.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 91,
+          "y": 554,
+          "width": 816,
+          "height": 33
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "飽和脂肪 0公克 0%",
+        "raw_name": "飽和脂肪",
+        "amount": 0.0,
+        "unit_raw": "公克",
+        "percent_dv": 0.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 115,
+          "y": 599,
+          "width": 792,
+          "height": 33
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "反式脂肪 0公克 *",
+        "raw_name": "反式脂肪",
+        "amount": 0.0,
+        "unit_raw": "公克",
+        "percent_dv": null,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 116,
+          "y": 643,
+          "width": 790,
+          "height": 33
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "碳水化合物 0.1公克 0%",
+        "raw_name": "碳水化合物",
+        "amount": 0.1,
+        "unit_raw": "公克",
+        "percent_dv": 0.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 91,
+          "y": 688,
+          "width": 816,
+          "height": 34
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "糖 0公克 *",
+        "raw_name": "糖",
+        "amount": 0.0,
+        "unit_raw": "公克",
+        "percent_dv": null,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 115,
+          "y": 734,
+          "width": 791,
+          "height": 33
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "鈉 0毫克 0%",
+        "raw_name": "鈉",
+        "amount": 0.0,
+        "unit_raw": "毫克",
+        "percent_dv": 0.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 91,
+          "y": 779,
+          "width": 816,
+          "height": 33
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "EPA 500毫克 *",
+        "raw_name": "EPA",
+        "amount": 500.0,
+        "unit_raw": "毫克",
+        "percent_dv": null,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 93,
+          "y": 824,
+          "width": 813,
+          "height": 32
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "DHA 250毫克 *",
+        "raw_name": "DHA",
+        "amount": 250.0,
+        "unit_raw": "毫克",
+        "percent_dv": null,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 93,
+          "y": 869,
+          "width": 813,
+          "height": 32
+        },
+        "needs_review": false
+      }
+    ],
+    "suggested_intake_raw": "每天一次，每次1-2粒，於餐後以開水配食。一日請勿超過2粒，多食無益。",
+    "headings": [
+      "成份",
+      "食用方法",
+      "營養標示"
+    ]
+  }
+}

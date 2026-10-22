@@ -1,0 +1,241 @@
+{
+  "image_id": "p06-img01",
+  "engine_version": "openrouter/google/gemini-3.8-flash/google-ai-studio/prompt-g1",
+  "blocks": [
+    {
+      "text": "營養標示 Nutrition Facts",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "每一份量2公克",
+      "bbox": {
+        "x": 610,
+        "y": 913,
+        "width": 236,
+        "height": 49
+      },
+      "confidence": null
+    },
+    {
+      "text": "熱量 7.7大卡 384.9大卡",
+      "bbox": {
+        "x": 608,
+        "y": 1033,
+        "width": 584,
+        "height": 50
+      },
+      "confidence": null
+    },
+    {
+      "text": "蛋白質 0.12公克 5.8公克",
+      "bbox": {
+        "x": 612,
+        "y": 1080,
+        "width": 578,
+        "height": 43
+      },
+      "confidence": null
+    },
+    {
+      "text": "脂肪 0公克 0.2公克",
+      "bbox": {
+        "x": 612,
+        "y": 1125,
+        "width": 584,
+        "height": 45
+      },
+      "confidence": null
+    },
+    {
+      "text": "飽和脂肪 0公克 0.1公克",
+      "bbox": {
+        "x": 642,
+        "y": 1163,
+        "width": 552,
+        "height": 43
+      },
+      "confidence": null
+    },
+    {
+      "text": "反式脂肪 0公克 0公克",
+      "bbox": {
+        "x": 644,
+        "y": 1206,
+        "width": 553,
+        "height": 45
+      },
+      "confidence": null
+    },
+    {
+      "text": "碳水化合物 1.8公克 90.1公克",
+      "bbox": {
+        "x": 603,
+        "y": 1248,
+        "width": 591,
+        "height": 45
+      },
+      "confidence": null
+    },
+    {
+      "text": "糖 0.2公克 11.1公克",
+      "bbox": {
+        "x": 637,
+        "y": 1293,
+        "width": 546,
+        "height": 40
+      },
+      "confidence": null
+    },
+    {
+      "text": "鈉 8.3毫克 417毫克",
+      "bbox": {
+        "x": 598,
+        "y": 1336,
+        "width": 580,
+        "height": 45
+      },
+      "confidence": null
+    }
+  ],
+  "reading": {
+    "serving": {
+      "raw_text": "每一份量2公克",
+      "serving_size": null,
+      "dose_unit_raw": null,
+      "bbox": {
+        "x": 610,
+        "y": 913,
+        "width": 236,
+        "height": 49
+      },
+      "needs_review": false
+    },
+    "rows": [
+      {
+        "raw_text": "熱量 7.7大卡 384.9大卡",
+        "raw_name": "熱量",
+        "amount": 7.7,
+        "unit_raw": "大卡",
+        "percent_dv": null,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 608,
+          "y": 1033,
+          "width": 584,
+          "height": 50
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "蛋白質 0.12公克 5.8公克",
+        "raw_name": "蛋白質",
+        "amount": 0.12,
+        "unit_raw": "公克",
+        "percent_dv": null,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 612,
+          "y": 1080,
+          "width": 578,
+          "height": 43
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "脂肪 0公克 0.2公克",
+        "raw_name": "脂肪",
+        "amount": 0.0,
+        "unit_raw": "公克",
+        "percent_dv": null,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 612,
+          "y": 1125,
+          "width": 584,
+          "height": 45
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "飽和脂肪 0公克 0.1公克",
+        "raw_name": "飽和脂肪",
+        "amount": 0.0,
+        "unit_raw": "公克",
+        "percent_dv": null,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 642,
+          "y": 1163,
+          "width": 552,
+          "height": 43
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "反式脂肪 0公克 0公克",
+        "raw_name": "反式脂肪",
+        "amount": 0.0,
+        "unit_raw": "公克",
+        "percent_dv": null,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 644,
+          "y": 1206,
+          "width": 553,
+          "height": 45
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "碳水化合物 1.8公克 90.1公克",
+        "raw_name": "碳水化合物",
+        "amount": 1.8,
+        "unit_raw": "公克",
+        "percent_dv": null,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 603,
+          "y": 1248,
+          "width": 591,
+          "height": 45
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "糖 0.2公克 11.1公克",
+        "raw_name": "糖",
+        "amount": 0.2,
+        "unit_raw": "公克",
+        "percent_dv": null,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 637,
+          "y": 1293,
+          "width": 546,
+          "height": 40
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "鈉 8.3毫克 417毫克",
+        "raw_name": "鈉",
+        "amount": 8.3,
+        "unit_raw": "毫克",
+        "percent_dv": null,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 598,
+          "y": 1336,
+          "width": 580,
+          "height": 45
+        },
+        "needs_review": false
+      }
+    ],
+    "suggested_intake_raw": null,
+    "headings": [
+      "營養標示 Nutrition Facts"
+    ]
+  }
+}

@@ -1,0 +1,151 @@
+{
+  "product_id": "b49ff425-a926-5e37-b178-6fd73cf6d9b3",
+  "product_name": "熱激化乳酸菌（品名未入鏡）",
+  "source_images": [
+    {
+      "image_id": "p06-img01",
+      "quality_status": "accepted"
+    }
+  ],
+  "serving_info": {
+    "serving_size": 2.0,
+    "dose_unit": "g",
+    "source_image_id": "p06-img01"
+  },
+  "nutrients": [
+    {
+      "row_id": "r01",
+      "raw_name": "熱量",
+      "label_section": "nutrition_table",
+      "source_image_id": "p06-img01",
+      "scope_status": "out_of_scope",
+      "per_serving": 7.7,
+      "unit": "kcal",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r02",
+      "raw_name": "蛋白質",
+      "label_section": "nutrition_table",
+      "source_image_id": "p06-img01",
+      "scope_status": "out_of_scope",
+      "per_serving": 0.12,
+      "unit": "g",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r03",
+      "raw_name": "脂肪",
+      "label_section": "nutrition_table",
+      "source_image_id": "p06-img01",
+      "scope_status": "out_of_scope",
+      "per_serving": 0.0,
+      "unit": "g",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r04",
+      "raw_name": "飽和脂肪",
+      "label_section": "nutrition_table",
+      "source_image_id": "p06-img01",
+      "scope_status": "out_of_scope",
+      "per_serving": 0.0,
+      "unit": "g",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r05",
+      "raw_name": "反式脂肪",
+      "label_section": "nutrition_table",
+      "source_image_id": "p06-img01",
+      "scope_status": "out_of_scope",
+      "per_serving": 0.0,
+      "unit": "g",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r06",
+      "raw_name": "碳水化合物",
+      "label_section": "nutrition_table",
+      "source_image_id": "p06-img01",
+      "scope_status": "out_of_scope",
+      "per_serving": 1.8,
+      "unit": "g",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r07",
+      "raw_name": "糖",
+      "label_section": "nutrition_table",
+      "source_image_id": "p06-img01",
+      "scope_status": "out_of_scope",
+      "per_serving": 0.2,
+      "unit": "g",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r08",
+      "raw_name": "鈉",
+      "label_section": "nutrition_table",
+      "source_image_id": "p06-img01",
+      "scope_status": "out_of_scope",
+      "per_serving": 8.3,
+      "unit": "mg",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r09",
+      "raw_name": "熱激化乳酸菌(乳酸菌、玉米可溶性膳食纖維)",
+      "label_section": "ingredient_list",
+      "source_image_id": "p06-img01",
+      "scope_status": "out_of_scope",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r10",
+      "raw_name": "植物乳桿菌(Lactobacillus plantarum LP28)",
+      "label_section": "ingredient_list",
+      "source_image_id": "p06-img01",
+      "scope_status": "out_of_scope",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r11",
+      "raw_name": "長雙歧桿菌(Bifidobacterium longum BL986)",
+      "label_section": "ingredient_list",
+      "source_image_id": "p06-img01",
+      "scope_status": "out_of_scope",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r12",
+      "raw_name": "熱激化克菲爾乳桿菌(Heat-killed",
+      "label_section": "ingredient_list",
+      "source_image_id": "p06-img01",
+      "scope_status": "out_of_scope",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r13",
+      "raw_name": "鼠李糖乳桿菌(Lactobacillus",
+      "label_section": "ingredient_list",
+      "source_image_id": "p06-img01",
+      "scope_status": "out_of_scope",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r14",
+      "raw_name": "嗜酸乳桿菌",
+      "label_section": "ingredient_list",
+      "source_image_id": "p06-img01",
+      "scope_status": "out_of_scope",
+      "requires_user_input": false
+    }
+  ],
+  "extraction_meta": {
+    "ocr_version": "gold-annotation",
+    "rule_layer_version": "gold-annotation",
+    "synonym_table_version": "gold-annotation",
+    "extracted_at": "2026-10-05T00:00:00+08:00"
+  }
+}

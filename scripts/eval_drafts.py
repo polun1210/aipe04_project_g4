@@ -113,7 +113,10 @@ def main() -> None:
     parser.add_argument("--gold", type=Path, default=ROOT / "tests" / "fixtures" / "gold_w1", help="標準答案資料夾")
     args = parser.parse_args()
     t = evaluate(args.engine, args.gold)
-    print(f"比較集 {t['images']} 張（可調規則的資料，數字偏樂觀）")
+    if "holdout" in args.gold.name:
+        print(f"保留集 {t['images']} 張（沒有拿來調過規則）")
+    else:
+        print(f"比較集 {t['images']} 張（可調規則的資料，數字偏樂觀）")
     print(f"- 逐欄正確（範圍、代碼、數值、單位都對）：{_pct(t['full'], t['gold'])}")
     print(f"- 漏抓：{_pct(t['missing'], t['gold'])}；多抓：{_pct(t['extra'], t['gold'])}")
     print(f"- 配對到的列：範圍狀態與代碼 {_pct(t['scope'], t['matched'])}、數值 {_pct(t['amount'], t['matched'])}、"

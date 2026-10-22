@@ -1,0 +1,912 @@
+{
+  "image_id": "p14-img01",
+  "engine_version": "openrouter/google/gemini-3.8-flash/google-ai-studio/prompt-g1",
+  "blocks": [
+    {
+      "text": "營養標示與成分",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "營養標示",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "品名",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "內容量",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "內容物名稱",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "食用方法",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "注意事項",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "保存條件",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "保存期間",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "有效日期",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "地址",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "服務專線",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "每一份量 1粒",
+      "bbox": {
+        "x": 46,
+        "y": 303,
+        "width": 145,
+        "height": 20
+      },
+      "confidence": null
+    },
+    {
+      "text": "每日1次,每次1錠,請於飯後搭配開水食用,一日請勿超過1錠,多食無益。",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "維生素B1 25.0毫克 1786%",
+      "bbox": {
+        "x": 46,
+        "y": 421,
+        "width": 280,
+        "height": 21
+      },
+      "confidence": null
+    },
+    {
+      "text": "維生素B2 50.0毫克 3125%",
+      "bbox": {
+        "x": 46,
+        "y": 444,
+        "width": 280,
+        "height": 20
+      },
+      "confidence": null
+    },
+    {
+      "text": "維生素B6 10.0毫克 625%",
+      "bbox": {
+        "x": 46,
+        "y": 466,
+        "width": 280,
+        "height": 21
+      },
+      "confidence": null
+    },
+    {
+      "text": "維生素B12 150.0微克 6250%",
+      "bbox": {
+        "x": 46,
+        "y": 489,
+        "width": 280,
+        "height": 20
+      },
+      "confidence": null
+    },
+    {
+      "text": "菸鹼素 27.0毫克NE 150%",
+      "bbox": {
+        "x": 46,
+        "y": 511,
+        "width": 280,
+        "height": 21
+      },
+      "confidence": null
+    },
+    {
+      "text": "葉酸 400.0微克 100%",
+      "bbox": {
+        "x": 46,
+        "y": 533,
+        "width": 280,
+        "height": 21
+      },
+      "confidence": null
+    },
+    {
+      "text": "泛酸 7.5毫克 150%",
+      "bbox": {
+        "x": 46,
+        "y": 555,
+        "width": 280,
+        "height": 21
+      },
+      "confidence": null
+    },
+    {
+      "text": "生物素 45.0微克 150%",
+      "bbox": {
+        "x": 46,
+        "y": 578,
+        "width": 280,
+        "height": 20
+      },
+      "confidence": null
+    },
+    {
+      "text": "鈣 0.7毫克 0%",
+      "bbox": {
+        "x": 46,
+        "y": 600,
+        "width": 280,
+        "height": 21
+      },
+      "confidence": null
+    },
+    {
+      "text": "微結晶狀α-纖維素",
+      "bbox": {
+        "x": 363,
+        "y": 425,
+        "width": 583,
+        "height": 39
+      },
+      "confidence": null
+    },
+    {
+      "text": "牛磺酸",
+      "bbox": {
+        "x": 549,
+        "y": 447,
+        "width": 50,
+        "height": 17
+      },
+      "confidence": null
+    },
+    {
+      "text": "核黃素(維生素B2)",
+      "bbox": {
+        "x": 609,
+        "y": 447,
+        "width": 107,
+        "height": 18
+      },
+      "confidence": null
+    },
+    {
+      "text": "羥丙基甲基纖維素",
+      "bbox": {
+        "x": 726,
+        "y": 447,
+        "width": 116,
+        "height": 17
+      },
+      "confidence": null
+    },
+    {
+      "text": "硝酸硫胺明(維生素B1)",
+      "bbox": {
+        "x": 364,
+        "y": 447,
+        "width": 581,
+        "height": 39
+      },
+      "confidence": null
+    },
+    {
+      "text": "菸鹼醯胺",
+      "bbox": {
+        "x": 468,
+        "y": 469,
+        "width": 67,
+        "height": 17
+      },
+      "confidence": null
+    },
+    {
+      "text": "鹽酸吡哆辛(維生素B6)",
+      "bbox": {
+        "x": 544,
+        "y": 469,
+        "width": 154,
+        "height": 17
+      },
+      "confidence": null
+    },
+    {
+      "text": "本多酸鈣",
+      "bbox": {
+        "x": 708,
+        "y": 469,
+        "width": 66,
+        "height": 17
+      },
+      "confidence": null
+    },
+    {
+      "text": "聚乙烯吡咯烷酮",
+      "bbox": {
+        "x": 784,
+        "y": 469,
+        "width": 100,
+        "height": 17
+      },
+      "confidence": null
+    },
+    {
+      "text": "支鏈胺基酸(L-白胺酸、L-異白胺酸、L-纈胺酸)",
+      "bbox": {
+        "x": 364,
+        "y": 469,
+        "width": 582,
+        "height": 40
+      },
+      "confidence": null
+    },
+    {
+      "text": "高防潮水性膜衣(聚乙烯醇、二氧化鈦、滑石粉、卵磷脂、玉米糖膠)",
+      "bbox": {
+        "x": 364,
+        "y": 491,
+        "width": 582,
+        "height": 40
+      },
+      "confidence": null
+    },
+    {
+      "text": "硬脂酸鎂",
+      "bbox": {
+        "x": 610,
+        "y": 513,
+        "width": 66,
+        "height": 17
+      },
+      "confidence": null
+    },
+    {
+      "text": "二氧化矽",
+      "bbox": {
+        "x": 686,
+        "y": 513,
+        "width": 67,
+        "height": 17
+      },
+      "confidence": null
+    },
+    {
+      "text": "聚乙二醇[聚乙二醇、二丁基羥基甲苯(抗氧化劑)]",
+      "bbox": {
+        "x": 363,
+        "y": 513,
+        "width": 583,
+        "height": 39
+      },
+      "confidence": null
+    },
+    {
+      "text": "蕎麥粉(含維生素B群)",
+      "bbox": {
+        "x": 573,
+        "y": 535,
+        "width": 159,
+        "height": 17
+      },
+      "confidence": null
+    },
+    {
+      "text": "二氧化鈦",
+      "bbox": {
+        "x": 741,
+        "y": 535,
+        "width": 68,
+        "height": 17
+      },
+      "confidence": null
+    },
+    {
+      "text": "乳酸菌(麥芽糊精、加氏乳桿菌(Lactobacillus gasseri MS-72))",
+      "bbox": {
+        "x": 364,
+        "y": 535,
+        "width": 582,
+        "height": 39
+      },
+      "confidence": null
+    },
+    {
+      "text": "芽孢乳酸菌(麥芽糊精、芽孢乳酸菌)",
+      "bbox": {
+        "x": 364,
+        "y": 557,
+        "width": 582,
+        "height": 39
+      },
+      "confidence": null
+    },
+    {
+      "text": "葉酸",
+      "bbox": {
+        "x": 418,
+        "y": 579,
+        "width": 33,
+        "height": 17
+      },
+      "confidence": null
+    },
+    {
+      "text": "氰鈷胺明(維生素B12)",
+      "bbox": {
+        "x": 461,
+        "y": 579,
+        "width": 166,
+        "height": 17
+      },
+      "confidence": null
+    },
+    {
+      "text": "食用黃色四號",
+      "bbox": {
+        "x": 637,
+        "y": 579,
+        "width": 100,
+        "height": 17
+      },
+      "confidence": null
+    },
+    {
+      "text": "食用黃色五號",
+      "bbox": {
+        "x": 747,
+        "y": 579,
+        "width": 99,
+        "height": 17
+      },
+      "confidence": null
+    },
+    {
+      "text": "生物素",
+      "bbox": {
+        "x": 857,
+        "y": 579,
+        "width": 66,
+        "height": 17
+      },
+      "confidence": null
+    }
+  ],
+  "reading": {
+    "serving": {
+      "raw_text": "每一份量 1粒",
+      "serving_size": 1.0,
+      "dose_unit_raw": "粒",
+      "bbox": {
+        "x": 46,
+        "y": 303,
+        "width": 145,
+        "height": 20
+      },
+      "needs_review": false
+    },
+    "rows": [
+      {
+        "raw_text": "維生素B1 25.0毫克 1786%",
+        "raw_name": "維生素B1",
+        "amount": 25.0,
+        "unit_raw": "毫克",
+        "percent_dv": 1786.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 46,
+          "y": 421,
+          "width": 280,
+          "height": 21
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "維生素B2 50.0毫克 3125%",
+        "raw_name": "維生素B2",
+        "amount": 50.0,
+        "unit_raw": "毫克",
+        "percent_dv": 3125.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 46,
+          "y": 444,
+          "width": 280,
+          "height": 20
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "維生素B6 10.0毫克 625%",
+        "raw_name": "維生素B6",
+        "amount": 10.0,
+        "unit_raw": "毫克",
+        "percent_dv": 625.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 46,
+          "y": 466,
+          "width": 280,
+          "height": 21
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "維生素B12 150.0微克 6250%",
+        "raw_name": "維生素B12",
+        "amount": 150.0,
+        "unit_raw": "微克",
+        "percent_dv": 6250.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 46,
+          "y": 489,
+          "width": 280,
+          "height": 20
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "菸鹼素 27.0毫克NE 150%",
+        "raw_name": "菸鹼素",
+        "amount": 27.0,
+        "unit_raw": "毫克NE",
+        "percent_dv": 150.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 46,
+          "y": 511,
+          "width": 280,
+          "height": 21
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "葉酸 400.0微克 100%",
+        "raw_name": "葉酸",
+        "amount": 400.0,
+        "unit_raw": "微克",
+        "percent_dv": 100.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 46,
+          "y": 533,
+          "width": 280,
+          "height": 21
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "泛酸 7.5毫克 150%",
+        "raw_name": "泛酸",
+        "amount": 7.5,
+        "unit_raw": "毫克",
+        "percent_dv": 150.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 46,
+          "y": 555,
+          "width": 280,
+          "height": 21
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "生物素 45.0微克 150%",
+        "raw_name": "生物素",
+        "amount": 45.0,
+        "unit_raw": "微克",
+        "percent_dv": 150.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 46,
+          "y": 578,
+          "width": 280,
+          "height": 20
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "鈣 0.7毫克 0%",
+        "raw_name": "鈣",
+        "amount": 0.7,
+        "unit_raw": "毫克",
+        "percent_dv": 0.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 46,
+          "y": 600,
+          "width": 280,
+          "height": 21
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "微結晶狀α-纖維素",
+        "raw_name": "微結晶狀α-纖維素",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 363,
+          "y": 425,
+          "width": 583,
+          "height": 39
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "牛磺酸",
+        "raw_name": "牛磺酸",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 549,
+          "y": 447,
+          "width": 50,
+          "height": 17
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "核黃素(維生素B2)",
+        "raw_name": "核黃素(維生素B2)",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 609,
+          "y": 447,
+          "width": 107,
+          "height": 18
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "羥丙基甲基纖維素",
+        "raw_name": "羥丙基甲基纖維素",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 726,
+          "y": 447,
+          "width": 116,
+          "height": 17
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "硝酸硫胺明(維生素B1)",
+        "raw_name": "硝酸硫胺明(維生素B1)",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 364,
+          "y": 447,
+          "width": 581,
+          "height": 39
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "菸鹼醯胺",
+        "raw_name": "菸鹼醯胺",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 468,
+          "y": 469,
+          "width": 67,
+          "height": 17
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "鹽酸吡哆辛(維生素B6)",
+        "raw_name": "鹽酸吡哆辛(維生素B6)",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 544,
+          "y": 469,
+          "width": 154,
+          "height": 17
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "本多酸鈣",
+        "raw_name": "本多酸鈣",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 708,
+          "y": 469,
+          "width": 66,
+          "height": 17
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "聚乙烯吡咯烷酮",
+        "raw_name": "聚乙烯吡咯烷酮",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 784,
+          "y": 469,
+          "width": 100,
+          "height": 17
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "支鏈胺基酸(L-白胺酸、L-異白胺酸、L-纈胺酸)",
+        "raw_name": "支鏈胺基酸(L-白胺酸、L-異白胺酸、L-纈胺酸)",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 364,
+          "y": 469,
+          "width": 582,
+          "height": 40
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "高防潮水性膜衣(聚乙烯醇、二氧化鈦、滑石粉、卵磷脂、玉米糖膠)",
+        "raw_name": "高防潮水性膜衣(聚乙烯醇、二氧化鈦、滑石粉、卵磷脂、玉米糖膠)",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 364,
+          "y": 491,
+          "width": 582,
+          "height": 40
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "硬脂酸鎂",
+        "raw_name": "硬脂酸鎂",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 610,
+          "y": 513,
+          "width": 66,
+          "height": 17
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "二氧化矽",
+        "raw_name": "二氧化矽",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 686,
+          "y": 513,
+          "width": 67,
+          "height": 17
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "聚乙二醇[聚乙二醇、二丁基羥基甲苯(抗氧化劑)]",
+        "raw_name": "聚乙二醇[聚乙二醇、二丁基羥基甲苯(抗氧化劑)]",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 363,
+          "y": 513,
+          "width": 583,
+          "height": 39
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "蕎麥粉(含維生素B群)",
+        "raw_name": "蕎麥粉(含維生素B群)",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 573,
+          "y": 535,
+          "width": 159,
+          "height": 17
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "二氧化鈦",
+        "raw_name": "二氧化鈦",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 741,
+          "y": 535,
+          "width": 68,
+          "height": 17
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "乳酸菌(麥芽糊精、加氏乳桿菌(Lactobacillus gasseri MS-72))",
+        "raw_name": "乳酸菌(麥芽糊精、加氏乳桿菌(Lactobacillus gasseri MS-72))",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 364,
+          "y": 535,
+          "width": 582,
+          "height": 39
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "芽孢乳酸菌(麥芽糊精、芽孢乳酸菌)",
+        "raw_name": "芽孢乳酸菌(麥芽糊精、芽孢乳酸菌)",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 364,
+          "y": 557,
+          "width": 582,
+          "height": 39
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "葉酸",
+        "raw_name": "葉酸",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 418,
+          "y": 579,
+          "width": 33,
+          "height": 17
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "氰鈷胺明(維生素B12)",
+        "raw_name": "氰鈷胺明(維生素B12)",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 461,
+          "y": 579,
+          "width": 166,
+          "height": 17
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "食用黃色四號",
+        "raw_name": "食用黃色四號",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 637,
+          "y": 579,
+          "width": 100,
+          "height": 17
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "食用黃色五號",
+        "raw_name": "食用黃色五號",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 747,
+          "y": 579,
+          "width": 99,
+          "height": 17
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "生物素",
+        "raw_name": "生物素",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 857,
+          "y": 579,
+          "width": 66,
+          "height": 17
+        },
+        "needs_review": false
+      }
+    ],
+    "suggested_intake_raw": "每日1次,每次1錠,請於飯後搭配開水食用,一日請勿超過1錠,多食無益。",
+    "headings": [
+      "營養標示與成分",
+      "營養標示",
+      "品名",
+      "內容量",
+      "內容物名稱",
+      "食用方法",
+      "注意事項",
+      "保存條件",
+      "保存期間",
+      "有效日期",
+      "地址",
+      "服務專線"
+    ]
+  }
+}

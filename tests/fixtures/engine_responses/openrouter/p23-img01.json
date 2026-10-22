@@ -1,0 +1,582 @@
+{
+  "image_id": "p23-img01",
+  "engine_version": "openrouter/google/gemini-3.8-flash/google-ai-studio/prompt-g1",
+  "blocks": [
+    {
+      "text": "品 名",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "成 分",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "食用方法",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "包裝規格",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "注意事項",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "營養標示",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "產地",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "每一份量1錠",
+      "bbox": {
+        "x": 96,
+        "y": 655,
+        "width": 126,
+        "height": 23
+      },
+      "confidence": null
+    },
+    {
+      "text": "一日1次，一次1錠，餐前食用。美國專利益胺酸亞鐵，亦可依個人需求於餐後食用。",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "維生素B6 1.2 毫克 75%",
+      "bbox": {
+        "x": 94,
+        "y": 766,
+        "width": 407,
+        "height": 26
+      },
+      "confidence": null
+    },
+    {
+      "text": "維生素B12 2 微克 83%",
+      "bbox": {
+        "x": 94,
+        "y": 801,
+        "width": 407,
+        "height": 25
+      },
+      "confidence": null
+    },
+    {
+      "text": "維生素C 15 毫克 15%",
+      "bbox": {
+        "x": 94,
+        "y": 834,
+        "width": 407,
+        "height": 25
+      },
+      "confidence": null
+    },
+    {
+      "text": "葉酸 400 微克 100%",
+      "bbox": {
+        "x": 93,
+        "y": 868,
+        "width": 407,
+        "height": 25
+      },
+      "confidence": null
+    },
+    {
+      "text": "鐵 15 毫克 100%",
+      "bbox": {
+        "x": 93,
+        "y": 902,
+        "width": 408,
+        "height": 25
+      },
+      "confidence": null
+    },
+    {
+      "text": "微結晶狀α-纖維素",
+      "bbox": {
+        "x": 173,
+        "y": 76,
+        "width": 187,
+        "height": 23
+      },
+      "confidence": null
+    },
+    {
+      "text": "甘氨酸亞鐵(含甘氨酸亞鐵、檸檬酸、麥芽糊精、二氧化矽)",
+      "bbox": {
+        "x": 178,
+        "y": 76,
+        "width": 421,
+        "height": 50
+      },
+      "confidence": null
+    },
+    {
+      "text": "維生素C",
+      "bbox": {
+        "x": 178,
+        "y": 103,
+        "width": 421,
+        "height": 51
+      },
+      "confidence": null
+    },
+    {
+      "text": "麥芽糊精(含樹薯澱粉、水)",
+      "bbox": {
+        "x": 263,
+        "y": 131,
+        "width": 284,
+        "height": 23
+      },
+      "confidence": null
+    },
+    {
+      "text": "聚乙烯吡咯烷酮",
+      "bbox": {
+        "x": 178,
+        "y": 131,
+        "width": 421,
+        "height": 51
+      },
+      "confidence": null
+    },
+    {
+      "text": "硬脂酸鎂",
+      "bbox": {
+        "x": 316,
+        "y": 159,
+        "width": 91,
+        "height": 23
+      },
+      "confidence": null
+    },
+    {
+      "text": "水性膜衣(含羥丙基甲基纖維素、聚乙二醇、食用紅色四十號鋁麗基、二氧化鈦、食用藍色一號鋁麗基)",
+      "bbox": {
+        "x": 178,
+        "y": 159,
+        "width": 436,
+        "height": 78
+      },
+      "confidence": null
+    },
+    {
+      "text": "保健食品專用膜衣(含羥丙基甲基纖維素、羥丙基纖維素、聚乙二醇)",
+      "bbox": {
+        "x": 178,
+        "y": 243,
+        "width": 414,
+        "height": 49
+      },
+      "confidence": null
+    },
+    {
+      "text": "二氧化矽",
+      "bbox": {
+        "x": 461,
+        "y": 270,
+        "width": 91,
+        "height": 22
+      },
+      "confidence": null
+    },
+    {
+      "text": "維生素B6",
+      "bbox": {
+        "x": 178,
+        "y": 298,
+        "width": 93,
+        "height": 22
+      },
+      "confidence": null
+    },
+    {
+      "text": "食用黃色五號鋁麗基",
+      "bbox": {
+        "x": 293,
+        "y": 298,
+        "width": 207,
+        "height": 22
+      },
+      "confidence": null
+    },
+    {
+      "text": "二氧化鈦",
+      "bbox": {
+        "x": 178,
+        "y": 298,
+        "width": 414,
+        "height": 49
+      },
+      "confidence": null
+    },
+    {
+      "text": "葉酸",
+      "bbox": {
+        "x": 224,
+        "y": 326,
+        "width": 45,
+        "height": 21
+      },
+      "confidence": null
+    },
+    {
+      "text": "維生素B12",
+      "bbox": {
+        "x": 292,
+        "y": 326,
+        "width": 102,
+        "height": 21
+      },
+      "confidence": null
+    },
+    {
+      "text": "Iron 15mg",
+      "bbox": {
+        "x": 654,
+        "y": 564,
+        "width": 80,
+        "height": 62
+      },
+      "confidence": null
+    }
+  ],
+  "reading": {
+    "serving": {
+      "raw_text": "每一份量1錠",
+      "serving_size": 1.0,
+      "dose_unit_raw": "錠",
+      "bbox": {
+        "x": 96,
+        "y": 655,
+        "width": 126,
+        "height": 23
+      },
+      "needs_review": false
+    },
+    "rows": [
+      {
+        "raw_text": "維生素B6 1.2 毫克 75%",
+        "raw_name": "維生素B6",
+        "amount": 1.2,
+        "unit_raw": "毫克",
+        "percent_dv": 75.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 94,
+          "y": 766,
+          "width": 407,
+          "height": 26
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "維生素B12 2 微克 83%",
+        "raw_name": "維生素B12",
+        "amount": 2.0,
+        "unit_raw": "微克",
+        "percent_dv": 83.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 94,
+          "y": 801,
+          "width": 407,
+          "height": 25
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "維生素C 15 毫克 15%",
+        "raw_name": "維生素C",
+        "amount": 15.0,
+        "unit_raw": "毫克",
+        "percent_dv": 15.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 94,
+          "y": 834,
+          "width": 407,
+          "height": 25
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "葉酸 400 微克 100%",
+        "raw_name": "葉酸",
+        "amount": 400.0,
+        "unit_raw": "微克",
+        "percent_dv": 100.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 93,
+          "y": 868,
+          "width": 407,
+          "height": 25
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "鐵 15 毫克 100%",
+        "raw_name": "鐵",
+        "amount": 15.0,
+        "unit_raw": "毫克",
+        "percent_dv": 100.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 93,
+          "y": 902,
+          "width": 408,
+          "height": 25
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "微結晶狀α-纖維素",
+        "raw_name": "微結晶狀α-纖維素",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 173,
+          "y": 76,
+          "width": 187,
+          "height": 23
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "甘氨酸亞鐵(含甘氨酸亞鐵、檸檬酸、麥芽糊精、二氧化矽)",
+        "raw_name": "甘氨酸亞鐵(含甘氨酸亞鐵、檸檬酸、麥芽糊精、二氧化矽)",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 178,
+          "y": 76,
+          "width": 421,
+          "height": 50
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "維生素C",
+        "raw_name": "維生素C",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 178,
+          "y": 103,
+          "width": 421,
+          "height": 51
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "麥芽糊精(含樹薯澱粉、水)",
+        "raw_name": "麥芽糊精(含樹薯澱粉、水)",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 263,
+          "y": 131,
+          "width": 284,
+          "height": 23
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "聚乙烯吡咯烷酮",
+        "raw_name": "聚乙烯吡咯烷酮",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 178,
+          "y": 131,
+          "width": 421,
+          "height": 51
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "硬脂酸鎂",
+        "raw_name": "硬脂酸鎂",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 316,
+          "y": 159,
+          "width": 91,
+          "height": 23
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "水性膜衣(含羥丙基甲基纖維素、聚乙二醇、食用紅色四十號鋁麗基、二氧化鈦、食用藍色一號鋁麗基)",
+        "raw_name": "水性膜衣(含羥丙基甲基纖維素、聚乙二醇、食用紅色四十號鋁麗基、二氧化鈦、食用藍色一號鋁麗基)",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 178,
+          "y": 159,
+          "width": 436,
+          "height": 78
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "保健食品專用膜衣(含羥丙基甲基纖維素、羥丙基纖維素、聚乙二醇)",
+        "raw_name": "保健食品專用膜衣(含羥丙基甲基纖維素、羥丙基纖維素、聚乙二醇)",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 178,
+          "y": 243,
+          "width": 414,
+          "height": 49
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "二氧化矽",
+        "raw_name": "二氧化矽",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 461,
+          "y": 270,
+          "width": 91,
+          "height": 22
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "維生素B6",
+        "raw_name": "維生素B6",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 178,
+          "y": 298,
+          "width": 93,
+          "height": 22
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "食用黃色五號鋁麗基",
+        "raw_name": "食用黃色五號鋁麗基",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 293,
+          "y": 298,
+          "width": 207,
+          "height": 22
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "二氧化鈦",
+        "raw_name": "二氧化鈦",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 178,
+          "y": 298,
+          "width": 414,
+          "height": 49
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "葉酸",
+        "raw_name": "葉酸",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 224,
+          "y": 326,
+          "width": 45,
+          "height": 21
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "維生素B12",
+        "raw_name": "維生素B12",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 292,
+          "y": 326,
+          "width": 102,
+          "height": 21
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "Iron 15mg",
+        "raw_name": "Iron",
+        "amount": 15.0,
+        "unit_raw": "mg",
+        "percent_dv": null,
+        "label_section": "front",
+        "bbox": {
+          "x": 654,
+          "y": 564,
+          "width": 80,
+          "height": 62
+        },
+        "needs_review": false
+      }
+    ],
+    "suggested_intake_raw": "一日1次，一次1錠，餐前食用。美國專利益胺酸亞鐵，亦可依個人需求於餐後食用。",
+    "headings": [
+      "品 名",
+      "成 分",
+      "食用方法",
+      "包裝規格",
+      "注意事項",
+      "營養標示",
+      "產地"
+    ]
+  }
+}

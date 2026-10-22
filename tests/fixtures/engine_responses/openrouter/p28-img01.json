@@ -1,0 +1,381 @@
+{
+  "image_id": "p28-img01",
+  "engine_version": "openrouter/google/gemini-3.8-flash/google-ai-studio/prompt-g1",
+  "blocks": [
+    {
+      "text": "品名",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "全成分",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "內容量",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "食用方法",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "保存方法",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "注意事項",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "批號、有效日期",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "有效期限",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "原產地",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "營養標示",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "成分添加量(每日2錠含:)",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "每一份量1錠",
+      "bbox": {
+        "x": 532,
+        "y": 146,
+        "width": 118,
+        "height": 23
+      },
+      "confidence": null
+    },
+    {
+      "text": "每次1錠，每日1-2次，於任一餐後以溫水配食。\n一日請勿超過2錠。",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "維生素C 500 毫克 500%",
+      "bbox": {
+        "x": 529,
+        "y": 267,
+        "width": 430,
+        "height": 25
+      },
+      "confidence": null
+    },
+    {
+      "text": "穀胱甘肽 10 毫克",
+      "bbox": {
+        "x": 532,
+        "y": 358,
+        "width": 427,
+        "height": 25
+      },
+      "confidence": null
+    },
+    {
+      "text": "維生素C(維生素C、玉米澱粉)",
+      "bbox": {
+        "x": 131,
+        "y": 130,
+        "width": 276,
+        "height": 23
+      },
+      "confidence": null
+    },
+    {
+      "text": "羥丙基甲基纖維素",
+      "bbox": {
+        "x": 131,
+        "y": 130,
+        "width": 370,
+        "height": 52
+      },
+      "confidence": null
+    },
+    {
+      "text": "微結晶狀α-纖維素",
+      "bbox": {
+        "x": 230,
+        "y": 161,
+        "width": 173,
+        "height": 21
+      },
+      "confidence": null
+    },
+    {
+      "text": "防水膜衣(羥丙基甲基纖維素、二氧化鈦、微結晶狀α-纖維素、硬脂酸)",
+      "bbox": {
+        "x": 130,
+        "y": 160,
+        "width": 372,
+        "height": 82
+      },
+      "confidence": null
+    },
+    {
+      "text": "二氧化矽",
+      "bbox": {
+        "x": 331,
+        "y": 220,
+        "width": 88,
+        "height": 22
+      },
+      "confidence": null
+    },
+    {
+      "text": "硬脂酸鎂",
+      "bbox": {
+        "x": 131,
+        "y": 220,
+        "width": 371,
+        "height": 52
+      },
+      "confidence": null
+    },
+    {
+      "text": "穀胱甘肽",
+      "bbox": {
+        "x": 169,
+        "y": 250,
+        "width": 86,
+        "height": 22
+      },
+      "confidence": null
+    },
+    {
+      "text": "食用黃色四號",
+      "bbox": {
+        "x": 273,
+        "y": 250,
+        "width": 128,
+        "height": 22
+      },
+      "confidence": null
+    },
+    {
+      "text": "食用紅色四十號",
+      "bbox": {
+        "x": 131,
+        "y": 250,
+        "width": 370,
+        "height": 53
+      },
+      "confidence": null
+    }
+  ],
+  "reading": {
+    "serving": {
+      "raw_text": "每一份量1錠",
+      "serving_size": 1.0,
+      "dose_unit_raw": "錠",
+      "bbox": {
+        "x": 532,
+        "y": 146,
+        "width": 118,
+        "height": 23
+      },
+      "needs_review": false
+    },
+    "rows": [
+      {
+        "raw_text": "維生素C 500 毫克 500%",
+        "raw_name": "維生素C",
+        "amount": 500.0,
+        "unit_raw": "毫克",
+        "percent_dv": 500.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 529,
+          "y": 267,
+          "width": 430,
+          "height": 25
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "穀胱甘肽 10 毫克",
+        "raw_name": "穀胱甘肽",
+        "amount": 10.0,
+        "unit_raw": "毫克",
+        "percent_dv": null,
+        "label_section": "per_unit_note",
+        "bbox": {
+          "x": 532,
+          "y": 358,
+          "width": 427,
+          "height": 25
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "維生素C(維生素C、玉米澱粉)",
+        "raw_name": "維生素C(維生素C、玉米澱粉)",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 131,
+          "y": 130,
+          "width": 276,
+          "height": 23
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "羥丙基甲基纖維素",
+        "raw_name": "羥丙基甲基纖維素",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 131,
+          "y": 130,
+          "width": 370,
+          "height": 52
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "微結晶狀α-纖維素",
+        "raw_name": "微結晶狀α-纖維素",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 230,
+          "y": 161,
+          "width": 173,
+          "height": 21
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "防水膜衣(羥丙基甲基纖維素、二氧化鈦、微結晶狀α-纖維素、硬脂酸)",
+        "raw_name": "防水膜衣(羥丙基甲基纖維素、二氧化鈦、微結晶狀α-纖維素、硬脂酸)",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 130,
+          "y": 160,
+          "width": 372,
+          "height": 82
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "二氧化矽",
+        "raw_name": "二氧化矽",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 331,
+          "y": 220,
+          "width": 88,
+          "height": 22
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "硬脂酸鎂",
+        "raw_name": "硬脂酸鎂",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 131,
+          "y": 220,
+          "width": 371,
+          "height": 52
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "穀胱甘肽",
+        "raw_name": "穀胱甘肽",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 169,
+          "y": 250,
+          "width": 86,
+          "height": 22
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "食用黃色四號",
+        "raw_name": "食用黃色四號",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 273,
+          "y": 250,
+          "width": 128,
+          "height": 22
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "食用紅色四十號",
+        "raw_name": "食用紅色四十號",
+        "amount": null,
+        "unit_raw": null,
+        "percent_dv": null,
+        "label_section": "ingredient_list",
+        "bbox": {
+          "x": 131,
+          "y": 250,
+          "width": 370,
+          "height": 53
+        },
+        "needs_review": false
+      }
+    ],
+    "suggested_intake_raw": "每次1錠，每日1-2次，於任一餐後以溫水配食。\n一日請勿超過2錠。",
+    "headings": [
+      "品名",
+      "全成分",
+      "內容量",
+      "食用方法",
+      "保存方法",
+      "注意事項",
+      "批號、有效日期",
+      "有效期限",
+      "原產地",
+      "營養標示",
+      "成分添加量(每日2錠含:)"
+    ]
+  }
+}

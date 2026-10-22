@@ -1,0 +1,202 @@
+{
+  "product_id": "ba65f5f2-a073-5ce5-b3fc-ca9a917c330e",
+  "product_name": "信東 紅麴膠囊",
+  "source_images": [
+    {
+      "image_id": "p13-img01",
+      "quality_status": "accepted"
+    }
+  ],
+  "serving_info": {
+    "serving_size": 1.0,
+    "dose_unit": "capsule",
+    "source_image_id": "p13-img01"
+  },
+  "nutrients": [
+    {
+      "row_id": "r01",
+      "raw_name": "熱量",
+      "label_section": "nutrition_table",
+      "source_image_id": "p13-img01",
+      "scope_status": "out_of_scope",
+      "per_serving": 2.0,
+      "unit": "kcal",
+      "percent_dv": 0.0,
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r02",
+      "raw_name": "蛋白質",
+      "label_section": "nutrition_table",
+      "source_image_id": "p13-img01",
+      "scope_status": "out_of_scope",
+      "per_serving": 0.1,
+      "unit": "g",
+      "percent_dv": 0.0,
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r03",
+      "raw_name": "脂肪",
+      "label_section": "nutrition_table",
+      "source_image_id": "p13-img01",
+      "scope_status": "out_of_scope",
+      "per_serving": 0.004,
+      "unit": "g",
+      "percent_dv": 0.0,
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r04",
+      "raw_name": "飽和脂肪",
+      "label_section": "nutrition_table",
+      "source_image_id": "p13-img01",
+      "scope_status": "out_of_scope",
+      "per_serving": 0.002,
+      "unit": "g",
+      "percent_dv": 0.0,
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r05",
+      "raw_name": "反式脂肪",
+      "label_section": "nutrition_table",
+      "source_image_id": "p13-img01",
+      "scope_status": "out_of_scope",
+      "per_serving": 0.0,
+      "unit": "g",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r06",
+      "raw_name": "碳水化合物",
+      "label_section": "nutrition_table",
+      "source_image_id": "p13-img01",
+      "scope_status": "out_of_scope",
+      "per_serving": 0.4,
+      "unit": "g",
+      "percent_dv": 0.0,
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r07",
+      "raw_name": "糖",
+      "label_section": "nutrition_table",
+      "source_image_id": "p13-img01",
+      "scope_status": "out_of_scope",
+      "per_serving": 0.0,
+      "unit": "g",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r08",
+      "raw_name": "鈉",
+      "label_section": "nutrition_table",
+      "source_image_id": "p13-img01",
+      "scope_status": "out_of_scope",
+      "per_serving": 4.0,
+      "unit": "mg",
+      "percent_dv": 0.0,
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r09",
+      "raw_name": "紅麴粉末",
+      "label_section": "ingredient_list",
+      "source_image_id": "p13-img01",
+      "standard_code": "red_yeast_rice",
+      "scope_status": "in_scope",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r10",
+      "raw_name": "硬脂酸鎂",
+      "label_section": "ingredient_list",
+      "source_image_id": "p13-img01",
+      "scope_status": "out_of_scope",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r11",
+      "raw_name": "羥丙基甲基纖維素",
+      "label_section": "ingredient_list",
+      "source_image_id": "p13-img01",
+      "scope_status": "out_of_scope",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r12",
+      "raw_name": "純水",
+      "label_section": "ingredient_list",
+      "source_image_id": "p13-img01",
+      "scope_status": "out_of_scope",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r13",
+      "raw_name": "鹿角菜膠",
+      "label_section": "ingredient_list",
+      "source_image_id": "p13-img01",
+      "scope_status": "out_of_scope",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r14",
+      "raw_name": "食用紅色六號",
+      "label_section": "ingredient_list",
+      "source_image_id": "p13-img01",
+      "scope_status": "out_of_scope",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r15",
+      "raw_name": "二氧化鈦",
+      "label_section": "ingredient_list",
+      "source_image_id": "p13-img01",
+      "scope_status": "out_of_scope",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r16",
+      "raw_name": "氯化鉀",
+      "label_section": "ingredient_list",
+      "source_image_id": "p13-img01",
+      "scope_status": "out_of_scope",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r17",
+      "raw_name": "食用藍色一號",
+      "label_section": "ingredient_list",
+      "source_image_id": "p13-img01",
+      "scope_status": "out_of_scope",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r18",
+      "raw_name": "HMG-CoA還原酵素抑制劑(Monacolin K)",
+      "label_section": "per_unit_note",
+      "source_image_id": "p13-img01",
+      "standard_code": "red_yeast_rice",
+      "scope_status": "in_scope",
+      "nutrient_form_code": "monacolin_k",
+      "per_serving": 3.0,
+      "unit": "mg",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r19",
+      "raw_name": "微結晶狀 α-纖維素",
+      "label_section": "ingredient_list",
+      "source_image_id": "p13-img01",
+      "scope_status": "out_of_scope",
+      "requires_user_input": false
+    }
+  ],
+  "extraction_meta": {
+    "ocr_version": "gold-annotation",
+    "rule_layer_version": "gold-annotation",
+    "synonym_table_version": "gold-annotation",
+    "extracted_at": "2026-10-05T00:00:00+08:00"
+  }
+}

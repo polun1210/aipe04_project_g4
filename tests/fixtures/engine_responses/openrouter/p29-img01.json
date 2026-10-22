@@ -1,0 +1,278 @@
+{
+  "image_id": "p29-img01",
+  "engine_version": "openrouter/google/gemini-3.8-flash/google-ai-studio/prompt-g1",
+  "blocks": [
+    {
+      "text": "成分報你知!!",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "營養標示",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "每份保健功效之相關成分含量",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "每一份量 1.1公克(2粒) 本包裝含30份",
+      "bbox": {
+        "x": 157,
+        "y": 228,
+        "width": 639,
+        "height": 40
+      },
+      "confidence": null
+    },
+    {
+      "text": "熱量 4.1 大卡 0%",
+      "bbox": {
+        "x": 41,
+        "y": 329,
+        "width": 898,
+        "height": 34
+      },
+      "confidence": null
+    },
+    {
+      "text": "蛋白質 0.4 公克 1%",
+      "bbox": {
+        "x": 41,
+        "y": 370,
+        "width": 896,
+        "height": 37
+      },
+      "confidence": null
+    },
+    {
+      "text": "脂肪 0.01 公克 0%",
+      "bbox": {
+        "x": 40,
+        "y": 412,
+        "width": 896,
+        "height": 37
+      },
+      "confidence": null
+    },
+    {
+      "text": "飽和脂肪 0 公克 0%",
+      "bbox": {
+        "x": 55,
+        "y": 452,
+        "width": 881,
+        "height": 37
+      },
+      "confidence": null
+    },
+    {
+      "text": "反式脂肪 0 公克 *",
+      "bbox": {
+        "x": 54,
+        "y": 495,
+        "width": 882,
+        "height": 36
+      },
+      "confidence": null
+    },
+    {
+      "text": "碳水化合物 0.6 公克 0%",
+      "bbox": {
+        "x": 41,
+        "y": 536,
+        "width": 896,
+        "height": 37
+      },
+      "confidence": null
+    },
+    {
+      "text": "糖 0 公克 *",
+      "bbox": {
+        "x": 55,
+        "y": 578,
+        "width": 881,
+        "height": 35
+      },
+      "confidence": null
+    },
+    {
+      "text": "鈉 10 毫克 1%",
+      "bbox": {
+        "x": 41,
+        "y": 620,
+        "width": 896,
+        "height": 35
+      },
+      "confidence": null
+    },
+    {
+      "text": "Monacolin K\n(HMG-CoA還原酵素抑制劑) 12±2.4 毫克",
+      "bbox": {
+        "x": 45,
+        "y": 861,
+        "width": 895,
+        "height": 82
+      },
+      "confidence": null
+    }
+  ],
+  "reading": {
+    "serving": {
+      "raw_text": "每一份量 1.1公克(2粒) 本包裝含30份",
+      "serving_size": 2.0,
+      "dose_unit_raw": "粒",
+      "bbox": {
+        "x": 157,
+        "y": 228,
+        "width": 639,
+        "height": 40
+      },
+      "needs_review": false
+    },
+    "rows": [
+      {
+        "raw_text": "熱量 4.1 大卡 0%",
+        "raw_name": "熱量",
+        "amount": 4.1,
+        "unit_raw": "大卡",
+        "percent_dv": 0.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 41,
+          "y": 329,
+          "width": 898,
+          "height": 34
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "蛋白質 0.4 公克 1%",
+        "raw_name": "蛋白質",
+        "amount": 0.4,
+        "unit_raw": "公克",
+        "percent_dv": 1.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 41,
+          "y": 370,
+          "width": 896,
+          "height": 37
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "脂肪 0.01 公克 0%",
+        "raw_name": "脂肪",
+        "amount": 0.01,
+        "unit_raw": "公克",
+        "percent_dv": 0.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 40,
+          "y": 412,
+          "width": 896,
+          "height": 37
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "飽和脂肪 0 公克 0%",
+        "raw_name": "飽和脂肪",
+        "amount": 0.0,
+        "unit_raw": "公克",
+        "percent_dv": 0.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 55,
+          "y": 452,
+          "width": 881,
+          "height": 37
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "反式脂肪 0 公克 *",
+        "raw_name": "反式脂肪",
+        "amount": 0.0,
+        "unit_raw": "公克",
+        "percent_dv": null,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 54,
+          "y": 495,
+          "width": 882,
+          "height": 36
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "碳水化合物 0.6 公克 0%",
+        "raw_name": "碳水化合物",
+        "amount": 0.6,
+        "unit_raw": "公克",
+        "percent_dv": 0.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 41,
+          "y": 536,
+          "width": 896,
+          "height": 37
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "糖 0 公克 *",
+        "raw_name": "糖",
+        "amount": 0.0,
+        "unit_raw": "公克",
+        "percent_dv": null,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 55,
+          "y": 578,
+          "width": 881,
+          "height": 35
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "鈉 10 毫克 1%",
+        "raw_name": "鈉",
+        "amount": 10.0,
+        "unit_raw": "毫克",
+        "percent_dv": 1.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 41,
+          "y": 620,
+          "width": 896,
+          "height": 35
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "Monacolin K\n(HMG-CoA還原酵素抑制劑) 12±2.4 毫克",
+        "raw_name": "Monacolin K(HMG-CoA還原酵素抑制劑)",
+        "amount": null,
+        "unit_raw": "毫克",
+        "percent_dv": null,
+        "label_section": "other",
+        "bbox": {
+          "x": 45,
+          "y": 861,
+          "width": 895,
+          "height": 82
+        },
+        "needs_review": false
+      }
+    ],
+    "suggested_intake_raw": null,
+    "headings": [
+      "成分報你知!!",
+      "營養標示",
+      "每份保健功效之相關成分含量"
+    ]
+  }
+}

@@ -1,0 +1,316 @@
+{
+  "image_id": "p30-img01",
+  "engine_version": "openrouter/google/gemini-3.8-flash/google-ai-studio/prompt-g1",
+  "blocks": [
+    {
+      "text": "營養標示",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "每一份量 1錠",
+      "bbox": {
+        "x": 164,
+        "y": 64,
+        "width": 165,
+        "height": 29
+      },
+      "confidence": null
+    },
+    {
+      "text": "維生素B1 25毫克 1786%",
+      "bbox": {
+        "x": 162,
+        "y": 186,
+        "width": 383,
+        "height": 32
+      },
+      "confidence": null
+    },
+    {
+      "text": "維生素B2 50毫克 3125%",
+      "bbox": {
+        "x": 162,
+        "y": 219,
+        "width": 383,
+        "height": 31
+      },
+      "confidence": null
+    },
+    {
+      "text": "維生素B6 40毫克 2500%",
+      "bbox": {
+        "x": 162,
+        "y": 250,
+        "width": 383,
+        "height": 32
+      },
+      "confidence": null
+    },
+    {
+      "text": "維生素B12 120微克 5000%",
+      "bbox": {
+        "x": 162,
+        "y": 283,
+        "width": 383,
+        "height": 31
+      },
+      "confidence": null
+    },
+    {
+      "text": "菸鹼素(B3) 18毫克NE 100%",
+      "bbox": {
+        "x": 162,
+        "y": 315,
+        "width": 383,
+        "height": 31
+      },
+      "confidence": null
+    },
+    {
+      "text": "泛酸(B5) 5毫克 100%",
+      "bbox": {
+        "x": 162,
+        "y": 347,
+        "width": 383,
+        "height": 31
+      },
+      "confidence": null
+    },
+    {
+      "text": "生物素(B7) 600微克 2000%",
+      "bbox": {
+        "x": 162,
+        "y": 379,
+        "width": 383,
+        "height": 31
+      },
+      "confidence": null
+    },
+    {
+      "text": "葉酸(B9) 400微克 100%",
+      "bbox": {
+        "x": 162,
+        "y": 411,
+        "width": 383,
+        "height": 31
+      },
+      "confidence": null
+    },
+    {
+      "text": "鈣 30毫克 3%",
+      "bbox": {
+        "x": 162,
+        "y": 443,
+        "width": 383,
+        "height": 31
+      },
+      "confidence": null
+    },
+    {
+      "text": "鐵 10毫克 67%",
+      "bbox": {
+        "x": 162,
+        "y": 475,
+        "width": 383,
+        "height": 31
+      },
+      "confidence": null
+    },
+    {
+      "text": "鎂 30毫克 8%",
+      "bbox": {
+        "x": 162,
+        "y": 507,
+        "width": 383,
+        "height": 31
+      },
+      "confidence": null
+    }
+  ],
+  "reading": {
+    "serving": {
+      "raw_text": "每一份量 1錠",
+      "serving_size": 1.0,
+      "dose_unit_raw": "錠",
+      "bbox": {
+        "x": 164,
+        "y": 64,
+        "width": 165,
+        "height": 29
+      },
+      "needs_review": false
+    },
+    "rows": [
+      {
+        "raw_text": "維生素B1 25毫克 1786%",
+        "raw_name": "維生素B1",
+        "amount": 25.0,
+        "unit_raw": "毫克",
+        "percent_dv": 1786.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 162,
+          "y": 186,
+          "width": 383,
+          "height": 32
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "維生素B2 50毫克 3125%",
+        "raw_name": "維生素B2",
+        "amount": 50.0,
+        "unit_raw": "毫克",
+        "percent_dv": 3125.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 162,
+          "y": 219,
+          "width": 383,
+          "height": 31
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "維生素B6 40毫克 2500%",
+        "raw_name": "維生素B6",
+        "amount": 40.0,
+        "unit_raw": "毫克",
+        "percent_dv": 2500.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 162,
+          "y": 250,
+          "width": 383,
+          "height": 32
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "維生素B12 120微克 5000%",
+        "raw_name": "維生素B12",
+        "amount": 120.0,
+        "unit_raw": "微克",
+        "percent_dv": 5000.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 162,
+          "y": 283,
+          "width": 383,
+          "height": 31
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "菸鹼素(B3) 18毫克NE 100%",
+        "raw_name": "菸鹼素(B3)",
+        "amount": 18.0,
+        "unit_raw": "毫克NE",
+        "percent_dv": 100.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 162,
+          "y": 315,
+          "width": 383,
+          "height": 31
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "泛酸(B5) 5毫克 100%",
+        "raw_name": "泛酸(B5)",
+        "amount": 5.0,
+        "unit_raw": "毫克",
+        "percent_dv": 100.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 162,
+          "y": 347,
+          "width": 383,
+          "height": 31
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "生物素(B7) 600微克 2000%",
+        "raw_name": "生物素(B7)",
+        "amount": 600.0,
+        "unit_raw": "微克",
+        "percent_dv": 2000.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 162,
+          "y": 379,
+          "width": 383,
+          "height": 31
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "葉酸(B9) 400微克 100%",
+        "raw_name": "葉酸(B9)",
+        "amount": 400.0,
+        "unit_raw": "微克",
+        "percent_dv": 100.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 162,
+          "y": 411,
+          "width": 383,
+          "height": 31
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "鈣 30毫克 3%",
+        "raw_name": "鈣",
+        "amount": 30.0,
+        "unit_raw": "毫克",
+        "percent_dv": 3.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 162,
+          "y": 443,
+          "width": 383,
+          "height": 31
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "鐵 10毫克 67%",
+        "raw_name": "鐵",
+        "amount": 10.0,
+        "unit_raw": "毫克",
+        "percent_dv": 67.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 162,
+          "y": 475,
+          "width": 383,
+          "height": 31
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "鎂 30毫克 8%",
+        "raw_name": "鎂",
+        "amount": 30.0,
+        "unit_raw": "毫克",
+        "percent_dv": 8.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 162,
+          "y": 507,
+          "width": 383,
+          "height": 31
+        },
+        "needs_review": false
+      }
+    ],
+    "suggested_intake_raw": null,
+    "headings": [
+      "營養標示"
+    ]
+  }
+}

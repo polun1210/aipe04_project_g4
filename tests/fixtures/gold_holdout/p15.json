@@ -1,0 +1,177 @@
+{
+  "product_id": "14e997d4-f2ab-5fb2-904d-8ce436ff33d1",
+  "product_name": "綠芙特級 檸檬酸鈣全方位加強錠",
+  "source_images": [
+    {
+      "image_id": "p15-img01",
+      "quality_status": "accepted"
+    }
+  ],
+  "serving_info": {
+    "serving_size": 1.0,
+    "dose_unit": "tablet",
+    "source_image_id": "p15-img01"
+  },
+  "nutrients": [
+    {
+      "row_id": "r01",
+      "raw_name": "維生素D",
+      "label_section": "nutrition_table",
+      "source_image_id": "p15-img01",
+      "standard_code": "vitamin_d",
+      "scope_status": "in_scope",
+      "per_serving": 12.5,
+      "unit": "ug",
+      "percent_dv": 125.0,
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r02",
+      "raw_name": "鈣",
+      "label_section": "nutrition_table",
+      "source_image_id": "p15-img01",
+      "standard_code": "calcium",
+      "scope_status": "in_scope",
+      "per_serving": 333.0,
+      "unit": "mg",
+      "percent_dv": 28.0,
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r03",
+      "raw_name": "鎂",
+      "label_section": "nutrition_table",
+      "source_image_id": "p15-img01",
+      "standard_code": "magnesium",
+      "scope_status": "in_scope",
+      "per_serving": 50.6,
+      "unit": "mg",
+      "percent_dv": 13.0,
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r04",
+      "raw_name": "鋅",
+      "label_section": "nutrition_table",
+      "source_image_id": "p15-img01",
+      "standard_code": "zinc",
+      "scope_status": "in_scope",
+      "per_serving": 7.6,
+      "unit": "mg",
+      "percent_dv": 51.0,
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r05",
+      "raw_name": "銅",
+      "label_section": "nutrition_table",
+      "source_image_id": "p15-img01",
+      "scope_status": "out_of_scope",
+      "per_serving": 0.5,
+      "unit": "mg",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r06",
+      "raw_name": "檸檬酸鈣",
+      "label_section": "ingredient_list",
+      "source_image_id": "p15-img01",
+      "scope_status": "out_of_scope",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r07",
+      "raw_name": "微晶纖維",
+      "label_section": "ingredient_list",
+      "source_image_id": "p15-img01",
+      "scope_status": "out_of_scope",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r08",
+      "raw_name": "氧化鎂",
+      "label_section": "ingredient_list",
+      "source_image_id": "p15-img01",
+      "scope_status": "out_of_scope",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r09",
+      "raw_name": "磷酸氫鈉",
+      "label_section": "ingredient_list",
+      "source_image_id": "p15-img01",
+      "scope_status": "out_of_scope",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r10",
+      "raw_name": "聚乙烯",
+      "label_section": "ingredient_list",
+      "source_image_id": "p15-img01",
+      "scope_status": "out_of_scope",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r11",
+      "raw_name": "吡咯烷酮",
+      "label_section": "ingredient_list",
+      "source_image_id": "p15-img01",
+      "scope_status": "out_of_scope",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r12",
+      "raw_name": "硬脂酸鎂",
+      "label_section": "ingredient_list",
+      "source_image_id": "p15-img01",
+      "scope_status": "out_of_scope",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r13",
+      "raw_name": "二氧化矽",
+      "label_section": "ingredient_list",
+      "source_image_id": "p15-img01",
+      "scope_status": "out_of_scope",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r14",
+      "raw_name": "氧化鋅",
+      "label_section": "ingredient_list",
+      "source_image_id": "p15-img01",
+      "scope_status": "out_of_scope",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r15",
+      "raw_name": "維生素D3(辛烯基丁二酸鈉澱粉、維生素D3、蔗糖、中鏈三酸甘油脂、濃縮d-α生育醇(抗氧化劑))",
+      "label_section": "ingredient_list",
+      "source_image_id": "p15-img01",
+      "scope_status": "out_of_scope",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r16",
+      "raw_name": "葡萄糖酸銅",
+      "label_section": "ingredient_list",
+      "source_image_id": "p15-img01",
+      "scope_status": "out_of_scope",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r17",
+      "raw_name": "交羧甲基纖維素鈉",
+      "label_section": "ingredient_list",
+      "source_image_id": "p15-img01",
+      "scope_status": "out_of_scope",
+      "requires_user_input": false
+    }
+  ],
+  "extraction_meta": {
+    "ocr_version": "gold-annotation",
+    "rule_layer_version": "gold-annotation",
+    "synonym_table_version": "gold-annotation",
+    "extracted_at": "2026-10-05T00:00:00+08:00"
+  }
+}

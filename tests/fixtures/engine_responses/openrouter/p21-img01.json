@@ -1,0 +1,116 @@
+{
+  "image_id": "p21-img01",
+  "engine_version": "openrouter/google/gemini-3.8-flash/google-ai-studio/prompt-g1",
+  "blocks": [
+    {
+      "text": "營養標示",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "每一份量1錠",
+      "bbox": {
+        "x": 75,
+        "y": 583,
+        "width": 226,
+        "height": 44
+      },
+      "confidence": null
+    },
+    {
+      "text": "維生素D 3.33微克(133 IU) 33%",
+      "bbox": {
+        "x": 73,
+        "y": 794,
+        "width": 835,
+        "height": 49
+      },
+      "confidence": null
+    },
+    {
+      "text": "鈣 433毫克 36%",
+      "bbox": {
+        "x": 73,
+        "y": 840,
+        "width": 835,
+        "height": 48
+      },
+      "confidence": null
+    },
+    {
+      "text": "鎂 173毫克 44%",
+      "bbox": {
+        "x": 73,
+        "y": 886,
+        "width": 835,
+        "height": 48
+      },
+      "confidence": null
+    }
+  ],
+  "reading": {
+    "serving": {
+      "raw_text": "每一份量1錠",
+      "serving_size": 1.0,
+      "dose_unit_raw": "錠",
+      "bbox": {
+        "x": 75,
+        "y": 583,
+        "width": 226,
+        "height": 44
+      },
+      "needs_review": false
+    },
+    "rows": [
+      {
+        "raw_text": "維生素D 3.33微克(133 IU) 33%",
+        "raw_name": "維生素D",
+        "amount": 3.33,
+        "unit_raw": "微克",
+        "percent_dv": 33.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 73,
+          "y": 794,
+          "width": 835,
+          "height": 49
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "鈣 433毫克 36%",
+        "raw_name": "鈣",
+        "amount": 433.0,
+        "unit_raw": "毫克",
+        "percent_dv": 36.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 73,
+          "y": 840,
+          "width": 835,
+          "height": 48
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "鎂 173毫克 44%",
+        "raw_name": "鎂",
+        "amount": 173.0,
+        "unit_raw": "毫克",
+        "percent_dv": 44.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 73,
+          "y": 886,
+          "width": 835,
+          "height": 48
+        },
+        "needs_review": false
+      }
+    ],
+    "suggested_intake_raw": null,
+    "headings": [
+      "營養標示"
+    ]
+  }
+}

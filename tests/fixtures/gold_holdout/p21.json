@@ -1,0 +1,59 @@
+{
+  "product_id": "514e9214-cfcd-5bd5-a475-1142df0bb18d",
+  "product_name": "你滋美得 鎂鈣錠",
+  "source_images": [
+    {
+      "image_id": "p21-img01",
+      "quality_status": "accepted"
+    }
+  ],
+  "serving_info": {
+    "serving_size": 1.0,
+    "dose_unit": "tablet",
+    "source_image_id": "p21-img01"
+  },
+  "nutrients": [
+    {
+      "row_id": "r01",
+      "raw_name": "維生素D",
+      "label_section": "nutrition_table",
+      "source_image_id": "p21-img01",
+      "standard_code": "vitamin_d",
+      "scope_status": "in_scope",
+      "per_serving": 3.33,
+      "unit": "ug",
+      "percent_dv": 33.0,
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r02",
+      "raw_name": "鈣",
+      "label_section": "nutrition_table",
+      "source_image_id": "p21-img01",
+      "standard_code": "calcium",
+      "scope_status": "in_scope",
+      "per_serving": 433.0,
+      "unit": "mg",
+      "percent_dv": 36.0,
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r03",
+      "raw_name": "鎂",
+      "label_section": "nutrition_table",
+      "source_image_id": "p21-img01",
+      "standard_code": "magnesium",
+      "scope_status": "in_scope",
+      "per_serving": 173.0,
+      "unit": "mg",
+      "percent_dv": 44.0,
+      "requires_user_input": false
+    }
+  ],
+  "extraction_meta": {
+    "ocr_version": "gold-annotation",
+    "rule_layer_version": "gold-annotation",
+    "synonym_table_version": "gold-annotation",
+    "extracted_at": "2026-10-05T00:00:00+08:00"
+  }
+}

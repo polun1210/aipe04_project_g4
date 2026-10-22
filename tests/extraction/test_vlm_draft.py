@@ -17,7 +17,8 @@ from app.schemas.label import ExtractionDraft, SourceImage
 
 RECORDED = Path(__file__).resolve().parents[1] / "fixtures" / "engine_responses" / "openrouter"
 PRODUCT = UUID("c4000000-0000-4000-8000-000000000001")
-COMPARISON_SET = sorted(p.stem for p in RECORDED.glob("p*-img01.json"))
+# 比較集＝W1 有標準答案的 10 張；同一個資料夾也放了保留集的錄製結果
+COMPARISON_SET = sorted(f"{p.stem}-img01" for p in (RECORDED.parents[1] / "gold_w1").glob("p*.json"))
 
 
 def _replay(image_id: str, folder: Path = RECORDED) -> ExtractionDraft:

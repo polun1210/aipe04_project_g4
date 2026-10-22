@@ -1,0 +1,151 @@
+{
+  "product_id": "4d94e894-627a-5fcd-b26d-c4d26efa6625",
+  "product_name": "三多 女性B群+鐵鎂糖衣錠",
+  "source_images": [
+    {
+      "image_id": "p30-img01",
+      "quality_status": "accepted"
+    }
+  ],
+  "serving_info": {
+    "serving_size": 1.0,
+    "dose_unit": "tablet",
+    "source_image_id": "p30-img01"
+  },
+  "nutrients": [
+    {
+      "row_id": "r01",
+      "raw_name": "維生素B1",
+      "label_section": "nutrition_table",
+      "source_image_id": "p30-img01",
+      "scope_status": "out_of_scope",
+      "per_serving": 25.0,
+      "unit": "mg",
+      "percent_dv": 1786.0,
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r02",
+      "raw_name": "維生素B2",
+      "label_section": "nutrition_table",
+      "source_image_id": "p30-img01",
+      "scope_status": "out_of_scope",
+      "per_serving": 50.0,
+      "unit": "mg",
+      "percent_dv": 3125.0,
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r03",
+      "raw_name": "維生素B6",
+      "label_section": "nutrition_table",
+      "source_image_id": "p30-img01",
+      "standard_code": "vitamin_b6",
+      "scope_status": "in_scope",
+      "per_serving": 40.0,
+      "unit": "mg",
+      "percent_dv": 2500.0,
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r04",
+      "raw_name": "維生素B12",
+      "label_section": "nutrition_table",
+      "source_image_id": "p30-img01",
+      "standard_code": "vitamin_b12",
+      "scope_status": "in_scope",
+      "per_serving": 120.0,
+      "unit": "ug",
+      "percent_dv": 5000.0,
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r05",
+      "raw_name": "菸鹼素(B3)",
+      "label_section": "nutrition_table",
+      "source_image_id": "p30-img01",
+      "standard_code": "niacin",
+      "scope_status": "in_scope",
+      "per_serving": 18.0,
+      "unit": "mg_ne",
+      "percent_dv": 100.0,
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r06",
+      "raw_name": "泛酸(B5)",
+      "label_section": "nutrition_table",
+      "source_image_id": "p30-img01",
+      "scope_status": "out_of_scope",
+      "per_serving": 5.0,
+      "unit": "mg",
+      "percent_dv": 100.0,
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r07",
+      "raw_name": "生物素(B7)",
+      "label_section": "nutrition_table",
+      "source_image_id": "p30-img01",
+      "scope_status": "out_of_scope",
+      "per_serving": 600.0,
+      "unit": "ug",
+      "percent_dv": 2000.0,
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r08",
+      "raw_name": "葉酸(B9)",
+      "label_section": "nutrition_table",
+      "source_image_id": "p30-img01",
+      "standard_code": "folate",
+      "scope_status": "in_scope",
+      "per_serving": 400.0,
+      "unit": "ug",
+      "percent_dv": 100.0,
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r09",
+      "raw_name": "鈣",
+      "label_section": "nutrition_table",
+      "source_image_id": "p30-img01",
+      "standard_code": "calcium",
+      "scope_status": "in_scope",
+      "per_serving": 30.0,
+      "unit": "mg",
+      "percent_dv": 3.0,
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r10",
+      "raw_name": "鐵",
+      "label_section": "nutrition_table",
+      "source_image_id": "p30-img01",
+      "standard_code": "iron",
+      "scope_status": "in_scope",
+      "per_serving": 10.0,
+      "unit": "mg",
+      "percent_dv": 67.0,
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r11",
+      "raw_name": "鎂",
+      "label_section": "nutrition_table",
+      "source_image_id": "p30-img01",
+      "standard_code": "magnesium",
+      "scope_status": "in_scope",
+      "per_serving": 30.0,
+      "unit": "mg",
+      "percent_dv": 8.0,
+      "requires_user_input": false
+    }
+  ],
+  "extraction_meta": {
+    "ocr_version": "gold-annotation",
+    "rule_layer_version": "gold-annotation",
+    "synonym_table_version": "gold-annotation",
+    "extracted_at": "2026-10-05T00:00:00+08:00"
+  }
+}

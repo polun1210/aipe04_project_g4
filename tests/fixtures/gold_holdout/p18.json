@@ -1,0 +1,144 @@
+{
+  "product_id": "c670004a-08ff-5566-bd68-ec67a2482429",
+  "product_name": "北歐天然 魚油+D 膠囊",
+  "source_images": [
+    {
+      "image_id": "p18-img01",
+      "quality_status": "accepted"
+    }
+  ],
+  "serving_info": {
+    "serving_size": 1.0,
+    "dose_unit": "softgel",
+    "source_image_id": "p18-img01"
+  },
+  "nutrients": [
+    {
+      "row_id": "r01",
+      "raw_name": "維生素D",
+      "label_section": "nutrition_table",
+      "source_image_id": "p18-img01",
+      "standard_code": "vitamin_d",
+      "scope_status": "in_scope",
+      "per_serving": 12.5,
+      "unit": "ug",
+      "percent_dv": 125.0,
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r02",
+      "raw_name": "維生素C",
+      "label_section": "nutrition_table",
+      "source_image_id": "p18-img01",
+      "standard_code": "vitamin_c",
+      "scope_status": "in_scope",
+      "per_serving": 10.0,
+      "unit": "mg_ate",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r03",
+      "raw_name": "二十碳五烯酸(EPA)",
+      "label_section": "nutrition_table",
+      "source_image_id": "p18-img01",
+      "standard_code": "omega_3",
+      "scope_status": "in_scope",
+      "nutrient_form_code": "epa",
+      "per_serving": 325.0,
+      "unit": "mg",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r04",
+      "raw_name": "二十二碳六烯酸(DHA)",
+      "label_section": "nutrition_table",
+      "source_image_id": "p18-img01",
+      "standard_code": "omega_3",
+      "scope_status": "in_scope",
+      "nutrient_form_code": "dha",
+      "per_serving": 225.0,
+      "unit": "mg",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r05",
+      "raw_name": "魚油(來自沙丁魚、鯷魚)(含EPA、DHA)",
+      "label_section": "ingredient_list",
+      "source_image_id": "p18-img01",
+      "standard_code": "omega_3",
+      "scope_status": "in_scope",
+      "nutrient_form_code": "fish_oil",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r06",
+      "raw_name": "明膠",
+      "label_section": "ingredient_list",
+      "source_image_id": "p18-img01",
+      "scope_status": "out_of_scope",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r07",
+      "raw_name": "甘油",
+      "label_section": "ingredient_list",
+      "source_image_id": "p18-img01",
+      "scope_status": "out_of_scope",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r08",
+      "raw_name": "水",
+      "label_section": "ingredient_list",
+      "source_image_id": "p18-img01",
+      "scope_status": "out_of_scope",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r09",
+      "raw_name": "檸檬香料(膠囊殼)",
+      "label_section": "ingredient_list",
+      "source_image_id": "p18-img01",
+      "scope_status": "out_of_scope",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r10",
+      "raw_name": "維生素D3(含維生素D3、橄欖油)",
+      "label_section": "ingredient_list",
+      "source_image_id": "p18-img01",
+      "scope_status": "out_of_scope",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r11",
+      "raw_name": "檸檬香料(膠囊內容物)",
+      "label_section": "ingredient_list",
+      "source_image_id": "p18-img01",
+      "scope_status": "out_of_scope",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r12",
+      "raw_name": "維生素E",
+      "label_section": "ingredient_list",
+      "source_image_id": "p18-img01",
+      "scope_status": "out_of_scope",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r13",
+      "raw_name": "迷迭香葉萃取物",
+      "label_section": "ingredient_list",
+      "source_image_id": "p18-img01",
+      "scope_status": "out_of_scope",
+      "requires_user_input": false
+    }
+  ],
+  "extraction_meta": {
+    "ocr_version": "gold-annotation",
+    "rule_layer_version": "gold-annotation",
+    "synonym_table_version": "gold-annotation",
+    "extracted_at": "2026-10-05T00:00:00+08:00"
+  }
+}

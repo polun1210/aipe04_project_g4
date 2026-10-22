@@ -1,0 +1,272 @@
+{
+  "product_id": "97664f7c-6b13-5f50-a1d3-49f4f7a891a3",
+  "product_name": "嘉康利 維特力綜合營養片",
+  "source_images": [
+    {
+      "image_id": "p26-img01",
+      "quality_status": "accepted"
+    }
+  ],
+  "serving_info": {
+    "source_image_id": "p26-img01"
+  },
+  "nutrients": [
+    {
+      "row_id": "r01",
+      "raw_name": "維生素A",
+      "label_section": "nutrition_table",
+      "source_image_id": "p26-img01",
+      "scope_status": "out_of_scope",
+      "per_serving": 1500.0,
+      "unit": "ug",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r02",
+      "raw_name": "維生素B1",
+      "label_section": "nutrition_table",
+      "source_image_id": "p26-img01",
+      "scope_status": "out_of_scope",
+      "per_serving": 1.3,
+      "unit": "mg",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r03",
+      "raw_name": "維生素B2",
+      "label_section": "nutrition_table",
+      "source_image_id": "p26-img01",
+      "scope_status": "out_of_scope",
+      "per_serving": 1.7,
+      "unit": "mg",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r04",
+      "raw_name": "維生素B6",
+      "label_section": "nutrition_table",
+      "source_image_id": "p26-img01",
+      "standard_code": "vitamin_b6",
+      "scope_status": "in_scope",
+      "per_serving": 2.0,
+      "unit": "mg",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r05",
+      "raw_name": "維生素B12",
+      "label_section": "nutrition_table",
+      "source_image_id": "p26-img01",
+      "standard_code": "vitamin_b12",
+      "scope_status": "in_scope",
+      "per_serving": 6.0,
+      "unit": "ug",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r06",
+      "raw_name": "維生素C",
+      "label_section": "nutrition_table",
+      "source_image_id": "p26-img01",
+      "standard_code": "vitamin_c",
+      "scope_status": "in_scope",
+      "per_serving": 120.0,
+      "unit": "mg",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r07",
+      "raw_name": "維生素D",
+      "label_section": "nutrition_table",
+      "source_image_id": "p26-img01",
+      "standard_code": "vitamin_d",
+      "scope_status": "in_scope",
+      "per_serving": 10.0,
+      "unit": "ug",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r08",
+      "raw_name": "維生素E",
+      "label_section": "nutrition_table",
+      "source_image_id": "p26-img01",
+      "standard_code": "vitamin_e",
+      "scope_status": "in_scope",
+      "per_serving": 40.0,
+      "unit": "mg_ate",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r09",
+      "raw_name": "維生素K",
+      "label_section": "nutrition_table",
+      "source_image_id": "p26-img01",
+      "scope_status": "out_of_scope",
+      "per_serving": 60.0,
+      "unit": "ug",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r10",
+      "raw_name": "菸鹼素",
+      "label_section": "nutrition_table",
+      "source_image_id": "p26-img01",
+      "standard_code": "niacin",
+      "scope_status": "in_scope",
+      "per_serving": 20.0,
+      "unit": "mg_ne",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r11",
+      "raw_name": "葉酸",
+      "label_section": "nutrition_table",
+      "source_image_id": "p26-img01",
+      "standard_code": "folate",
+      "scope_status": "in_scope",
+      "per_serving": 400.0,
+      "unit": "ug",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r12",
+      "raw_name": "泛酸",
+      "label_section": "nutrition_table",
+      "source_image_id": "p26-img01",
+      "scope_status": "out_of_scope",
+      "per_serving": 10.0,
+      "unit": "mg",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r13",
+      "raw_name": "生物素",
+      "label_section": "nutrition_table",
+      "source_image_id": "p26-img01",
+      "scope_status": "out_of_scope",
+      "per_serving": 300.0,
+      "unit": "ug",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r14",
+      "raw_name": "鈣",
+      "label_section": "nutrition_table",
+      "source_image_id": "p26-img01",
+      "standard_code": "calcium",
+      "scope_status": "in_scope",
+      "per_serving": 450.0,
+      "unit": "mg",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r15",
+      "raw_name": "磷",
+      "label_section": "nutrition_table",
+      "source_image_id": "p26-img01",
+      "scope_status": "out_of_scope",
+      "per_serving": 350.0,
+      "unit": "mg",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r16",
+      "raw_name": "碘",
+      "label_section": "nutrition_table",
+      "source_image_id": "p26-img01",
+      "scope_status": "out_of_scope",
+      "per_serving": 150.0,
+      "unit": "ug",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r17",
+      "raw_name": "鎂",
+      "label_section": "nutrition_table",
+      "source_image_id": "p26-img01",
+      "standard_code": "magnesium",
+      "scope_status": "in_scope",
+      "per_serving": 200.0,
+      "unit": "mg",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r18",
+      "raw_name": "鋅",
+      "label_section": "nutrition_table",
+      "source_image_id": "p26-img01",
+      "standard_code": "zinc",
+      "scope_status": "in_scope",
+      "per_serving": 15.0,
+      "unit": "mg",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r19",
+      "raw_name": "硒",
+      "label_section": "nutrition_table",
+      "source_image_id": "p26-img01",
+      "standard_code": "selenium",
+      "scope_status": "in_scope",
+      "per_serving": 70.0,
+      "unit": "ug",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r20",
+      "raw_name": "銅",
+      "label_section": "nutrition_table",
+      "source_image_id": "p26-img01",
+      "scope_status": "out_of_scope",
+      "per_serving": 2.0,
+      "unit": "mg",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r21",
+      "raw_name": "錳",
+      "label_section": "nutrition_table",
+      "source_image_id": "p26-img01",
+      "scope_status": "out_of_scope",
+      "per_serving": 2.0,
+      "unit": "mg",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r22",
+      "raw_name": "鉻",
+      "label_section": "nutrition_table",
+      "source_image_id": "p26-img01",
+      "scope_status": "out_of_scope",
+      "per_serving": 120.0,
+      "unit": "ug",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r23",
+      "raw_name": "硼",
+      "label_section": "nutrition_table",
+      "source_image_id": "p26-img01",
+      "scope_status": "out_of_scope",
+      "per_serving": 700.0,
+      "unit": "ug",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r24",
+      "raw_name": "矽",
+      "label_section": "nutrition_table",
+      "source_image_id": "p26-img01",
+      "scope_status": "out_of_scope",
+      "per_serving": 2.0,
+      "unit": "mg",
+      "requires_user_input": false
+    }
+  ],
+  "extraction_meta": {
+    "ocr_version": "gold-annotation",
+    "rule_layer_version": "gold-annotation",
+    "synonym_table_version": "gold-annotation",
+    "extracted_at": "2026-10-05T00:00:00+08:00"
+  }
+}

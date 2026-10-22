@@ -1,0 +1,150 @@
+{
+  "image_id": "p20-img01",
+  "engine_version": "openrouter/google/gemini-3.8-flash/google-ai-studio/prompt-g1",
+  "blocks": [
+    {
+      "text": "營養資訊",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "每日3顆",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "鋅 1.5毫克",
+      "bbox": {
+        "x": 24,
+        "y": 72,
+        "width": 452,
+        "height": 22
+      },
+      "confidence": null
+    },
+    {
+      "text": "銅 0.21毫克",
+      "bbox": {
+        "x": 24,
+        "y": 105,
+        "width": 452,
+        "height": 21
+      },
+      "confidence": null
+    },
+    {
+      "text": "錳 0.21毫克",
+      "bbox": {
+        "x": 24,
+        "y": 137,
+        "width": 452,
+        "height": 22
+      },
+      "confidence": null
+    },
+    {
+      "text": "葡萄糖胺 1500毫克",
+      "bbox": {
+        "x": 24,
+        "y": 170,
+        "width": 452,
+        "height": 22
+      },
+      "confidence": null
+    },
+    {
+      "text": "葡萄籽萃取物 99毫克",
+      "bbox": {
+        "x": 24,
+        "y": 202,
+        "width": 452,
+        "height": 22
+      },
+      "confidence": null
+    }
+  ],
+  "reading": {
+    "serving": null,
+    "rows": [
+      {
+        "raw_text": "鋅 1.5毫克",
+        "raw_name": "鋅",
+        "amount": 1.5,
+        "unit_raw": "毫克",
+        "percent_dv": null,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 24,
+          "y": 72,
+          "width": 452,
+          "height": 22
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "銅 0.21毫克",
+        "raw_name": "銅",
+        "amount": 0.21,
+        "unit_raw": "毫克",
+        "percent_dv": null,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 24,
+          "y": 105,
+          "width": 452,
+          "height": 21
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "錳 0.21毫克",
+        "raw_name": "錳",
+        "amount": 0.21,
+        "unit_raw": "毫克",
+        "percent_dv": null,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 24,
+          "y": 137,
+          "width": 452,
+          "height": 22
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "葡萄糖胺 1500毫克",
+        "raw_name": "葡萄糖胺",
+        "amount": 1500.0,
+        "unit_raw": "毫克",
+        "percent_dv": null,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 24,
+          "y": 170,
+          "width": 452,
+          "height": 22
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "葡萄籽萃取物 99毫克",
+        "raw_name": "葡萄籽萃取物",
+        "amount": 99.0,
+        "unit_raw": "毫克",
+        "percent_dv": null,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 24,
+          "y": 202,
+          "width": 452,
+          "height": 22
+        },
+        "needs_review": false
+      }
+    ],
+    "suggested_intake_raw": "每日3顆",
+    "headings": [
+      "營養資訊"
+    ]
+  }
+}

@@ -1,0 +1,73 @@
+{
+  "product_id": "0c5d13d6-42fe-5aea-a03f-6fd65fcd46e6",
+  "product_name": "嘉康利 捷身靈膠囊",
+  "source_images": [
+    {
+      "image_id": "p20-img01",
+      "quality_status": "accepted"
+    }
+  ],
+  "serving_info": {
+    "source_image_id": "p20-img01"
+  },
+  "nutrients": [
+    {
+      "row_id": "r01",
+      "raw_name": "鋅",
+      "label_section": "nutrition_table",
+      "source_image_id": "p20-img01",
+      "standard_code": "zinc",
+      "scope_status": "in_scope",
+      "per_serving": 1.5,
+      "unit": "mg",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r02",
+      "raw_name": "銅",
+      "label_section": "nutrition_table",
+      "source_image_id": "p20-img01",
+      "scope_status": "out_of_scope",
+      "per_serving": 0.21,
+      "unit": "mg",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r03",
+      "raw_name": "錳",
+      "label_section": "nutrition_table",
+      "source_image_id": "p20-img01",
+      "scope_status": "out_of_scope",
+      "per_serving": 0.21,
+      "unit": "mg",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r04",
+      "raw_name": "葡萄糖胺",
+      "label_section": "nutrition_table",
+      "source_image_id": "p20-img01",
+      "standard_code": "glucosamine",
+      "scope_status": "in_scope",
+      "per_serving": 1500.0,
+      "unit": "mg",
+      "requires_user_input": false
+    },
+    {
+      "row_id": "r05",
+      "raw_name": "葡萄籽萃取物",
+      "label_section": "nutrition_table",
+      "source_image_id": "p20-img01",
+      "scope_status": "out_of_scope",
+      "per_serving": 99.0,
+      "unit": "mg",
+      "requires_user_input": false
+    }
+  ],
+  "extraction_meta": {
+    "ocr_version": "gold-annotation",
+    "rule_layer_version": "gold-annotation",
+    "synonym_table_version": "gold-annotation",
+    "extracted_at": "2026-10-05T00:00:00+08:00"
+  }
+}

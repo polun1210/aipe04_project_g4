@@ -1,0 +1,316 @@
+{
+  "image_id": "p16-img01",
+  "engine_version": "openrouter/google/gemini-3.8-flash/google-ai-studio/prompt-g1",
+  "blocks": [
+    {
+      "text": "營養標示",
+      "bbox": null,
+      "confidence": null
+    },
+    {
+      "text": "每一份量 1.6公克 (2粒)",
+      "bbox": {
+        "x": 56,
+        "y": 59,
+        "width": 210,
+        "height": 22
+      },
+      "confidence": null
+    },
+    {
+      "text": "熱量 12.5 大卡 1%",
+      "bbox": {
+        "x": 56,
+        "y": 163,
+        "width": 337,
+        "height": 21
+      },
+      "confidence": null
+    },
+    {
+      "text": "蛋白質 0.2 公克 0%",
+      "bbox": {
+        "x": 56,
+        "y": 188,
+        "width": 338,
+        "height": 21
+      },
+      "confidence": null
+    },
+    {
+      "text": "脂肪 1.3 公克 2%",
+      "bbox": {
+        "x": 56,
+        "y": 213,
+        "width": 338,
+        "height": 22
+      },
+      "confidence": null
+    },
+    {
+      "text": "飽和脂肪 0 公克 0%",
+      "bbox": {
+        "x": 74,
+        "y": 239,
+        "width": 320,
+        "height": 21
+      },
+      "confidence": null
+    },
+    {
+      "text": "反式脂肪 0 公克 *",
+      "bbox": {
+        "x": 73,
+        "y": 264,
+        "width": 307,
+        "height": 23
+      },
+      "confidence": null
+    },
+    {
+      "text": "碳水化合物 0 公克 0%",
+      "bbox": {
+        "x": 55,
+        "y": 289,
+        "width": 339,
+        "height": 23
+      },
+      "confidence": null
+    },
+    {
+      "text": "糖 0 公克 *",
+      "bbox": {
+        "x": 74,
+        "y": 315,
+        "width": 305,
+        "height": 22
+      },
+      "confidence": null
+    },
+    {
+      "text": "鈉 1.6 毫克 0%",
+      "bbox": {
+        "x": 56,
+        "y": 341,
+        "width": 338,
+        "height": 22
+      },
+      "confidence": null
+    },
+    {
+      "text": "Omega-3脂肪酸 1008 毫克 *",
+      "bbox": {
+        "x": 56,
+        "y": 366,
+        "width": 324,
+        "height": 23
+      },
+      "confidence": null
+    },
+    {
+      "text": "EPA 576 毫克 *",
+      "bbox": {
+        "x": 56,
+        "y": 392,
+        "width": 324,
+        "height": 22
+      },
+      "confidence": null
+    },
+    {
+      "text": "DHA 384 毫克 *",
+      "bbox": {
+        "x": 56,
+        "y": 417,
+        "width": 324,
+        "height": 23
+      },
+      "confidence": null
+    }
+  ],
+  "reading": {
+    "serving": {
+      "raw_text": "每一份量 1.6公克 (2粒)",
+      "serving_size": 2.0,
+      "dose_unit_raw": "粒",
+      "bbox": {
+        "x": 56,
+        "y": 59,
+        "width": 210,
+        "height": 22
+      },
+      "needs_review": false
+    },
+    "rows": [
+      {
+        "raw_text": "熱量 12.5 大卡 1%",
+        "raw_name": "熱量",
+        "amount": 12.5,
+        "unit_raw": "大卡",
+        "percent_dv": 1.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 56,
+          "y": 163,
+          "width": 337,
+          "height": 21
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "蛋白質 0.2 公克 0%",
+        "raw_name": "蛋白質",
+        "amount": 0.2,
+        "unit_raw": "公克",
+        "percent_dv": 0.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 56,
+          "y": 188,
+          "width": 338,
+          "height": 21
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "脂肪 1.3 公克 2%",
+        "raw_name": "脂肪",
+        "amount": 1.3,
+        "unit_raw": "公克",
+        "percent_dv": 2.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 56,
+          "y": 213,
+          "width": 338,
+          "height": 22
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "飽和脂肪 0 公克 0%",
+        "raw_name": "飽和脂肪",
+        "amount": 0.0,
+        "unit_raw": "公克",
+        "percent_dv": 0.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 74,
+          "y": 239,
+          "width": 320,
+          "height": 21
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "反式脂肪 0 公克 *",
+        "raw_name": "反式脂肪",
+        "amount": 0.0,
+        "unit_raw": "公克",
+        "percent_dv": null,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 73,
+          "y": 264,
+          "width": 307,
+          "height": 23
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "碳水化合物 0 公克 0%",
+        "raw_name": "碳水化合物",
+        "amount": 0.0,
+        "unit_raw": "公克",
+        "percent_dv": 0.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 55,
+          "y": 289,
+          "width": 339,
+          "height": 23
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "糖 0 公克 *",
+        "raw_name": "糖",
+        "amount": 0.0,
+        "unit_raw": "公克",
+        "percent_dv": null,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 74,
+          "y": 315,
+          "width": 305,
+          "height": 22
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "鈉 1.6 毫克 0%",
+        "raw_name": "鈉",
+        "amount": 1.6,
+        "unit_raw": "毫克",
+        "percent_dv": 0.0,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 56,
+          "y": 341,
+          "width": 338,
+          "height": 22
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "Omega-3脂肪酸 1008 毫克 *",
+        "raw_name": "Omega-3脂肪酸",
+        "amount": 1008.0,
+        "unit_raw": "毫克",
+        "percent_dv": null,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 56,
+          "y": 366,
+          "width": 324,
+          "height": 23
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "EPA 576 毫克 *",
+        "raw_name": "EPA",
+        "amount": 576.0,
+        "unit_raw": "毫克",
+        "percent_dv": null,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 56,
+          "y": 392,
+          "width": 324,
+          "height": 22
+        },
+        "needs_review": false
+      },
+      {
+        "raw_text": "DHA 384 毫克 *",
+        "raw_name": "DHA",
+        "amount": 384.0,
+        "unit_raw": "毫克",
+        "percent_dv": null,
+        "label_section": "nutrition_table",
+        "bbox": {
+          "x": 56,
+          "y": 417,
+          "width": 324,
+          "height": 23
+        },
+        "needs_review": false
+      }
+    ],
+    "suggested_intake_raw": null,
+    "headings": [
+      "營養標示"
+    ]
+  }
+}
