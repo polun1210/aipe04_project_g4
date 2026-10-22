@@ -22,8 +22,11 @@ import re
 import urllib.error
 import urllib.request
 from collections.abc import Callable
+from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import TimeoutError as FuturesTimeout
 from dataclasses import dataclass
 from datetime import datetime, timezone
+from http.client import HTTPException
 from time import perf_counter
 from typing import Any
 
@@ -38,14 +41,18 @@ ENGINE_NAME = "openrouter"
 API_URL = "https://openrouter.ai/api/v1/chat/completions"
 PROMPT_VERSION = "g1"  # 與 Gemini 共用提示詞；改提示詞或結構就要加版本，engine_version 會跟著變
 TEMPERATURE = 0.0
-# 使用者同步等待，整體上限約 60 秒：每次呼叫 28 秒，主型號逾時改呼叫備援最多再 28 秒；多張照片由 extract() 同時處理
-TIMEOUT_SECONDS = 28
+# 使用者同步等待：每張照片（含備援）總共最多 55 秒，多張照片由 extract() 同時處理，整體約 60 秒內回應。
+# 保留集實測 20 張有 3 張要 39–44 秒，所以不能每次呼叫只給 28 秒。
+# OpenRouter 處理時會持續送「還在處理」的空白，只靠 socket 逾時切不斷，所以讀取時另外檢查總時間。
+TOTAL_SECONDS = 55
+MIN_FALLBACK_SECONDS = 15  # 主型號失敗後剩下的時間不到這麼多，就不呼叫備援，直接回錯誤
 # 長邊超過就先縮小再送：比較集實測（97%）的照片長邊約 2400 像素；手機原圖約 4000 像素，送原圖只會更慢
 MAX_SIDE = 2400
 _RETRYABLE_STATUS = {408, 429}  # 加上所有 5xx
 
-# (請求內容) → 服務回傳的 JSON。HTTP 錯誤以 urllib.error.HTTPError 拋出。測試換成假的，不真的連網
-Transport = Callable[[dict[str, Any]], dict[str, Any]]
+# (請求內容, 最多等幾秒) → 服務回傳的 JSON。HTTP 錯誤以 urllib.error.HTTPError、逾時以 TimeoutError 拋出。
+# 測試換成假的，不真的連網
+Transport = Callable[[dict[str, Any], float], dict[str, Any]]
 
 
 @dataclass(frozen=True)
@@ -55,16 +62,45 @@ class Route:
 
 
 def http_transport(api_key: str) -> Transport:
-    def send(body: dict[str, Any]) -> dict[str, Any]:
+    def send(body: dict[str, Any], timeout: float) -> dict[str, Any]:
         request = urllib.request.Request(
             API_URL,
             data=json.dumps(body).encode("utf-8"),
             headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
         )
-        with urllib.request.urlopen(request, timeout=TIMEOUT_SECONDS) as response:
-            return json.load(response)
+
+        deadline = perf_counter() + timeout
+
+        def post() -> dict[str, Any]:
+            # 背景執行緒自己也看時間：外面不等了之後，這裡最晚再一次讀取逾時就關掉連線結束，不會一直留著
+            with urllib.request.urlopen(request, timeout=timeout) as response:
+                return json.loads(read_before(response, deadline))
+
+        return within(post, timeout)
 
     return send
+
+
+def read_before(response: Any, deadline: float) -> bytes:
+    """有多少讀多少，超過 deadline 就拋 TimeoutError（不管對方是不是還在持續送空白）。"""
+    chunks = []
+    while chunk := response.read1(65536):
+        chunks.append(chunk)
+        if perf_counter() > deadline:
+            raise TimeoutError("超過等待時間上限")
+    return b"".join(chunks)
+
+
+def within(fn: Callable[[], Any], timeout: float) -> Any:
+    """在背景執行緒跑 fn，最多等 timeout 秒：連線、等標頭、讀內容卡在哪一段都切得斷。
+    逾時後背景的請求不會被取消（照樣會計費），只是不再等它。"""
+    pool = ThreadPoolExecutor(max_workers=1)
+    try:
+        return pool.submit(fn).result(timeout=timeout)
+    except FuturesTimeout as e:
+        raise TimeoutError("超過等待時間上限") from e
+    finally:
+        pool.shutdown(wait=False)
 
 
 def _strict(schema: Any, defs: dict[str, Any]) -> Any:
@@ -142,14 +178,15 @@ class OpenRouterEngine:
         started = perf_counter()
         route, primary_error = self.primary, None
         try:
-            response = self._send(self._body(route, data_url))
-        except (urllib.error.URLError, TimeoutError, json.JSONDecodeError) as e:
-            if self.fallback is None or not _retryable(e):
+            response = self._send(self._body(route, data_url), TOTAL_SECONDS)
+        except (OSError, HTTPException, ValueError) as e:  # 網路、逾時、讀到一半斷線、回應不是 JSON
+            remaining = TOTAL_SECONDS - (perf_counter() - started)
+            if self.fallback is None or not _retryable(e) or remaining < MIN_FALLBACK_SECONDS:
                 raise ExtractionError(f"{image.image_id} 呼叫 OpenRouter 失敗：{e}") from e
             route, primary_error = self.fallback, _describe(e)
             try:
-                response = self._send(self._body(route, data_url))
-            except (urllib.error.URLError, TimeoutError, json.JSONDecodeError) as e2:
+                response = self._send(self._body(route, data_url), remaining)
+            except (OSError, HTTPException, ValueError) as e2:
                 raise ExtractionError(f"{image.image_id} 主型號與備援都失敗：{primary_error}；{e2}") from e2
         latency_ms = (perf_counter() - started) * 1000
 

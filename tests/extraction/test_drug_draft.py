@@ -79,7 +79,7 @@ def test_名稱開頭的鹽類字不去掉():
 
 
 def test_沒有通過品質檢查時回錯誤():
-    engine = DrugOpenRouterEngine(lambda body: {}, Route("google/gemini-3.8-flash", "google-ai-studio"))
+    engine = DrugOpenRouterEngine(lambda body, timeout: {}, Route("google/gemini-3.8-flash", "google-ai-studio"))
     with pytest.raises(ExtractionError, match="品質檢查"):
         extract_drugs(
             DRAFT_ID,
@@ -92,7 +92,7 @@ def test_沒有通過品質檢查時回錯誤():
 
 def test_模型回傳不符格式時回錯誤而不是空草稿(make_jpeg):
     reply = {"model": "m", "choices": [{"message": {"content": json.dumps({"rows": []})}}]}
-    engine = DrugOpenRouterEngine(lambda body: reply, Route("google/gemini-3.8-flash", "google-ai-studio"))
+    engine = DrugOpenRouterEngine(lambda body, timeout: reply, Route("google/gemini-3.8-flash", "google-ai-studio"))
     with pytest.raises(ExtractionError, match="不符合格式"):
         extract_drugs(
             DRAFT_ID,

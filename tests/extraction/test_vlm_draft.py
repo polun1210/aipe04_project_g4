@@ -320,7 +320,7 @@ def test_名稱中間的片段不算命中(tmp_path):
 def _openrouter_draft(label: dict, make_jpeg) -> ExtractionDraft:
     content = json.dumps(label, ensure_ascii=False)
     reply = {"model": "google/gemini-3.8-flash", "choices": [{"message": {"content": content}, "finish_reason": "stop"}]}
-    engine = OpenRouterEngine(lambda body: reply, Route("google/gemini-3.8-flash", "google-ai-studio"))
+    engine = OpenRouterEngine(lambda body, timeout: reply, Route("google/gemini-3.8-flash", "google-ai-studio"))
     image = ImageInput(image_id="img-01", content=make_jpeg(100, 200))
     return extract(PRODUCT, [image], [SourceImage(image_id="img-01", quality_status=QualityStatus.ACCEPTED)], engine=engine)
 
