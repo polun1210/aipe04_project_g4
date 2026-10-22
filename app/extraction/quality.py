@@ -71,9 +71,10 @@ def load_upright_gray(content: bytes) -> np.ndarray | None:
     try:
         img = Image.open(BytesIO(content))
         img.load()
-    except (UnidentifiedImageError, OSError, ValueError, Image.DecompressionBombError):
-        return None  # 壞檔、格式不支援、像素多到像壓縮炸彈，都當作讀不出來
-    return np.asarray(ImageOps.exif_transpose(img).convert("L"))
+        return np.asarray(ImageOps.exif_transpose(img).convert("L"))
+    except (UnidentifiedImageError, OSError, ValueError, SyntaxError, Image.DecompressionBombError):
+        # 壞檔、格式不支援、EXIF 損壞（Pillow 有時拋 SyntaxError）、像素多到像壓縮炸彈，都當作讀不出來
+        return None
 
 
 def measure_gray(gray: np.ndarray) -> QualityMeasure:
