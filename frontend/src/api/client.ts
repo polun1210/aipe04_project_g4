@@ -1,4 +1,3 @@
-// API 串接練習，尚未接入正式頁面，待團隊整合
 export interface ApiErrorBody {
   code: string
   message: string
@@ -18,10 +17,14 @@ export class ApiError extends Error {
   }
 }
 
-export async function apiRequest<T>(
-  path: string,
-  options: RequestInit = {},
-): Promise<T> {
+export function errorMessage(error: unknown): string {
+  if (error instanceof ApiError) {
+    return [error.message, ...(error.body.error.details ?? [])].join('；')
+  }
+  return '無法完成操作，請確認網路與後端服務後再試。'
+}
+
+export async function apiRequest<T>(path: string, options: RequestInit = {}): Promise<T> {
   // 判斷這次是否要上傳圖片或檔案
   const isFormData = options.body instanceof FormData
 
@@ -46,12 +49,22 @@ export async function apiRequest<T>(
 
     throw new ApiError(
       response.status,
-      body ?? {
-        error: {
-          code: 'network_error',
-          message: '無法完成請求，請確認後端已啟動或稍後再試',
-        },
-      },
+      body && typeof body.error?.message === 'string'
+        ? {
+            error: {
+              code: typeof body.error.code === 'string' ? body.error.code : 'request_failed',
+              message: body.error.message,
+              details: Array.isArray(body.error.details)
+                ? body.error.details.filter((item: unknown) => typeof item === 'string')
+                : [],
+            },
+          }
+        : {
+            error: {
+              code: 'network_error',
+              message: '無法完成請求，請確認後端已啟動或稍後再試',
+            },
+          },
     )
   }
 

@@ -40,7 +40,7 @@
 | ③ | `03_assessment_request` | 使用者送出評估的資料：確認後的藥名、要評估的產品（年齡、性別、慢性病由後端從帳號讀，不由前端送） | 前端 → 後端 | `AssessmentRequest`（`case.py`） |
 | ④ | `04_supplement_draft` | 保健食品照片上傳後，同步回傳的辨識草稿：每份量、建議吃法、逐列成分（含座標） | 標示辨識 → 後端 → 核對介面 | `ExtractionDraft`（`label.py`） |
 | ④ | `04_drug_draft` | 藥包照片上傳後，同步回傳的辨識草稿：每行藥包原文、學名、對照到的有效成分、範圍狀態 | 藥包辨識 → 後端 → 核對介面 | `DrugDraft`（`drug_label.py`） |
-| ⑤ | `05a_verification_submission` | 使用者核對、修正完後送出的資料（不含計算值） | 核對介面 → 後端 | `VerificationSubmission`（`label.py`） |
+| ⑤ | `05a_verification_submission` | 使用者核對、修正完後送出的資料（不含計算值；`product_name` 必填） | 核對介面 → 後端 | `VerificationSubmission`（`label.py`） |
 | ⑤ | `05b_label_corrections` | 後端比對「辨識草稿」與「使用者送出」後產生的**修正紀錄**（改前、改後），用來量測辨識準確率 | 後端內部 | `LabelCorrection`（`label.py`） |
 | — | `case_profile` | **凍結的評估個案**：基本資料、用藥、所有已核對產品的完整快照，是計算層的唯一輸入 | 後端內部 | `CaseProfile`（`case.py`） |
 | ⑥ | `06_assessment` | 計算層與規則引擎的結論：營養素與上限（跨產品加總）、交互作用、揭露事項。等級與數字在這裡就確定 | 後端 → 敘述層 | `Assessment`（`assessment.py`） |
@@ -82,8 +82,8 @@
 | PG-003 註冊頁、PG-009 用藥校對頁 | `GET /api/catalog` | — | `CatalogResponse`（`catalog/` 底下 CSV 的內容） | `CatalogSource.load` | 已完成 |
 | PG-004 藥圖片上傳頁 | `POST /api/drug-drafts` | multipart：`images`（1 張以上） | `04_drug_draft`，HTTP 201 | `save_drug_draft` | 已完成（假版本） |
 | PG-005 藥人工校對頁 | `GET /api/drugs/lookup?name=…` | query：`name` | `mapped`（與評估時一致的對照結果）＋ `candidates`（候選藥名，最多 10 筆） | `CatalogSource.load` | 已完成 |
-| PG-006 保健食品圖片上傳頁 | `POST /api/supplement-drafts` | multipart：`ingredient_images`、`nutrition_images`（合計 1 張以上）、`category`（選填，只當顯示名稱） | `04_supplement_draft`，HTTP 201 | `save_supplement_draft` | 已完成（假版本） |
-| PG-007 保健食品人工校對頁 | `POST /api/products` | `05a_verification_submission` | `product_id`，HTTP 201 | `save_product` | 已完成（假版本） |
+| PG-006 保健食品圖片上傳頁 | `POST /api/supplement-drafts` | multipart：`ingredient_images`、`nutrition_images`（合計 1 張以上）、`category`（選填，只當產品名稱的預填建議：辨識讀不到名稱時填進草稿的 `product_name`，民眾在 PG-007 仍要自己確認） | `04_supplement_draft`，HTTP 201 | `save_supplement_draft` | 已完成（假版本） |
+| PG-007 保健食品人工校對頁 | `POST /api/products` | `05a_verification_submission`（`product_name` 必填，民眾在校對頁確認；空字串或只有空白回 422） | `product_id`，HTTP 201 | `save_product` | 已完成（假版本） |
 | PG-007 → PG-008 | `POST /api/assessments` | `03_assessment_request`（確認後的藥名；`product_ids` 放前面存好的產品） | `06_assessment` | `get_products`、`get_profile`、`save_assessment` | 已完成（假版本） |
 | PG-008 報告呈現頁 | `POST /api/assessments/{case_id}/report` | — | `08_report`；第一次 201，已產生過回 200 與同一份 | `get_report_by_case`、`get_case`、`save_report` | 已完成（假版本） |
 | PG-011 報告記錄查詢頁 | `GET /api/reports?date_from=…&date_to=…` | query：兩個日期（選填、含當天、台灣時間） | `list[ReportSummary]`，新到舊 | `list_reports` | 已完成 |

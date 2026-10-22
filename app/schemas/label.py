@@ -8,9 +8,10 @@
 """
 
 from datetime import datetime
+from typing import Annotated
 from uuid import UUID
 
-from pydantic import Field, model_validator
+from pydantic import Field, StringConstraints, model_validator
 
 from app.schemas.catalog import Code
 from app.schemas.common import BoundingBox, FrozenModel, StrictModel
@@ -30,6 +31,9 @@ from app.schemas.enums import (
 )
 
 Confidence = float
+
+ProductName = Annotated[str, StringConstraints(strip_whitespace=True, min_length=1)]
+"""校對頁送出的產品名稱：必填，去掉前後空白後不可為空。"""
 
 
 def _check_scope(scope: ScopeStatus, code: IngredientCode | None, unit: Unit | None) -> None:
@@ -124,7 +128,7 @@ class ExtractionDraft(StrictModel):
     """保健食品照片上傳後，同步回傳的辨識草稿。"""
 
     product_id: UUID
-    product_name: str | None = None  # 不參與計算；未填時前端顯示「保健食品 N」
+    product_name: str | None = None  # 不參與計算；辨識常讀不到名稱，可為 null，只當校對頁的預填
     source_images: list[SourceImage] = Field(min_length=1)
     serving_info: ServingInfoDraft
     label_suggested_intake: LabelSuggestedIntake | None = None
@@ -190,9 +194,9 @@ class NutrientConfirmed(StrictModel):
 
 
 class VerificationSubmission(StrictModel):
-    """PUT /api/products/{product_id}/verification"""
+    """POST /api/products"""
 
-    product_name: str | None = None
+    product_name: ProductName  # 民眾在校對頁確認，必填；只有空白也擋
     serving_info: ServingInfo
     user_intake: UserIntake
     nutrients: list[NutrientConfirmed] = Field(min_length=1)

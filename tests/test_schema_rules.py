@@ -148,6 +148,7 @@ def test_duplicate_row_ids_rejected():
            "per_serving": 10, "unit": "mg"}
     with pytest.raises(ValidationError):
         VerificationSubmission(
+            product_name="綜合維他命錠",
             serving_info={"serving_size": 1, "dose_unit": "tablet"},
             user_intake={"frequency_type": "daily", "times_per_day": 1, "amount_per_time": 1},
             nutrients=[row, row],

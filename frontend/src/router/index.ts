@@ -43,6 +43,23 @@ const router = createRouter({
       name: 'api-test',
       component: () => import('@/views/ApiTestView.vue'),
     },
+    {
+      path: '/supplement-upload',
+      name: 'supplement-upload',
+      component: () => import('@/views/SupplementUploadView.vue'),
+    },
+    {
+      path: '/supplement-review',
+      name: 'supplement-review',
+      component: () => import('@/views/SupplementReviewView.vue'),
+    },
+    { path: '/report/:caseId', name: 'report', component: () => import('@/views/ReportView.vue') },
+    { path: '/reports', name: 'reports', component: () => import('@/views/ReportHistoryView.vue') },
+    {
+      path: '/reports/:reportId',
+      name: 'report-detail',
+      component: () => import('@/views/ReportView.vue'),
+    },
   ],
 })
 

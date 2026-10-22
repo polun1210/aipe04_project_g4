@@ -9,6 +9,7 @@ import { RouterLink } from 'vue-router'
     <nav aria-label="會員導覽">
       <RouterLink to="/register">註冊</RouterLink>
       <RouterLink to="/login">登入</RouterLink>
+      <RouterLink to="/member-center">會員中心（測試帳號）</RouterLink>
     </nav>
   </header>
 
@@ -16,6 +17,7 @@ import { RouterLink } from 'vue-router'
     <section aria-labelledby="welcome-title">
       <h1 id="welcome-title">歡迎使用保健食品評估系統</h1>
       <p>協助使用者了解保健食品與用藥資訊。</p>
+      <p>目前使用測試帳號，評估與報告仍為示範版本；登入、註冊與設定儲存尚未開放。</p>
 
       <RouterLink to="/medicine-upload">開始使用</RouterLink>
     </section>
@@ -26,17 +28,14 @@ import { RouterLink } from 'vue-router'
       <ol>
         <li>
           <h3>步驟 1：上傳並核對藥品</h3>
-          <p>步驟 1 範例圖（待補）</p>
           <p>上傳藥包圖片，辨識完成後確認藥品資料。</p>
         </li>
         <li>
           <h3>步驟 2：上傳並核對保健食品</h3>
-          <p>步驟 2 範例圖（待補）</p>
           <p>上傳保健食品圖片，確認成分並填寫實際服用方式。</p>
         </li>
         <li>
           <h3>步驟 3：查看評估報告</h3>
-          <p>步驟 3 範例圖（待補）</p>
           <p>查看評估結果與改善建議。</p>
         </li>
       </ol>
