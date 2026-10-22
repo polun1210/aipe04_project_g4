@@ -82,6 +82,31 @@ def test_create_product_rejects_missing_required_field(client):
     assert response.json()["error"]["code"] == "validation_error"
 
 
+@pytest.mark.parametrize("name", ["", "   ", "　"])
+def test_create_product_rejects_blank_product_name(client, name):
+    body = _example("05a_verification_submission.json")
+    body["product_name"] = name
+    response = client.post("/api/products", json=body)
+    assert response.status_code == 422
+    assert response.json()["error"]["code"] == "validation_error"
+
+
+def test_create_product_rejects_missing_product_name(client):
+    body = _example("05a_verification_submission.json")
+    del body["product_name"]
+    response = client.post("/api/products", json=body)
+    assert response.status_code == 422
+
+
+def test_create_product_strips_product_name(client, store):
+    body = _example("05a_verification_submission.json")
+    body["product_name"] = "  魚油  "
+    response = client.post("/api/products", json=body)
+    assert response.status_code == 201
+    [stored] = store.get_products([UUID(response.json()["product_id"])])
+    assert stored.product_name == "魚油"
+
+
 def test_create_product_rejects_client_supplied_computed_fields(client):
     body = _example("05a_verification_submission.json")
     body["user_intake"]["units_per_day_peak"] = 999
