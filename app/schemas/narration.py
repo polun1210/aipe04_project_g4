@@ -57,3 +57,5 @@ class OutputCheckResult(StrictModel):
     number_fidelity_violations: list[str]  # 敘述中有、但 Assessment 沒有的數字
     banned_phrase_violations: list[str]
     dosage_boundary_violations: list[str]  # 數字接 mg／ug／IU 且不在授權集合；停用、減量詞彙
+    coverage_violations: list[str]  # 每條提醒都要有敘述，不能漏、不能多
+    severity_wording_violations: list[str]  # 措辭比嚴重等級強（例如「提醒」等級寫「立即」）
