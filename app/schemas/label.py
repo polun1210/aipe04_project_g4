@@ -196,6 +196,9 @@ class NutrientConfirmed(StrictModel):
 class VerificationSubmission(StrictModel):
     """POST /api/products"""
 
+    # 這罐是從哪份辨識草稿校對來的（草稿的 product_id）；後端拿草稿比對、產生修正紀錄。
+    # 沒帶就不產生修正紀錄（例如使用者整罐手動輸入）
+    draft_product_id: UUID | None = None
     product_name: ProductName  # 民眾在校對頁確認，必填；只有空白也擋
     serving_info: ServingInfo
     user_intake: UserIntake

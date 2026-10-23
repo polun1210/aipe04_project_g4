@@ -14,7 +14,7 @@ from app.schemas.case import AccountProfile, CaseProfile
 from app.schemas.common import ExclusiveSelection
 from app.schemas.drug_label import DrugDraft
 from app.schemas.enums import ConditionCode, Sex
-from app.schemas.label import ExtractionDraft, VerifiedProduct
+from app.schemas.label import ExtractionDraft, LabelCorrection, VerifiedProduct
 from app.schemas.report import Report
 
 TAIPEI_TZ = timezone(timedelta(hours=8))  # 報告日期以台灣時間判斷是哪一天
@@ -38,6 +38,12 @@ class Store(Protocol):
 
     def save_supplement_draft(self, user_id: UUID, draft: ExtractionDraft) -> None: ...
 
+    def get_supplement_draft(self, user_id: UUID, product_id: UUID) -> ExtractionDraft | None:
+        """不存在或不屬於這個使用者都回 None。"""
+        ...
+
+    def save_label_corrections(self, user_id: UUID, corrections: list[LabelCorrection]) -> None: ...
+
     def get_case(self, user_id: UUID, case_id: UUID) -> tuple[CaseProfile, Assessment] | None:
         """不存在或不屬於這個使用者都回 None。"""
         ...
@@ -59,6 +65,7 @@ class InMemoryStore:
         self.assessments: list[tuple[CaseProfile, Assessment]] = []
         self.drug_drafts: list[tuple[UUID, DrugDraft]] = []
         self.supplement_drafts: list[tuple[UUID, ExtractionDraft]] = []
+        self.label_corrections: list[tuple[UUID, LabelCorrection]] = []
         self._reports: list[tuple[UUID, Report]] = []
 
     def save_product(self, product: VerifiedProduct) -> None:
@@ -86,6 +93,12 @@ class InMemoryStore:
 
     def save_supplement_draft(self, user_id: UUID, draft: ExtractionDraft) -> None:
         self.supplement_drafts.append((user_id, draft))
+
+    def get_supplement_draft(self, user_id: UUID, product_id: UUID) -> ExtractionDraft | None:
+        return next((d for u, d in self.supplement_drafts if u == user_id and d.product_id == product_id), None)
+
+    def save_label_corrections(self, user_id: UUID, corrections: list[LabelCorrection]) -> None:
+        self.label_corrections += [(user_id, c) for c in corrections]
 
     def get_case(self, user_id: UUID, case_id: UUID) -> tuple[CaseProfile, Assessment] | None:
         return next(
