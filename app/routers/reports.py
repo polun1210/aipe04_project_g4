@@ -8,7 +8,8 @@ from app.reporting import Reporter, get_reporter
 from app.schemas.api import ErrorResponse
 from app.schemas.enums import ErrorCode
 from app.schemas.report import Report, ReportSummary
-from app.store import TEST_USER_ID, Store, get_store
+from app.auth import get_current_user_id
+from app.store import Store, get_store
 
 router = APIRouter(tags=["報告"])
 
@@ -34,17 +35,18 @@ def create_report(
     response: Response,
     reporter: Reporter = Depends(get_reporter),
     store: Store = Depends(get_store),
+    user_id: UUID = Depends(get_current_user_id),
 ) -> Report:
-    existing = store.get_report_by_case(TEST_USER_ID, case_id)
+    existing = store.get_report_by_case(user_id, case_id)
     if existing is not None:
         response.status_code = 200
         return existing
-    found = store.get_case(TEST_USER_ID, case_id)
+    found = store.get_case(user_id, case_id)
     if found is None:
         raise ApiError(404, ErrorCode.NOT_FOUND, "找不到要求的資料")
     case, assessment = found
     report = reporter.build(case, assessment, datetime.now(UTC))
-    store.save_report(TEST_USER_ID, report)
+    store.save_report(user_id, report)
     return report
 
 
@@ -62,6 +64,7 @@ def list_reports(
     date_from: date | None = Query(default=None, description="開始日期 YYYY-MM-DD（含）"),
     date_to: date | None = Query(default=None, description="結束日期 YYYY-MM-DD（含）"),
     store: Store = Depends(get_store),
+    user_id: UUID = Depends(get_current_user_id),
 ) -> list[ReportSummary]:
     if date_from and date_to and date_from > date_to:
         raise ApiError(
@@ -75,7 +78,7 @@ def list_reports(
             drug_count=len(r.profile.drugs),
             product_count=len(r.products),
         )
-        for r in store.list_reports(TEST_USER_ID, date_from, date_to)
+        for r in store.list_reports(user_id, date_from, date_to)
     ]
 
 
@@ -86,8 +89,12 @@ def list_reports(
     description="PG-012 報告記錄詳細資料頁呼叫，回傳凍結的完整報告。",
     responses=_NOT_FOUND,
 )
-def get_report(report_id: UUID, store: Store = Depends(get_store)) -> Report:
-    report = store.get_report(TEST_USER_ID, report_id)
+def get_report(
+    report_id: UUID,
+    store: Store = Depends(get_store),
+    user_id: UUID = Depends(get_current_user_id),
+) -> Report:
+    report = store.get_report(user_id, report_id)
     if report is None:
         raise ApiError(404, ErrorCode.NOT_FOUND, "找不到要求的資料")
     return report

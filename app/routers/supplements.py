@@ -1,4 +1,4 @@
-from uuid import uuid4
+from uuid import UUID, uuid4
 
 from fastapi import APIRouter, Depends, File, Form, UploadFile
 
@@ -7,7 +7,8 @@ from app.extractor import Extractor, get_extractor
 from app.schemas.api import ErrorResponse
 from app.schemas.enums import ErrorCode, ImageKind
 from app.schemas.label import ExtractionDraft
-from app.store import TEST_USER_ID, Store, get_store
+from app.auth import get_current_user_id
+from app.store import Store, get_store
 from app.uploads import ensure_any_accepted, extraction_errors_as_api_error, to_image_inputs
 
 router = APIRouter(tags=["保健食品"])
@@ -46,6 +47,7 @@ def create_supplement_draft(
     category: str | None = Form(default=None, description="保健食品種類（選填），例如「魚油」"),
     extractor: Extractor = Depends(get_extractor),
     store: Store = Depends(get_store),
+    user_id: UUID = Depends(get_current_user_id),
 ) -> ExtractionDraft:
     category = _clean_category(category)
     inputs = to_image_inputs(
@@ -60,5 +62,5 @@ def create_supplement_draft(
         draft = extractor.extract_supplement(uuid4(), inputs, quality)
     if draft.product_name is None and category is not None:
         draft = draft.model_copy(update={"product_name": category})
-    store.save_supplement_draft(TEST_USER_ID, draft)
+    store.save_supplement_draft(user_id, draft)
     return draft

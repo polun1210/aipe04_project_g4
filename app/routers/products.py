@@ -10,7 +10,8 @@ from app.errors import ApiError
 from app.schemas.api import ErrorResponse, ProductCreated
 from app.schemas.enums import ErrorCode
 from app.schemas.label import VerificationSubmission
-from app.store import TEST_USER_ID, Store, get_store
+from app.auth import get_current_user_id
+from app.store import Store, get_store
 
 logger = logging.getLogger(__name__)
 
@@ -35,17 +36,20 @@ def create_product(
     submission: VerificationSubmission,
     calculator: Calculator = Depends(get_calculator),
     store: Store = Depends(get_store),
+    user_id: UUID = Depends(get_current_user_id),
 ) -> ProductCreated:
     product_id, verified_at = uuid4(), datetime.now(UTC)
     if submission.draft_product_id is not None:
-        _save_corrections(store, submission, product_id, verified_at)
+        _save_corrections(store, user_id, submission, product_id, verified_at)
     product = calculator.verify_product(product_id, submission, verified_at)
     store.save_product(product)
     return ProductCreated(product_id=product.product_id)
 
 
-def _save_corrections(store: Store, submission: VerificationSubmission, product_id: UUID, at: datetime) -> None:
-    draft = store.get_supplement_draft(TEST_USER_ID, submission.draft_product_id)
+def _save_corrections(
+    store: Store, user_id: UUID, submission: VerificationSubmission, product_id: UUID, at: datetime
+) -> None:
+    draft = store.get_supplement_draft(user_id, submission.draft_product_id)
     if draft is None:
         # 修正紀錄只用來統計準確率；草稿找不到（例如伺服器重啟過）不擋使用者送出
         logger.warning("找不到辨識草稿 %s，這罐不產生修正紀錄", submission.draft_product_id)
@@ -55,4 +59,4 @@ def _save_corrections(store: Store, submission: VerificationSubmission, product_
     except UnknownRowError as e:
         details = [f"nutrients：row_id {r} 不在辨識草稿裡" for r in e.row_ids]
         raise ApiError(422, ErrorCode.VALIDATION_ERROR, "送出的資料有欄位需要修正", details) from e
-    store.save_label_corrections(TEST_USER_ID, corrections)
+    store.save_label_corrections(user_id, corrections)

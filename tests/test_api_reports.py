@@ -6,6 +6,7 @@ from uuid import UUID, uuid4
 import pytest
 from fastapi.testclient import TestClient
 
+from app.auth import get_current_user_id
 from app.main import create_app
 from app.schemas.report import Report, ReportSummary
 from app.store import TAIPEI_TZ, InMemoryStore, get_store
@@ -134,3 +135,14 @@ def test_get_report_returns_stored_report(client):
 
 def test_get_unknown_report_is_404(client):
     assert client.get(f"/api/reports/{uuid4()}").status_code == 404
+
+
+# ── 目前是誰 ────────────────────────────────────────────────
+
+
+def test_other_signed_in_user_cannot_read_report(client):
+    report = _make_report(client)
+    client.app.dependency_overrides[get_current_user_id] = lambda: uuid4()
+    assert client.get(f"/api/reports/{report['report_id']}").status_code == 404
+    assert client.get("/api/reports").json() == []
+    assert client.post(f"/api/assessments/{report['case_id']}/report").status_code == 404

@@ -1,5 +1,5 @@
 from datetime import UTC, datetime
-from uuid import uuid4
+from uuid import UUID, uuid4
 
 from fastapi import APIRouter, Depends
 
@@ -21,7 +21,8 @@ from app.schemas.case import (
 )
 from app.schemas.common import ExclusiveSelection
 from app.schemas.enums import ErrorCode
-from app.store import TEST_USER_ID, Store, get_store
+from app.auth import get_current_user_id
+from app.store import Store, get_store
 
 router = APIRouter(tags=["評估"])
 
@@ -54,6 +55,7 @@ def create_assessment(
     calculator: Calculator = Depends(get_calculator),
     catalog: CatalogSource = Depends(get_catalog_source),
     store: Store = Depends(get_store),
+    user_id: UUID = Depends(get_current_user_id),
 ) -> Assessment:
     products = store.get_products(request.product_ids)
     found_ids = {p.product_id for p in products}
@@ -62,7 +64,7 @@ def create_assessment(
         details = [f"product_ids：{pid}" for pid in missing]
         raise ApiError(409, ErrorCode.PRODUCT_NOT_FOUND, _UNKNOWN_PRODUCT_MESSAGE, details)
 
-    account = store.get_profile(TEST_USER_ID)
+    account = store.get_profile(user_id)
     created_at = datetime.now(UTC)
     age = age_on(account.birth_year, account.birth_month, created_at.date())
     if age < MIN_AGE:
@@ -72,7 +74,7 @@ def create_assessment(
 
     case = CaseProfile(
         case_id=uuid4(),
-        user_id=TEST_USER_ID,
+        user_id=user_id,
         created_at=created_at,
         decision_data_version=_decision_data_version(),
         basic_profile=BasicProfileSnapshot(age=age, sex=account.sex, age_band=age_band_for(age)),

@@ -1,4 +1,4 @@
-from uuid import uuid4
+from uuid import UUID, uuid4
 
 from fastapi import APIRouter, Depends, File, Query, UploadFile
 
@@ -9,7 +9,8 @@ from app.extractor import Extractor, get_extractor
 from app.schemas.api import ErrorResponse
 from app.schemas.drug_label import DrugDraft, DrugLookupResponse
 from app.schemas.enums import ErrorCode, ImageKind
-from app.store import TEST_USER_ID, Store, get_store
+from app.auth import get_current_user_id
+from app.store import Store, get_store
 from app.uploads import ensure_any_accepted, extraction_errors_as_api_error, to_image_inputs
 
 router = APIRouter(tags=["藥包"])
@@ -35,13 +36,14 @@ def create_drug_draft(
     images: list[UploadFile] = File(default=[], description="藥包照片，至少 1 張"),
     extractor: Extractor = Depends(get_extractor),
     store: Store = Depends(get_store),
+    user_id: UUID = Depends(get_current_user_id),
 ) -> DrugDraft:
     inputs = to_image_inputs([(ImageKind.DRUG_PACKAGE, images)])
     with extraction_errors_as_api_error():
         quality = extractor.check_quality(inputs)
         ensure_any_accepted(quality)
         draft = extractor.extract_drugs(uuid4(), inputs, quality)
-    store.save_drug_draft(TEST_USER_ID, draft)
+    store.save_drug_draft(user_id, draft)
     return draft
 
 
