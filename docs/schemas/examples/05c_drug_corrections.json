@@ -1,0 +1,26 @@
+[
+  {
+    "case_id": "c0000000-0000-4000-8000-000000000001",
+    "draft_id": "d1000000-0000-4000-8000-000000000001",
+    "field_path": "rows.d05.name",
+    "correction_type": "modified",
+    "model_value": "Dichlotrde",
+    "corrected_value": "Dichlotride",
+    "ocr_version": "openrouter:google/gemini-3.8-flash",
+    "rule_layer_version": "label-rules-v1",
+    "synonym_table_version": "syn-2026w40",
+    "corrected_at": "2026-09-29T09:25:00+08:00"
+  },
+  {
+    "case_id": "c0000000-0000-4000-8000-000000000001",
+    "draft_id": null,
+    "field_path": "rows.new1",
+    "correction_type": "added",
+    "model_value": null,
+    "corrected_value": "氧化鎂錠",
+    "ocr_version": null,
+    "rule_layer_version": null,
+    "synonym_table_version": null,
+    "corrected_at": "2026-09-29T09:25:00+08:00"
+  }
+]

@@ -42,6 +42,7 @@
 | ④ | `04_drug_draft` | 藥包照片上傳後，同步回傳的辨識草稿：每行藥包原文、學名、對照到的有效成分、範圍狀態 | 藥包辨識 → 後端 → 核對介面 | `DrugDraft`（`drug_label.py`） |
 | ⑤ | `05a_verification_submission` | 使用者核對、修正完後送出的資料（不含計算值；`product_name` 必填） | 核對介面 → 後端 | `VerificationSubmission`（`label.py`） |
 | ⑤ | `05b_label_corrections` | 後端比對「辨識草稿」與「使用者送出」後產生的**修正紀錄**（改前、改後），用來量測辨識準確率 | 後端內部 | `LabelCorrection`（`label.py`） |
+| ⑤ | `05c_drug_corrections` | 送出評估時，後端比對「藥包草稿」與「確認的藥名」產生的**藥名修正紀錄**（改名、新增、刪除），用來量測藥包辨識準確率 | 後端內部 | `DrugCorrection`（`drug_label.py`） |
 | — | `case_profile` | **凍結的評估個案**：基本資料、用藥、所有已核對產品的完整快照，是計算層的唯一輸入 | 後端內部 | `CaseProfile`（`case.py`） |
 | ⑥ | `06_assessment` | 計算層與規則引擎的結論：營養素與上限（跨產品加總）、交互作用、揭露事項。等級與數字在這裡就確定 | 後端 → 敘述層 | `Assessment`（`assessment.py`） |
 | ⑦ | `07_narration_output` | LLM 寫的白話說明，加上所用模型與 prompt 版本；先過輸出檢查才會進報告 | 敘述層 → 後端 | `NarrationOutput`（`narration.py`） |
