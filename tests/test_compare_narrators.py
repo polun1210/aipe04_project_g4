@@ -23,7 +23,7 @@ def _fake_http_transport(good: bool):
     return factory
 
 
-def test_compare_writes_stats_and_blind_review(tmp_path, monkeypatch):
+def test_compare_writes_stats(tmp_path, monkeypatch):
     monkeypatch.setenv("OPENROUTER_API_KEY", "test")
     monkeypatch.setattr(cmp, "load_dotenv", lambda: None)
     monkeypatch.setattr(cmp, "http_transport", _fake_http_transport(good=True))
@@ -31,10 +31,7 @@ def test_compare_writes_stats_and_blind_review(tmp_path, monkeypatch):
 
     stats = (tmp_path / "stats.md").read_text(encoding="utf-8")
     assert "| vendor/a | 2 | 100% | 0% |" in stats
-    review = (tmp_path / "blind_review.md").read_text(encoding="utf-8")
-    assert "vendor/" not in review and "版本 A" in review and "版本 B" in review
-    key = json.loads((tmp_path / "blind_key.json").read_text(encoding="utf-8"))
-    assert sorted(key["06_assessment"].values()) == ["vendor/a", "vendor/b"]
+    assert "| vendor/b | 2 | 100% | 0% |" in stats
     assert len((tmp_path / "runs.jsonl").read_text(encoding="utf-8").splitlines()) == 4
 
 

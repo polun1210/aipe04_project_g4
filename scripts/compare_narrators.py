@@ -1,4 +1,4 @@
-"""LLM 敘述模型比較（W3 工單 7）：幾個模型 × 幾份評估結果 × 每份跑幾次，統計後產出醫生盲評表。
+"""LLM 敘述模型比較（W3 工單 7）：幾個模型 × 幾份評估結果 × 每份跑幾次，統計後寫成比較表。
 
     uv run python scripts/compare_narrators.py \
         --model google/gemini-3.8-flash@google-ai-studio --model 另一個型號@服務商 \
@@ -9,15 +9,12 @@
 
 輸出（--out 資料夾）：
 - stats.md：每個模型一次就通過的比例、改用模板的比例、平均秒數、平均每份費用
-- blind_review.md：每份評估把各模型的文字打亂成 A／B／C，不標模型名稱，交給醫生評
-- blind_key.json：A／B／C 對應哪個模型（不要給醫生）
 - runs.jsonl：每一次呼叫的原始紀錄（文字、檢查結果、秒數、費用）
 """
 
 import argparse
 import json
 import os
-import random
 import statistics
 import sys
 from dataclasses import dataclass, field
@@ -38,7 +35,6 @@ from app.schemas.assessment import Assessment  # noqa: E402
 from app.schemas.narration import NarrationInput, NarrationOutput  # noqa: E402
 
 DEFAULT_CASE = Path("docs/schemas/examples/06_assessment.json")
-SEED = 20261023  # 盲評的 A／B／C 順序固定，重跑結果一樣
 
 
 @dataclass
@@ -104,23 +100,6 @@ def write_stats(trials: list[Trial], out: Path) -> None:
     (out / "stats.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
-def write_blind_review(trials: list[Trial], out: Path) -> None:
-    rng = random.Random(SEED)
-    lines = ["# 報告文字盲評", "", "每一題請就「長輩讀不讀得懂」「措辭合不合理」給 1～5 分，並寫下覺得不妥的句子。", ""]
-    key: dict[str, dict[str, str]] = {}
-    for case in dict.fromkeys(t.case for t in trials):
-        candidates = [t for t in trials if t.case == case and t.run == 1 and t.output is not None]
-        rng.shuffle(candidates)
-        key[case] = {}
-        lines += [f"## {case}", ""]
-        for label, trial in zip("ABCDEFGH", candidates, strict=False):
-            key[case][label] = trial.model
-            lines += [f"### 版本 {label}", ""] + [f"- {item.text}" for item in trial.output.items] + [""]
-            lines += ["易讀（1–5）：____　措辭合理（1–5）：____　意見：", ""]
-    (out / "blind_review.md").write_text("\n".join(lines), encoding="utf-8")
-    (out / "blind_key.json").write_text(json.dumps(key, ensure_ascii=False, indent=2), encoding="utf-8")
-
-
 def parse_route(text: str) -> Route:
     model, sep, provider = text.rpartition("@")
     if not sep or not model or not provider:
@@ -159,7 +138,6 @@ def main(argv: list[str] | None = None) -> int:
                     log.write(json.dumps(record, ensure_ascii=False) + "\n")
                     print(f"{route.model} {case_name} #{run}：{'模板' if trial.fell_back else f'第 {trial.attempts} 次通過'}")
     write_stats(trials, args.out)
-    write_blind_review(trials, args.out)
     print(f"結果在 {args.out}")
     return 0
 
