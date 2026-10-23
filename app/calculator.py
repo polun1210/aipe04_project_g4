@@ -3,7 +3,8 @@
 昊昀的真版本好了之後，只要換掉 get_calculator 回傳的實作，網址與前端都不用改。
 真版本需要的輸入輸出就是這兩個函式的簽名；FakeCalculator 只做「整條能通」所需的最少事情：
   - verify_product：只做份數乘法，不做單位換算與元素量推估（缺元素量的列標為 unknown）
-  - assess：不管輸入，一律回傳 06_assessment 範例（case_id 與版本戳換成這次的）
+  - assess：一律回傳 06_assessment 範例（case_id 與版本戳換成這次的）；
+    只有「含量無法判定」的揭露照這次的個案產生
 所以 FakeCalculator 的數字不可當作正確結果。
 """
 
@@ -13,7 +14,7 @@ from pathlib import Path
 from typing import Protocol
 from uuid import UUID
 
-from app.schemas.assessment import Assessment
+from app.schemas.assessment import Assessment, UndeterminedAmount
 from app.schemas.case import CaseProfile
 from app.schemas.enums import TARGET_NUTRIENTS, ElementalBasis, FrequencyType, ScopeStatus
 from app.schemas.label import (
@@ -122,9 +123,27 @@ class FakeCalculator:
 
     def assess(self, case: CaseProfile) -> Assessment:
         example = Assessment.model_validate_json(_EXAMPLE_ASSESSMENT.read_text(encoding="utf-8"))
+        disclosures = example.disclosures.model_copy(update={"undetermined_amounts": undetermined_amounts(case)})
         return example.model_copy(
-            update={"case_id": case.case_id, "decision_data_version": case.decision_data_version}
+            update={
+                "case_id": case.case_id,
+                "decision_data_version": case.decision_data_version,
+                "disclosures": disclosures,
+            }
         )
+
+
+def undetermined_amounts(case: CaseProfile) -> list[UndeterminedAmount]:
+    """13 項目標營養素裡，含量無法判定（elemental_basis = unknown）的成分列。真版本也可以直接用。
+
+    紅麴、葡萄糖胺、魚油這類允許成分只判有沒有、本來就沒有含量，不算。
+    """
+    return [
+        UndeterminedAmount(product_id=p.product_id, row_id=n.row_id, raw_name=n.raw_name, nutrient_code=n.standard_code)
+        for p in case.supplements
+        for n in p.nutrients
+        if n.standard_code in TARGET_NUTRIENTS and n.elemental_basis is ElementalBasis.UNKNOWN
+    ]
 
 
 @lru_cache(maxsize=1)

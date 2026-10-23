@@ -95,6 +95,7 @@
     "unresolved_ingredients": ["海藻鈣粉"],
     "out_of_scope_drugs": ["Zyloric 100mg"],
     "unresolved_drugs": [],
-    "drug_source_not_counted": ["calcium", "magnesium", "iron"]
+    "drug_source_not_counted": ["calcium", "magnesium", "iron"],
+    "undetermined_amounts": []
   }
 }

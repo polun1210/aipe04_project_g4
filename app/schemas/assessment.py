@@ -102,6 +102,20 @@ class InteractionFinding(FrozenModel):
         return self
 
 
+class UndeterminedAmount(FrozenModel):
+    """範圍內成分，但含量無法判定（elemental_basis = unknown），沒有算進加總與上限比對。
+
+    例如只寫「海藻鈣 500mg」：知道是鈣，但不知道元素鈣有多少。報告要寫出來，不能默默略過。
+    範圍外、無法確認的成分另有 out_of_scope_ingredients／unresolved_ingredients，不放這裡；
+    紅麴這類允許成分只判有沒有、本來就沒有含量，也不放這裡。
+    """
+
+    product_id: UUID
+    row_id: str | None  # 使用者新增的列為 null
+    raw_name: str | None  # 標示原文；使用者新增的列為 null
+    nutrient_code: IngredientCode
+
+
 class Disclosures(FrozenModel):
     """報告固定揭露的範圍資訊。文案在模板，這裡只放資料。"""
 
@@ -117,6 +131,7 @@ class Disclosures(FrozenModel):
     out_of_scope_drugs: list[str]  # raw_name；中性語氣「不在本系統評估範圍」
     unresolved_drugs: list[str]  # raw_name；寫明「無法判斷是否有交互作用」
     drug_source_not_counted: list[IngredientCode]
+    undetermined_amounts: list[UndeterminedAmount]  # 含量無法判定、沒算進上限比對的成分列
 
 
 class Assessment(FrozenModel):

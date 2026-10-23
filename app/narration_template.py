@@ -63,6 +63,9 @@ def _summary(assessment: Assessment, names: dict[IngredientCode, str]) -> str:
     exceeded = [names[n.nutrient_code] for n in assessment.relevant_nutrients if n.ul and n.ul.exceeded]
     if exceeded:
         parts.append(f"{'、'.join(exceeded)}的補充劑攝取已超過上限攝取量，請和醫師或藥師討論。")
+    undetermined = dict.fromkeys(names[u.nutrient_code] for u in assessment.disclosures.undetermined_amounts)
+    if undetermined:
+        parts.append(f"有部分{'、'.join(undetermined)}的含量無法判定，沒有算進上限比對，請詢問藥師。")
     if assessment.disclosures.unresolved_drugs:
         parts.append("有部分藥物無法確認是哪一種，無法判斷是否有交互作用，請詢問藥師。")
     return "".join(parts)
