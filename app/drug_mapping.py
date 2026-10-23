@@ -16,6 +16,11 @@ def _raw_names_of(item: DrugItem) -> list[str]:
     return [item.active_ingredient_code, item.display_name_zh, item.english_name, *item.common_tradenames_tw]
 
 
+def same_drug_name(a: str, b: str) -> bool:
+    """全形半形、大小寫、前後空白不同都算同一個名字。"""
+    return _normalize(a) == _normalize(b)
+
+
 def _names_of(item: DrugItem) -> set[str]:
     return {_normalize(n) for n in _raw_names_of(item)}
 
@@ -59,7 +64,7 @@ def map_confirmed_drug(
     草稿的對照也是後端算的，不是前端送來的。
     改過名、自己新增的列、草稿找不到、或草稿是「無法確認」→ 用 map_drug_name 重新對照。
     """
-    if draft_row is None or _normalize(name) != _normalize(draft_row.raw_name):
+    if draft_row is None or not same_drug_name(name, draft_row.raw_name):
         return map_drug_name(name, drug_items, dose_mg, times_per_day)
     if draft_row.scope_status is ScopeStatus.OUT_OF_SCOPE:
         return SelectedDrug(

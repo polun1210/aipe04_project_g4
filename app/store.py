@@ -12,7 +12,7 @@ from uuid import UUID
 from app.schemas.assessment import Assessment
 from app.schemas.case import AccountProfile, CaseProfile
 from app.schemas.common import ExclusiveSelection
-from app.schemas.drug_label import DrugDraft
+from app.schemas.drug_label import DrugCorrection, DrugDraft
 from app.schemas.enums import ConditionCode, Sex
 from app.schemas.label import ExtractionDraft, LabelCorrection, VerifiedProduct
 from app.schemas.report import Report
@@ -48,6 +48,8 @@ class Store(Protocol):
 
     def save_label_corrections(self, user_id: UUID, corrections: list[LabelCorrection]) -> None: ...
 
+    def save_drug_corrections(self, user_id: UUID, corrections: list[DrugCorrection]) -> None: ...
+
     def get_case(self, user_id: UUID, case_id: UUID) -> tuple[CaseProfile, Assessment] | None:
         """不存在或不屬於這個使用者都回 None。"""
         ...
@@ -70,6 +72,7 @@ class InMemoryStore:
         self.drug_drafts: list[tuple[UUID, DrugDraft]] = []
         self.supplement_drafts: list[tuple[UUID, ExtractionDraft]] = []
         self.label_corrections: list[tuple[UUID, LabelCorrection]] = []
+        self.drug_corrections: list[tuple[UUID, DrugCorrection]] = []
         self._reports: list[tuple[UUID, Report]] = []
 
     def save_product(self, product: VerifiedProduct) -> None:
@@ -106,6 +109,9 @@ class InMemoryStore:
 
     def save_label_corrections(self, user_id: UUID, corrections: list[LabelCorrection]) -> None:
         self.label_corrections += [(user_id, c) for c in corrections]
+
+    def save_drug_corrections(self, user_id: UUID, corrections: list[DrugCorrection]) -> None:
+        self.drug_corrections += [(user_id, c) for c in corrections]
 
     def get_case(self, user_id: UUID, case_id: UUID) -> tuple[CaseProfile, Assessment] | None:
         return next(

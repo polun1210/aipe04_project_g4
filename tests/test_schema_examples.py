@@ -11,7 +11,7 @@ from app.schemas.api import ErrorResponse
 from app.schemas.assessment import Assessment
 from app.schemas.case import AssessmentRequest, CaseProfile
 from app.schemas.csv_io import load_csv
-from app.schemas.drug_label import DrugDraft
+from app.schemas.drug_label import DrugCorrection, DrugDraft
 from app.schemas.label import ExtractionDraft, LabelCorrection, VerificationSubmission
 from app.schemas.narration import BANNED_PHRASES, NarrationOutput
 from app.schemas.report import Report, ReportDrug
@@ -24,6 +24,7 @@ JSON_EXAMPLES: dict[str, TypeAdapter] = {
     "04_drug_draft.json": TypeAdapter(DrugDraft),
     "05a_verification_submission.json": TypeAdapter(VerificationSubmission),
     "05b_label_corrections.json": TypeAdapter(list[LabelCorrection]),
+    "05c_drug_corrections.json": TypeAdapter(list[DrugCorrection]),
     "case_profile.json": TypeAdapter(CaseProfile),
     "06_assessment.json": TypeAdapter(Assessment),
     "07_narration_output.json": TypeAdapter(NarrationOutput),

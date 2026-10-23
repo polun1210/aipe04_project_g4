@@ -4,6 +4,7 @@
 複方藥對照到目錄中的一個複方品項，所以一列草稿只有一個 active_ingredient_code。
 """
 
+from datetime import datetime
 from uuid import UUID
 
 from pydantic import Field, model_validator
@@ -11,7 +12,7 @@ from pydantic import Field, model_validator
 from app.schemas.catalog import Code
 from app.schemas.common import BoundingBox, StrictModel
 from app.schemas.case import SelectedDrug
-from app.schemas.enums import DrugClassCode, ScopeStatus
+from app.schemas.enums import CorrectionType, DrugClassCode, ScopeStatus
 from app.schemas.label import ExtractionMeta, SourceImage, check_unique_rows
 
 
@@ -45,6 +46,34 @@ class DrugDraft(StrictModel):
     @model_validator(mode="after")
     def _unique_rows(self) -> "DrugDraft":
         check_unique_rows([r.row_id for r in self.rows])
+        return self
+
+
+class DrugCorrection(StrictModel):
+    """藥名校對的修正紀錄（05c），送出評估時後端比對藥包草稿與確認的藥名產生。藥包辨識準確率的來源。
+
+    field_path 格式：rows.<row_id>.name（改名）／ rows.<row_id>（整列刪除）／ rows.new<n>（使用者新增）
+    只比對有送出藥名的草稿；某一批的藥被全部刪掉時，前端沒送那份草稿的編號，後端無從得知，不會產生 removed。
+    """
+
+    case_id: UUID  # 哪一次評估送出的
+    draft_id: UUID | None  # 使用者新增的藥為 null
+    field_path: str
+    correction_type: CorrectionType
+    model_value: str | None  # 草稿原文；新增為 null
+    corrected_value: str | None  # 使用者確認的藥名；刪除為 null
+    # 辨識版本取自該份草稿；新增的藥不屬於任何草稿，三者都是 null
+    ocr_version: str | None
+    rule_layer_version: str | None
+    synonym_table_version: str | None
+    corrected_at: datetime
+
+    @model_validator(mode="after")
+    def _added_has_no_draft(self) -> "DrugCorrection":
+        added = self.correction_type is CorrectionType.ADDED
+        versions = (self.ocr_version, self.rule_layer_version, self.synonym_table_version)
+        if added != (self.draft_id is None) or (added != all(v is None for v in versions)):
+            raise ValueError("只有新增的藥沒有 draft_id 與辨識版本，其他一定要有")
         return self
 
 
