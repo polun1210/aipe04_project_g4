@@ -10,6 +10,7 @@ from app.calculator import FakeCalculator, get_calculator
 from app.main import create_app
 from app.schemas.assessment import Assessment
 from app.schemas.case import AccountProfile, CaseProfile, age_on
+from app.schemas.drug_label import DrugDraft
 from app.schemas.label import VerificationSubmission, VerifiedProduct
 from app.store import TEST_USER_ID, InMemoryStore, get_store
 
@@ -263,3 +264,56 @@ def test_assessment_calculator_failure_returns_internal_error_without_leaking(cl
     assert response.status_code == 500
     assert response.json()["error"]["code"] == "internal_error"
     assert "secret" not in response.text
+
+
+def _client_with_drug_draft(owner: UUID):
+    """存一份藥包草稿：原文是整串（含劑量），辨識時已用商品名對到 atorvastatin。"""
+    app = create_app()
+    spy = SpyCalculator(FakeCalculator())
+    store = InMemoryStore()
+    draft = DrugDraft.model_validate(
+        {
+            **_example("04_drug_draft.json"),
+            "rows": [
+                {"row_id": "d01", "raw_name": "立普妥膜衣錠 10毫克", "source_image_id": "img-01",
+                 "active_ingredient_code": "atorvastatin", "scope_status": "in_scope"}
+            ],
+        }
+    )
+    store.save_drug_draft(owner, draft)
+    app.dependency_overrides[get_store] = lambda: store
+    app.dependency_overrides[get_calculator] = lambda: spy
+    return TestClient(app, raise_server_exceptions=False), spy, draft
+
+
+def _request_with_drug(product_id: str, draft: DrugDraft, name: str) -> dict:
+    drug = {"draft_id": str(draft.draft_id), "row_id": "d01", "name": name}
+    return {"drugs": {"selected": [drug], "none_selected": False}, "product_ids": [product_id]}
+
+
+def test_assessment_unchanged_drug_name_reuses_draft_mapping():
+    test_client, spy, draft = _client_with_drug_draft(TEST_USER_ID)
+    body = _request_with_drug(_create_product(test_client), draft, "立普妥膜衣錠 10毫克")
+    assert test_client.post("/api/assessments", json=body).status_code == 200
+    [drug] = spy.cases[0].drugs.selected
+    assert (drug.raw_name, drug.scope_status, drug.active_ingredient_code) == (
+        "立普妥膜衣錠 10毫克",
+        "in_scope",
+        "atorvastatin",
+    )
+
+
+def test_assessment_renamed_drug_is_remapped_not_taken_from_draft():
+    test_client, spy, draft = _client_with_drug_draft(TEST_USER_ID)
+    body = _request_with_drug(_create_product(test_client), draft, "完全亂打的藥")
+    test_client.post("/api/assessments", json=body)
+    [drug] = spy.cases[0].drugs.selected
+    assert drug.scope_status == "unresolved"
+
+
+def test_assessment_ignores_other_users_drug_draft():
+    test_client, spy, draft = _client_with_drug_draft(uuid4())
+    body = _request_with_drug(_create_product(test_client), draft, "立普妥膜衣錠 10毫克")
+    test_client.post("/api/assessments", json=body)
+    [drug] = spy.cases[0].drugs.selected
+    assert drug.scope_status == "unresolved"

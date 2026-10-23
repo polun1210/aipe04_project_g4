@@ -27,7 +27,7 @@ def age_band_for(age: int) -> AgeBand:
 
 
 class ConfirmedDrug(StrictModel):
-    """校對頁鎖定後的一筆藥。只送藥名文字，不送對照結果（後端重新對照）。"""
+    """校對頁鎖定後的一筆藥。只送藥名文字，不送對照結果（後端自己對照）。"""
 
     draft_id: UUID | None = None  # 來自哪份藥包草稿；使用者自己新增的列為 null
     row_id: str | None = None  # 草稿原本的 row_id；使用者自己新增的列為 null
@@ -94,7 +94,7 @@ def check_drug_scope_fields(
 
 
 class SelectedDrug(FrozenModel):
-    """使用者確認的藥名 ＋ 後端凍結當下重新對照的結果。"""
+    """使用者確認的藥名 ＋ 後端凍結當下的對照結果。"""
 
     raw_name: str  # 使用者確認後的藥名文字
     scope_status: ScopeStatus

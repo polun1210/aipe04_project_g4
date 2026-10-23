@@ -22,7 +22,8 @@ class DrugDraftRow(StrictModel):
     source_image_id: str
     bbox: BoundingBox | None = None
     extraction_confidence: float | None = Field(default=None, ge=0, le=1)
-    # 藥名對照結果，僅供校對頁預填；送出評估時後端會重新對照，不採用這裡的值
+    # 藥名對照結果。送出評估時，使用者沒改藥名就沿用這裡（後端存的那份草稿，不信前端送來的）；
+    # 改過名就重新對照。見 app/drug_mapping.py 的 map_confirmed_drug
     active_ingredient_code: Code | None = None
     scope_status: ScopeStatus
 

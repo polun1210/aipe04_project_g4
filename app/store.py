@@ -36,6 +36,10 @@ class Store(Protocol):
 
     def save_drug_draft(self, user_id: UUID, draft: DrugDraft) -> None: ...
 
+    def get_drug_draft(self, user_id: UUID, draft_id: UUID) -> DrugDraft | None:
+        """不存在或不屬於這個使用者都回 None。"""
+        ...
+
     def save_supplement_draft(self, user_id: UUID, draft: ExtractionDraft) -> None: ...
 
     def get_supplement_draft(self, user_id: UUID, product_id: UUID) -> ExtractionDraft | None:
@@ -90,6 +94,9 @@ class InMemoryStore:
 
     def save_drug_draft(self, user_id: UUID, draft: DrugDraft) -> None:
         self.drug_drafts.append((user_id, draft))
+
+    def get_drug_draft(self, user_id: UUID, draft_id: UUID) -> DrugDraft | None:
+        return next((d for u, d in self.drug_drafts if u == user_id and d.draft_id == draft_id), None)
 
     def save_supplement_draft(self, user_id: UUID, draft: ExtractionDraft) -> None:
         self.supplement_drafts.append((user_id, draft))

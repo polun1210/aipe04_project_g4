@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends
 
 from app.calculator import Calculator, get_calculator
 from app.catalog_source import CatalogSource, get_catalog_source
-from app.drug_mapping import map_drug_name
+from app.drug_mapping import map_confirmed_drug
 from app.errors import ApiError
 from app.schemas.api import ErrorResponse
 from app.schemas.assessment import Assessment
@@ -15,11 +15,13 @@ from app.schemas.case import (
     AssessmentRequest,
     BasicProfileSnapshot,
     CaseProfile,
+    ConfirmedDrug,
     SelectedDrug,
     age_band_for,
     age_on,
 )
 from app.schemas.common import ExclusiveSelection
+from app.schemas.drug_label import DrugDraftRow
 from app.schemas.enums import ErrorCode
 from app.auth import get_current_user_id
 from app.store import Store, get_store
@@ -30,11 +32,23 @@ _UNKNOWN_PRODUCT_MESSAGE = "部分保健食品資料已失效，請重新上傳�
 _VALIDATION_MESSAGE = "送出的資料有欄位需要修正"
 
 
-def _freeze_drugs(request: AssessmentRequest, catalog: CatalogSource) -> ExclusiveSelection[SelectedDrug]:
-    """每個確認的藥名重新對照目錄；認不得的藥是 unresolved，不是錯誤。"""
+def _freeze_drugs(
+    request: AssessmentRequest, catalog: CatalogSource, store: Store, user_id: UUID
+) -> ExclusiveSelection[SelectedDrug]:
+    """每個確認的藥名對照目錄：沒改名沿用草稿的對照，改過名重新對照；認不得的藥是 unresolved，不是錯誤。"""
     drug_items = catalog.load().drug_items
-    selected = [map_drug_name(d.name, drug_items, d.dose_mg, d.times_per_day) for d in request.drugs.selected]
+    selected = [
+        map_confirmed_drug(d.name, _draft_row(store, user_id, d), drug_items, d.dose_mg, d.times_per_day)
+        for d in request.drugs.selected
+    ]
     return ExclusiveSelection[SelectedDrug](selected=selected, none_selected=request.drugs.none_selected)
+
+
+def _draft_row(store: Store, user_id: UUID, drug: ConfirmedDrug) -> DrugDraftRow | None:
+    if drug.draft_id is None:
+        return None
+    draft = store.get_drug_draft(user_id, drug.draft_id)
+    return next((r for r in draft.rows if r.row_id == drug.row_id), None) if draft else None
 
 
 @router.post(
@@ -79,7 +93,7 @@ def create_assessment(
         decision_data_version=_decision_data_version(),
         basic_profile=BasicProfileSnapshot(age=age, sex=account.sex, age_band=age_band_for(age)),
         conditions=account.conditions,
-        drugs=_freeze_drugs(request, catalog),
+        drugs=_freeze_drugs(request, catalog, store, user_id),
         supplements=products,
     )
     assessment = calculator.assess(case)

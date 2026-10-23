@@ -4,7 +4,7 @@ import unicodedata
 
 from app.schemas.case import SelectedDrug
 from app.schemas.catalog import DrugItem
-from app.schemas.drug_label import DrugCandidate
+from app.schemas.drug_label import DrugCandidate, DrugDraftRow
 from app.schemas.enums import ScopeStatus
 
 
@@ -42,6 +42,36 @@ def map_drug_name(
             dose_mg=dose_mg,
             times_per_day=times_per_day,
         )
+    return _in_scope(name, item, dose_mg, times_per_day)
+
+
+def map_confirmed_drug(
+    name: str,
+    draft_row: DrugDraftRow | None,
+    drug_items: list[DrugItem],
+    dose_mg: float | None = None,
+    times_per_day: int | None = None,
+) -> SelectedDrug:
+    """送出評估時的藥名對照。
+
+    使用者沒改藥名（跟草稿原文一樣）→ 沿用辨識時的對照：辨識時有商品名、學名可以比，
+    比只拿整串原文完全比對準（「立普妥膜衣錠 10毫克」整串對不到，但商品名「立普妥」對得到）。
+    草稿的對照也是後端算的，不是前端送來的。
+    改過名、自己新增的列、草稿找不到、或草稿是「無法確認」→ 用 map_drug_name 重新對照。
+    """
+    if draft_row is None or _normalize(name) != _normalize(draft_row.raw_name):
+        return map_drug_name(name, drug_items, dose_mg, times_per_day)
+    if draft_row.scope_status is ScopeStatus.OUT_OF_SCOPE:
+        return SelectedDrug(
+            raw_name=name, scope_status=ScopeStatus.OUT_OF_SCOPE, dose_mg=dose_mg, times_per_day=times_per_day
+        )
+    item = next((i for i in drug_items if i.active_ingredient_code == draft_row.active_ingredient_code), None)
+    if item is None:  # 無法確認，或目錄已經沒有這個品項
+        return map_drug_name(name, drug_items, dose_mg, times_per_day)
+    return _in_scope(name, item, dose_mg, times_per_day)
+
+
+def _in_scope(name: str, item: DrugItem, dose_mg: float | None, times_per_day: int | None) -> SelectedDrug:
     return SelectedDrug(
         raw_name=name,
         scope_status=ScopeStatus.IN_SCOPE,
