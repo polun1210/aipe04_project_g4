@@ -1,8 +1,42 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref, watch } from 'vue'
+import { getCatalog, type Ingredient } from '../api/catalog'
 import type { Report, ReportNutrient } from '../api/reports'
 import { taipeiDateTime } from '../api/reports'
+import type { Unit } from '../api/supplements'
 const props = defineProps<{ report: Report }>()
+const unitLabels: Record<Unit, string> = {
+  mg: '毫克',
+  ug: '微克',
+  g: '公克',
+  kcal: '大卡',
+  iu: '國際單位（IU）',
+  mg_ate: '毫克 α-TE',
+  mg_ne: '毫克 NE',
+  other: '其他單位',
+}
+function unitLabel(unit: string) {
+  return Object.hasOwn(unitLabels, unit) ? unitLabels[unit as Unit] : unit
+}
+const ingredients = ref<Ingredient[]>([])
+const nutrientNames = computed(
+  () => new Map([
+    ...ingredients.value.map((item) => [item.code, item.display_name_zh] as const),
+    ...props.report.nutrients.map((item) => [item.nutrient_code, item.display_name_zh] as const),
+  ]),
+)
+watch(
+  () => props.report.disclosures.drug_source_not_counted.some((code) => !nutrientNames.value.has(code)),
+  async (missingNames) => {
+    if (!missingNames) return
+    try {
+      ingredients.value = (await getCatalog()).ingredients
+    } catch {
+      // 目錄暫時無法取得時保留原代碼，仍顯示完整揭露。
+    }
+  },
+  { immediate: true },
+)
 const severity = { priority: '優先處理', attention: '留意', info: '資訊' }
 const advice: Record<string, string> = {
   separate_timing: '錯開服用',
@@ -74,6 +108,16 @@ function sourceUrl(url: string | null) {
     </section>
     <section aria-labelledby="report-nutrients">
       <h2 id="report-nutrients">② 營養素攝取量與上限比對</h2>
+      <details>
+        <summary>單位說明</summary>
+        <ul>
+          <li>毫克（mg）、微克（ug）與公克（g）是重量單位；大卡（kcal）是熱量單位。</li>
+          <li>國際單位（IU）用於表示生物活性。</li>
+          <li>α-TE 是 α-生育醇當量，用於表示維生素 E 的活性；毫克 α-TE 是其單位。</li>
+          <li>NE 是菸鹼素當量；毫克 NE 是菸鹼素的當量單位。</li>
+          <li>「其他單位」表示後端以 other 標示的單位；未認識的單位代碼會保留原文。</li>
+        </ul>
+      </details>
       <p>補充劑來源與含飲食的建議總攝取量口徑不同，不能直接相減當作缺口。</p>
       <p v-if="!report.nutrients.length">本份報告沒有列出相關營養素。</p>
       <section v-for="nutrient in report.nutrients" :key="nutrient.nutrient_code">
@@ -82,21 +126,21 @@ function sourceUrl(url: string | null) {
         </h3>
         <p>
           補充劑單日峰值：{{ nutrient.peak_intake_from_supplements }}
-          {{ nutrient.unit }}；平均每日：{{ nutrient.average_intake_from_supplements }}
-          {{ nutrient.unit }}
+          {{ unitLabel(nutrient.unit) }}；平均每日：{{ nutrient.average_intake_from_supplements }}
+          {{ unitLabel(nutrient.unit) }}
         </p>
         <p>
           建議總攝取量（含飲食，{{
             nutrient.recommended_total_intake.reference_type.toUpperCase()
-          }}）：{{ nutrient.recommended_total_intake.value }} {{ nutrient.unit }}
+          }}）：{{ nutrient.recommended_total_intake.value }} {{ unitLabel(nutrient.unit) }}
         </p>
         <p v-if="nutrient.ul">
-          上限：{{ nutrient.ul.ul_value }} {{ nutrient.unit }}。{{ ulText(nutrient) }}
+          上限：{{ nutrient.ul.ul_value }} {{ unitLabel(nutrient.unit) }}。{{ ulText(nutrient) }}
         </p>
         <p v-else>{{ ulText(nutrient) }}</p>
         <p v-if="nutrient.intake_from_drugs !== null">
           另列藥品來源：{{ nutrient.intake_from_drugs }}
-          {{ nutrient.unit }}，不納入上述補充劑上限比例。
+          {{ unitLabel(nutrient.unit) }}，不納入上述補充劑上限比例。
         </p>
         <p v-if="nutrient.narration">{{ nutrient.narration }}</p>
       </section>
@@ -147,6 +191,13 @@ function sourceUrl(url: string | null) {
         DRIs 為健康族群參考值，慢性病個別需要請與醫師或藥師討論。
       </p>
       <p v-if="report.disclosures.peak_same_day_assumption">非每日服用產品的峰值採同日服用假設。</p>
+      <p v-if="report.disclosures.drug_source_not_counted.length">
+        下列營養素的藥品來源未納入補充劑上限比例：{{
+          report.disclosures.drug_source_not_counted
+            .map((code) => nutrientNames.get(code) ?? code)
+            .join('、')
+        }}。
+      </p>
       <p v-if="report.disclosures.out_of_scope_ingredients.length">
         不在評估範圍的成分：{{ report.disclosures.out_of_scope_ingredients.join('、') }}
       </p>
