@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref } from 'vue'
-import { onBeforeRouteLeave, useRouter } from 'vue-router'
+import { isNavigationFailure, onBeforeRouteLeave, useRouter } from 'vue-router'
 import { getCatalog, type Ingredient } from '../api/catalog'
 import { errorMessage } from '../api/client'
 import {
@@ -90,7 +90,6 @@ async function submit() {
   if (!canSubmit.value) return
   busy.value = true
   error.value = ''
-  flow.caseId = null
   try {
     const ids: string[] = []
     for (const [index, product] of flow.products.entries()) {
@@ -105,10 +104,25 @@ async function submit() {
       }
       ids.push(product.savedProductId)
     }
-    stage.value = '正在評估…'
-    const result = await createAssessment(medicine.confirmedDrugs, ids)
-    flow.caseId = result.case_id
-    await router.push(`/report/${result.case_id}`)
+    const drugs = medicine.confirmedDrugs
+    const assessmentPayload = JSON.stringify({ drugs, ids })
+    // 評估成功但導航失敗時，僅在輸入相同的情況沿用 caseId。
+    if (!flow.caseId || flow.assessmentPayload !== assessmentPayload) {
+      flow.caseId = null
+      flow.assessmentPayload = null
+      stage.value = '正在評估…'
+      const result = await createAssessment(drugs, ids)
+      flow.caseId = result.case_id
+      flow.assessmentPayload = assessmentPayload
+    }
+    const caseId = flow.caseId
+    const failure = await router.push(`/report/${caseId}`)
+    const route = router.currentRoute.value
+    if (isNavigationFailure(failure) || route.name !== 'report' || route.params.caseId !== caseId) {
+      error.value = '無法前往報告頁，資料已保留，請重試。'
+      return
+    }
+    flow.resetFlow()
   } catch (reason) {
     error.value = errorMessage(reason)
   } finally {
