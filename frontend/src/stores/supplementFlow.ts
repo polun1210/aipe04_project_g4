@@ -55,6 +55,10 @@ function nonnegative(value: Numeric): value is number {
 function emptyValues(): NutrientValues {
   return { choice: '', amount: null, unit: '', form: '', elemental: null }
 }
+// 僅限制此人工校對流程；API 的 Frequency 仍保留歷史資料所需的 as_needed。
+export function isReviewFrequency(value: string): value is Exclude<Frequency, 'as_needed'> {
+  return ['daily', 'alternate_days', 'weekly_n_times', 'cyclic_on_off'].includes(value)
+}
 export function nutrientError(value: NutrientValues, ingredients: Ingredient[]): string {
   if (!value.choice) return '請選擇營養素或評估範圍。'
   const ingredient = ingredients.find((item) => item.code === value.choice)
@@ -80,7 +84,7 @@ export function productReady(product: SupplementProduct, ingredients: Ingredient
     product.name.trim() !== '' &&
     positive(product.servingSize) &&
     !!product.doseUnit &&
-    !!product.frequency &&
+    isReviewFrequency(product.frequency) &&
     positive(product.times) &&
     positive(product.amount) &&
     product.rows.length > 0 &&
@@ -93,6 +97,7 @@ export function productReady(product: SupplementProduct, ingredients: Ingredient
   )
 }
 export function submissionFor(product: SupplementProduct): VerificationSubmission {
+  if (!isReviewFrequency(product.frequency)) throw new Error('請重新選擇有效的服用頻率。')
   return {
     product_name: product.name.trim(),
     serving_info: {
@@ -100,7 +105,7 @@ export function submissionFor(product: SupplementProduct): VerificationSubmissio
       dose_unit: product.doseUnit as DoseUnit,
     },
     user_intake: {
-      frequency_type: product.frequency as Frequency,
+      frequency_type: product.frequency,
       times_per_day: Number(product.times),
       amount_per_time: Number(product.amount),
       days_per_week: product.frequency === 'weekly_n_times' ? Number(product.weekly) : null,
@@ -215,6 +220,19 @@ export const useSupplementFlowStore = defineStore('supplementFlow', () => {
     row.error = nutrientError(row.value, ingredients)
     if (!row.editing && !row.error) row.locked = locked
   }
+  function lockAllRows(ingredients: Ingredient[]) {
+    for (const product of products.value) {
+      for (const row of product.rows) {
+        if (!row.locked && !row.editing) setLocked(row, true, ingredients)
+      }
+    }
+  }
+  function unlockAllRows() {
+    for (const product of products.value) {
+      // 解除鎖定不需通過驗證，讓使用者能重新編輯所有列。
+      for (const row of product.rows) row.locked = false
+    }
+  }
   return {
     products,
     caseId,
@@ -226,5 +244,7 @@ export const useSupplementFlowStore = defineStore('supplementFlow', () => {
     cancelRow,
     saveRow,
     setLocked,
+    lockAllRows,
+    unlockAllRows,
   }
 })
