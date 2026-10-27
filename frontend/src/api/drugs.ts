@@ -4,6 +4,29 @@ import { apiRequest } from './client'
 // UUID 和 datetime 在 JSON 中以字串傳遞，不需要建立特殊物件。
 export type ScopeStatus = 'in_scope' | 'out_of_scope' | 'unresolved'
 
+export interface DrugCandidate {
+  active_ingredient_code: string
+  display_name_zh: string
+  english_name: string
+  matched_name: string
+  drug_class_codes: string[]
+}
+
+export interface DrugLookupResponse {
+  mapped: {
+    raw_name: string
+    scope_status: ScopeStatus
+    active_ingredient_code?: string | null
+    display_name_zh?: string | null
+    drug_class_codes: string[]
+  }
+  candidates: DrugCandidate[]
+}
+
+export function lookupDrug(name: string): Promise<DrugLookupResponse> {
+  return apiRequest<DrugLookupResponse>(`/api/drugs/lookup?${new URLSearchParams({ name })}`)
+}
+
 export interface BoundingBox {
   x: number
   y: number
@@ -54,13 +77,8 @@ export interface DrugDraft {
 // 對照 case.py 的 ConfirmedDrug；來源與劑量各自必須成對。
 export type ConfirmedDrug = {
   name: string
-} & (
-  | { draft_id: string; row_id: string }
-  | { draft_id?: null; row_id?: null }
-) & (
-  | { dose_mg: number; times_per_day: number }
-  | { dose_mg?: null; times_per_day?: null }
-)
+} & ({ draft_id: string; row_id: string } | { draft_id?: null; row_id?: null }) &
+  ({ dose_mg: number; times_per_day: number } | { dose_mg?: null; times_per_day?: null })
 
 // 後端已用 Pydantic 驗證格式；只檢查上傳頁與 Store 實際依賴的欄位。
 export function isUsableDraft(value: unknown, fileCount: number): value is DrugDraft {
