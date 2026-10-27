@@ -131,13 +131,14 @@ export const useSupplementFlowStore = defineStore('supplementFlow', () => {
     caseId.value = null
     assessmentPayload.value = null
   }
-  function addBatch(files: File[], draft: SupplementDraft) {
+  function addBatch(files: File[], draft: SupplementDraft, productName?: string) {
     if (products.value.some((product) => product.id === draft.product_id)) return
     products.value.push({
       id: draft.product_id,
       draft: structuredClone(draft),
       files: [...files],
-      name: draft.product_name ?? '',
+      // 上傳頁提供的名稱帶入校對欄位，原始辨識草稿仍保留，供後續比對。
+      name: productName === undefined ? (draft.product_name ?? '') : productName.trim(),
       servingSize: draft.serving_info.serving_size,
       doseUnit: draft.serving_info.dose_unit ?? '',
       frequency: '',

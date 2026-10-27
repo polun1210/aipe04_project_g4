@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "test:supplement-upload": "node --experimental-vm-modules tests/supplement-upload.test.mjs",
     "test:medicine-flow": "node --experimental-vm-modules tests/medicine-flow.test.mjs",
     "dev": "vite",
     "build": "run-p type-check \"build-only {@}\" --",
