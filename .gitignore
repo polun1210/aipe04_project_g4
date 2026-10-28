@@ -2,29 +2,41 @@
 __pycache__/
 *.pyc
 
-# 每個人本機自己建立的虛擬環境（用 `uv sync` 產生，不進 git）
+# 每個人本機的虛擬環境
 .venv/
 
 # 工具的快取
 .pytest_cache/
 .ruff_cache/
 
-# 密鑰與環境變數（API key 絕不進 repo）。範本檔 .env.example 可以進。
+# 金鑰與環境變數；範本檔可以進 Git
 .env
 .env.*
 !.env.example
 
-# 作業系統與編輯器產生的雜訊
+# 本機 SQLite 資料庫
+*.db
+*.db-*
+*.sqlite
+*.sqlite-*
+*.sqlite3
+*.sqlite3-*
+
+# 前端產生的檔案
+node_modules/
+dist/
+
+# 作業系統與編輯器產生的檔案
 .DS_Store
 Thumbs.db
 .idea/
 .vscode/
 
-# 標示照片：有版權，只留本機，不進 repo
+# 有版權的標示照片，只留本機
 /data/
 
-# 引擎原始回應很大（Cloud Vision 一張約 1 MB），只留本機；repo 只放轉換後的精簡結果，避免拖慢全組 clone
+# 引擎原始回應，只留本機
 tests/fixtures/engine_responses/*/raw/
 
-# Claude Code 每個人自己的設定（共用的 skill 在 .claude/skills/ 會進 git）
+# Claude Code 個人設定
 .claude/settings.local.json
