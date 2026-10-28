@@ -125,6 +125,7 @@ async function submit() {
       error.value = '無法前往報告頁，資料已保留，請重試。'
       return
     }
+    medicine.resetFlow()
     flow.resetFlow()
   } catch (reason) {
     error.value = errorMessage(reason)

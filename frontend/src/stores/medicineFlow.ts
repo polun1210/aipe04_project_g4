@@ -27,6 +27,12 @@ export const useMedicineFlowStore = defineStore('medicineFlow', () => {
   const drugBatches = ref<DrugBatch[]>([])
   const medicines = ref<MedicineRow[]>([])
 
+  // 僅在評估成功且確認已抵達該份報告後清除本輪資料。
+  function resetFlow(): void {
+    drugBatches.value = []
+    medicines.value = []
+  }
+
   const allConfirmed = computed(
     () => medicines.value.length > 0 && medicines.value.every(
       (medicine) => medicine.name.trim() !== '' && !medicine.isEditing && medicine.isLocked,
@@ -144,11 +150,17 @@ export const useMedicineFlowStore = defineStore('medicineFlow', () => {
     medicine.isLocked = locked
   }
 
+  function setAllLocked(locked: boolean): number {
+    for (const medicine of medicines.value) setLocked(medicine, locked)
+    return medicines.value.filter((medicine) => medicine.isLocked !== locked).length
+  }
+
   return {
     drugBatches,
     medicines,
     allConfirmed,
     confirmedDrugs,
+    resetFlow,
     addDrugBatch,
     findDraftRow,
     findSourceFile,
@@ -157,5 +169,6 @@ export const useMedicineFlowStore = defineStore('medicineFlow', () => {
     saveMedicine,
     cancelEditing,
     setLocked,
+    setAllLocked,
   }
 })
