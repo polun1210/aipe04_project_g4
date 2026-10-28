@@ -61,7 +61,9 @@ LLM 的營養素敘述只是有寫才多顯示一句白話；只挑重點寫反�
 - 設定：`NARRATOR_MODEL=anthropic/claude-haiku-5.5`、`NARRATOR_PROVIDER=anthropic`（`.env.example` 已填；`NARRATOR` 預設仍是 `template`，要啟用才改成 `openrouter`）。
   型號用完整 ID，請求固定 `provider.only` 且不允許備援服務商。
 - **檢查器的四捨五入問題已修正**：`app/narration_template.py` 的 `percent()` 原本用 `round()`，遇到 .5 會取偶數（62.5 → 62）；
-  比較之後改成一般四捨五入（62.5 → 63），與提示詞規則 4 一致。上面的比較數字是修正前跑的；待重跑案例 09，確認三個模型的比較結論不變。
+  比較之後改成一般四捨五入（62.5 → 63），與提示詞規則 4 一致。上面的比較數字是修正前跑的。
+  修正後重跑案例 09（3 模型 × 3 次，`docs/w3/narrator-comparison/rerun-09/`）：三個模型 9 次全部一次就通過，寫到 B6 的都是 63%；
+  平均秒數 Haiku 7.6、Luna 14.5、Gemini 18.8，Haiku 仍最快，結論不變。Haiku 仍有 2 次只挑 1～2 個營養素寫。
 - **待處理**：報告頁的上限比例保留一位小數（62.5%），敘述是整數（63%），同一頁數字看起來不完全一樣，之後可統一格式。
 - **固定模板句子與禁用詞未經規則負責人查證**；輸出檢查通過不代表句子內容已被審過。
 - 隱私：判定結果（不含照片）會經 OpenRouter 轉送到 Anthropic；OpenRouter 帳號要關閉「允許拿資料訓練」，隱私說明要交代。
