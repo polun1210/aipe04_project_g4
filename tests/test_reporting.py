@@ -7,7 +7,7 @@ import pytest
 from app.catalog_source import get_catalog_source
 from app.extraction.engines.openrouter import Route
 from app.narration_check import check_narration
-from app.narration_template import TEMPLATE_MODEL, template_narration
+from app.narration_template import TEMPLATE_MODEL, percent, template_narration
 from app.narrator import NarratorError, OpenRouterNarrator
 from app.reporting import MAX_RETRIES, NarratedReporter, condition_names, narrate
 from app.schemas.assessment import Assessment
@@ -150,9 +150,26 @@ def test_check_flags_number_not_in_assessment(assessment):
 
 def test_check_allows_numbers_from_assessment_and_names(assessment):
     vitamin_d = next(n for n in assessment.relevant_nutrients if n.nutrient_code is IngredientCode.VITAMIN_D)
-    pct = round(vitamin_d.ul.ratio * 100)
+    pct = percent(vitamin_d.ul.ratio)
     text = f"維生素D3已達上限的{pct}%，B12、Omega-3 與 COX-2 只是名稱。"
     assert check_narration(_llm_output(assessment, summary=text), assessment).passed
+
+
+@pytest.mark.parametrize(("ratio", "expected"), [(0.625, 63), (0.125, 13), (0.145, 15), (0.624, 62)])
+def test_percent_rounds_half_up(ratio, expected):
+    assert percent(ratio) == expected
+
+
+def test_check_allows_half_up_percent(assessment):
+    nutrients = [
+        n.model_copy(update={"ul": n.ul.model_copy(update={"ratio": 0.625})})
+        if n.nutrient_code is IngredientCode.VITAMIN_D
+        else n
+        for n in assessment.relevant_nutrients
+    ]
+    half = assessment.model_copy(update={"relevant_nutrients": nutrients})
+    text = "維生素D已達上限的63%。"
+    assert check_narration(_llm_output(half, summary=text), half).passed
 
 
 def test_check_flags_banned_phrase(assessment):

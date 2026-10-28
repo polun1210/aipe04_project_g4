@@ -4,6 +4,8 @@
 句子之後換成羿文的模板句子時，只改這個檔，輸出格式（NarrationOutput）不變。
 """
 
+from decimal import ROUND_HALF_UP, Decimal
+
 from app.schemas.assessment import Assessment, InteractionFinding, RelevantNutrient
 from app.schemas.enums import SEVERITY_RANK, ElementalBasis, IngredientCode, NarrationKind, Severity, ULPhrasing
 from app.schemas.narration import NarrationItem, NarrationOutput
@@ -22,7 +24,8 @@ _UL_SENTENCE = {
 
 
 def percent(ratio: float) -> int:
-    return round(ratio * 100)
+    # 一般四捨五入（62.5 → 63），與提示詞一致；內建 round() 遇 .5 會取偶數
+    return int((Decimal(str(ratio)) * 100).quantize(Decimal(1), rounding=ROUND_HALF_UP))
 
 
 def template_narration(
