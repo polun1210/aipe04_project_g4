@@ -150,6 +150,11 @@ export const useMedicineFlowStore = defineStore('medicineFlow', () => {
     medicine.isLocked = locked
   }
 
+  function setAllLocked(locked: boolean): number {
+    for (const medicine of medicines.value) setLocked(medicine, locked)
+    return medicines.value.filter((medicine) => medicine.isLocked !== locked).length
+  }
+
   return {
     drugBatches,
     medicines,
@@ -164,5 +169,6 @@ export const useMedicineFlowStore = defineStore('medicineFlow', () => {
     saveMedicine,
     cancelEditing,
     setLocked,
+    setAllLocked,
   }
 })

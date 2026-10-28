@@ -13,6 +13,7 @@ import {
 import { createAssessment } from '../api/reports'
 import { useMedicineFlowStore } from '../stores/medicineFlow'
 import {
+  isReviewFrequency,
   productReady,
   submissionFor,
   useSupplementFlowStore,
@@ -27,6 +28,8 @@ const catalogBusy = ref(false)
 const error = ref('')
 const busy = ref(false)
 const stage = ref('')
+const nutrientRows = computed(() => flow.products.flatMap((product) => product.rows))
+const lockedCount = computed(() => nutrientRows.value.filter((row) => row.locked).length)
 const urls = new Map<File, string>()
 const previews = flow.products.flatMap((product) =>
   product.draft.source_images.map((image) => {
@@ -140,7 +143,7 @@ onBeforeRouteLeave(() => {
 </script>
 
 <template>
-  <main>
+  <main class="supplement-review">
     <h1>保健食品人工校對</h1>
     <p>資料暫存在本機，重新整理後需要重新上傳。請依原始標示確認每份量及成分。</p>
     <p>目前評估與報告使用後端示範實作及測試帳號，結果不代表你的實際健康評估。</p>
@@ -158,6 +161,28 @@ onBeforeRouteLeave(() => {
     <form @submit.prevent="submit">
       <fieldset :disabled="busy || catalogBusy || !ingredients.length">
         <legend>確認保健食品與實際服用方式</legend>
+        <div v-if="nutrientRows.length" class="bulk-actions" aria-label="本輪營養素鎖定操作">
+          <button
+            type="button"
+            :disabled="lockedCount === nutrientRows.length"
+            @click="flow.lockAllRows(ingredients)"
+          >
+            一鍵鎖定
+          </button>
+          <button type="button" :disabled="lockedCount === 0" @click="flow.unlockAllRows()">
+            全部解除鎖定
+          </button>
+        </div>
+        <p v-if="nutrientRows.length" role="status" aria-live="polite" aria-atomic="true">
+          <template v-if="lockedCount === nutrientRows.length">
+            本輪 {{ lockedCount }} 筆營養素已全部鎖定。
+          </template>
+          <template v-else>
+            已鎖定 {{ lockedCount }} 筆營養素，另有
+            {{ nutrientRows.length - lockedCount }} 筆需要完成校對。
+          </template>
+        </p>
+        <p v-if="nutrientRows.length">一鍵鎖定會跳過編輯中或驗證未通過的營養素，不會送出評估。</p>
         <section
           v-for="(product, index) in flow.products"
           :key="product.id"
@@ -285,7 +310,7 @@ onBeforeRouteLeave(() => {
                 <button type="button" :disabled="row.locked" @click="flow.editRow(row)">
                   編輯
                 </button>
-                <label
+                <label class="lock-label"
                   ><input
                     type="checkbox"
                     :checked="row.locked"
@@ -312,14 +337,39 @@ onBeforeRouteLeave(() => {
           </p>
           <p>
             <label :for="`frequency-${product.id}`">服用頻率</label>
-            <select :id="`frequency-${product.id}`" v-model="product.frequency" required>
+            <select
+              :id="`frequency-${product.id}`"
+              v-model="product.frequency"
+              required
+              :aria-invalid="
+                product.frequency && !isReviewFrequency(product.frequency) ? 'true' : undefined
+              "
+              :aria-describedby="
+                product.frequency && !isReviewFrequency(product.frequency)
+                  ? `frequency-error-${product.id}`
+                  : undefined
+              "
+            >
               <option value="" disabled>請選擇</option>
+              <option
+                v-if="product.frequency && !isReviewFrequency(product.frequency)"
+                :value="product.frequency"
+                disabled
+              >
+                請重新選擇服用頻率
+              </option>
               <option value="daily">每天</option>
               <option value="alternate_days">每兩天</option>
               <option value="weekly_n_times">每週指定天數</option>
               <option value="cyclic_on_off">週期性服用／停用</option>
-              <option value="as_needed">需要時服用（無法量化每日量）</option>
             </select>
+          </p>
+          <p
+            v-if="product.frequency && !isReviewFrequency(product.frequency)"
+            :id="`frequency-error-${product.id}`"
+            role="alert"
+          >
+            原先暫存的服用頻率已不適用，請重新選擇有效的服用頻率後再送出評估。
           </p>
           <p v-if="product.frequency === 'weekly_n_times'">
             <label :for="`weekly-${product.id}`">每週服用幾天</label>
@@ -401,3 +451,39 @@ onBeforeRouteLeave(() => {
     <p v-if="busy" role="status">{{ stage }}</p>
   </main>
 </template>
+
+<style scoped>
+.supplement-review {
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button {
+  min-height: 50px;
+  padding: 0.5rem 1rem;
+}
+
+.bulk-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.lock-label {
+  display: inline-flex;
+  align-items: center;
+  min-height: 50px;
+  gap: 8px;
+}
+
+.lock-label input {
+  width: 24px;
+  height: 24px;
+}
+</style>

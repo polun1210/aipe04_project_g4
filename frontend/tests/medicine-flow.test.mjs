@@ -17,6 +17,7 @@ const context = vm.createContext({
   FormData,
   Headers,
   URL,
+  URLSearchParams,
   crypto,
   structuredClone,
   console,
@@ -49,7 +50,9 @@ async function load(id) {
       const body = ast.statements.filter((statement) => !ts.isImportDeclaration(statement))
       const bindings = id.endsWith('MedicineUploadView.vue')
         ? 'startRecognition, startNextBatch, goToReview, selectedImages, receivedDraft, errorMessages'
-        : 'submit, ingredients, error, canSubmit'
+        : id.endsWith('MedicineReviewView.vue')
+          ? 'setAllLocked, bulkMessage, searchDrug, selectDrug, clearLookup, lookups, saveMedicine, cancelEditing'
+          : 'submit, ingredients, error, canSubmit'
       source = `${imports.map((s) => s.getText(ast)).join('\n')}
         export function setup() {
           ${body.map((s) => s.getText(ast)).join('\n')}
@@ -78,6 +81,7 @@ const { useMedicineFlowStore } = await source('../src/stores/medicineFlow.ts')
 const { useSupplementFlowStore } = await source('../src/stores/supplementFlow.ts')
 const uploadModule = await source('../src/views/MedicineUploadView.vue')
 const reviewModule = await source('../src/views/SupplementReviewView.vue')
+const medicineReviewModule = await source('../src/views/MedicineReviewView.vue')
 const fixture = JSON.parse(
   await readFile(new URL('../../docs/schemas/examples/04_drug_draft.json', import.meta.url)),
 )
@@ -297,4 +301,137 @@ test('invalid recognition response preserves the current round and retry images'
   assert.equal(upload.selectedImages.value.length, 1)
   assert.equal(upload.receivedDraft.value, null)
   assert.equal(upload.errorMessages.value.length, 1)
+})
+
+test('bulk controls lock eligible rows across batches and skip blank/editing rows without submitting', () => {
+  addBatch('A')
+  addBatch('B')
+  const original = JSON.stringify(medicine.drugBatches.map((batch) => batch.draft))
+  const editing = medicine.medicines[0]
+  medicine.startEditing(editing)
+  editing.draftName = 'unsaved change'
+  medicine.medicines[1].name = '  '
+  medicine.addMedicine()
+  const review = medicineReviewModule.setup()
+  review.setAllLocked(true)
+  assert.match(review.bulkMessage.value, /3 筆無法鎖定/)
+  assert.equal(editing.name, fixture.rows[0].raw_name)
+  assert.equal(editing.draftName, 'unsaved change')
+  assert.equal(editing.isEditing, true)
+  assert.equal(medicine.allConfirmed, false)
+  assert.equal(medicine.confirmedDrugs.length, 0)
+  assert.ok(medicine.medicines.slice(2, -1).every((row) => row.isLocked))
+  review.setAllLocked(false)
+  assert.ok(medicine.medicines.every((row) => !row.isLocked))
+  assert.equal(JSON.stringify(medicine.drugBatches.map((batch) => batch.draft)), original)
+  assert.equal(calls.length, 0)
+})
+
+test('bulk lock confirms valid manual rows and unlock revokes submission readiness', () => {
+  medicine.addMedicine()
+  const row = medicine.medicines[0]
+  row.draftName = '阿斯匹靈'
+  medicine.saveMedicine(row)
+  medicine.setAllLocked(true)
+  assert.equal(medicine.allConfirmed, true)
+  assert.equal(medicine.confirmedDrugs[0].name, '阿斯匹靈')
+  medicine.startEditing(row)
+  assert.equal(row.isEditing, false)
+  medicine.setAllLocked(false)
+  assert.equal(medicine.allConfirmed, false)
+  assert.equal(medicine.confirmedDrugs.length, 0)
+  assert.equal(calls.length, 0)
+})
+
+const lookupResponse = {
+  mapped: {
+    raw_name: '立普妥',
+    scope_status: 'in_scope',
+    active_ingredient_code: 'atorvastatin',
+    drug_class_codes: [],
+  },
+  candidates: [
+    {
+      active_ingredient_code: 'atorvastatin',
+      display_name_zh: '阿托伐他汀',
+      english_name: 'Atorvastatin',
+      matched_name: '立普妥',
+      drug_class_codes: [],
+    },
+  ],
+}
+
+test('lookup uses API candidates; selection preserves OCR and source; assessment payload contains name only', async () => {
+  addBatch('A')
+  const row = medicine.medicines[0]
+  const original = JSON.stringify(medicine.drugBatches[0].draft)
+  medicine.startEditing(row)
+  row.draftName = '立普妥'
+  request = async (path) => {
+    calls.push({ path })
+    return Response.json(lookupResponse)
+  }
+  const review = medicineReviewModule.setup()
+  await review.searchDrug(row)
+  assert.equal(calls[0].path, `/api/drugs/lookup?${new URLSearchParams({ name: '立普妥' })}`)
+  review.selectDrug(row, { target: { value: 'atorvastatin' } })
+  assert.equal(row.draftName, '阿托伐他汀')
+  assert.equal(row.name, fixture.rows[0].raw_name)
+  assert.equal(row.isLocked, false)
+  review.saveMedicine(row)
+  medicine.setAllLocked(true)
+  const confirmed = medicine.confirmedDrugs[0]
+  assert.equal(confirmed.name, '阿托伐他汀')
+  assert.equal(confirmed.draft_id, 'A')
+  assert.equal(confirmed.row_id, fixture.rows[0].row_id)
+  assert.equal('scope_status' in confirmed, false)
+  assert.equal('active_ingredient_code' in confirmed, false)
+  assert.equal(JSON.stringify(medicine.drugBatches[0].draft), original)
+  assert.ok(calls.every((call) => call.path.startsWith('/api/drugs/lookup?')))
+})
+
+test('lookup ignores superseded responses and input changes; cancellation does not save', async () => {
+  medicine.addMedicine()
+  const row = medicine.medicines[0]
+  const review = medicineReviewModule.setup()
+  const pending = []
+  request = () => new Promise((resolve) => pending.push(resolve))
+  row.draftName = 'old'
+  const oldSearch = review.searchDrug(row)
+  row.draftName = 'new'
+  review.clearLookup(row)
+  const newSearch = review.searchDrug(row)
+  pending[1](Response.json({ mapped: { scope_status: 'unresolved' }, candidates: [] }))
+  await newSearch
+  pending[0](Response.json(lookupResponse))
+  await oldSearch
+  assert.equal(review.lookups.value[row.id].result.candidates.length, 0)
+  assert.equal(row.draftName, 'new')
+  const lateSearch = review.searchDrug(row)
+  review.cancelEditing(row)
+  pending[2](Response.json(lookupResponse))
+  await lateSearch
+  assert.equal(medicine.medicines.length, 0)
+  assert.equal(review.lookups.value[row.id], undefined)
+})
+
+test('lookup failures keep manual input and permit retry; empty names never query', async () => {
+  medicine.addMedicine()
+  const row = medicine.medicines[0]
+  const review = medicineReviewModule.setup()
+  await review.searchDrug(row)
+  assert.equal(calls.length, 0)
+  row.draftName = '未知藥名'
+  request = async () => {
+    throw new Error('offline')
+  }
+  await review.searchDrug(row)
+  assert.ok(review.lookups.value[row.id].error)
+  assert.equal(row.draftName, '未知藥名')
+  request = async () => Response.json({ mapped: { scope_status: 'unresolved' }, candidates: [] })
+  await review.searchDrug(row)
+  assert.equal(review.lookups.value[row.id].error, '')
+  assert.equal(review.lookups.value[row.id].result.mapped.scope_status, 'unresolved')
+  review.saveMedicine(row)
+  assert.equal(row.name, '未知藥名')
 })
