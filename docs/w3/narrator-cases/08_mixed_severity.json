@@ -1,0 +1,133 @@
+{
+  "case_id": "c0000000-0000-4000-8000-000000000008",
+  "decision_data_version": "seed-2026w40.1",
+  "relevant_nutrients": [],
+  "interactions": [
+    {
+      "ingredient_code": "red_yeast_rice",
+      "severity": "priority",
+      "requires_professional_review": true,
+      "user_has_supplement": true,
+      "matched_product_ids": [
+        "a1000000-0000-4000-8000-000000000001"
+      ],
+      "triggers": [
+        {
+          "rule_id": "R-0012",
+          "condition_type": "drug_class",
+          "condition_code": "statin",
+          "interaction_type": "pharmacodynamic",
+          "severity": "priority",
+          "advice_code": "consult_before_combining",
+          "separation_hours": null,
+          "reason_zh": "紅麴所含成分與此類藥物的作用機轉相同，併用可能增加肌肉不良反應的風險",
+          "citation_ids": [
+            "cit-0001"
+          ]
+        }
+      ]
+    },
+    {
+      "ingredient_code": "glucosamine",
+      "severity": "attention",
+      "requires_professional_review": false,
+      "user_has_supplement": true,
+      "matched_product_ids": [
+        "a1000000-0000-4000-8000-000000000002"
+      ],
+      "triggers": [
+        {
+          "rule_id": "R-0040",
+          "condition_type": "drug_class",
+          "condition_code": "insulin",
+          "interaction_type": "pharmacodynamic",
+          "severity": "attention",
+          "advice_code": "inform_provider",
+          "separation_hours": null,
+          "reason_zh": "葡萄糖胺可能影響血糖控制，使用胰島素者應告知醫師",
+          "citation_ids": [
+            "cit-0006"
+          ]
+        }
+      ]
+    },
+    {
+      "ingredient_code": "omega_3",
+      "severity": "info",
+      "requires_professional_review": false,
+      "user_has_supplement": true,
+      "matched_product_ids": [
+        "a1000000-0000-4000-8000-000000000003"
+      ],
+      "triggers": [
+        {
+          "rule_id": "R-0045",
+          "condition_type": "drug_class",
+          "condition_code": "acei_arb",
+          "interaction_type": "pharmacodynamic",
+          "severity": "info",
+          "advice_code": "inform_provider",
+          "separation_hours": null,
+          "reason_zh": "魚油可能有輕微降血壓作用，與降血壓藥併用時可留意血壓變化",
+          "citation_ids": [
+            "cit-0007"
+          ]
+        }
+      ]
+    }
+  ],
+  "disclosures": {
+    "covered_known_conditions": [
+      "hypertension",
+      "t2dm",
+      "dyslipidemia",
+      "chronic_arthritis",
+      "chronic_insomnia"
+    ],
+    "covered_drug_classes": [
+      "thiazide_diuretic",
+      "acei_arb",
+      "ccb",
+      "biguanide",
+      "insulin",
+      "sglt2",
+      "statin",
+      "ezetimibe",
+      "cox2_inhibitor",
+      "acetaminophen",
+      "glucosamine_rx",
+      "bzd_zdrug",
+      "melatonin_rx",
+      "ppi",
+      "h2ra",
+      "antacid_laxative"
+    ],
+    "covered_nutrients": [
+      "calcium",
+      "magnesium",
+      "iron",
+      "zinc",
+      "potassium",
+      "vitamin_d",
+      "vitamin_e",
+      "vitamin_b12",
+      "folate",
+      "niacin",
+      "vitamin_c",
+      "vitamin_b6",
+      "selenium"
+    ],
+    "known_conditions_none": false,
+    "drugs_none": false,
+    "healthy_population_caveat": true,
+    "peak_same_day_assumption": false,
+    "out_of_scope_ingredients": [
+      "葉黃素(金盞花萃取物)"
+    ],
+    "unresolved_ingredients": [],
+    "out_of_scope_drugs": [],
+    "unresolved_drugs": [],
+    "drug_source_not_counted": [],
+    "undetermined_amounts": []
+  }
+}

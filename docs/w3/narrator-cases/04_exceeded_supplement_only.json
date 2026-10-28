@@ -1,0 +1,126 @@
+{
+  "case_id": "c0000000-0000-4000-8000-000000000004",
+  "decision_data_version": "seed-2026w40.1",
+  "relevant_nutrients": [
+    {
+      "nutrient_code": "magnesium",
+      "is_supplemented": true,
+      "triggered_by_drug": false,
+      "peak_intake_from_supplements": 400,
+      "average_intake_from_supplements": 400,
+      "intake_from_drugs": null,
+      "unit": "mg",
+      "basis": "estimated",
+      "recommended_total_intake": {
+        "reference_type": "rda",
+        "value": 360
+      },
+      "ul": {
+        "ul_value": 350,
+        "ratio": 1.143,
+        "exceeded": true,
+        "scope": "supplement_only",
+        "phrasing": "exceeded_supplement_only"
+      }
+    },
+    {
+      "nutrient_code": "zinc",
+      "is_supplemented": true,
+      "triggered_by_drug": false,
+      "peak_intake_from_supplements": 22,
+      "average_intake_from_supplements": 22,
+      "intake_from_drugs": null,
+      "unit": "mg",
+      "basis": "label_stated",
+      "recommended_total_intake": {
+        "reference_type": "rda",
+        "value": 15
+      },
+      "ul": {
+        "ul_value": 35,
+        "ratio": 0.629,
+        "exceeded": false,
+        "scope": "total_intake",
+        "phrasing": "percent_total_intake"
+      }
+    }
+  ],
+  "interactions": [
+    {
+      "ingredient_code": "zinc",
+      "severity": "info",
+      "requires_professional_review": false,
+      "user_has_supplement": true,
+      "matched_product_ids": [
+        "a1000000-0000-4000-8000-000000000001"
+      ],
+      "triggers": [
+        {
+          "rule_id": "R-0030",
+          "condition_type": "drug_class",
+          "condition_code": "ppi",
+          "interaction_type": "drug_affects_nutrient",
+          "severity": "info",
+          "advice_code": "inform_provider",
+          "separation_hours": null,
+          "reason_zh": "長期使用此類胃藥可能降低鋅的吸收",
+          "citation_ids": [
+            "cit-0004"
+          ]
+        }
+      ]
+    }
+  ],
+  "disclosures": {
+    "covered_known_conditions": [
+      "hypertension",
+      "t2dm",
+      "dyslipidemia",
+      "chronic_arthritis",
+      "chronic_insomnia"
+    ],
+    "covered_drug_classes": [
+      "thiazide_diuretic",
+      "acei_arb",
+      "ccb",
+      "biguanide",
+      "insulin",
+      "sglt2",
+      "statin",
+      "ezetimibe",
+      "cox2_inhibitor",
+      "acetaminophen",
+      "glucosamine_rx",
+      "bzd_zdrug",
+      "melatonin_rx",
+      "ppi",
+      "h2ra",
+      "antacid_laxative"
+    ],
+    "covered_nutrients": [
+      "calcium",
+      "magnesium",
+      "iron",
+      "zinc",
+      "potassium",
+      "vitamin_d",
+      "vitamin_e",
+      "vitamin_b12",
+      "folate",
+      "niacin",
+      "vitamin_c",
+      "vitamin_b6",
+      "selenium"
+    ],
+    "known_conditions_none": false,
+    "drugs_none": false,
+    "healthy_population_caveat": true,
+    "peak_same_day_assumption": false,
+    "out_of_scope_ingredients": [],
+    "unresolved_ingredients": [],
+    "out_of_scope_drugs": [],
+    "unresolved_drugs": [],
+    "drug_source_not_counted": [],
+    "undetermined_amounts": []
+  }
+}

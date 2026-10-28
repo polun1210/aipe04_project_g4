@@ -1,0 +1,122 @@
+{
+  "case_id": "c0000000-0000-4000-8000-000000000007",
+  "decision_data_version": "seed-2026w40.1",
+  "relevant_nutrients": [
+    {
+      "nutrient_code": "iron",
+      "is_supplemented": true,
+      "triggered_by_drug": false,
+      "peak_intake_from_supplements": 18,
+      "average_intake_from_supplements": 18,
+      "intake_from_drugs": null,
+      "unit": "mg",
+      "basis": "label_stated",
+      "recommended_total_intake": {
+        "reference_type": "rda",
+        "value": 10
+      },
+      "ul": {
+        "ul_value": 40,
+        "ratio": 0.45,
+        "exceeded": false,
+        "scope": "supplement_only",
+        "phrasing": "percent_supplement_only"
+      }
+    },
+    {
+      "nutrient_code": "magnesium",
+      "is_supplemented": false,
+      "triggered_by_drug": true,
+      "peak_intake_from_supplements": 0,
+      "average_intake_from_supplements": 0,
+      "intake_from_drugs": 301.6,
+      "unit": "mg",
+      "basis": "label_stated",
+      "recommended_total_intake": {
+        "reference_type": "rda",
+        "value": 360
+      },
+      "ul": null
+    }
+  ],
+  "interactions": [
+    {
+      "ingredient_code": "iron",
+      "severity": "attention",
+      "requires_professional_review": false,
+      "user_has_supplement": true,
+      "matched_product_ids": [
+        "a1000000-0000-4000-8000-000000000002"
+      ],
+      "triggers": [
+        {
+          "rule_id": "R-0025",
+          "condition_type": "drug_class",
+          "condition_code": "antacid_laxative",
+          "interaction_type": "absorption",
+          "severity": "attention",
+          "advice_code": "separate_timing",
+          "separation_hours": 2,
+          "reason_zh": "制酸劑會降低鐵的吸收，兩者應錯開服用時間",
+          "citation_ids": [
+            "cit-0005"
+          ]
+        }
+      ]
+    }
+  ],
+  "disclosures": {
+    "covered_known_conditions": [
+      "hypertension",
+      "t2dm",
+      "dyslipidemia",
+      "chronic_arthritis",
+      "chronic_insomnia"
+    ],
+    "covered_drug_classes": [
+      "thiazide_diuretic",
+      "acei_arb",
+      "ccb",
+      "biguanide",
+      "insulin",
+      "sglt2",
+      "statin",
+      "ezetimibe",
+      "cox2_inhibitor",
+      "acetaminophen",
+      "glucosamine_rx",
+      "bzd_zdrug",
+      "melatonin_rx",
+      "ppi",
+      "h2ra",
+      "antacid_laxative"
+    ],
+    "covered_nutrients": [
+      "calcium",
+      "magnesium",
+      "iron",
+      "zinc",
+      "potassium",
+      "vitamin_d",
+      "vitamin_e",
+      "vitamin_b12",
+      "folate",
+      "niacin",
+      "vitamin_c",
+      "vitamin_b6",
+      "selenium"
+    ],
+    "known_conditions_none": false,
+    "drugs_none": false,
+    "healthy_population_caveat": true,
+    "peak_same_day_assumption": false,
+    "out_of_scope_ingredients": [],
+    "unresolved_ingredients": [],
+    "out_of_scope_drugs": [],
+    "unresolved_drugs": [],
+    "drug_source_not_counted": [
+      "magnesium"
+    ],
+    "undetermined_amounts": []
+  }
+}

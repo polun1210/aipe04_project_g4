@@ -1,0 +1,101 @@
+{
+  "case_id": "c0000000-0000-4000-8000-000000000010",
+  "decision_data_version": "seed-2026w40.1",
+  "relevant_nutrients": [
+    {
+      "nutrient_code": "niacin",
+      "is_supplemented": true,
+      "triggered_by_drug": false,
+      "peak_intake_from_supplements": 50,
+      "average_intake_from_supplements": 50,
+      "intake_from_drugs": null,
+      "unit": "mg",
+      "basis": "not_applicable",
+      "recommended_total_intake": {
+        "reference_type": "rda",
+        "value": 16
+      },
+      "ul": {
+        "ul_value": 35,
+        "ratio": 1.429,
+        "exceeded": true,
+        "scope": "total_intake",
+        "phrasing": "exceeded_total_intake"
+      }
+    },
+    {
+      "nutrient_code": "vitamin_b6",
+      "is_supplemented": true,
+      "triggered_by_drug": false,
+      "peak_intake_from_supplements": 25,
+      "average_intake_from_supplements": 25,
+      "intake_from_drugs": null,
+      "unit": "mg",
+      "basis": "not_applicable",
+      "recommended_total_intake": {
+        "reference_type": "rda",
+        "value": 1.6
+      },
+      "ul": {
+        "ul_value": 80,
+        "ratio": 0.313,
+        "exceeded": false,
+        "scope": "total_intake",
+        "phrasing": "percent_total_intake"
+      }
+    }
+  ],
+  "interactions": [],
+  "disclosures": {
+    "covered_known_conditions": [
+      "hypertension",
+      "t2dm",
+      "dyslipidemia",
+      "chronic_arthritis",
+      "chronic_insomnia"
+    ],
+    "covered_drug_classes": [
+      "thiazide_diuretic",
+      "acei_arb",
+      "ccb",
+      "biguanide",
+      "insulin",
+      "sglt2",
+      "statin",
+      "ezetimibe",
+      "cox2_inhibitor",
+      "acetaminophen",
+      "glucosamine_rx",
+      "bzd_zdrug",
+      "melatonin_rx",
+      "ppi",
+      "h2ra",
+      "antacid_laxative"
+    ],
+    "covered_nutrients": [
+      "calcium",
+      "magnesium",
+      "iron",
+      "zinc",
+      "potassium",
+      "vitamin_d",
+      "vitamin_e",
+      "vitamin_b12",
+      "folate",
+      "niacin",
+      "vitamin_c",
+      "vitamin_b6",
+      "selenium"
+    ],
+    "known_conditions_none": true,
+    "drugs_none": true,
+    "healthy_population_caveat": false,
+    "peak_same_day_assumption": false,
+    "out_of_scope_ingredients": [],
+    "unresolved_ingredients": [],
+    "out_of_scope_drugs": [],
+    "unresolved_drugs": [],
+    "drug_source_not_counted": [],
+    "undetermined_amounts": []
+  }
+}
