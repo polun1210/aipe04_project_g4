@@ -83,7 +83,7 @@ flowchart TB
 | CatalogSource | `load()`、`load_citations()` | 讀 `docs/schemas/examples/catalog/*.csv` | 讀資料庫 | catalog 區 |
 | Extractor | `check_quality()`、`extract_supplement()`、`extract_drugs()` | 品質一律通過；草稿回範例 | 保健食品接 `app/extraction/engines/openrouter.py`（已寫好）；藥包辨識待寫 | OpenRouter |
 | Calculator | `verify_product()`、`assess()` | 份數換算是真的；判定一律回 `06_assessment` 範例 | 單位換算、元素量推估、規則引擎 | catalog 區（規則表） |
-| Reporter | `build()` | 判定層照抄、補中文名稱與完整出處；敘述用固定模板（`NARRATOR=template`）。`NARRATOR=openrouter` 時改由 LLM 寫，過輸出檢查（`app/narration_check.py`），不合格重試 2 次，再失敗用固定模板 | 模板句子換成羿文的版本；選定 LLM 型號 | LLM 服務 |
+| Reporter | `build()` | 判定層照抄、補中文名稱與完整出處；敘述用固定模板（`NARRATOR=template`）。`NARRATOR=openrouter` 時改由 LLM 寫，過輸出檢查（`app/narration_check.py`），不合格重試 2 次，再失敗用固定模板 | 模板句子換成羿文的版本；LLM 型號已選定 `anthropic/claude-haiku-5.5`（服務商 `anthropic`，見 ADR-0011） | LLM 服務 |
 | Store | 產品、草稿、評估、報告的存取，全部帶 `user_id` | 記憶體（重啟就清空） | 讀寫資料庫 | app 區 |
 
 測試時可以用 `app.dependency_overrides` 換成特製的假版本，例如 `tests/test_api_assessments.py`。
