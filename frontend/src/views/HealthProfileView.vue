@@ -14,7 +14,7 @@ const saving = ref(false)
 const error = ref('')
 const errorSummary = ref<HTMLElement | null>(null)
 const selectionError = computed(() => conditionsError(conditions.value))
-const canSave = computed(() => gateway.available && !saving.value && !selectionError.value)
+const canSave = computed(() => gateway.available && !saving.value)
 
 async function handleSubmit() {
   if (saving.value) return
