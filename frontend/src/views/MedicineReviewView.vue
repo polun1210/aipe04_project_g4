@@ -1,8 +1,14 @@
 <script setup lang="ts">
-import { computed, onUnmounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useMedicineFlowStore, type MedicineRow } from '../stores/medicineFlow'
-import { lookupDrug, type DrugLookupResponse } from '../api/drugs'
+import { getCatalog, type DrugClass } from '../api/catalog'
+import {
+  isMedicineCandidate,
+  medicineSearchUnavailable,
+  useMedicineSearchGateway,
+  type MedicineCandidate,
+} from '../services/medicineSearchGateway'
 import { errorMessage } from '../api/client'
 import ReviewImageGallery from '../components/ReviewImageGallery.vue'
 
@@ -10,10 +16,48 @@ const flow = useMedicineFlowStore()
 const { medicines, allConfirmed } = storeToRefs(flow)
 const bulkMessage = ref('')
 const selectedImageId = ref('')
+const searchGateway = useMedicineSearchGateway()
+const catalogClasses = ref<DrugClass[]>([])
+const catalogLoading = ref(false)
+const catalogError = ref('')
+const drugClasses = ref<Record<string, string>>({})
+const searchTimers = new Map<string, ReturnType<typeof setTimeout>>()
+let disposed = false
+function classFor(medicine: MedicineRow) {
+  return drugClasses.value[medicine.id] ?? medicine.selectedMedicine?.drugClassCode ?? ''
+}
+async function loadClasses() {
+  if (catalogLoading.value) return
+  catalogLoading.value = true
+  catalogError.value = ''
+  try {
+    const result = await getCatalog()
+    if (
+      !Array.isArray(result.drug_classes) ||
+      result.drug_classes.some(
+        (item) =>
+          !item ||
+          typeof item.drug_class_code !== 'string' ||
+          typeof item.display_name_zh !== 'string' ||
+          typeof item.plain_description_zh !== 'string',
+      )
+    )
+      throw new Error('Invalid drug classes')
+    if (!disposed) catalogClasses.value = result.drug_classes
+  } catch (reason) {
+    if (!disposed) catalogError.value = errorMessage(reason)
+  } finally {
+    catalogLoading.value = false
+  }
+}
 const confirmedCount = computed(
   () =>
     medicines.value.filter(
-      (medicine) => medicine.isLocked && !medicine.isEditing && medicine.name.trim() !== '',
+      (medicine) =>
+        medicine.isLocked &&
+        !medicine.isEditing &&
+        !!medicine.selectedMedicine &&
+        medicine.selectedMedicine.name === medicine.name,
     ).length,
 )
 const lookups = ref<
@@ -21,7 +65,10 @@ const lookups = ref<
     string,
     {
       loading: boolean
-      result: DrugLookupResponse | null
+      result: { candidates: MedicineCandidate[] } | null
+      selected: MedicineCandidate | null
+      query: string
+      drugClassCode: string
       error: string
     }
   >
@@ -30,33 +77,101 @@ const lookups = ref<
 function setAllLocked(locked: boolean): void {
   const skipped = flow.setAllLocked(locked)
   bulkMessage.value = skipped
-    ? `有 ${skipped} 筆無法鎖定：請確認藥名非空白，並先儲存或取消編輯，再按「一鍵鎖定」。其他可鎖定的藥品已鎖定。`
+    ? `有 ${skipped} 筆無法鎖定：請先選取正式候選藥品，並儲存或取消編輯，再按「一鍵鎖定」。其他可鎖定的藥品已鎖定。`
     : locked
       ? '全部藥品已鎖定，尚未送出評估。'
       : '全部藥品已解除鎖定。'
 }
 
 function clearLookup(medicine: MedicineRow): void {
+  clearTimeout(searchTimers.get(medicine.id))
+  searchTimers.delete(medicine.id)
   delete lookups.value[medicine.id]
+  medicine.errorMessage = ''
+}
+
+function inputChanged(medicine: MedicineRow) {
+  clearLookup(medicine)
+  if (searchGateway.available && classFor(medicine) && medicine.draftName.trim()) {
+    searchTimers.set(
+      medicine.id,
+      setTimeout(() => {
+        searchTimers.delete(medicine.id)
+        void searchDrug(medicine)
+      }, 300),
+    )
+  }
+}
+function changeClass(medicine: MedicineRow, event: Event) {
+  drugClasses.value[medicine.id] = (event.target as HTMLSelectElement).value
+  inputChanged(medicine)
 }
 
 async function searchDrug(medicine: MedicineRow): Promise<void> {
   const name = medicine.draftName.trim()
-  if (!name || !medicine.isEditing || medicine.isLocked) return
-  lookups.value[medicine.id] = { loading: true, result: null, error: '' }
+  const drugClassCode = classFor(medicine)
+  clearTimeout(searchTimers.get(medicine.id))
+  searchTimers.delete(medicine.id)
+  if (
+    !name ||
+    !drugClassCode ||
+    !catalogClasses.value.some((item) => item.drug_class_code === drugClassCode) ||
+    !medicine.isEditing ||
+    medicine.isLocked ||
+    disposed
+  )
+    return
+  if (
+    lookups.value[medicine.id]?.loading &&
+    lookups.value[medicine.id]?.query === name &&
+    lookups.value[medicine.id]?.drugClassCode === drugClassCode
+  )
+    return
+  lookups.value[medicine.id] = {
+    loading: true,
+    result: null,
+    selected: null,
+    query: name,
+    drugClassCode,
+    error: '',
+  }
   const state = lookups.value[medicine.id]!
+  if (!searchGateway.available) {
+    state.loading = false
+    state.error = medicineSearchUnavailable
+    return
+  }
   try {
-    const result = await lookupDrug(name)
+    const candidates = await searchGateway.search(drugClassCode, name)
     // 修改輸入、重新查詢、儲存或取消後，舊回應不能覆蓋目前資料。
     if (
       lookups.value[medicine.id] === state &&
       medicine.draftName.trim() === name &&
-      medicine.isEditing
+      medicine.isEditing &&
+      classFor(medicine) === drugClassCode &&
+      !disposed
     ) {
-      state.result = result
+      if (
+        !Array.isArray(candidates) ||
+        candidates.some(
+          (item) => !isMedicineCandidate(item) || item.drugClassCode !== drugClassCode,
+        ) ||
+        new Set(candidates.map((item) => item.id)).size !== candidates.length
+      ) {
+        state.error = '搜尋回應無法確認，請重試；未使用候選資料。'
+        return
+      }
+      state.result = { candidates }
     }
   } catch (error) {
-    if (lookups.value[medicine.id] === state) state.error = errorMessage(error)
+    if (
+      lookups.value[medicine.id] === state &&
+      medicine.draftName.trim() === name &&
+      classFor(medicine) === drugClassCode &&
+      medicine.isEditing &&
+      !disposed
+    )
+      state.error = errorMessage(error)
   } finally {
     state.loading = false
   }
@@ -64,23 +179,46 @@ async function searchDrug(medicine: MedicineRow): Promise<void> {
 
 function selectDrug(medicine: MedicineRow, event: Event): void {
   const code = (event.target as HTMLSelectElement).value
-  const candidate = lookups.value[medicine.id]?.result?.candidates.find(
-    (item) => item.active_ingredient_code === code,
+  const candidate = lookups.value[medicine.id]?.result?.candidates.find((item) => item.id === code)
+  const state = lookups.value[medicine.id]
+  if (state && !candidate) state.selected = null
+  if (
+    !candidate ||
+    !state ||
+    state.query !== medicine.draftName.trim() ||
+    candidate.drugClassCode !== classFor(medicine) ||
+    medicine.isLocked ||
+    !medicine.isEditing
   )
-  if (!candidate || medicine.isLocked || !medicine.isEditing) return
-  // 使用目錄可精確對照的中文名；不修改辨識原文，也不傳前端對照結果。
-  medicine.draftName = candidate.display_name_zh
-  clearLookup(medicine)
-  void searchDrug(medicine)
+    return
+  medicine.draftName = candidate.name
+  state.query = candidate.name
+  state.selected = { ...candidate }
+}
+
+function canSave(medicine: MedicineRow): boolean {
+  const state = lookups.value[medicine.id]
+  return (
+    !!state?.selected &&
+    state.selected.name === medicine.draftName.trim() &&
+    state.selected.drugClassCode === classFor(medicine) &&
+    !state.loading &&
+    !medicine.isLocked
+  )
 }
 
 function saveMedicine(medicine: MedicineRow): void {
-  flow.saveMedicine(medicine)
+  if (!canSave(medicine)) {
+    medicine.errorMessage = '請先選擇用藥類別，並從正式搜尋結果選取藥品。'
+    return
+  }
+  flow.saveMedicine(medicine, lookups.value[medicine.id]!.selected!)
   clearLookup(medicine)
 }
 
 function cancelEditing(medicine: MedicineRow): void {
   clearLookup(medicine)
+  delete drugClasses.value[medicine.id]
   flow.cancelEditing(medicine)
 }
 
@@ -127,8 +265,12 @@ const galleryImages = sourceImages.map((image) => ({
 }))
 
 onUnmounted(() => {
+  disposed = true
+  searchTimers.forEach(clearTimeout)
+  lookups.value = {}
   previewUrls.forEach((url) => URL.revokeObjectURL(url))
 })
+onMounted(loadClasses)
 </script>
 
 <template>
@@ -154,7 +296,12 @@ onUnmounted(() => {
         </div>
         <p>儲存只更新本機校對資料；鎖定表示由你確認，尚未送出評估。</p>
         <p>
-          藥名可手動輸入或查詢候選藥名；候選來自後端目前的藥品目錄，未列出不代表範圍外。送出評估時由後端決定對照結果。
+          請先編輯並選擇用藥類別，再輸入藥品名稱搜尋；必須選取實際候選藥品並儲存後，才能鎖定與繼續。辨識原文仍會保留。
+        </p>
+        <p v-if="!searchGateway.available" role="status">{{ medicineSearchUnavailable }}</p>
+        <p v-if="catalogLoading" role="status">正在載入用藥類別…</p>
+        <p v-if="catalogError" role="alert">
+          {{ catalogError }} <button type="button" @click="loadClasses">重試載入用藥類別</button>
         </p>
         <div v-if="medicines.length" class="bulk-controls">
           <button type="button" @click="setAllLocked(true)">一鍵鎖定</button>
@@ -179,12 +326,29 @@ onUnmounted(() => {
             </template>
 
             <form v-if="medicine.isEditing" @submit.prevent="saveMedicine(medicine)">
-              <label :for="`medicine-name-${medicine.id}`">藥名</label>
+              <label :for="`medicine-class-${medicine.id}`">用藥類別</label>
+              <select
+                :id="`medicine-class-${medicine.id}`"
+                :value="classFor(medicine)"
+                :disabled="catalogLoading || !catalogClasses.length"
+                @change="changeClass(medicine, $event)"
+              >
+                <option value="">請先選擇用藥類別</option>
+                <option
+                  v-for="item in catalogClasses"
+                  :key="item.drug_class_code"
+                  :value="item.drug_class_code"
+                >
+                  {{ item.display_name_zh }} — {{ item.plain_description_zh }}
+                </option>
+              </select>
+              <label :for="`medicine-name-${medicine.id}`">藥品名稱</label>
               <input
                 :id="`medicine-name-${medicine.id}`"
                 v-model="medicine.draftName"
                 type="text"
-                @input="clearLookup(medicine)"
+                :disabled="!classFor(medicine)"
+                @input="inputChanged(medicine)"
                 :aria-invalid="medicine.errorMessage ? 'true' : undefined"
                 :aria-describedby="
                   medicine.errorMessage ? `medicine-error-${medicine.id}` : undefined
@@ -192,54 +356,60 @@ onUnmounted(() => {
               />
               <button
                 type="button"
-                :disabled="!medicine.draftName.trim() || lookups[medicine.id]?.loading"
+                :disabled="
+                  !searchGateway.available ||
+                  !classFor(medicine) ||
+                  !medicine.draftName.trim() ||
+                  lookups[medicine.id]?.loading
+                "
                 @click="searchDrug(medicine)"
               >
                 查詢候選藥名
               </button>
               <p v-if="lookups[medicine.id]?.loading" role="status">正在查詢藥名…</p>
               <p v-if="lookups[medicine.id]?.error" role="alert">
-                {{ lookups[medicine.id]?.error }} 請重新查詢，或保留手動輸入的藥名。
+                {{ lookups[medicine.id]?.error }} 可按「查詢候選藥名」重試；不會自動確認輸入文字。
               </p>
               <template v-if="lookups[medicine.id]?.result">
-                <label :for="`medicine-candidates-${medicine.id}`">候選藥名（最多 10 筆）</label>
+                <label :for="`medicine-candidates-${medicine.id}`">候選藥品</label>
                 <select
                   :id="`medicine-candidates-${medicine.id}`"
                   @change="selectDrug(medicine, $event)"
                 >
-                  <option value="">請選擇藥名，或繼續手動輸入</option>
+                  <option value="">請選取實際藥品</option>
                   <option
                     v-for="candidate in lookups[medicine.id]?.result?.candidates"
-                    :key="candidate.active_ingredient_code"
-                    :value="candidate.active_ingredient_code"
+                    :key="candidate.id"
+                    :value="candidate.id"
                   >
-                    {{ candidate.display_name_zh }}／{{ candidate.english_name }}（符合名稱：{{
-                      candidate.matched_name
-                    }}）
+                    {{ candidate.name }}｜規格：{{
+                      candidate.specification || '未提供'
+                    }}｜許可證：{{ candidate.licenseNumber || '未提供' }}
                   </option>
                 </select>
                 <p v-if="!lookups[medicine.id]?.result?.candidates.length">
-                  目前目錄沒有候選藥名，可保留手動輸入；不代表此藥為範圍外。
+                  此類別找不到符合的候選藥品，請修改名稱或類別後重試；未找到不代表範圍外。
                 </p>
-                <p>
-                  輸入名稱對照：{{
-                    lookups[medicine.id]?.result?.mapped.scope_status === 'in_scope'
-                      ? '範圍內'
-                      : lookups[medicine.id]?.result?.mapped.scope_status === 'out_of_scope'
-                        ? '範圍外'
-                        : '無法確認'
-                  }}。若藥名未修改，評估仍沿用後端草稿的辨識對照。
+                <p v-if="canSave(medicine)" role="status">
+                  已選取候選藥品，請確認名稱、規格與許可證後儲存。
                 </p>
               </template>
               <p v-if="medicine.errorMessage" :id="`medicine-error-${medicine.id}`" role="alert">
                 {{ medicine.errorMessage }}
               </p>
-              <button type="submit">儲存</button>
+              <button type="submit" :disabled="!canSave(medicine)">儲存</button>
               <button type="button" @click="cancelEditing(medicine)">取消</button>
             </form>
 
             <div v-else class="review-row-content">
               <strong class="review-row-value">{{ medicine.name }}</strong>
+              <p v-if="medicine.selectedMedicine">
+                規格：{{ medicine.selectedMedicine.specification || '未提供' }}；許可證：{{
+                  medicine.selectedMedicine.licenseNumber || '未提供'
+                }}
+              </p>
+              <p v-else>尚未從正式候選藥品選取，請先編輯。</p>
+              <p v-if="medicine.errorMessage" role="alert">{{ medicine.errorMessage }}</p>
               <div class="review-row-actions">
                 <button
                   type="button"
@@ -251,6 +421,7 @@ onUnmounted(() => {
                 <label>
                   <input
                     type="checkbox"
+                    :disabled="!medicine.selectedMedicine"
                     :checked="medicine.isLocked"
                     @change="flow.setLocked(medicine, ($event.target as HTMLInputElement).checked)"
                   />
@@ -291,7 +462,7 @@ onUnmounted(() => {
 }
 button,
 select {
-  min-height: 44px;
+  min-height: 50px;
 }
 select {
   max-width: 100%;

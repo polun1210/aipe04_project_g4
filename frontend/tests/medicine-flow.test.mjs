@@ -12,6 +12,7 @@ import * as vueRouter from 'vue-router'
 
 let router
 let request
+let officialGateway
 const context = vm.createContext({
   File,
   FormData,
@@ -21,6 +22,8 @@ const context = vm.createContext({
   crypto,
   structuredClone,
   console,
+  setTimeout,
+  clearTimeout,
   fetch: (...args) => request(...args),
 })
 const modules = new Map()
@@ -30,7 +33,12 @@ async function load(id) {
   if (!id.startsWith('file:')) {
     const exports =
       id === 'vue'
-        ? { ...vue, onMounted() {}, onUnmounted() {} }
+        ? {
+            ...vue,
+            inject: (_key, fallback) => officialGateway ?? fallback,
+            onMounted() {},
+            onUnmounted() {},
+          }
         : id === 'pinia'
           ? pinia
           : { ...vueRouter, useRouter: () => router, onBeforeRouteLeave() {} }
@@ -51,7 +59,7 @@ async function load(id) {
       const bindings = id.endsWith('MedicineUploadView.vue')
         ? 'startRecognition, startNextBatch, goToReview, selectedImages, receivedDraft, errorMessages'
         : id.endsWith('MedicineReviewView.vue')
-          ? 'setAllLocked, bulkMessage, searchDrug, selectDrug, clearLookup, lookups, saveMedicine, cancelEditing'
+          ? 'setAllLocked, bulkMessage, searchDrug, selectDrug, clearLookup, lookups, saveMedicine, cancelEditing, catalogClasses, drugClasses, canSave, changeClass, inputChanged'
           : 'submit, ingredients, error, canSubmit'
       source = `${imports.map((s) => s.getText(ast)).join('\n')}
         export function setup() {
@@ -91,7 +99,29 @@ function addBatch(id) {
   medicine.addDrugBatch([file(), file()], { ...structuredClone(fixture), draft_id: id })
 }
 function confirm() {
-  for (const row of medicine.medicines) medicine.setLocked(row, true)
+  for (const row of medicine.medicines) {
+    medicine.startEditing(row)
+    medicine.saveMedicine(row, candidateFor(row.draftName))
+    medicine.setLocked(row, true)
+  }
+}
+// Explicit mock catalog selections for workflow tests; never used by production code.
+function candidateFor(name) {
+  return {
+    id: `test-${name}`,
+    name,
+    drugClassCode: 'statin',
+    specification: '測試規格',
+    licenseNumber: '測試許可證',
+  }
+}
+function searchReview(row) {
+  const review = medicineReviewModule.setup()
+  review.catalogClasses.value = [
+    { drug_class_code: 'statin', display_name_zh: '測試類別', plain_description_zh: '測試' },
+  ]
+  review.drugClasses.value[row.id] = 'statin'
+  return review
 }
 function readyReview() {
   supplement.products.push({
@@ -127,6 +157,15 @@ beforeEach(() => {
   medicine = useMedicineFlowStore()
   supplement = useSupplementFlowStore()
   calls = []
+  officialGateway = {
+    available: true,
+    search: async (drugClassCode, query) => {
+      const response = await request(
+        `/test/official-search?${new URLSearchParams({ drugClassCode, query })}`,
+      )
+      return (await response.json()).candidates
+    },
+  }
   router = {
     currentRoute: vue.ref({ name: 'supplement-review', params: {} }),
     async push(path) {
@@ -146,7 +185,7 @@ test('batches A and B append, preserving edits, lock state, manual rows and sour
   const row = medicine.medicines[0]
   medicine.startEditing(row)
   row.draftName = 'Corrected medicine'
-  medicine.saveMedicine(row)
+  medicine.saveMedicine(row, candidateFor(row.draftName))
   medicine.setLocked(row, true)
   medicine.addMedicine()
   const manual = medicine.medicines.at(-1)
@@ -306,6 +345,10 @@ test('invalid recognition response preserves the current round and retry images'
 test('bulk controls lock eligible rows across batches and skip blank/editing rows without submitting', () => {
   addBatch('A')
   addBatch('B')
+  for (const row of medicine.medicines) {
+    medicine.startEditing(row)
+    medicine.saveMedicine(row, candidateFor(row.draftName))
+  }
   const original = JSON.stringify(medicine.drugBatches.map((batch) => batch.draft))
   const editing = medicine.medicines[0]
   medicine.startEditing(editing)
@@ -331,7 +374,7 @@ test('bulk lock confirms valid manual rows and unlock revokes submission readine
   medicine.addMedicine()
   const row = medicine.medicines[0]
   row.draftName = '阿斯匹靈'
-  medicine.saveMedicine(row)
+  medicine.saveMedicine(row, candidateFor(row.draftName))
   medicine.setAllLocked(true)
   assert.equal(medicine.allConfirmed, true)
   assert.equal(medicine.confirmedDrugs[0].name, '阿斯匹靈')
@@ -352,6 +395,11 @@ const lookupResponse = {
   },
   candidates: [
     {
+      id: 'atorvastatin',
+      name: '阿托伐他汀',
+      drugClassCode: 'statin',
+      specification: '測試規格',
+      licenseNumber: '測試許可證',
       active_ingredient_code: 'atorvastatin',
       display_name_zh: '阿托伐他汀',
       english_name: 'Atorvastatin',
@@ -361,8 +409,12 @@ const lookupResponse = {
   ],
 }
 
-test('lookup uses API candidates; selection preserves OCR and source; assessment payload contains name only', async () => {
+test('official gateway candidates preserve OCR and source; assessment payload contains name only', async () => {
   addBatch('A')
+  for (const other of medicine.medicines.slice(1)) {
+    medicine.startEditing(other)
+    medicine.saveMedicine(other, candidateFor(other.draftName))
+  }
   const row = medicine.medicines[0]
   const original = JSON.stringify(medicine.drugBatches[0].draft)
   medicine.startEditing(row)
@@ -371,9 +423,12 @@ test('lookup uses API candidates; selection preserves OCR and source; assessment
     calls.push({ path })
     return Response.json(lookupResponse)
   }
-  const review = medicineReviewModule.setup()
+  const review = searchReview(row)
   await review.searchDrug(row)
-  assert.equal(calls[0].path, `/api/drugs/lookup?${new URLSearchParams({ name: '立普妥' })}`)
+  assert.equal(
+    calls[0].path,
+    `/test/official-search?${new URLSearchParams({ drugClassCode: 'statin', query: '立普妥' })}`,
+  )
   review.selectDrug(row, { target: { value: 'atorvastatin' } })
   assert.equal(row.draftName, '阿托伐他汀')
   assert.equal(row.name, fixture.rows[0].raw_name)
@@ -387,13 +442,13 @@ test('lookup uses API candidates; selection preserves OCR and source; assessment
   assert.equal('scope_status' in confirmed, false)
   assert.equal('active_ingredient_code' in confirmed, false)
   assert.equal(JSON.stringify(medicine.drugBatches[0].draft), original)
-  assert.ok(calls.every((call) => call.path.startsWith('/api/drugs/lookup?')))
+  assert.ok(calls.every((call) => call.path.startsWith('/test/official-search?')))
 })
 
 test('lookup ignores superseded responses and input changes; cancellation does not save', async () => {
   medicine.addMedicine()
   const row = medicine.medicines[0]
-  const review = medicineReviewModule.setup()
+  const review = searchReview(row)
   const pending = []
   request = () => new Promise((resolve) => pending.push(resolve))
   row.draftName = 'old'
@@ -418,7 +473,7 @@ test('lookup ignores superseded responses and input changes; cancellation does n
 test('lookup failures keep manual input and permit retry; empty names never query', async () => {
   medicine.addMedicine()
   const row = medicine.medicines[0]
-  const review = medicineReviewModule.setup()
+  const review = searchReview(row)
   await review.searchDrug(row)
   assert.equal(calls.length, 0)
   row.draftName = '未知藥名'
@@ -431,7 +486,99 @@ test('lookup failures keep manual input and permit retry; empty names never quer
   request = async () => Response.json({ mapped: { scope_status: 'unresolved' }, candidates: [] })
   await review.searchDrug(row)
   assert.equal(review.lookups.value[row.id].error, '')
-  assert.equal(review.lookups.value[row.id].result.mapped.scope_status, 'unresolved')
+  assert.equal(review.lookups.value[row.id].result.candidates.length, 0)
   review.saveMedicine(row)
-  assert.equal(row.name, '未知藥名')
+  assert.equal(row.name, '')
+  assert.equal(row.isEditing, true)
+  assert.match(row.errorMessage, /選取藥品/)
+  medicine.setAllLocked(true)
+  assert.equal(medicine.allConfirmed, false)
+})
+
+test('OCR text and manually typed names cannot be locked without an actual candidate selection', () => {
+  addBatch('A')
+  medicine.setAllLocked(true)
+  assert.equal(medicine.allConfirmed, false)
+  assert.ok(medicine.medicines.every((row) => !row.isLocked))
+  const row = medicine.medicines[0]
+  medicine.startEditing(row)
+  row.draftName = '只輸入文字'
+  medicine.saveMedicine(row)
+  assert.equal(row.isEditing, true)
+  assert.equal(row.selectedMedicine, null)
+  assert.equal(medicine.confirmedDrugs.length, 0)
+})
+
+test('official search unavailable never calls legacy sample lookup or confirms a name', async () => {
+  officialGateway = {
+    available: false,
+    search: () => {
+      throw new Error('must not search')
+    },
+  }
+  medicine.addMedicine()
+  const row = medicine.medicines[0]
+  row.draftName = '待確認藥品'
+  const review = searchReview(row)
+  await review.searchDrug(row)
+  assert.match(review.lookups.value[row.id].error, /尚未開放/)
+  assert.equal(calls.length, 0)
+  assert.equal(review.canSave(row), false)
+  review.saveMedicine(row)
+  assert.equal(row.name, '')
+})
+
+test('class selection is required; mismatched or malformed candidates never become selectable', async () => {
+  medicine.addMedicine()
+  const row = medicine.medicines[0]
+  row.draftName = '測試'
+  const review = searchReview(row)
+  review.drugClasses.value[row.id] = ''
+  await review.searchDrug(row)
+  assert.equal(calls.length, 0)
+  review.drugClasses.value[row.id] = 'statin'
+  officialGateway.search = async () => [{ ...candidateFor('測試'), drugClassCode: 'wrong-class' }]
+  await review.searchDrug(row)
+  assert.match(review.lookups.value[row.id].error, /無法確認/)
+  assert.equal(review.canSave(row), false)
+  officialGateway.search = async () => [candidateFor('測試')]
+  await review.searchDrug(row)
+  review.selectDrug(row, { target: { value: 'test-測試' } })
+  assert.equal(review.canSave(row), true)
+  review.selectDrug(row, { target: { value: '' } })
+  assert.equal(review.canSave(row), false)
+  review.selectDrug(row, { target: { value: 'test-測試' } })
+  assert.equal(review.canSave(row), true)
+  row.draftName = '改寫文字'
+  review.clearLookup(row)
+  assert.equal(review.canSave(row), false)
+})
+
+test('typing automatically searches the selected class after debounce and keeps rows independent', async () => {
+  medicine.addMedicine()
+  medicine.addMedicine()
+  const [first, second] = medicine.medicines
+  const review = searchReview(first)
+  review.drugClasses.value[second.id] = 'statin'
+  const searches = []
+  officialGateway.search = async (code, query) => {
+    searches.push({ code, query })
+    return [candidateFor(query)]
+  }
+  first.draftName = 'a'
+  review.inputChanged(first)
+  first.draftName = 'ab'
+  review.inputChanged(first)
+  second.draftName = '另一筆'
+  review.inputChanged(second)
+  await new Promise((resolve) => setTimeout(resolve, 340))
+  assert.deepEqual(searches, [
+    { code: 'statin', query: 'ab' },
+    { code: 'statin', query: '另一筆' },
+  ])
+  assert.equal(review.lookups.value[first.id].result.candidates[0].name, 'ab')
+  assert.equal(review.lookups.value[second.id].result.candidates[0].name, '另一筆')
+  review.selectDrug(first, { target: { value: 'test-ab' } })
+  assert.equal(review.canSave(first), true)
+  assert.equal(review.canSave(second), false)
 })

@@ -1,6 +1,7 @@
 import { computed, readonly, ref, toRaw, type DeepReadonly } from 'vue'
 import { defineStore } from 'pinia'
 import type { ConfirmedDrug, DrugDraft } from '../api/drugs'
+import { isMedicineCandidate, type MedicineCandidate } from '../services/medicineSearchGateway'
 
 export interface DrugBatch {
   files: File[]
@@ -16,12 +17,11 @@ interface MedicineRowState {
   isEditing: boolean
   isLocked: boolean
   errorMessage: string
+  selectedMedicine: MedicineCandidate | null
 }
 
-export type MedicineRow = MedicineRowState & (
-  | { draftId: string; rowId: string }
-  | { draftId: null; rowId: null }
-)
+export type MedicineRow = MedicineRowState &
+  ({ draftId: string; rowId: string } | { draftId: null; rowId: null })
 
 export const useMedicineFlowStore = defineStore('medicineFlow', () => {
   const drugBatches = ref<DrugBatch[]>([])
@@ -34,9 +34,15 @@ export const useMedicineFlowStore = defineStore('medicineFlow', () => {
   }
 
   const allConfirmed = computed(
-    () => medicines.value.length > 0 && medicines.value.every(
-      (medicine) => medicine.name.trim() !== '' && !medicine.isEditing && medicine.isLocked,
-    ),
+    () =>
+      medicines.value.length > 0 &&
+      medicines.value.every(
+        (medicine) =>
+          !!medicine.selectedMedicine &&
+          medicine.name === medicine.selectedMedicine.name &&
+          !medicine.isEditing &&
+          medicine.isLocked,
+      ),
   )
 
   // 尚未全部確認時不產生可送出的清單；這不會呼叫後端。
@@ -72,6 +78,7 @@ export const useMedicineFlowStore = defineStore('medicineFlow', () => {
         isEditing: false,
         isLocked: false,
         errorMessage: '',
+        selectedMedicine: null,
       })
       existingIds.add(id)
     }
@@ -91,7 +98,9 @@ export const useMedicineFlowStore = defineStore('medicineFlow', () => {
 
     // app/uploads.py 依該批送出順序編為 img-01、img-02…。
     // 不依賴 source_images 的排列，也不在來源不存在時改用第一張。
-    const index = batch.files.findIndex((_, i) => `img-${String(i + 1).padStart(2, '0')}` === sourceImageId)
+    const index = batch.files.findIndex(
+      (_, i) => `img-${String(i + 1).padStart(2, '0')}` === sourceImageId,
+    )
     return batch.files[index]
   }
 
@@ -106,6 +115,7 @@ export const useMedicineFlowStore = defineStore('medicineFlow', () => {
       isEditing: true,
       isLocked: false,
       errorMessage: '',
+      selectedMedicine: null,
     })
   }
 
@@ -120,7 +130,7 @@ export const useMedicineFlowStore = defineStore('medicineFlow', () => {
     medicines.value = medicines.value.filter((medicine) => medicine.id !== id)
   }
 
-  function saveMedicine(medicine: MedicineRow): void {
+  function saveMedicine(medicine: MedicineRow, candidate?: MedicineCandidate): void {
     if (medicine.isLocked || !medicine.isEditing) return
     const name = medicine.draftName.trim()
     if (!name) {
@@ -128,6 +138,11 @@ export const useMedicineFlowStore = defineStore('medicineFlow', () => {
       else medicine.errorMessage = '藥名不可空白'
       return
     }
+    if (!candidate || !isMedicineCandidate(candidate) || candidate.name !== name) {
+      medicine.errorMessage = '請先選擇用藥類別，並從正式搜尋結果選取藥品。'
+      return
+    }
+    medicine.selectedMedicine = { ...candidate }
     medicine.name = name
     medicine.draftName = name
     medicine.isNew = false
@@ -147,6 +162,13 @@ export const useMedicineFlowStore = defineStore('medicineFlow', () => {
 
   function setLocked(medicine: MedicineRow, locked: boolean): void {
     if (medicine.isEditing || !medicine.name.trim()) return
+    if (
+      locked &&
+      (!medicine.selectedMedicine || medicine.selectedMedicine.name !== medicine.name)
+    ) {
+      medicine.errorMessage = '請先編輯並選取正式候選藥品，再鎖定變更。'
+      return
+    }
     medicine.isLocked = locked
   }
 
