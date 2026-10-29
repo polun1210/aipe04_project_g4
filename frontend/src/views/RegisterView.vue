@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { reactive } from 'vue'
 import { useRouter } from 'vue-router'
+import ConditionSelector from '../components/ConditionSelector.vue'
+import { type Sex as ProfileSex, type ConditionSelection } from '../models/healthProfile'
 
-type Sex = '' | 'male' | 'female'
-type ConditionCode =
-  'hypertension' | 't2dm' | 'dyslipidemia' | 'chronic_arthritis' | 'chronic_insomnia'
+type Sex = '' | ProfileSex
 
 interface RegisterForm {
   birthYear: string
@@ -12,10 +12,7 @@ interface RegisterForm {
   sex: Sex
   email: string
   password: string
-  conditions: {
-    selected: ConditionCode[]
-    none_selected: boolean
-  }
+  conditions: ConditionSelection
 }
 
 const router = useRouter()
@@ -30,26 +27,6 @@ const form = reactive<RegisterForm>({
     none_selected: false,
   },
 })
-
-const conditionOptions: { code: ConditionCode; label: string }[] = [
-  { code: 'hypertension', label: '高血壓' },
-  { code: 't2dm', label: '第二型糖尿病' },
-  { code: 'dyslipidemia', label: '高血脂' },
-  { code: 'chronic_arthritis', label: '慢性關節炎／長期關節疼痛' },
-  { code: 'chronic_insomnia', label: '慢性失眠' },
-]
-
-function handleConditionChange(): void {
-  if (form.conditions.selected.length > 0) {
-    form.conditions.none_selected = false
-  }
-}
-
-function handleNoneChange(): void {
-  if (form.conditions.none_selected) {
-    form.conditions.selected = []
-  }
-}
 
 function handleCancel(): void {
   void router.push('/')
@@ -120,33 +97,20 @@ function handleSubmit(): void {
         />
       </p>
 
-      <fieldset>
-        <legend>慢性疾病（可複選）</legend>
-        <p v-for="condition in conditionOptions" :key="condition.code">
-          <label>
-            <input
-              v-model="form.conditions.selected"
-              type="checkbox"
-              :value="condition.code"
-              @change="handleConditionChange"
-            />
-            {{ condition.label }}
-          </label>
-        </p>
-        <p>
-          <label>
-            <input
-              v-model="form.conditions.none_selected"
-              type="checkbox"
-              @change="handleNoneChange"
-            />
-            以上皆無
-          </label>
-        </p>
-      </fieldset>
+      <ConditionSelector
+        id="register-conditions"
+        v-model="form.conditions"
+        legend="慢性疾病（可複選）"
+      />
 
       <button type="button" @click="handleCancel">取消</button>
       <button type="submit" disabled>確認（尚未開放）</button>
     </form>
   </main>
 </template>
+
+<style scoped>
+button {
+  min-height: 50px;
+}
+</style>

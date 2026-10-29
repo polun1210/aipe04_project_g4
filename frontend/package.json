@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "test:health-profile": "node --experimental-vm-modules tests/health-profile.test.mjs",
     "test:recognition-loading": "node --experimental-vm-modules tests/recognition-loading.test.mjs",
     "test:supplement-review": "node --experimental-vm-modules tests/supplement-review.test.mjs",
     "test:supplement-upload": "node --experimental-vm-modules tests/supplement-upload.test.mjs",

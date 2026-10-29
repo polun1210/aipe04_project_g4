@@ -29,6 +29,11 @@ const router = createRouter({
       component: () => import('@/views/SettingsView.vue'),
     },
     {
+      path: '/health-profile',
+      name: 'health-profile',
+      component: () => import('@/views/HealthProfileView.vue'),
+    },
+    {
       path: '/medicine-upload',
       name: 'medicine-upload',
       component: () => import('@/views/MedicineUploadView.vue'),
