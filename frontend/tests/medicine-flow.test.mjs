@@ -35,7 +35,10 @@ async function load(id) {
       id === 'vue'
         ? {
             ...vue,
-            inject: (_key, fallback) => officialGateway ?? fallback,
+            inject: (key, fallback) =>
+              key.description === 'medicineSearchGateway'
+                ? (officialGateway ?? fallback)
+                : fallback,
             onMounted() {},
             onUnmounted() {},
           }

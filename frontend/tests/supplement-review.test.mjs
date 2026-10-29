@@ -30,7 +30,7 @@ async function load(id) {
   if (!id.startsWith('file:')) {
     const exports =
       id === 'vue'
-        ? { ...vue, onMounted() {}, onUnmounted() {} }
+        ? { ...vue, inject: (_key, fallback) => fallback, onMounted() {}, onUnmounted() {} }
         : id === 'pinia'
           ? pinia
           : { ...vueRouter, useRouter: () => router, onBeforeRouteLeave() {} }
@@ -51,7 +51,7 @@ async function load(id) {
       const bindings = `submit, ingredients, error, canSubmit, nutrientRows, lockedCount, busy, catalogBusy,
          flow, medicine, previews, selectedImageId, confirmedCount, reviewRows, outOfScopeRows,
          isTestExtraction, loadCatalog, doseLabels, doseAmounts, unitOptions, chooseNutrient,
-         nameFor, isReviewFrequency, stage`
+         nameFor, isReviewFrequency, stage, demo, reviewDemoEnabled`
       source = `${imports.map((s) => s.getText(ast)).join('\n')}
         export function setup() {
           ${body.map((s) => s.getText(ast)).join('\n')}

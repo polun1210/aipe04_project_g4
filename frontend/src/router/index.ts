@@ -1,8 +1,18 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { reviewDemoEnabled } from '../demo/enabled'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+    ...(reviewDemoEnabled
+      ? [
+          {
+            path: '/review-demo',
+            name: 'review-demo',
+            component: () => import('../demo/ReviewDemoView.vue'),
+          },
+        ]
+      : [{ path: '/review-demo', redirect: '/' }]),
     {
       path: '/',
       name: 'home',

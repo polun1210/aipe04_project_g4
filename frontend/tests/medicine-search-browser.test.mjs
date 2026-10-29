@@ -5,13 +5,14 @@ import { createServer as createNetServer } from 'node:net'
 import { tmpdir } from 'node:os'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { createServer } from 'vite'
+import { build, createServer, preview } from 'vite'
 
 // Live HTTP integration: real FastAPI catalog/lookup/products/assessment/report.
 // The backend remains its existing demonstration implementation, never a medical oracle.
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..')
 const artifacts = await mkdtemp(join(tmpdir(), 'medicine-search-review-browser-'))
 const sockets = []
+const previewServers = []
 let api, vite, chrome, origin
 const delay = (ms) => new Promise((done) => setTimeout(done, ms))
 async function until(check) {
@@ -392,14 +393,230 @@ try {
     assert.equal(await page.eval('document.documentElement.scrollWidth>innerWidth'), false)
     assert.deepEqual(errors, [])
     await page.screenshot(`report-${width}.png`)
-    console.log(
-      `PASS ${width}px: real lookup/class filter/selection, null metadata hidden, uncertain no search and no assessment, OCR preserved, real API demonstration report after candidate correction`,
+    // Isolated frontend demo: the same forms, real read-only lookup, zero writes.
+    const writesBeforeDemo = requests.filter((request) => request.method === 'POST').length
+    await page.eval(`(() => {
+      const store=window.__medicineTest; store.addMedicine();
+      const row=store.medicines[0]; row.draftName='一般流程保留的藥品';
+      store.saveMedicine(row,undefined,'uncertain'); store.setLocked(row,true);
+      window.__normalSnapshot=JSON.stringify(store.$state);
+    })()`)
+    await page.eval('window.__testRouter.push("/review-demo")')
+    await until(() => page.eval('!!document.querySelector(".review-demo .review-list")'))
+    assert.match(
+      await page.eval('document.querySelector(".review-demo").textContent'),
+      /示範資料，非實際個人化評估結果/,
     )
+    await page.eval(`(async()=>{
+      const app=document.querySelector('[data-review-demo-host]').__vue_app__;
+      const {useMedicineFlowStore}=await import('/src/stores/medicineFlow.ts');
+      const {useSupplementFlowStore}=await import('/src/stores/supplementFlow.ts');
+      window.__demoMedicine=useMedicineFlowStore(app.config.globalProperties.$pinia);
+      window.__demoSupplement=useSupplementFlowStore(app.config.globalProperties.$pinia);
+    })()`)
+    assert.equal(await page.eval('window.__demoMedicine===window.__medicineTest'), false)
+    for (const [index, row] of originalDraft.rows.entries()) {
+      const prefix = `.review-demo .review-list > li:nth-child(${index + 1})`
+      await page.click(`${prefix} .review-row-actions button`)
+      const classInput = `${prefix} select[id^="medicine-class-"]`
+      const name = `${prefix} input[id^="medicine-name-"]`
+      if (row.scope_status === 'in_scope') {
+        const results = await (
+          await fetch(`${apiOrigin}/api/drugs/lookup?name=${encodeURIComponent(row.raw_name)}`)
+        ).json()
+        const matched = results.candidates.find(
+          (item) => item.active_ingredient_code === row.active_ingredient_code,
+        )
+        assert.ok(matched, 'Existing sample must match the actual backend catalog')
+        await until(() =>
+          page.eval(`!document.querySelector(${JSON.stringify(classInput)}).disabled`),
+        )
+        await page.select(classInput, matched.drug_class_codes[0])
+        await page.fill(name, matched.display_name_zh)
+        const choices = `${prefix} select[id^="medicine-candidates-"]`
+        await until(() =>
+          page.eval(
+            `!!document.querySelector(${JSON.stringify(choices)})?.querySelector('option[value="${matched.active_ingredient_code}"]')`,
+          ),
+        )
+        await page.select(choices, matched.active_ingredient_code)
+      } else {
+        await page.select(classInput, 'other_uncertain')
+        await page.fill(name, `${row.raw_name}（示範修改）`)
+      }
+      await page.click(`${prefix} form button[type=submit]`)
+    }
+    await page.click('.review-demo .bulk-controls button:first-child')
+    assert.equal(await page.eval('window.__demoMedicine.allConfirmed'), true)
+    assert.equal(
+      await page.eval(
+        'window.__demoMedicine.medicines.filter(row=>row.reviewMode==="uncertain").every(row=>row.selectedMedicine===null)',
+      ),
+      true,
+    )
+    assert.match(
+      await page.eval('document.querySelector(".review-demo .review-progress").textContent'),
+      /5 \/ 5/,
+    )
+    await page.click('.review-demo button.primary-action')
+    await until(() =>
+      page.eval(
+        '!!document.querySelector(".review-demo .supplement-review") && !document.querySelector(".review-demo main").textContent.includes("正在載入營養素選項")',
+      ),
+    )
+    const scopeBefore = await page.eval(
+      'JSON.stringify(window.__demoSupplement.products[0].rows.filter(row=>row.value.choice==="out_of_scope"))',
+    )
+    assert.equal(
+      await page.eval('document.querySelector(".review-demo details.out-of-scope").open'),
+      false,
+    )
+    assert.equal(
+      await page.eval('document.querySelectorAll(".review-demo .out-of-scope input").length'),
+      0,
+    )
+    await page.fill('.review-demo input[id^="name-"]', '示範資料：編輯後的保健食品')
+    // Exercise an existing nutrient edit/save, then both bulk lock directions.
+    await page.eval(`(() => {
+      const root=document.querySelector('.review-demo');
+      [...root.querySelectorAll('button')].find(button=>button.textContent.trim()==='編輯').click();
+    })()`)
+    await until(() => page.eval('!!document.querySelector(".review-demo input[id^=amount-]")'))
+    await page.fill('.review-demo input[id^="amount-"]', '11')
+    await page.eval(
+      `[...document.querySelectorAll('.review-demo button')].find(button=>button.textContent.trim()==='儲存').click()`,
+    )
+    await page.select('.review-demo select[id^="frequency-"]', 'daily')
+    await page.select('.review-demo select[id^="times-"]', '1')
+    await page.fill('.review-demo input[id^="intake-"]', '1')
+    await page.eval(
+      `[...document.querySelectorAll('.review-demo button')].find(button=>button.textContent.trim()==='一鍵鎖定').click()`,
+    )
+    await page.eval(
+      `[...document.querySelectorAll('.review-demo button')].find(button=>button.textContent.trim()==='全部解除鎖定').click()`,
+    )
+    assert.equal(
+      await page.eval('window.__demoSupplement.products[0].rows.some(row=>row.locked)'),
+      false,
+    )
+    await page.eval(
+      `[...document.querySelectorAll('.review-demo button')].find(button=>button.textContent.trim()==='一鍵鎖定').click()`,
+    )
+    assert.equal(
+      await page.eval(
+        'JSON.stringify(window.__demoSupplement.products[0].rows.filter(row=>row.value.choice==="out_of_scope"))',
+      ),
+      scopeBefore,
+    )
+    await page.click('.review-demo form button[type=submit]')
+    await until(() =>
+      page.eval(
+        'document.querySelector(".review-demo main")?.textContent.includes("固定範例報告展示")',
+      ),
+    )
+    assert.match(
+      await page.eval('document.querySelector(".review-demo main").textContent'),
+      /與剛才輸入的藥名、成分及攝取量無關/,
+    )
+    assert.equal(requests.filter((request) => request.method === 'POST').length, writesBeforeDemo)
+    assert.equal(
+      await page.eval('JSON.stringify(window.__medicineTest.$state)===window.__normalSnapshot'),
+      true,
+    )
+    assert.equal(await page.eval('document.documentElement.scrollWidth>innerWidth'), false)
+    await page.screenshot(`isolated-demo-report-${width}.png`)
+    await page.eval('window.scrollTo(0, document.body.scrollHeight / 2)')
+    const demoLabel = await page.eval(
+      `(() => {const label=document.querySelector('.demo-label'); const r=label.getBoundingClientRect(); return {text:label.textContent,top:r.top,bottom:r.bottom};})()`,
+    )
+    assert.match(demoLabel.text, /示範資料，非實際個人化評估結果/)
+    assert.ok(
+      demoLabel.top >= 0 && demoLabel.bottom <= 900,
+      'Demo warning remains visible while reading the report',
+    )
+    await page.click('.review-demo .demo-notice button')
+    await until(() =>
+      page.eval('location.pathname==="/" && !document.querySelector("[data-review-demo-host]")'),
+    )
+    assert.equal(await page.eval('window.__demoMedicine.medicines.length'), 0)
+    assert.equal(await page.eval('window.__demoSupplement.products.length'), 0)
+    assert.equal(
+      await page.eval('JSON.stringify(window.__medicineTest.$state)===window.__normalSnapshot'),
+      true,
+    )
+    await page.eval('window.__testRouter.push("/medicine-review?demo=1")')
+    await until(() => page.eval('!!document.querySelector("#review-title")'))
+    assert.equal(await page.eval('document.querySelector("button.primary-action").disabled'), true)
+    assert.match(await page.eval('document.querySelector("main").textContent'), /無法產生可靠報告/)
+    await page.eval('window.__testRouter.push("/review-demo")')
+    await until(() => page.eval('!!document.querySelector(".review-demo .review-list")'))
+    assert.equal(
+      await page.eval('document.querySelector(".review-demo").textContent.includes("示範修改")'),
+      false,
+    )
+    await page.click('.review-demo .demo-notice button')
+    await until(() => page.eval('!document.querySelector("[data-review-demo-host]")'))
+    assert.deepEqual(errors, [])
+    console.log(
+      `PASS ${width}px: real API regression and isolated demo editing/locks/both next buttons/fixed report/no writes/normal-state preservation/cleanup/fresh re-entry`,
+    )
+  }
+  // Check actual production builds, not merely a mocked environment flag.
+  const previousFlag = process.env.VITE_ENABLE_REVIEW_DEMO
+  const previousNodeEnv = process.env.NODE_ENV
+  try {
+    process.env.NODE_ENV = 'production'
+    for (const enabled of [false, true]) {
+      process.env.VITE_ENABLE_REVIEW_DEMO = String(enabled)
+      const outDir = join(artifacts, enabled ? 'enabled-build' : 'default-build')
+      await build({
+        root: join(root, 'frontend'),
+        logLevel: 'error',
+        build: { outDir, emptyOutDir: false },
+      })
+      const server = await preview({
+        root: join(root, 'frontend'),
+        logLevel: 'error',
+        build: { outDir },
+        preview: {
+          host: '127.0.0.1',
+          port: 0,
+          proxy: { '^/api(?:/|$)': { target: apiOrigin, changeOrigin: true } },
+        },
+      })
+      previewServers.push(server)
+      const info = await (
+        await fetch(`http://127.0.0.1:${chromePort}/json/new?about:blank`, { method: 'PUT' })
+      ).json()
+      const page = await connect(info.webSocketDebuggerUrl)
+      await page.send('Page.enable')
+      await page.send('Page.navigate', {
+        url: `http://127.0.0.1:${server.httpServer.address().port}/review-demo`,
+      })
+      await until(() =>
+        page.eval(
+          enabled
+            ? '!!document.querySelector(".review-demo .review-list")'
+            : 'location.pathname==="/" && !!document.querySelector("#app h1")',
+        ),
+      )
+      assert.equal(await page.eval('!!document.querySelector(".review-demo")'), enabled)
+      console.log(
+        `PASS production build: demo ${enabled ? 'explicitly enabled' : 'disabled by default'}`,
+      )
+    }
+  } finally {
+    if (previousFlag === undefined) delete process.env.VITE_ENABLE_REVIEW_DEMO
+    else process.env.VITE_ENABLE_REVIEW_DEMO = previousFlag
+    if (previousNodeEnv === undefined) delete process.env.NODE_ENV
+    else process.env.NODE_ENV = previousNodeEnv
   }
   console.log(`Browser artifacts: ${artifacts}`)
 } finally {
   for (const socket of sockets) socket.close()
   chrome?.kill()
+  for (const server of previewServers)
+    await new Promise((resolve) => server.httpServer.close(resolve))
   await vite?.close()
   api?.kill()
 }

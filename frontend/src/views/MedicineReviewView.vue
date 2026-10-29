@@ -17,8 +17,18 @@ import {
 } from '../services/medicineSearchGateway'
 import { errorMessage } from '../api/client'
 import ReviewImageGallery from '../components/ReviewImageGallery.vue'
+import { useReviewDemo } from '../demo/context'
+import { reviewDemoEnabled } from '../demo/enabled'
+import { useRouter } from 'vue-router'
+
+const demo = useReviewDemo()
+const router = useRouter()
 
 const flow = useMedicineFlowStore()
+function goNext() {
+  if (!flow.allConfirmed || (!demo && flow.assessmentBlockedReason)) return
+  void router.push(demo ? '/supplement-review' : '/supplement-upload')
+}
 const { medicines, allConfirmed } = storeToRefs(flow)
 const bulkMessage = ref('')
 const selectedImageId = ref('')
@@ -300,6 +310,9 @@ onMounted(loadClasses)
 <template>
   <main>
     <h1>核對你的藥品名稱</h1>
+    <p v-if="reviewDemoEnabled && !demo">
+      <RouterLink to="/review-demo">使用示範資料練習人工校對</RouterLink>
+    </p>
     <p>資料暫存在本機，返回上傳頁可繼續新增批次；重新整理後需要重新上傳。</p>
     <p v-if="!flow.drugBatches.length && !medicines.length" role="status">
       目前沒有藥品資料，請返回上傳藥包圖片，或自行新增藥名。
@@ -464,9 +477,15 @@ onMounted(loadClasses)
 
         <button type="button" @click="flow.addMedicine">＋新增</button>
         <p v-if="editingUncertain" role="status">
-          {{ uncertainMedicineNotice }}
+          {{
+            demo
+              ? '此為示範中的其他／不確定藥品，只供本機操作練習，不會作為正式候選或送出評估。'
+              : uncertainMedicineNotice
+          }}
         </p>
-        <p v-if="flow.assessmentBlockedReason" role="alert">{{ flow.assessmentBlockedReason }}</p>
+        <p v-if="flow.assessmentBlockedReason && !demo" role="alert">
+          {{ flow.assessmentBlockedReason }}
+        </p>
 
         <div role="status" aria-live="polite">
           <p v-if="allConfirmed">本機藥品校對已完成，尚未送出評估。</p>
@@ -475,10 +494,10 @@ onMounted(loadClasses)
         <button
           class="primary-action"
           type="button"
-          :disabled="!allConfirmed || !!flow.assessmentBlockedReason"
-          @click="$router.push('/supplement-upload')"
+          :disabled="!allConfirmed || (!demo && !!flow.assessmentBlockedReason)"
+          @click="goNext"
         >
-          下一步：保健食品圖片上傳
+          {{ demo ? '下一步：示範保健食品校對' : '下一步：保健食品圖片上傳' }}
         </button>
         <p v-if="!medicines.length">
           <RouterLink to="/supplement-upload">未提供用藥資料，前往保健食品圖片上傳</RouterLink>
