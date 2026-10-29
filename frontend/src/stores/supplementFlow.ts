@@ -79,6 +79,15 @@ export function nutrientError(value: NutrientValues, ingredients: Ingredient[]):
     return '單位不適用此成分，請依標示選擇。'
   return ''
 }
+export function needsReview(row: NutrientRow): boolean {
+  return row.value.choice !== 'out_of_scope'
+}
+export function reviewRows(product: SupplementProduct): NutrientRow[] {
+  return product.rows.filter(needsReview)
+}
+export function outOfScopeRows(product: SupplementProduct): NutrientRow[] {
+  return product.rows.filter((row) => !needsReview(row))
+}
 export function productReady(product: SupplementProduct, ingredients: Ingredient[]): boolean {
   return (
     product.name.trim() !== '' &&
@@ -89,7 +98,8 @@ export function productReady(product: SupplementProduct, ingredients: Ingredient
     positive(product.amount) &&
     product.rows.length > 0 &&
     product.rows.every(
-      (row) => row.locked && !row.editing && !nutrientError(row.value, ingredients),
+      (row) =>
+        !row.editing && (!needsReview(row) || row.locked) && !nutrientError(row.value, ingredients),
     ) &&
     (product.frequency !== 'weekly_n_times' || (positive(product.weekly) && product.weekly <= 7)) &&
     (product.frequency !== 'cyclic_on_off' ||
@@ -218,12 +228,17 @@ export const useSupplementFlowStore = defineStore('supplementFlow', () => {
     row.isNew = false
   }
   function setLocked(row: NutrientRow, locked: boolean, ingredients: Ingredient[]) {
+    if (!needsReview(row)) {
+      row.locked = false
+      row.error = ''
+      return
+    }
     row.error = nutrientError(row.value, ingredients)
     if (!row.editing && !row.error) row.locked = locked
   }
   function lockAllRows(ingredients: Ingredient[]) {
     for (const product of products.value) {
-      for (const row of product.rows) {
+      for (const row of reviewRows(product)) {
         if (!row.locked && !row.editing) setLocked(row, true, ingredients)
       }
     }
