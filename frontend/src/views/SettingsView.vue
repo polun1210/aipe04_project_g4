@@ -33,14 +33,7 @@ watch(form, () => {
 })
 const errorSummary = ref<HTMLElement | null>(null)
 const errors = computed(() => profileErrors(form))
-const canSave = computed(
-  () =>
-    gateway.available &&
-    loaded.value &&
-    !loading.value &&
-    !saving.value &&
-    !Object.values(errors.value).some(Boolean),
-)
+const canSave = computed(() => gateway.available && loaded.value && !loading.value && !saving.value)
 const errorFields = [
   { key: 'birthYear', id: 'birth-year' },
   { key: 'birthMonth', id: 'birth-month' },
