@@ -2,6 +2,7 @@
 import { computed, onUnmounted, ref } from 'vue'
 import { onBeforeRouteLeave, useRouter } from 'vue-router'
 import { errorMessage } from '../api/client'
+import RecognitionLoading from '../components/RecognitionLoading.vue'
 import {
   isTestExtraction,
   isUsableSupplementDraft,
@@ -246,7 +247,7 @@ onUnmounted(releaseImages)
         <button class="primary-action" type="submit" :disabled="!canUpload">開始辨識</button>
       </fieldset>
     </form>
-    <p v-if="busy" role="status">圖片上傳與辨識處理中…</p>
+    <RecognitionLoading v-if="busy" />
     <p v-if="flow.products.length && !received">
       <RouterLink to="/supplement-review"
         >前往保健食品人工校對（已保存 {{ flow.products.length }} 罐）</RouterLink

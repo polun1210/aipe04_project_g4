@@ -3,6 +3,7 @@ import { computed, onUnmounted, ref, shallowRef } from 'vue'
 import { onBeforeRouteLeave, useRouter } from 'vue-router'
 import { isUsableDraft, uploadDrugDraft, type DrugDraft } from '../api/drugs'
 import { ApiError } from '../api/client'
+import RecognitionLoading from '../components/RecognitionLoading.vue'
 import { useMedicineFlowStore } from '../stores/medicineFlow'
 
 interface SelectedImage {
@@ -294,7 +295,7 @@ onUnmounted(releaseAllPreviews)
         開始辨識
       </button>
     </p>
-    <p v-if="isUploading" role="status">圖片上傳與辨識處理中</p>
+    <RecognitionLoading v-if="isUploading" />
     <p v-else-if="!receivedDraft">請等待所有圖片完成載入驗證後開始辨識。失敗時不會自動重送。</p>
 
     <p v-if="flow.drugBatches.length && !receivedDraft">
