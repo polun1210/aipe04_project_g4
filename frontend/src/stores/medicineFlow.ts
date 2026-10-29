@@ -18,10 +18,24 @@ interface MedicineRowState {
   isLocked: boolean
   errorMessage: string
   selectedMedicine: MedicineCandidate | null
+  reviewMode: 'candidate' | 'uncertain' | null
 }
 
 export type MedicineRow = MedicineRowState &
   ({ draftId: string; rowId: string } | { draftId: null; rowId: null })
+
+// 「完成本機校對」不代表後端已能可靠評估其他／不確定的藥品。
+export function hasValidMedicineReview(medicine: MedicineRow): boolean {
+  return (
+    !!medicine.name.trim() &&
+    (medicine.reviewMode === 'uncertain'
+      ? medicine.selectedMedicine === null
+      : !!medicine.selectedMedicine && medicine.name === medicine.selectedMedicine.name)
+  )
+}
+
+export const uncertainMedicineNotice =
+  '「其他／不確定」僅保存本機校對資料，不代表藥品已確認。後端尚無法可靠處理此選擇，目前無法產生可靠報告，因此不會送出評估。原始圖片與辨識資料會保留，重新整理後仍需重新上傳。'
 
 export const useMedicineFlowStore = defineStore('medicineFlow', () => {
   const drugBatches = ref<DrugBatch[]>([])
@@ -37,17 +51,19 @@ export const useMedicineFlowStore = defineStore('medicineFlow', () => {
     () =>
       medicines.value.length > 0 &&
       medicines.value.every(
-        (medicine) =>
-          !!medicine.selectedMedicine &&
-          medicine.name === medicine.selectedMedicine.name &&
-          !medicine.isEditing &&
-          medicine.isLocked,
+        (medicine) => hasValidMedicineReview(medicine) && !medicine.isEditing && medicine.isLocked,
       ),
+  )
+
+  const assessmentBlockedReason = computed(() =>
+    medicines.value.some((medicine) => medicine.reviewMode === 'uncertain')
+      ? uncertainMedicineNotice
+      : '',
   )
 
   // 尚未全部確認時不產生可送出的清單；這不會呼叫後端。
   const confirmedDrugs = computed<ConfirmedDrug[]>(() => {
-    if (!allConfirmed.value) return []
+    if (!allConfirmed.value || assessmentBlockedReason.value) return []
     return medicines.value.map((medicine) => {
       const name = medicine.name.trim()
       return medicine.draftId === null
@@ -79,6 +95,7 @@ export const useMedicineFlowStore = defineStore('medicineFlow', () => {
         isLocked: false,
         errorMessage: '',
         selectedMedicine: null,
+        reviewMode: null,
       })
       existingIds.add(id)
     }
@@ -116,6 +133,7 @@ export const useMedicineFlowStore = defineStore('medicineFlow', () => {
       isLocked: false,
       errorMessage: '',
       selectedMedicine: null,
+      reviewMode: null,
     })
   }
 
@@ -130,19 +148,26 @@ export const useMedicineFlowStore = defineStore('medicineFlow', () => {
     medicines.value = medicines.value.filter((medicine) => medicine.id !== id)
   }
 
-  function saveMedicine(medicine: MedicineRow, candidate?: MedicineCandidate): void {
+  function saveMedicine(
+    medicine: MedicineRow,
+    candidate?: MedicineCandidate,
+    reviewMode: 'candidate' | 'uncertain' = 'candidate',
+  ): void {
     if (medicine.isLocked || !medicine.isEditing) return
     const name = medicine.draftName.trim()
     if (!name) {
-      if (medicine.isNew) removeMedicine(medicine.id)
-      else medicine.errorMessage = '藥名不可空白'
+      medicine.errorMessage = '藥名不可空白'
       return
     }
-    if (!candidate || !isMedicineCandidate(candidate) || candidate.name !== name) {
+    if (
+      reviewMode !== 'uncertain' &&
+      (!candidate || !isMedicineCandidate(candidate) || candidate.name !== name)
+    ) {
       medicine.errorMessage = '請先選擇用藥類別，並從正式搜尋結果選取藥品。'
       return
     }
-    medicine.selectedMedicine = { ...candidate }
+    medicine.selectedMedicine = reviewMode === 'uncertain' ? null : { ...candidate! }
+    medicine.reviewMode = reviewMode
     medicine.name = name
     medicine.draftName = name
     medicine.isNew = false
@@ -162,10 +187,7 @@ export const useMedicineFlowStore = defineStore('medicineFlow', () => {
 
   function setLocked(medicine: MedicineRow, locked: boolean): void {
     if (medicine.isEditing || !medicine.name.trim()) return
-    if (
-      locked &&
-      (!medicine.selectedMedicine || medicine.selectedMedicine.name !== medicine.name)
-    ) {
+    if (locked && !hasValidMedicineReview(medicine)) {
       medicine.errorMessage = '請先編輯並選取正式候選藥品，再鎖定變更。'
       return
     }
@@ -181,6 +203,7 @@ export const useMedicineFlowStore = defineStore('medicineFlow', () => {
     drugBatches,
     medicines,
     allConfirmed,
+    assessmentBlockedReason,
     confirmedDrugs,
     resetFlow,
     addDrugBatch,

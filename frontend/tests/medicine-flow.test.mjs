@@ -59,7 +59,7 @@ async function load(id) {
       const bindings = id.endsWith('MedicineUploadView.vue')
         ? 'startRecognition, startNextBatch, goToReview, selectedImages, receivedDraft, errorMessages'
         : id.endsWith('MedicineReviewView.vue')
-          ? 'setAllLocked, bulkMessage, searchDrug, selectDrug, clearLookup, lookups, saveMedicine, cancelEditing, catalogClasses, drugClasses, canSave, changeClass, inputChanged'
+          ? 'setAllLocked, bulkMessage, searchDrug, selectDrug, clearLookup, lookups, saveMedicine, cancelEditing, catalogClasses, drugClasses, canSave, changeClass, inputChanged, confirmedCount'
           : 'submit, ingredients, error, canSubmit'
       source = `${imports.map((s) => s.getText(ast)).join('\n')}
         export function setup() {
@@ -90,6 +90,9 @@ const { useSupplementFlowStore } = await source('../src/stores/supplementFlow.ts
 const uploadModule = await source('../src/views/MedicineUploadView.vue')
 const reviewModule = await source('../src/views/SupplementReviewView.vue')
 const medicineReviewModule = await source('../src/views/MedicineReviewView.vue')
+const { useMedicineSearchGateway, UNCERTAIN_DRUG_CLASS } = await source(
+  '../src/services/medicineSearchGateway.ts',
+)
 const fixture = JSON.parse(
   await readFile(new URL('../../docs/schemas/examples/04_drug_draft.json', import.meta.url)),
 )
@@ -123,7 +126,7 @@ function searchReview(row) {
   review.drugClasses.value[row.id] = 'statin'
   return review
 }
-function readyReview() {
+function readyReview(expectedReady = true) {
   supplement.products.push({
     id: 'supplement-draft',
     draft: { source_images: [] },
@@ -149,7 +152,7 @@ function readyReview() {
   review.ingredients.value = [
     { code: 'calcium', category: 'target_nutrient', accepted_units: ['mg'] },
   ]
-  assert.equal(review.canSubmit.value, true)
+  assert.equal(review.canSubmit.value, expectedReady)
   return review
 }
 beforeEach(() => {
@@ -581,4 +584,124 @@ test('typing automatically searches the selected class after debounce and keeps 
   review.selectDrug(first, { target: { value: 'test-ab' } })
   assert.equal(review.canSave(first), true)
   assert.equal(review.canSave(second), false)
+})
+
+test('default gateway calls the existing lookup and filters backend candidates without inventing metadata', async () => {
+  officialGateway = undefined
+  const gateway = useMedicineSearchGateway()
+  assert.equal(gateway.available, true)
+  const backend = [
+    {
+      active_ingredient_code: 'ingredient-1',
+      display_name_zh: '測試一',
+      drug_class_codes: ['statin', 'ppi'],
+    },
+    {
+      active_ingredient_code: 'ingredient-2',
+      display_name_zh: '測試二',
+      drug_class_codes: ['ppi'],
+    },
+  ]
+  request = async (path) => {
+    calls.push({ path })
+    return Response.json({ candidates: backend })
+  }
+  const result = await gateway.search('statin', '  測試  ')
+  assert.deepEqual(JSON.parse(JSON.stringify(result)), [
+    {
+      id: 'ingredient-1',
+      name: '測試一',
+      drugClassCode: 'statin',
+      specification: null,
+      licenseNumber: null,
+    },
+  ])
+  assert.equal(calls.length, 1)
+  const url = new URL(calls[0].path, 'http://localhost')
+  assert.equal(url.pathname, '/api/drugs/lookup')
+  assert.equal(url.searchParams.get('name'), '測試')
+  assert.equal(url.searchParams.has('drug_class_code'), false)
+  assert.equal((await gateway.search('missing-class', '測試')).length, 0)
+  const count = calls.length
+  assert.equal((await gateway.search(UNCERTAIN_DRUG_CLASS, '測試')).length, 0)
+  assert.equal((await gateway.search('statin', ' ')).length, 0)
+  assert.equal(calls.length, count)
+  request = async () => {
+    throw new Error('lookup failed')
+  }
+  await assert.rejects(gateway.search('statin', '測試'), /lookup failed/)
+  request = async () =>
+    Response.json({
+      candidates: [
+        { active_ingredient_code: 'bad', display_name_zh: 'bad', drug_class_codes: null },
+      ],
+    })
+  await assert.rejects(gateway.search('statin', '測試'), /無法確認/)
+})
+
+test('other/uncertain saves and locks nonblank names locally without searching or sending unsafe assessment data', async () => {
+  addBatch('A')
+  confirm()
+  const row = medicine.medicines[0]
+  const original = JSON.stringify(medicine.drugBatches[0].draft)
+  medicine.setLocked(row, false)
+  medicine.startEditing(row)
+  const review = searchReview(row)
+  review.changeClass(row, { target: { value: UNCERTAIN_DRUG_CLASS } })
+  row.draftName = '  其他藥品  '
+  review.inputChanged(row)
+  await review.searchDrug(row)
+  await new Promise((resolve) => setTimeout(resolve, 340))
+  assert.equal(calls.length, 0)
+  assert.equal(review.canSave(row), true)
+  review.saveMedicine(row)
+  assert.equal(row.name, '其他藥品')
+  assert.equal(row.selectedMedicine, null)
+  assert.equal(row.reviewMode, 'uncertain')
+  medicine.setAllLocked(true)
+  assert.equal(medicine.allConfirmed, true)
+  assert.equal(review.confirmedCount.value, medicine.medicines.length)
+  assert.match(medicine.assessmentBlockedReason, /無法產生可靠報告/)
+  assert.equal(medicine.confirmedDrugs.length, 0)
+  const supplementReview = readyReview(false)
+  assert.equal(supplementReview.canSubmit.value, false)
+  const supplementBefore = JSON.stringify(supplement.products)
+  await supplementReview.submit()
+  assert.match(supplementReview.error.value, /無法產生可靠報告/)
+  assert.equal(calls.length, 0)
+  assert.equal(router.currentRoute.value.name, 'supplement-review')
+  assert.equal(JSON.stringify(supplement.products), supplementBefore)
+  assert.equal(JSON.stringify(medicine.drugBatches[0].draft), original)
+  assert.ok(medicine.findSourceFile('A', 'img-01'))
+  medicine.setLocked(row, false)
+  medicine.startEditing(row)
+  row.draftName = '  '
+  medicine.saveMedicine(row, undefined, 'uncertain')
+  medicine.setLocked(row, true)
+  assert.equal(row.isEditing, true)
+  assert.equal(row.isLocked, false)
+  assert.match(row.errorMessage, /不可空白/)
+  review.cancelEditing(row)
+  assert.equal(row.reviewMode, 'uncertain')
+  medicine.startEditing(row)
+  row.draftName = '正式候選'
+  medicine.saveMedicine(row, candidateFor('正式候選'))
+  medicine.setLocked(row, true)
+  assert.equal(row.reviewMode, 'candidate')
+  assert.equal(medicine.assessmentBlockedReason, '')
+  assert.equal(supplementReview.canSubmit.value, true)
+  await supplementReview.submit()
+  assert.ok(calls.some((call) => call.path === '/api/assessments'))
+})
+
+test('blank new other/uncertain row is retained with an error and cannot count as confirmed', () => {
+  medicine.addMedicine()
+  const row = medicine.medicines[0]
+  row.draftName = '　 '
+  medicine.saveMedicine(row, undefined, 'uncertain')
+  medicine.setAllLocked(true)
+  assert.equal(medicine.medicines.length, 1)
+  assert.equal(row.isLocked, false)
+  assert.equal(medicine.allConfirmed, false)
+  assert.match(row.errorMessage, /不可空白/)
 })

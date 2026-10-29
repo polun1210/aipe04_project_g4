@@ -70,6 +70,7 @@ const canSubmit = computed(
     ingredients.value.length > 0 &&
     flow.products.length > 0 &&
     (!medicine.medicines.length || medicine.allConfirmed) &&
+    !medicine.assessmentBlockedReason &&
     flow.products.every((product) => productReady(product, ingredients.value)),
 )
 async function loadCatalog() {
@@ -100,6 +101,10 @@ function nameFor(choice: string) {
   )
 }
 async function submit() {
+  if (medicine.assessmentBlockedReason) {
+    error.value = medicine.assessmentBlockedReason
+    return
+  }
   if (!canSubmit.value) return
   busy.value = true
   error.value = ''
@@ -159,6 +164,10 @@ onBeforeRouteLeave(() => {
     <p>目前評估與報告使用後端示範實作及測試帳號，結果不代表你的實際健康評估。</p>
     <p><RouterLink to="/supplement-upload">返回上傳／新增其他保健食品</RouterLink></p>
     <p v-if="!flow.products.length">目前沒有保健食品資料，請先上傳圖片。</p>
+    <p v-if="medicine.assessmentBlockedReason" role="alert">
+      {{ medicine.assessmentBlockedReason }}
+      <RouterLink to="/medicine-review">返回藥品校對</RouterLink>
+    </p>
     <p v-if="medicine.medicines.length && !medicine.allConfirmed" role="alert">
       藥品尚未全部確認。<RouterLink to="/medicine-review">返回藥品校對</RouterLink>
     </p>
