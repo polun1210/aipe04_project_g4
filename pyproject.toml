@@ -1,7 +1,7 @@
 [project]
 name = "aipe04-final-project"
 version = "0.1.0"
-description = "補對了嗎？— AI 個人化營養補充評估系統（第一版）"
+description = "補藥亂吃！— AI 個人化營養補充評估系統（第一版）"
 requires-python = ">=3.12"
 # 系統執行時需要的套件。各模組需要的套件由負責人在自己的分支用 `uv add` 加入。
 dependencies = [

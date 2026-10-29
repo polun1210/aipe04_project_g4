@@ -56,9 +56,9 @@ const sidebarLinks = [
   >
     <a class="shell-skip" href="#page-content">跳至主要內容</a>
     <header class="shell-header">
-      <RouterLink to="/" class="shell-brand" aria-label="補對了嗎？首頁"
+      <RouterLink to="/" class="shell-brand" aria-label="補藥亂吃！首頁"
         ><img src="/brand-mark.svg" width="48" height="48" alt="" /><span
-          >補對了嗎？</span
+          >補藥亂吃！</span
         ></RouterLink
       >
       <p class="shell-tagline">給長輩與照顧者的<br />AI 營養補充評估</p>
@@ -120,7 +120,7 @@ const sidebarLinks = [
     </div>
 
     <footer class="shell-footer">
-      <RouterLink to="/">補對了嗎？</RouterLink>
+      <RouterLink to="/">補藥亂吃！</RouterLink>
       <p>本工具提供補充安全檢查資訊，不取代醫師或藥師的專業建議。</p>
       <span>設計示意</span>
     </footer>

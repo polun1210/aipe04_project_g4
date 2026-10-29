@@ -25,7 +25,7 @@ def _use_binary_format_for_uploads(schema: dict[str, Any]) -> None:
 
 
 def create_app() -> FastAPI:
-    app = FastAPI(title="補對了嗎？API", description=_DESCRIPTION)
+    app = FastAPI(title="補藥亂吃！API", description=_DESCRIPTION)
     register_error_handlers(app)
     app.include_router(catalog.router)
     app.include_router(drugs.router)
