@@ -5,7 +5,8 @@ import { readFile } from 'node:fs/promises'
 import { beforeEach, test } from 'node:test'
 import vm from 'node:vm'
 import ts from 'typescript'
-import { parse } from '@vue/compiler-sfc'
+import { compileTemplate, parse } from '@vue/compiler-sfc'
+import { renderToString } from 'vue/server-renderer'
 import * as vue from 'vue'
 import * as pinia from 'pinia'
 import * as vueRouter from 'vue-router'
@@ -47,8 +48,10 @@ async function load(id) {
       const ast = ts.createSourceFile(id, source, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS)
       const imports = ast.statements.filter(ts.isImportDeclaration)
       const body = ast.statements.filter((statement) => !ts.isImportDeclaration(statement))
-      const bindings =
-        'submit, ingredients, error, canSubmit, nutrientRows, lockedCount, busy, catalogBusy'
+      const bindings = `submit, ingredients, error, canSubmit, nutrientRows, lockedCount, busy, catalogBusy,
+         flow, medicine, previews, selectedImageId, confirmedCount, reviewRows, outOfScopeRows,
+         isTestExtraction, loadCatalog, doseLabels, doseAmounts, unitOptions, chooseNutrient,
+         nameFor, isReviewFrequency, stage`
       source = `${imports.map((s) => s.getText(ast)).join('\n')}
         export function setup() {
           ${body.map((s) => s.getText(ast)).join('\n')}
@@ -78,9 +81,36 @@ const { useSupplementFlowStore, productReady, submissionFor, isReviewFrequency }
 )
 const { useMedicineFlowStore } = await source('../src/stores/medicineFlow.ts')
 const reviewModule = await source('../src/views/SupplementReviewView.vue')
+const reviewSource = await readFile(
+  new URL('../src/views/SupplementReviewView.vue', import.meta.url),
+  'utf8',
+)
+const compiled = compileTemplate({
+  source: parse(reviewSource).descriptor.template.content,
+  id: 'review-test',
+  compilerOptions: { expressionPlugins: ['typescript'] },
+})
+assert.deepEqual(compiled.errors, [])
+const templateCode = ts.transpileModule(compiled.code, {
+  compilerOptions: { target: ts.ScriptTarget.ESNext, module: ts.ModuleKind.ESNext },
+}).outputText
+const templateModule = new vm.SourceTextModule(templateCode, { context })
+await templateModule.link((specifier) => load(specifier))
+await templateModule.evaluate()
+async function renderReview(review) {
+  const app = vue.createSSRApp({ setup: () => review, render: templateModule.namespace.render })
+  app.component('RouterLink', {
+    setup:
+      (_, { slots }) =>
+      () =>
+        vue.h('a', slots.default?.()),
+  })
+  app.component('ReviewImageGallery', { render: () => vue.h('div') })
+  return renderToString(app)
+}
 const ingredients = [{ code: 'calcium', category: 'target_nutrient', accepted_units: ['mg'] }]
 let flow, calls
-function addProduct(id) {
+function addProduct(id, extraRows = []) {
   flow.addBatch([], {
     product_id: id,
     product_name: `產品 ${id}`,
@@ -103,6 +133,7 @@ function addProduct(id) {
         nutrient_form_code: null,
         stated_elemental_amount: null,
       },
+      ...extraRows,
     ],
     extraction_meta: { ocr_version: 'stub-t01' },
   })
@@ -366,4 +397,153 @@ test('empty round bulk actions are harmless', () => {
   assert.equal(review.nutrientRows.value.length, 0)
   assert.equal(review.canSubmit.value, false)
   assert.equal(calls.length, 0)
+})
+
+function scopeRow(id, scope = 'out_of_scope') {
+  return {
+    row_id: id,
+    raw_name: `成分 ${id}`,
+    standard_code: null,
+    scope_status: scope,
+    source_image_id: 'img-01',
+    per_serving: null,
+    unit: null,
+    nutrient_form_code: null,
+    stated_elemental_amount: null,
+    requires_user_input: true,
+  }
+}
+
+test('mixed scopes render separate sections with name-only collapsed out-of-scope rows', async () => {
+  const a = addProduct('A', [scopeRow('outside'), scopeRow('unknown', 'unresolved')])
+  const review = setupReview()
+  assert.equal(review.reviewRows(a).length, 2)
+  assert.equal(review.outOfScopeRows(a).length, 1)
+  assert.equal(review.nutrientRows.value.length, 2)
+  flow.lockAllRows(ingredients)
+  assert.equal(review.lockedCount.value, 2)
+  assert.equal(review.confirmedCount(a), 2)
+  assert.equal(a.rows[1].locked, false)
+  assert.equal(a.rows[2].locked, true) // Unresolved still requires confirmation.
+  const html = await renderReview(review)
+  const [outside] = html.match(/<details\b[\s\S]*?<\/details>/g) ?? []
+  assert.ok(outside)
+  assert.match(outside, /目前不在評估範圍（1 項）/)
+  assert.match(outside, /<li>成分 outside<\/li>/)
+  assert.doesNotMatch(outside, /<(?:input|select|button)\b|辨識原文|每份含量/)
+  assert.doesNotMatch(outside.split('>')[0], /\bopen\b/)
+  const confirmation = html.slice(
+    html.indexOf('id="needs-confirmation-A"'),
+    html.indexOf('<details'),
+  )
+  assert.match(confirmation, /需要你確認/)
+  assert.match(confirmation, /成分 unknown/)
+  assert.doesNotMatch(confirmation, /成分 outside/)
+  assert.match(html, /max="2"/)
+})
+
+test('out-of-scope rows stay unchanged, unlocked and serialized through submit and retries', async () => {
+  const a = addProduct('A', [scopeRow('outside')])
+  const b = addProduct('B', [scopeRow('outside-B')])
+  const beforeDrafts = json(flow.products.map((product) => product.draft))
+  const outsideBefore = json(a.rows[1])
+  const review = setupReview()
+  flow.lockAllRows(ingredients)
+  flow.setLocked(a.rows[1], true, ingredients)
+  assert.deepEqual(json(a.rows[1]), outsideBefore)
+  assert.equal(review.nutrientRows.value.length, 2)
+  assert.equal(productReady(a, ingredients), true)
+  assert.equal(productReady(b, ingredients), true)
+  assert.equal(review.canSubmit.value, true)
+  assert.equal(submissionFor(a).nutrients.length, 2)
+  assert.deepEqual(json(submissionFor(a).nutrients[1]), {
+    row_id: 'outside',
+    standard_code: null,
+    scope_status: 'out_of_scope',
+    nutrient_form_code: null,
+    per_serving: null,
+    unit: null,
+    stated_elemental_amount: null,
+  })
+  flow.unlockAllRows()
+  assert.equal(review.canSubmit.value, false)
+  flow.lockAllRows(ingredients)
+  router.push = async () => {
+    throw new Error('navigation failed')
+  }
+  await review.submit()
+  assert.equal(review.error.value, '無法完成操作，請確認網路與後端服務後再試。')
+  assert.deepEqual(json(flow.products.map((product) => product.draft)), beforeDrafts)
+  assert.deepEqual(json(a.rows[1]), outsideBefore)
+  router.push = async () => {
+    router.currentRoute.value = { name: 'report', params: { caseId: 'case-1' } }
+  }
+  await review.submit()
+  assert.equal(review.error.value, '')
+  assert.equal(calls.filter((call) => call.path === '/api/products').length, 2)
+  assert.ok(
+    calls
+      .filter((call) => call.path === '/api/products')
+      .every((call) =>
+        JSON.parse(call.body).nutrients.some((row) => row.scope_status === 'out_of_scope'),
+      ),
+  )
+  assert.equal(flow.products.length, 0)
+})
+
+test('out-of-scope-only products can submit with no nutrient locks', async () => {
+  const a = addProduct('A', [scopeRow('outside')])
+  a.rows.shift()
+  a.draft.nutrients.shift()
+  const before = json(a.draft)
+  const review = setupReview()
+  flow.lockAllRows(ingredients)
+  assert.equal(review.nutrientRows.value.length, 0)
+  assert.equal(review.lockedCount.value, 0)
+  assert.equal(a.rows[0].locked, false)
+  assert.equal(productReady(a, ingredients), true)
+  assert.equal(review.canSubmit.value, true)
+  const html = await renderReview(review)
+  assert.doesNotMatch(html, /<progress|一鍵鎖定|type="checkbox"/)
+  assert.match(html, /目前沒有需要確認的成分/)
+  await review.submit()
+  assert.equal(review.error.value, '')
+  assert.equal(JSON.parse(calls[0].body).nutrients[0].scope_status, 'out_of_scope')
+  assert.deepEqual(json(a.draft), before)
+})
+
+test('unresolved and in-scope rows must still be saved, valid and locked', () => {
+  const a = addProduct('A', [scopeRow('outside'), scopeRow('unknown', 'unresolved')])
+  flow.setLocked(a.rows[0], true, ingredients)
+  const review = setupReview()
+  assert.equal(review.canSubmit.value, false)
+  flow.setLocked(a.rows[2], true, ingredients)
+  assert.equal(review.canSubmit.value, true)
+  flow.unlockAllRows()
+  flow.editRow(a.rows[0])
+  a.rows[0].edit.amount = -1
+  flow.saveRow(a, a.rows[0], ingredients)
+  flow.lockAllRows(ingredients)
+  assert.equal(review.canSubmit.value, false)
+  assert.equal(a.rows[0].editing, true)
+  assert.equal(a.rows[1].locked, false)
+  assert.equal(a.rows[2].locked, true)
+})
+
+test('saving an unresolved row as out-of-scope moves it without deleting the original draft', () => {
+  const a = addProduct('A', [scopeRow('unknown', 'unresolved')])
+  const original = json(a.draft)
+  const review = setupReview()
+  flow.editRow(a.rows[1])
+  a.rows[1].edit.choice = 'out_of_scope'
+  assert.equal(review.reviewRows(a).length, 2) // Do not hide an unsaved edit.
+  flow.saveRow(a, a.rows[1], ingredients)
+  assert.equal(review.reviewRows(a).length, 1)
+  assert.equal(review.outOfScopeRows(a).length, 1)
+  assert.equal(a.rows[1].locked, false)
+  assert.equal(a.rows[1].rawName, '成分 unknown')
+  assert.deepEqual(json(a.draft), original)
+  flow.lockAllRows(ingredients)
+  assert.equal(review.canSubmit.value, true)
+  assert.equal(submissionFor(a).nutrients[1].scope_status, 'out_of_scope')
 })
