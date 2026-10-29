@@ -20,8 +20,8 @@ const steps = [
   <div class="home-page">
     <a class="skip-link" href="#home-main">跳至主要內容</a>
     <header class="site-header">
-      <RouterLink class="brand" to="/" aria-label="補對了嗎？首頁"
-        ><span class="brand-mark" aria-hidden="true"></span><span>補對了嗎？</span></RouterLink
+      <RouterLink class="brand" to="/" aria-label="補藥亂吃！首頁"
+        ><span class="brand-mark" aria-hidden="true"></span><span>補藥亂吃！</span></RouterLink
       >
       <p class="brand-description">台灣長輩與家人的 AI 營養補充評估工具</p>
       <nav class="account-nav" aria-label="會員導覽">
@@ -221,7 +221,7 @@ const steps = [
     </main>
     <footer class="site-footer">
       <RouterLink class="brand footer-brand" to="/"
-        ><span class="brand-mark" aria-hidden="true"></span><span>補對了嗎？</span></RouterLink
+        ><span class="brand-mark" aria-hidden="true"></span><span>補藥亂吃！</span></RouterLink
       >
       <p>本工具提供補充安全檢查資訊，不取代醫師或藥師的專業建議。</p>
     </footer>
