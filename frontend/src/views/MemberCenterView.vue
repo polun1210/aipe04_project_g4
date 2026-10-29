@@ -10,7 +10,7 @@ import { RouterLink } from 'vue-router'
     <div class="member-actions">
       <RouterLink to="/settings"
         ><span aria-hidden="true">01</span><strong>個人資料設定 →</strong>
-        <p>查看基本資料與帳號設定。</p></RouterLink
+        <p>設定出生年月、性別與慢性疾病。</p></RouterLink
       >
       <RouterLink to="/reports"
         ><span aria-hidden="true">02</span><strong>評估記錄查詢 →</strong>

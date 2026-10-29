@@ -24,7 +24,7 @@ const steps = [
   { name: 'report', label: '評估報告', icon: 'M4 14h3v7H4Z M11 8h3v13h-3Z M18 3h3v18h-3Z' },
 ]
 const activeStep = computed(() => steps.findIndex((step) => step.name === route.name))
-const isAuth = computed(() => route.name === 'login' || route.name === 'register')
+const isAuth = computed(() => ['login', 'register', 'health-profile'].includes(String(route.name)))
 const isUpload = computed(
   () => route.name === 'medicine-upload' || route.name === 'supplement-upload',
 )
