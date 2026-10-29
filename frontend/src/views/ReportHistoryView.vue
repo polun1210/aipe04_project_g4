@@ -70,7 +70,7 @@ onMounted(search)
     <template v-else>
       <p role="status">共 {{ reports.length }} 筆報告</p>
       <p v-if="!reports.length">此日期範圍沒有報告。</p>
-      <ul v-else class="history-list">
+      <ul v-else>
         <li v-for="report in reports" :key="report.report_id">
           <h2>{{ taipeiDateTime(report.generated_at) }}</h2>
           <p>

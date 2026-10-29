@@ -3,7 +3,6 @@ import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { isNavigationFailure, onBeforeRouteLeave, useRouter } from 'vue-router'
 import { getCatalog, type Ingredient } from '../api/catalog'
 import { errorMessage } from '../api/client'
-import ReviewImageGallery from '../components/ReviewImageGallery.vue'
 import {
   createProduct,
   doseAmounts,
@@ -19,7 +18,6 @@ import {
   submissionFor,
   useSupplementFlowStore,
   type NutrientRow,
-  type SupplementProduct,
 } from '../stores/supplementFlow'
 
 const router = useRouter()
@@ -32,12 +30,6 @@ const busy = ref(false)
 const stage = ref('')
 const nutrientRows = computed(() => flow.products.flatMap((product) => product.rows))
 const lockedCount = computed(() => nutrientRows.value.filter((row) => row.locked).length)
-
-const selectedImageId = ref('')
-
-function confirmedCount(product: SupplementProduct) {
-  return product.rows.filter((row) => row.locked && !row.editing && !row.error).length
-}
 const urls = new Map<File, string>()
 const previews = flow.products.flatMap((product) =>
   product.draft.source_images.map((image) => {
@@ -152,7 +144,7 @@ onBeforeRouteLeave(() => {
 
 <template>
   <main class="supplement-review">
-    <h1>確認成分與實際攝取量</h1>
+    <h1>保健食品人工校對</h1>
     <p>資料暫存在本機，重新整理後需要重新上傳。請依原始標示確認每份量及成分。</p>
     <p>目前評估與報告使用後端示範實作及測試帳號，結果不代表你的實際健康評估。</p>
     <p><RouterLink to="/supplement-upload">返回上傳／新增其他保健食品</RouterLink></p>
@@ -169,8 +161,29 @@ onBeforeRouteLeave(() => {
     <form @submit.prevent="submit">
       <fieldset :disabled="busy || catalogBusy || !ingredients.length">
         <legend>確認保健食品與實際服用方式</legend>
+        <div v-if="nutrientRows.length" class="bulk-actions" aria-label="本輪營養素鎖定操作">
+          <button
+            type="button"
+            :disabled="lockedCount === nutrientRows.length"
+            @click="flow.lockAllRows(ingredients)"
+          >
+            一鍵鎖定
+          </button>
+          <button type="button" :disabled="lockedCount === 0" @click="flow.unlockAllRows()">
+            全部解除鎖定
+          </button>
+        </div>
+        <p v-if="nutrientRows.length" role="status" aria-live="polite" aria-atomic="true">
+          <template v-if="lockedCount === nutrientRows.length">
+            本輪 {{ lockedCount }} 筆營養素已全部鎖定。
+          </template>
+          <template v-else>
+            已鎖定 {{ lockedCount }} 筆營養素，另有
+            {{ nutrientRows.length - lockedCount }} 筆需要完成校對。
+          </template>
+        </p>
+        <p v-if="nutrientRows.length">一鍵鎖定會跳過編輯中或驗證未通過的營養素，不會送出評估。</p>
         <section
-          class="product-panel"
           v-for="(product, index) in flow.products"
           :key="product.id"
           :aria-labelledby="`product-${product.id}`"
@@ -179,319 +192,260 @@ onBeforeRouteLeave(() => {
           <p v-if="isTestExtraction(product.draft.extraction_meta.ocr_version)">
             目前是測試資料，不是實際辨識結果
           </p>
-          <div class="review-layout">
-            <section class="review-images" :aria-labelledby="`product-images-${product.id}`">
-              <h3 :id="`product-images-${product.id}`">保健食品圖片預覽</h3>
-              <ReviewImageGallery
-                v-model:selected-id="selectedImageId"
-                :images="
-                  previews
-                    .filter((image) => image.productId === product.id)
-                    .map((image) => ({
-                      id: image.id,
-                      label: image.name ?? '來源圖片遺失',
-                      src: image.url,
-                    }))
+          <figure
+            v-for="image in previews.filter((item) => item.productId === product.id)"
+            :id="image.id"
+            :key="image.id"
+          >
+            <img v-if="image.url" :src="image.url" :alt="image.name" width="280" />
+            <p v-else>無法取得此來源圖片，請參考原始標示。</p>
+            <figcaption>{{ image.name ?? '來源圖片遺失' }}</figcaption>
+          </figure>
+          <p>
+            <label :for="`name-${product.id}`">產品名稱（必填）</label>
+            <input :id="`name-${product.id}`" v-model="product.name" required />
+          </p>
+          <p>
+            <label :for="`serving-${product.id}`">每份量（幾錠／粒／mL 等）</label>
+            <input
+              :id="`serving-${product.id}`"
+              v-model.number="product.servingSize"
+              type="number"
+              min="0"
+              step="any"
+              required
+            />
+          </p>
+          <p>
+            <label :for="`dose-${product.id}`">劑型／每份量單位</label>
+            <select :id="`dose-${product.id}`" v-model="product.doseUnit" required>
+              <option value="" disabled>請選擇</option>
+              <option v-for="(label, code) in doseLabels" :key="code" :value="code">
+                {{ label }}
+              </option>
+            </select>
+          </p>
+          <h3>營養素與每份含量</h3>
+          <p v-if="!product.rows.length">目前沒有成分列，請按「＋新增營養素」。</p>
+          <ul>
+            <li v-for="row in product.rows" :key="row.id">
+              <p v-if="row.rawName !== null">
+                辨識原文：{{ row.rawName }}
+                <a
+                  v-if="
+                    previews.some(
+                      (image) =>
+                        image.productId === product.id && image.imageId === row.sourceImageId,
+                    )
+                  "
+                  :href="`#supplement-${product.id}-${row.sourceImageId}`"
+                  >查看來源圖片</a
+                >
+              </p>
+              <p v-else>手動新增（無來源圖片）</p>
+              <p
+                v-if="
+                  product.draft.nutrients.some(
+                    (item) => item.row_id === row.rowId && item.requires_user_input,
+                  )
                 "
-              />
-            </section>
-            <section class="review-fields" :aria-labelledby="`product-review-${product.id}`">
-              <h3 :id="`product-review-${product.id}`">請確認資料是否正確</h3>
-              <div v-if="product.rows.length" class="review-progress">
-                <p aria-live="polite">
-                  已確認 {{ confirmedCount(product) }} / {{ product.rows.length }} 項成分
+              >
+                此列辨識有不確定之處，請核對原始標示。
+              </p>
+              <template v-if="row.editing">
+                <p>
+                  <label :for="`nutrient-${row.id}`">營養素名稱／評估範圍</label>
+                  <select
+                    :id="`nutrient-${row.id}`"
+                    v-model="row.edit.choice"
+                    @change="chooseNutrient(row)"
+                  >
+                    <option value="">請選擇</option>
+                    <option v-for="item in ingredients" :key="item.code" :value="item.code">
+                      {{ item.display_name_zh }}
+                    </option>
+                    <option value="out_of_scope">不在評估範圍</option>
+                    <option value="unresolved">無法確認</option>
+                  </select>
                 </p>
-                <progress
-                  :value="confirmedCount(product)"
-                  :max="product.rows.length"
-                  :aria-label="`${product.name || `保健食品 ${index + 1}`}的成分校對進度`"
-                />
-              </div>
-              <p>
-                <label :for="`name-${product.id}`">產品名稱（必填）</label>
-                <input :id="`name-${product.id}`" v-model="product.name" required />
-              </p>
-              <p>
-                <label :for="`serving-${product.id}`">每份量（幾錠／粒／mL 等）</label>
-                <input
-                  :id="`serving-${product.id}`"
-                  v-model.number="product.servingSize"
-                  type="number"
-                  min="0"
-                  step="any"
-                  required
-                />
-              </p>
-              <p>
-                <label :for="`dose-${product.id}`">劑型／每份量單位</label>
-                <select :id="`dose-${product.id}`" v-model="product.doseUnit" required>
-                  <option value="" disabled>請選擇</option>
-                  <option v-for="(label, code) in doseLabels" :key="code" :value="code">
-                    {{ label }}
-                  </option>
-                </select>
-              </p>
-              <h3>營養素與每份含量</h3>
-              <div v-if="nutrientRows.length" class="bulk-actions" aria-label="本輪營養素鎖定操作">
+                <p>
+                  <label :for="`amount-${row.id}`">每份含量</label>
+                  <input
+                    :id="`amount-${row.id}`"
+                    v-model.number="row.edit.amount"
+                    type="number"
+                    min="0"
+                    step="any"
+                  />
+                </p>
+                <p>
+                  <label :for="`unit-${row.id}`">劑量單位</label>
+                  <select :id="`unit-${row.id}`" v-model="row.edit.unit">
+                    <option value="">未標示</option>
+                    <option v-for="unit in unitOptions" :key="unit" :value="unit">
+                      {{ unit }}
+                    </option>
+                  </select>
+                </p>
+                <p>
+                  <label :for="`elemental-${row.id}`"
+                    >標示載明的元素量（選填，與每份含量使用相同單位）</label
+                  >
+                  <input
+                    :id="`elemental-${row.id}`"
+                    v-model.number="row.edit.elemental"
+                    type="number"
+                    min="0"
+                    step="any"
+                  />
+                </p>
+                <button type="button" @click="flow.saveRow(product, row, ingredients)">儲存</button>
+                <button type="button" @click="flow.cancelRow(product, row)">取消</button>
+              </template>
+              <template v-else>
+                <span
+                  >{{ nameFor(row.value.choice) }}：{{ row.value.amount ?? '未標示' }}
+                  {{ row.value.unit }}</span
+                >
+                <button type="button" :disabled="row.locked" @click="flow.editRow(row)">
+                  編輯
+                </button>
+                <label class="lock-label"
+                  ><input
+                    type="checkbox"
+                    :checked="row.locked"
+                    @change="
+                      flow.setLocked(row, ($event.target as HTMLInputElement).checked, ingredients)
+                    "
+                  />鎖定變更</label
+                >
                 <button
                   type="button"
-                  :disabled="lockedCount === nutrientRows.length"
-                  @click="flow.lockAllRows(ingredients)"
+                  :disabled="row.locked"
+                  @click="product.rows = product.rows.filter((item) => item.id !== row.id)"
                 >
-                  一鍵鎖定
+                  移除
                 </button>
-                <button type="button" :disabled="lockedCount === 0" @click="flow.unlockAllRows()">
-                  全部解除鎖定
-                </button>
-              </div>
-              <p v-if="nutrientRows.length" role="status" aria-live="polite" aria-atomic="true">
-                <template v-if="lockedCount === nutrientRows.length">
-                  本輪 {{ lockedCount }} 筆營養素已全部鎖定。
-                </template>
-                <template v-else>
-                  已鎖定 {{ lockedCount }} 筆營養素，另有
-                  {{ nutrientRows.length - lockedCount }} 筆需要完成校對。
-                </template>
-              </p>
-              <p v-if="nutrientRows.length">
-                一鍵鎖定會跳過編輯中或驗證未通過的營養素，不會送出評估。
-              </p>
-              <p v-if="!product.rows.length">目前沒有成分列，請按「＋新增營養素」。</p>
-              <ul class="review-list">
-                <li v-for="row in product.rows" :key="row.id">
-                  <p v-if="row.rawName !== null">
-                    辨識原文：{{ row.rawName }}
-                    <a
-                      v-if="
-                        previews.some(
-                          (image) =>
-                            image.productId === product.id && image.imageId === row.sourceImageId,
-                        )
-                      "
-                      :href="`#supplement-${product.id}-${row.sourceImageId}`"
-                      @click="selectedImageId = `supplement-${product.id}-${row.sourceImageId}`"
-                      >查看來源圖片</a
-                    >
-                  </p>
-                  <p v-else>手動新增（無來源圖片）</p>
-                  <p
-                    v-if="
-                      product.draft.nutrients.some(
-                        (item) => item.row_id === row.rowId && item.requires_user_input,
-                      )
-                    "
-                  >
-                    此列辨識有不確定之處，請核對原始標示。
-                  </p>
-                  <template v-if="row.editing">
-                    <p>
-                      <label :for="`nutrient-${row.id}`">營養素名稱／評估範圍</label>
-                      <select
-                        :id="`nutrient-${row.id}`"
-                        v-model="row.edit.choice"
-                        @change="chooseNutrient(row)"
-                      >
-                        <option value="">請選擇</option>
-                        <option v-for="item in ingredients" :key="item.code" :value="item.code">
-                          {{ item.display_name_zh }}
-                        </option>
-                        <option value="out_of_scope">不在評估範圍</option>
-                        <option value="unresolved">無法確認</option>
-                      </select>
-                    </p>
-                    <p>
-                      <label :for="`amount-${row.id}`">每份含量</label>
-                      <input
-                        :id="`amount-${row.id}`"
-                        v-model.number="row.edit.amount"
-                        type="number"
-                        min="0"
-                        step="any"
-                      />
-                    </p>
-                    <p>
-                      <label :for="`unit-${row.id}`">劑量單位</label>
-                      <select :id="`unit-${row.id}`" v-model="row.edit.unit">
-                        <option value="">未標示</option>
-                        <option v-for="unit in unitOptions" :key="unit" :value="unit">
-                          {{ unit }}
-                        </option>
-                      </select>
-                    </p>
-                    <p>
-                      <label :for="`elemental-${row.id}`"
-                        >標示載明的元素量（選填，與每份含量使用相同單位）</label
-                      >
-                      <input
-                        :id="`elemental-${row.id}`"
-                        v-model.number="row.edit.elemental"
-                        type="number"
-                        min="0"
-                        step="any"
-                      />
-                    </p>
-                    <button type="button" @click="flow.saveRow(product, row, ingredients)">
-                      儲存
-                    </button>
-                    <button type="button" @click="flow.cancelRow(product, row)">取消</button>
-                  </template>
-                  <div v-else class="review-row-content">
-                    <strong class="review-row-value"
-                      >{{ nameFor(row.value.choice) }}：{{ row.value.amount ?? '未標示' }}
-                      {{ row.value.unit }}</strong
-                    >
-                    <div class="review-row-actions">
-                      <button type="button" :disabled="row.locked" @click="flow.editRow(row)">
-                        編輯
-                      </button>
-                      <label class="lock-label"
-                        ><input
-                          type="checkbox"
-                          :checked="row.locked"
-                          @change="
-                            flow.setLocked(
-                              row,
-                              ($event.target as HTMLInputElement).checked,
-                              ingredients,
-                            )
-                          "
-                        />鎖定變更</label
-                      >
-                      <button
-                        type="button"
-                        :disabled="row.locked"
-                        @click="product.rows = product.rows.filter((item) => item.id !== row.id)"
-                      >
-                        移除
-                      </button>
-                    </div>
-                  </div>
-                  <p v-if="row.error" role="alert">{{ row.error }}</p>
-                </li>
-              </ul>
-              <button type="button" @click="flow.addRow(product)">＋新增營養素</button>
-              <h3>使用者實際服用方式</h3>
-              <p v-if="product.draft.label_suggested_intake">
-                標示建議：{{ product.draft.label_suggested_intake.raw_text }}（請確認實際服用方式）
-              </p>
-              <p>
-                <label :for="`frequency-${product.id}`">服用頻率</label>
-                <select
-                  :id="`frequency-${product.id}`"
-                  v-model="product.frequency"
-                  required
-                  :aria-invalid="
-                    product.frequency && !isReviewFrequency(product.frequency) ? 'true' : undefined
-                  "
-                  :aria-describedby="
-                    product.frequency && !isReviewFrequency(product.frequency)
-                      ? `frequency-error-${product.id}`
-                      : undefined
-                  "
-                >
-                  <option value="" disabled>請選擇</option>
-                  <option
-                    v-if="product.frequency && !isReviewFrequency(product.frequency)"
-                    :value="product.frequency"
-                    disabled
-                  >
-                    請重新選擇服用頻率
-                  </option>
-                  <option value="daily">每天</option>
-                  <option value="alternate_days">每兩天</option>
-                  <option value="weekly_n_times">每週指定天數</option>
-                  <option value="cyclic_on_off">週期性服用／停用</option>
-                </select>
-              </p>
-              <p
-                v-if="product.frequency && !isReviewFrequency(product.frequency)"
-                :id="`frequency-error-${product.id}`"
-                role="alert"
-              >
-                原先暫存的服用頻率已不適用，請重新選擇有效的服用頻率後再送出評估。
-              </p>
-              <p v-if="product.frequency === 'weekly_n_times'">
-                <label :for="`weekly-${product.id}`">每週服用幾天</label>
-                <input
-                  :id="`weekly-${product.id}`"
-                  v-model.number="product.weekly"
-                  type="number"
-                  min="1"
-                  max="7"
-                  step="any"
-                  required
-                />
-              </p>
-              <template v-if="product.frequency === 'cyclic_on_off'">
-                <p>
-                  <label :for="`on-${product.id}`">連續服用天數</label
-                  ><input
-                    :id="`on-${product.id}`"
-                    v-model.number="product.onDays"
-                    type="number"
-                    min="0"
-                    step="any"
-                    required
-                  />
-                </p>
-                <p>
-                  <label :for="`off-${product.id}`">停止服用天數</label
-                  ><input
-                    :id="`off-${product.id}`"
-                    v-model.number="product.offDays"
-                    type="number"
-                    min="0"
-                    step="any"
-                    required
-                  />
-                </p>
               </template>
-              <p>
-                <label :for="`times-${product.id}`">服用當日每日次數</label>
-                <select :id="`times-${product.id}`" v-model.number="product.times" required>
-                  <option value="" disabled>請選擇</option>
-                  <option v-for="times in [1, 2, 3]" :key="times" :value="times">
-                    {{ times }} 次
-                  </option>
-                  <option
-                    v-if="product.times && ![1, 2, 3].includes(Number(product.times))"
-                    :value="product.times"
-                  >
-                    {{ product.times }} 次（依標示）
-                  </option>
-                </select>
-              </p>
-              <p>
-                <label :for="`intake-${product.id}`"
-                  >每次服用量
-                  {{ product.doseUnit ? `（${doseLabels[product.doseUnit]}）` : '' }}</label
-                >
-                <input
-                  :id="`intake-${product.id}`"
-                  v-model.number="product.amount"
-                  type="number"
-                  min="0"
-                  step="any"
-                  :list="`doses-${product.id}`"
-                  required
-                />
-                <datalist :id="`doses-${product.id}`">
-                  <option
-                    v-for="amount in product.doseUnit ? doseAmounts[product.doseUnit] : []"
-                    :key="amount"
-                    :value="amount"
-                  />
-                </datalist>
-              </p>
-            </section>
-          </div>
+              <p v-if="row.error" role="alert">{{ row.error }}</p>
+            </li>
+          </ul>
+          <button type="button" @click="flow.addRow(product)">＋新增營養素</button>
+          <h3>使用者實際服用方式</h3>
+          <p v-if="product.draft.label_suggested_intake">
+            標示建議：{{ product.draft.label_suggested_intake.raw_text }}（請確認實際服用方式）
+          </p>
+          <p>
+            <label :for="`frequency-${product.id}`">服用頻率</label>
+            <select
+              :id="`frequency-${product.id}`"
+              v-model="product.frequency"
+              required
+              :aria-invalid="
+                product.frequency && !isReviewFrequency(product.frequency) ? 'true' : undefined
+              "
+              :aria-describedby="
+                product.frequency && !isReviewFrequency(product.frequency)
+                  ? `frequency-error-${product.id}`
+                  : undefined
+              "
+            >
+              <option value="" disabled>請選擇</option>
+              <option
+                v-if="product.frequency && !isReviewFrequency(product.frequency)"
+                :value="product.frequency"
+                disabled
+              >
+                請重新選擇服用頻率
+              </option>
+              <option value="daily">每天</option>
+              <option value="alternate_days">每兩天</option>
+              <option value="weekly_n_times">每週指定天數</option>
+              <option value="cyclic_on_off">週期性服用／停用</option>
+            </select>
+          </p>
+          <p
+            v-if="product.frequency && !isReviewFrequency(product.frequency)"
+            :id="`frequency-error-${product.id}`"
+            role="alert"
+          >
+            原先暫存的服用頻率已不適用，請重新選擇有效的服用頻率後再送出評估。
+          </p>
+          <p v-if="product.frequency === 'weekly_n_times'">
+            <label :for="`weekly-${product.id}`">每週服用幾天</label>
+            <input
+              :id="`weekly-${product.id}`"
+              v-model.number="product.weekly"
+              type="number"
+              min="1"
+              max="7"
+              step="any"
+              required
+            />
+          </p>
+          <template v-if="product.frequency === 'cyclic_on_off'">
+            <p>
+              <label :for="`on-${product.id}`">連續服用天數</label
+              ><input
+                :id="`on-${product.id}`"
+                v-model.number="product.onDays"
+                type="number"
+                min="0"
+                step="any"
+                required
+              />
+            </p>
+            <p>
+              <label :for="`off-${product.id}`">停止服用天數</label
+              ><input
+                :id="`off-${product.id}`"
+                v-model.number="product.offDays"
+                type="number"
+                min="0"
+                step="any"
+                required
+              />
+            </p>
+          </template>
+          <p>
+            <label :for="`times-${product.id}`">服用當日每日次數</label>
+            <select :id="`times-${product.id}`" v-model.number="product.times" required>
+              <option value="" disabled>請選擇</option>
+              <option v-for="times in [1, 2, 3]" :key="times" :value="times">{{ times }} 次</option>
+              <option
+                v-if="product.times && ![1, 2, 3].includes(Number(product.times))"
+                :value="product.times"
+              >
+                {{ product.times }} 次（依標示）
+              </option>
+            </select>
+          </p>
+          <p>
+            <label :for="`intake-${product.id}`"
+              >每次服用量 {{ product.doseUnit ? `（${doseLabels[product.doseUnit]}）` : '' }}</label
+            >
+            <input
+              :id="`intake-${product.id}`"
+              v-model.number="product.amount"
+              type="number"
+              min="0"
+              step="any"
+              :list="`doses-${product.id}`"
+              required
+            />
+            <datalist :id="`doses-${product.id}`">
+              <option
+                v-for="amount in product.doseUnit ? doseAmounts[product.doseUnit] : []"
+                :key="amount"
+                :value="amount"
+              />
+            </datalist>
+          </p>
         </section>
         <p v-if="flow.products.length && !canSubmit && !busy">
           有未確認項目，請填寫產品名稱、鎖定所有成分，並填寫大於 0 的每份量與實際服用方式。
         </p>
-        <button class="primary-action" type="submit" :disabled="!canSubmit">
-          下一步：送出並產生報告
-        </button>
+        <button type="submit" :disabled="!canSubmit">下一步：送出並產生報告</button>
       </fieldset>
     </form>
     <p v-if="busy" role="status">{{ stage }}</p>

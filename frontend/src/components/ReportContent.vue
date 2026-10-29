@@ -20,15 +20,13 @@ function unitLabel(unit: string) {
 }
 const ingredients = ref<Ingredient[]>([])
 const nutrientNames = computed(
-  () =>
-    new Map([
-      ...ingredients.value.map((item) => [item.code, item.display_name_zh] as const),
-      ...props.report.nutrients.map((item) => [item.nutrient_code, item.display_name_zh] as const),
-    ]),
+  () => new Map([
+    ...ingredients.value.map((item) => [item.code, item.display_name_zh] as const),
+    ...props.report.nutrients.map((item) => [item.nutrient_code, item.display_name_zh] as const),
+  ]),
 )
 watch(
-  () =>
-    props.report.disclosures.drug_source_not_counted.some((code) => !nutrientNames.value.has(code)),
+  () => props.report.disclosures.drug_source_not_counted.some((code) => !nutrientNames.value.has(code)),
   async (missingNames) => {
     if (!missingNames) return
     try {
@@ -76,7 +74,7 @@ function sourceUrl(url: string | null) {
 </script>
 
 <template>
-  <article class="report-content">
+  <article>
     <h1>我的營養補充評估報告</h1>
     <p role="status">
       目前後端計算與報告仍為示範實作，使用測試帳號與範例內容，並非你的正式健康評估。
@@ -85,9 +83,7 @@ function sourceUrl(url: string | null) {
     <p>報告編號：{{ report.report_id }}</p>
     <p>{{ report.summary }}</p>
     <section aria-labelledby="report-profile">
-      <h2 id="report-profile">
-        <span class="section-index" aria-hidden="true">01</span>使用者基本資料
-      </h2>
+      <h2 id="report-profile">① 使用者基本資料</h2>
       <p>
         年齡：{{ report.profile.age }}；性別：{{
           report.profile.sex === 'male'
@@ -111,9 +107,7 @@ function sourceUrl(url: string | null) {
       <p>保健食品：{{ report.products.map((item) => item.display_name).join('、') }}</p>
     </section>
     <section aria-labelledby="report-nutrients">
-      <h2 id="report-nutrients">
-        <span class="section-index" aria-hidden="true">02</span>營養素攝取量與上限比對
-      </h2>
+      <h2 id="report-nutrients">② 營養素攝取量與上限比對</h2>
       <details>
         <summary>單位說明</summary>
         <ul>
@@ -152,9 +146,7 @@ function sourceUrl(url: string | null) {
       </section>
     </section>
     <section aria-labelledby="report-interactions">
-      <h2 id="report-interactions">
-        <span class="section-index" aria-hidden="true">03</span>交互作用
-      </h2>
+      <h2 id="report-interactions">③ 交互作用</h2>
       <p v-if="!report.interactions.length">本份報告未列出交互作用；這不代表已排除所有風險。</p>
       <section v-for="interaction in report.interactions" :key="interaction.ingredient_code">
         <h3>{{ interaction.display_name_zh }}：{{ severity[interaction.severity] }}</h3>
@@ -168,7 +160,7 @@ function sourceUrl(url: string | null) {
       </section>
     </section>
     <section aria-labelledby="report-advice">
-      <h2 id="report-advice"><span class="section-index" aria-hidden="true">04</span>改善建議</h2>
+      <h2 id="report-advice">④ 改善建議</h2>
       <p v-if="!report.interactions.length">本份報告未提供特定交互作用建議。</p>
       <ul>
         <template v-for="interaction in report.interactions" :key="interaction.ingredient_code">
@@ -183,9 +175,7 @@ function sourceUrl(url: string | null) {
       </ul>
     </section>
     <section aria-labelledby="report-disclosures">
-      <h2 id="report-disclosures">
-        <span class="section-index" aria-hidden="true">05</span>評估範圍與資料來源
-      </h2>
+      <h2 id="report-disclosures">⑤ 評估範圍與資料來源</h2>
       <p>
         涵蓋 {{ report.disclosures.covered_known_conditions.length }} 種慢性病、{{
           report.disclosures.covered_drug_classes.length

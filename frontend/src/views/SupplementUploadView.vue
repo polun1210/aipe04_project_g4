@@ -155,7 +155,7 @@ onUnmounted(releaseImages)
 
 <template>
   <main class="supplement-upload">
-    <h1>上傳保健食品標示</h1>
+    <h1>保健食品圖片上傳</h1>
     <p>每批代表一罐產品，可上傳成分表或營養標示，辨識結果仍需逐筆校對。</p>
     <p v-if="!medicineReady" role="alert">藥品尚未全部確認，請先完成藥品校對。</p>
     <p><RouterLink to="/medicine-review">返回藥人工校對</RouterLink></p>
@@ -191,7 +191,7 @@ onUnmounted(releaseImages)
           {{ categoryError }}
         </p>
         <p>可從建議種類選取或自行輸入，最多 30 字；種類不影響辨識或評估。</p>
-        <p class="upload-field">
+        <p>
           <label for="supplement-name">保健食品名稱（必填）</label>
           <input
             id="supplement-name"
@@ -205,7 +205,7 @@ onUnmounted(releaseImages)
           {{ nameError }}
         </p>
         <p>請填寫產品包裝上的名稱，辨識後仍可在人工校對頁修改。</p>
-        <p class="upload-field">
+        <p>
           <label for="ingredient-images">成分表</label>
           <input
             id="ingredient-images"
@@ -215,7 +215,7 @@ onUnmounted(releaseImages)
             @change="selectFiles($event, 'ingredients')"
           />
         </p>
-        <p class="upload-field">
+        <p>
           <label for="nutrition-images">營養標示</label>
           <input
             id="nutrition-images"
@@ -226,7 +226,7 @@ onUnmounted(releaseImages)
           />
         </p>
         <p>合計 1 至 3 張，每張不得超過 3 MB。已選擇 {{ images.length }} 張。</p>
-        <ul class="preview-grid">
+        <ul>
           <li v-for="image in images" :key="image.id">
             <img
               :src="image.url"
@@ -243,7 +243,7 @@ onUnmounted(releaseImages)
           圖片上傳提醒：照片可能包含姓名等個人資訊。辨識時，照片會透過 OpenRouter 轉送至 Google
           的辨識服務。建議上傳前先遮住姓名等不必要的個人資訊。
         </p>
-        <button class="primary-action" type="submit" :disabled="!canUpload">開始辨識</button>
+        <button type="submit" :disabled="!canUpload">開始辨識</button>
       </fieldset>
     </form>
     <p v-if="busy" role="status">圖片上傳與辨識處理中…</p>

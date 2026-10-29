@@ -228,13 +228,13 @@ onUnmounted(releaseAllPreviews)
 
 <template>
   <main>
-    <h1>先上傳你的藥包照片</h1>
+    <h1>藥圖片上傳</h1>
     <p id="upload-notice">選圖後按「開始辨識」會上傳圖片，辨識結果仍需由你逐筆校對。</p>
 
     <ul v-if="errorMessages.length" role="alert">
       <li v-for="(message, index) in errorMessages" :key="index">{{ message }}</li>
     </ul>
-    <p class="upload-field">
+    <p>
       <label for="medicine-image">請上傳藥包圖片</label>
       <input
         id="medicine-image"
@@ -252,7 +252,7 @@ onUnmounted(releaseAllPreviews)
     </p>
     <p v-if="selectedImages.length === 0">尚未選擇圖片。</p>
 
-    <ul v-else class="preview-grid">
+    <ul v-else>
       <li v-for="image in selectedImages" :key="image.id">
         <figure>
           <img
@@ -290,9 +290,7 @@ onUnmounted(releaseAllPreviews)
       Google 的辨識服務。建議上傳前先遮住姓名等不必要的個人資訊。
     </p>
     <p>
-      <button class="primary-action" type="button" :disabled="!canUpload" @click="startRecognition">
-        開始辨識
-      </button>
+      <button type="button" :disabled="!canUpload" @click="startRecognition">開始辨識</button>
     </p>
     <p v-if="isUploading" role="status">圖片上傳與辨識處理中</p>
     <p v-else-if="!receivedDraft">請等待所有圖片完成載入驗證後開始辨識。失敗時不會自動重送。</p>

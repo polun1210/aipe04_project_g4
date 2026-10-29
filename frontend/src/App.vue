@@ -1,12 +1,7 @@
 ﻿<script setup lang="ts">
-import { RouterView, useRoute } from 'vue-router'
-import AppShell from './components/AppShell.vue'
-import './assets/app-theme.css'
-
-const route = useRoute()
+import { RouterView } from 'vue-router'
 </script>
 
 <template>
-  <RouterView v-if="route.name === 'home'" />
-  <AppShell v-else><RouterView /></AppShell>
+  <RouterView />
 </template>

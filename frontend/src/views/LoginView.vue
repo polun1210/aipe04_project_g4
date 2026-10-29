@@ -1,38 +1,141 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { RouterLink } from 'vue-router'
+import { onMounted, ref } from 'vue'
+import { GoogleLogin, type CallbackTypes } from 'vue3-google-login'
 
-const email = ref<string>('')
-const password = ref<string>('')
+// 想修改頁面標題，改這行文字即可
+const title = '歡迎使用，請選擇以下方式登入'
 
-function handleSubmit(): void {
-  // 暫不執行登入動作；保留函式供學習表單事件。
-  return
+const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID
+const message = ref('')
+const isCheckingSession = ref(true)
+
+type User = {
+  user_id: number
+  email: string | null
+  name: string | null
+}
+
+const currentUser = ref<User | null>(null)
+
+// 頁面開啟或重新整理時，向後端確認是否已登入
+onMounted(async () => {
+  try {
+    const res = await fetch('http://localhost:8000/api/me', {
+      credentials: 'include',
+    })
+
+    if (res.ok) {
+      currentUser.value = await res.json()
+    }
+  } catch (error) {
+    console.error('查詢登入狀態失敗：', error)
+  } finally {
+    isCheckingSession.value = false
+  }
+})
+
+// Google 登入成功後，把憑證交給後端
+const handleLoginSuccess: CallbackTypes.CredentialCallback = async (response) => {
+  const credential = response.credential
+
+  if (!credential) {
+    message.value = '未取得 Google 登入憑證。'
+    return
+  }
+
+  try {
+    const res = await fetch('http://localhost:8000/api/auth/google', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ credential }),
+    })
+
+    if (!res.ok) {
+      throw new Error(`登入失敗：${res.status}`)
+    }
+
+    const user: User = await res.json()
+    currentUser.value = user
+    message.value = `登入成功：${user.email}`
+  } catch (error) {
+    console.error('後端驗證失敗：', error)
+    message.value = '後端驗證失敗，請稍後再試。'
+  }
+}
+
+const handleLoginError = (error: unknown) => {
+  console.error('Google 登入失敗：', error)
+  message.value = 'Google 登入失敗或已取消，請再試一次。'
+}
+
+// 登出並清除畫面上的使用者資料
+async function handleLogout() {
+  try {
+    const res = await fetch('http://localhost:8000/api/logout', {
+      method: 'POST',
+      credentials: 'include',
+    })
+
+    if (!res.ok) {
+      throw new Error(`登出失敗：${res.status}`)
+    }
+
+    currentUser.value = null
+    message.value = '已登出'
+  } catch (error) {
+    console.error('登出失敗：', error)
+    message.value = '登出失敗，請稍後再試。'
+  }
 }
 </script>
 
 <template>
-  <main>
-    <h1>登入</h1>
-    <p id="login-notice">目前可開啟註冊表單，但登入與建立帳號功能尚未開放。</p>
+  <main class="login-page">
+    <section class="login-card">
+      <h1>{{ title }}</h1>
 
-    <!-- @submit：Vue 語法，監聽表單送出事件。
-    .prevent：阻止瀏覽器原本的表單送出行為，避免重新載入頁面。
-    "handleSubmit"：事件發生時執行的函式。 -->
-    <form aria-describedby="login-notice" @submit.prevent="handleSubmit">
-      <p>
-        <!-- v-model="email" 提供雙向綁定 -->
-        <label for="email">帳號（Email）</label>
-        <input id="email" v-model="email" type="email" autocomplete="username" />
-      </p>
+      <p v-if="isCheckingSession">正在確認登入狀態…</p>
 
-      <p>
-        <label for="password">密碼</label>
-        <input id="password" v-model="password" type="password" autocomplete="current-password" />
-      </p>
+      <div v-else-if="currentUser" class="user-info">
+        <p>已登入：{{ currentUser.name || currentUser.email }}</p>
+        <button type="button" @click="handleLogout">登出</button>
+      </div>
 
-      <RouterLink to="/register">註冊</RouterLink>
-      <button type="submit" disabled>登入（尚未開放）</button>
-    </form>
+      <div v-else class="google-login-container">
+        <GoogleLogin
+          :client-id="clientId"
+          :callback="handleLoginSuccess"
+          :error="handleLoginError"
+        />
+      </div>
+
+      <p v-if="message" role="status">{{ message }}</p>
+    </section>
   </main>
 </template>
+
+<style scoped>
+.login-page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+.login-card {
+  width: min(100%, 400px);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+h1 {
+  margin: 0;
+}
+
+.google-login-container,
+.user-info {
+  margin-top: 8px;
+}
+</style>

@@ -4,18 +4,10 @@ import { storeToRefs } from 'pinia'
 import { useMedicineFlowStore, type MedicineRow } from '../stores/medicineFlow'
 import { lookupDrug, type DrugLookupResponse } from '../api/drugs'
 import { errorMessage } from '../api/client'
-import ReviewImageGallery from '../components/ReviewImageGallery.vue'
 
 const flow = useMedicineFlowStore()
 const { medicines, allConfirmed } = storeToRefs(flow)
 const bulkMessage = ref('')
-const selectedImageId = ref('')
-const confirmedCount = computed(
-  () =>
-    medicines.value.filter(
-      (medicine) => medicine.isLocked && !medicine.isEditing && medicine.name.trim() !== '',
-    ).length,
-)
 const lookups = ref<
   Record<
     string,
@@ -120,11 +112,6 @@ const reviewRows = computed(() =>
     return { medicine, original, source }
   }),
 )
-const galleryImages = sourceImages.map((image) => ({
-  id: image.id,
-  label: `第 ${image.batchNumber} 批：${image.fileName ?? '來源圖片遺失'}`,
-  src: image.previewUrl,
-}))
 
 onUnmounted(() => {
   previewUrls.forEach((url) => URL.revokeObjectURL(url))
@@ -133,153 +120,152 @@ onUnmounted(() => {
 
 <template>
   <main>
-    <h1>核對你的藥品名稱</h1>
+    <h1>藥人工校對</h1>
     <p>資料暫存在本機，返回上傳頁可繼續新增批次；重新整理後需要重新上傳。</p>
     <p v-if="!flow.drugBatches.length && !medicines.length" role="status">
       目前沒有藥品資料，請返回上傳藥包圖片，或自行新增藥名。
     </p>
     <p><RouterLink to="/medicine-upload">返回藥圖片上傳／新增批次</RouterLink></p>
 
-    <div class="review-layout">
-      <section class="review-panel review-images" aria-labelledby="image-title">
-        <h2 id="image-title">藥包圖片預覽</h2>
-        <ReviewImageGallery v-model:selected-id="selectedImageId" :images="galleryImages" />
-      </section>
+    <section aria-labelledby="image-title">
+      <h2 id="image-title">藥包圖片預覽</h2>
+      <p v-if="!sourceImages.length">目前沒有可預覽的藥包圖片。</p>
+      <figure v-for="image in sourceImages" :id="image.id" :key="image.id">
+        <img
+          v-if="image.previewUrl"
+          :src="image.previewUrl"
+          :alt="`第 ${image.batchNumber} 批：${image.fileName} 的藥包圖片`"
+          width="320"
+        />
+        <p v-else>無法預覽此來源圖片，請參考原始藥包確認藥名。</p>
+        <figcaption>
+          第 {{ image.batchNumber }} 批：{{ image.fileName ?? '來源圖片遺失' }}
+        </figcaption>
+      </figure>
+    </section>
 
-      <section class="review-panel review-fields" aria-labelledby="review-title">
-        <h2 id="review-title">請確認資料是否正確</h2>
-        <div v-if="medicines.length" class="review-progress">
-          <p aria-live="polite">已確認 {{ confirmedCount }} / {{ medicines.length }} 項藥品</p>
-          <progress :value="confirmedCount" :max="medicines.length" aria-label="藥品校對進度" />
-        </div>
-        <p>儲存只更新本機校對資料；鎖定表示由你確認，尚未送出評估。</p>
-        <p>
-          藥名可手動輸入或查詢候選藥名；候選來自後端目前的藥品目錄，未列出不代表範圍外。送出評估時由後端決定對照結果。
-        </p>
-        <div v-if="medicines.length" class="bulk-controls">
-          <button type="button" @click="setAllLocked(true)">一鍵鎖定</button>
-          <button type="button" @click="setAllLocked(false)">全部解除鎖定</button>
-        </div>
-        <p role="status" aria-live="polite">{{ bulkMessage }}</p>
-        <p v-if="medicines.length === 0">
-          目前沒有藥品列；若照片未辨識出藥名，可以按「＋新增」人工輸入。
-        </p>
+    <section aria-labelledby="review-title">
+      <h2 id="review-title">請確認資料是否正確</h2>
+      <p>儲存只更新本機校對資料；鎖定表示由你確認，尚未送出評估。</p>
+      <p>
+        藥名可手動輸入或查詢候選藥名；候選來自後端目前的藥品目錄，未列出不代表範圍外。送出評估時由後端決定對照結果。
+      </p>
+      <div v-if="medicines.length" class="bulk-controls">
+        <button type="button" @click="setAllLocked(true)">一鍵鎖定</button>
+        <button type="button" @click="setAllLocked(false)">全部解除鎖定</button>
+      </div>
+      <p role="status" aria-live="polite">{{ bulkMessage }}</p>
+      <p v-if="medicines.length === 0">
+        目前沒有藥品列；若照片未辨識出藥名，可以按「＋新增」人工輸入。
+      </p>
 
-        <ul v-else class="review-list">
-          <li v-for="{ medicine, original, source } in reviewRows" :key="medicine.id">
-            <p v-if="medicine.draftId === null">來源：手動新增（無來源圖片）</p>
-            <template v-else>
-              <p v-if="source">
-                來源：<a :href="`#${source.id}`" @click="selectedImageId = source.id"
-                  >第 {{ source.batchNumber }} 批：{{ source.fileName ?? '來源圖片遺失' }}</a
-                >
-              </p>
-              <p v-else>來源圖片無法取得，請參考原始藥包確認藥名。</p>
-              <p>辨識原文：{{ original?.raw_name ?? '無法取得原文' }}</p>
-            </template>
-
-            <form v-if="medicine.isEditing" @submit.prevent="saveMedicine(medicine)">
-              <label :for="`medicine-name-${medicine.id}`">藥名</label>
-              <input
-                :id="`medicine-name-${medicine.id}`"
-                v-model="medicine.draftName"
-                type="text"
-                @input="clearLookup(medicine)"
-                :aria-invalid="medicine.errorMessage ? 'true' : undefined"
-                :aria-describedby="
-                  medicine.errorMessage ? `medicine-error-${medicine.id}` : undefined
-                "
-              />
-              <button
-                type="button"
-                :disabled="!medicine.draftName.trim() || lookups[medicine.id]?.loading"
-                @click="searchDrug(medicine)"
+      <ul v-else>
+        <li v-for="{ medicine, original, source } in reviewRows" :key="medicine.id">
+          <p v-if="medicine.draftId === null">來源：手動新增（無來源圖片）</p>
+          <template v-else>
+            <p v-if="source">
+              來源：<a :href="`#${source.id}`"
+                >第 {{ source.batchNumber }} 批：{{ source.fileName ?? '來源圖片遺失' }}</a
               >
-                查詢候選藥名
-              </button>
-              <p v-if="lookups[medicine.id]?.loading" role="status">正在查詢藥名…</p>
-              <p v-if="lookups[medicine.id]?.error" role="alert">
-                {{ lookups[medicine.id]?.error }} 請重新查詢，或保留手動輸入的藥名。
-              </p>
-              <template v-if="lookups[medicine.id]?.result">
-                <label :for="`medicine-candidates-${medicine.id}`">候選藥名（最多 10 筆）</label>
-                <select
-                  :id="`medicine-candidates-${medicine.id}`"
-                  @change="selectDrug(medicine, $event)"
+            </p>
+            <p v-else>來源圖片無法取得，請參考原始藥包確認藥名。</p>
+            <p>辨識原文：{{ original?.raw_name ?? '無法取得原文' }}</p>
+          </template>
+
+          <form v-if="medicine.isEditing" @submit.prevent="saveMedicine(medicine)">
+            <label :for="`medicine-name-${medicine.id}`">藥名</label>
+            <input
+              :id="`medicine-name-${medicine.id}`"
+              v-model="medicine.draftName"
+              type="text"
+              @input="clearLookup(medicine)"
+              :aria-invalid="medicine.errorMessage ? 'true' : undefined"
+              :aria-describedby="
+                medicine.errorMessage ? `medicine-error-${medicine.id}` : undefined
+              "
+            />
+            <button
+              type="button"
+              :disabled="!medicine.draftName.trim() || lookups[medicine.id]?.loading"
+              @click="searchDrug(medicine)"
+            >
+              查詢候選藥名
+            </button>
+            <p v-if="lookups[medicine.id]?.loading" role="status">正在查詢藥名…</p>
+            <p v-if="lookups[medicine.id]?.error" role="alert">
+              {{ lookups[medicine.id]?.error }} 請重新查詢，或保留手動輸入的藥名。
+            </p>
+            <template v-if="lookups[medicine.id]?.result">
+              <label :for="`medicine-candidates-${medicine.id}`">候選藥名（最多 10 筆）</label>
+              <select
+                :id="`medicine-candidates-${medicine.id}`"
+                @change="selectDrug(medicine, $event)"
+              >
+                <option value="">請選擇藥名，或繼續手動輸入</option>
+                <option
+                  v-for="candidate in lookups[medicine.id]?.result?.candidates"
+                  :key="candidate.active_ingredient_code"
+                  :value="candidate.active_ingredient_code"
                 >
-                  <option value="">請選擇藥名，或繼續手動輸入</option>
-                  <option
-                    v-for="candidate in lookups[medicine.id]?.result?.candidates"
-                    :key="candidate.active_ingredient_code"
-                    :value="candidate.active_ingredient_code"
-                  >
-                    {{ candidate.display_name_zh }}／{{ candidate.english_name }}（符合名稱：{{
-                      candidate.matched_name
-                    }}）
-                  </option>
-                </select>
-                <p v-if="!lookups[medicine.id]?.result?.candidates.length">
-                  目前目錄沒有候選藥名，可保留手動輸入；不代表此藥為範圍外。
-                </p>
-                <p>
-                  輸入名稱對照：{{
-                    lookups[medicine.id]?.result?.mapped.scope_status === 'in_scope'
-                      ? '範圍內'
-                      : lookups[medicine.id]?.result?.mapped.scope_status === 'out_of_scope'
-                        ? '範圍外'
-                        : '無法確認'
-                  }}。若藥名未修改，評估仍沿用後端草稿的辨識對照。
-                </p>
-              </template>
-              <p v-if="medicine.errorMessage" :id="`medicine-error-${medicine.id}`" role="alert">
-                {{ medicine.errorMessage }}
+                  {{ candidate.display_name_zh }}／{{ candidate.english_name }}（符合名稱：{{
+                    candidate.matched_name
+                  }}）
+                </option>
+              </select>
+              <p v-if="!lookups[medicine.id]?.result?.candidates.length">
+                目前目錄沒有候選藥名，可保留手動輸入；不代表此藥為範圍外。
               </p>
-              <button type="submit">儲存</button>
-              <button type="button" @click="cancelEditing(medicine)">取消</button>
-            </form>
+              <p>
+                輸入名稱對照：{{
+                  lookups[medicine.id]?.result?.mapped.scope_status === 'in_scope'
+                    ? '範圍內'
+                    : lookups[medicine.id]?.result?.mapped.scope_status === 'out_of_scope'
+                      ? '範圍外'
+                      : '無法確認'
+                }}。若藥名未修改，評估仍沿用後端草稿的辨識對照。
+              </p>
+            </template>
+            <p v-if="medicine.errorMessage" :id="`medicine-error-${medicine.id}`" role="alert">
+              {{ medicine.errorMessage }}
+            </p>
+            <button type="submit">儲存</button>
+            <button type="button" @click="cancelEditing(medicine)">取消</button>
+          </form>
 
-            <div v-else class="review-row-content">
-              <strong class="review-row-value">{{ medicine.name }}</strong>
-              <div class="review-row-actions">
-                <button
-                  type="button"
-                  :disabled="medicine.isLocked"
-                  @click="flow.startEditing(medicine)"
-                >
-                  編輯
-                </button>
-                <label>
-                  <input
-                    type="checkbox"
-                    :checked="medicine.isLocked"
-                    @change="flow.setLocked(medicine, ($event.target as HTMLInputElement).checked)"
-                  />
-                  鎖定變更
-                </label>
-              </div>
-            </div>
-          </li>
-        </ul>
+          <div v-else>
+            <span>{{ medicine.name }}</span>
+            <button
+              type="button"
+              :disabled="medicine.isLocked"
+              @click="flow.startEditing(medicine)"
+            >
+              編輯
+            </button>
+            <label>
+              <input
+                type="checkbox"
+                :checked="medicine.isLocked"
+                @change="flow.setLocked(medicine, ($event.target as HTMLInputElement).checked)"
+              />
+              鎖定變更
+            </label>
+          </div>
+        </li>
+      </ul>
 
-        <button type="button" @click="flow.addMedicine">＋新增</button>
+      <button type="button" @click="flow.addMedicine">＋新增</button>
 
-        <div role="status" aria-live="polite">
-          <p v-if="allConfirmed">本機藥品資料已確認完成，尚未送出評估。</p>
-          <p v-else-if="medicines.length > 0">有未確認項目，麻煩請再檢查一次！</p>
-        </div>
-        <button
-          class="primary-action"
-          type="button"
-          :disabled="!allConfirmed"
-          @click="$router.push('/supplement-upload')"
-        >
-          下一步：保健食品圖片上傳
-        </button>
-        <p v-if="!medicines.length">
-          <RouterLink to="/supplement-upload">未提供用藥資料，前往保健食品圖片上傳</RouterLink>
-        </p>
-      </section>
-    </div>
+      <div role="status" aria-live="polite">
+        <p v-if="allConfirmed">本機藥品資料已確認完成，尚未送出評估。</p>
+        <p v-else-if="medicines.length > 0">有未確認項目，麻煩請再檢查一次！</p>
+      </div>
+      <button type="button" :disabled="!allConfirmed" @click="$router.push('/supplement-upload')">
+        下一步：保健食品圖片上傳
+      </button>
+      <p v-if="!medicines.length">
+        <RouterLink to="/supplement-upload">未提供用藥資料，前往保健食品圖片上傳</RouterLink>
+      </p>
+    </section>
   </main>
 </template>
 

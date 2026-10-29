@@ -1,10 +1,14 @@
 <script setup lang="ts">
 import { reactive } from 'vue'
-import { useRouter } from 'vue-router'
+import { RouterLink, useRouter } from 'vue-router'
 
 type Sex = '' | 'male' | 'female'
 type ConditionCode =
-  'hypertension' | 't2dm' | 'dyslipidemia' | 'chronic_arthritis' | 'chronic_insomnia'
+  | 'hypertension'
+  | 't2dm'
+  | 'dyslipidemia'
+  | 'chronic_arthritis'
+  | 'chronic_insomnia'
 
 interface RegisterForm {
   birthYear: string
@@ -62,6 +66,10 @@ function handleSubmit(): void {
 </script>
 
 <template>
+  <header>
+    <RouterLink to="/">補對了嗎?</RouterLink>
+  </header>
+
   <main>
     <h1>註冊</h1>
     <p id="register-notice">目前僅提供註冊表單，註冊功能尚未開放，資料不會送出。</p>
