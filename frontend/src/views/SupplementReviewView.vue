@@ -4,8 +4,6 @@ import { isNavigationFailure, onBeforeRouteLeave, useRouter } from 'vue-router'
 import { getCatalog, type Ingredient } from '../api/catalog'
 import { errorMessage } from '../api/client'
 import ReviewImageGallery from '../components/ReviewImageGallery.vue'
-import { useReviewDemo } from '../demo/context'
-import { reviewDemoEnabled } from '../demo/enabled'
 import {
   createProduct,
   doseAmounts,
@@ -27,7 +25,6 @@ import {
 } from '../stores/supplementFlow'
 
 const router = useRouter()
-const demo = useReviewDemo()
 const flow = useSupplementFlowStore()
 const medicine = useMedicineFlowStore()
 const ingredients = ref<Ingredient[]>([])
@@ -73,7 +70,6 @@ const canSubmit = computed(
     ingredients.value.length > 0 &&
     flow.products.length > 0 &&
     (!medicine.medicines.length || medicine.allConfirmed) &&
-    (!!demo || !medicine.assessmentBlockedReason) &&
     flow.products.every((product) => productReady(product, ingredients.value)),
 )
 async function loadCatalog() {
@@ -104,14 +100,6 @@ function nameFor(choice: string) {
   )
 }
 async function submit() {
-  if (demo) {
-    if (canSubmit.value) await demo.finish()
-    return
-  }
-  if (medicine.assessmentBlockedReason) {
-    error.value = medicine.assessmentBlockedReason
-    return
-  }
   if (!canSubmit.value) return
   busy.value = true
   error.value = ''
@@ -167,17 +155,10 @@ onBeforeRouteLeave(() => {
 <template>
   <main class="supplement-review">
     <h1>確認成分與實際攝取量</h1>
-    <p v-if="reviewDemoEnabled && !demo">
-      <RouterLink to="/review-demo">使用示範資料練習人工校對</RouterLink>
-    </p>
     <p>資料暫存在本機，重新整理後需要重新上傳。請依原始標示確認每份量及成分。</p>
     <p>目前評估與報告使用後端示範實作及測試帳號，結果不代表你的實際健康評估。</p>
     <p><RouterLink to="/supplement-upload">返回上傳／新增其他保健食品</RouterLink></p>
     <p v-if="!flow.products.length">目前沒有保健食品資料，請先上傳圖片。</p>
-    <p v-if="medicine.assessmentBlockedReason && !demo" role="alert">
-      {{ medicine.assessmentBlockedReason }}
-      <RouterLink to="/medicine-review">返回藥品校對</RouterLink>
-    </p>
     <p v-if="medicine.medicines.length && !medicine.allConfirmed" role="alert">
       藥品尚未全部確認。<RouterLink to="/medicine-review">返回藥品校對</RouterLink>
     </p>
@@ -530,7 +511,7 @@ onBeforeRouteLeave(() => {
           的每份量與實際服用方式。
         </p>
         <button class="primary-action" type="submit" :disabled="!canSubmit">
-          {{ demo ? '下一步：查看固定示範報告' : '下一步：送出並產生報告' }}
+          下一步：送出並產生報告
         </button>
       </fieldset>
     </form>

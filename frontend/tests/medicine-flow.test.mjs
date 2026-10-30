@@ -62,7 +62,7 @@ async function load(id) {
       const bindings = id.endsWith('MedicineUploadView.vue')
         ? 'startRecognition, startNextBatch, goToReview, selectedImages, receivedDraft, errorMessages'
         : id.endsWith('MedicineReviewView.vue')
-          ? 'setAllLocked, bulkMessage, searchDrug, selectDrug, clearLookup, lookups, saveMedicine, cancelEditing, catalogClasses, drugClasses, canSave, changeClass, inputChanged, confirmedCount'
+          ? 'setAllLocked, bulkMessage, searchDrug, selectDrug, clearLookup, lookups, saveMedicine, cancelEditing, catalogClasses, drugClasses, canSave, changeClass, inputChanged, confirmedCount, goNext'
           : 'submit, ingredients, error, canSubmit'
       source = `${imports.map((s) => s.getText(ast)).join('\n')}
         export function setup() {
@@ -501,18 +501,49 @@ test('lookup failures keep manual input and permit retry; empty names never quer
   assert.equal(medicine.allConfirmed, false)
 })
 
-test('OCR text and manually typed names cannot be locked without an actual candidate selection', () => {
+test('recognized medicines lock directly; unresolved rows and renamed medicines require review', () => {
   addBatch('A')
-  medicine.setAllLocked(true)
+  const original = JSON.stringify(medicine.drugBatches[0].draft)
+  const recognized = medicine.medicines.filter((row) => row.reviewMode === 'recognized')
+  assert.equal(recognized.length, 4) // Includes a recognized drug outside the assessment scope.
+  assert.equal(medicine.setAllLocked(true), 1)
+  assert.ok(recognized.every((row) => row.isLocked))
+  const unresolved = medicine.medicines.at(-1)
+  assert.equal(unresolved.isLocked, false)
   assert.equal(medicine.allConfirmed, false)
-  assert.ok(medicine.medicines.every((row) => !row.isLocked))
-  const row = medicine.medicines[0]
+  assert.equal(medicine.confirmedDrugs.length, 0)
+  const row = recognized[0]
+  medicine.setLocked(row, false)
+  medicine.startEditing(row)
+  const review = medicineReviewModule.setup()
+  assert.equal(review.canSave(row), true)
+  review.saveMedicine(row) // Opening and saving an unchanged name requires no search.
+  medicine.setLocked(row, true)
+  assert.equal(row.isLocked, true)
+  medicine.setLocked(row, false)
   medicine.startEditing(row)
   row.draftName = '只輸入文字'
+  review.inputChanged(row)
+  assert.equal(review.canSave(row), false)
   medicine.saveMedicine(row)
+  medicine.setLocked(row, true)
   assert.equal(row.isEditing, true)
+  assert.equal(row.isLocked, false)
   assert.equal(row.selectedMedicine, null)
-  assert.equal(medicine.confirmedDrugs.length, 0)
+  review.cancelEditing(row)
+  medicine.setLocked(row, true)
+  assert.equal(row.isLocked, true)
+  assert.equal(JSON.stringify(medicine.drugBatches[0].draft), original)
+  assert.equal(calls.length, 0)
+})
+
+test('missing recognition metadata does not make raw OCR text lockable', () => {
+  const draft = structuredClone(fixture)
+  draft.rows = draft.rows.slice(0, 1)
+  delete draft.rows[0].active_ingredient_code
+  medicine.addDrugBatch([file(), file()], draft)
+  medicine.setAllLocked(true)
+  assert.equal(medicine.medicines[0].isLocked, false)
 })
 
 test('official search unavailable never calls legacy sample lookup or confirms a name', async () => {
@@ -642,7 +673,7 @@ test('default gateway calls the existing lookup and filters backend candidates w
   await assert.rejects(gateway.search('statin', '測試'), /無法確認/)
 })
 
-test('other/uncertain saves and locks nonblank names locally without searching or sending unsafe assessment data', async () => {
+test('other/uncertain saves, locks, continues and submits the name with its source without searching', async () => {
   addBatch('A')
   confirm()
   const row = medicine.medicines[0]
@@ -664,37 +695,42 @@ test('other/uncertain saves and locks nonblank names locally without searching o
   medicine.setAllLocked(true)
   assert.equal(medicine.allConfirmed, true)
   assert.equal(review.confirmedCount.value, medicine.medicines.length)
-  assert.match(medicine.assessmentBlockedReason, /無法產生可靠報告/)
-  assert.equal(medicine.confirmedDrugs.length, 0)
-  const supplementReview = readyReview(false)
-  assert.equal(supplementReview.canSubmit.value, false)
-  const supplementBefore = JSON.stringify(supplement.products)
-  await supplementReview.submit()
-  assert.match(supplementReview.error.value, /無法產生可靠報告/)
+  assert.equal(medicine.confirmedDrugs.length, medicine.medicines.length)
+  assert.equal(medicine.confirmedDrugs[0].name, '其他藥品')
+  assert.equal(medicine.confirmedDrugs[0].draft_id, 'A')
+  assert.equal(medicine.confirmedDrugs[0].row_id, row.rowId)
+  const supplementReview = readyReview()
+  review.goNext()
+  assert.equal(router.currentRoute.value.params.caseId, 'supplement-upload')
   assert.equal(calls.length, 0)
-  assert.equal(router.currentRoute.value.name, 'supplement-review')
-  assert.equal(JSON.stringify(supplement.products), supplementBefore)
   assert.equal(JSON.stringify(medicine.drugBatches[0].draft), original)
   assert.ok(medicine.findSourceFile('A', 'img-01'))
-  medicine.setLocked(row, false)
-  medicine.startEditing(row)
-  row.draftName = '  '
-  medicine.saveMedicine(row, undefined, 'uncertain')
-  medicine.setLocked(row, true)
-  assert.equal(row.isEditing, true)
-  assert.equal(row.isLocked, false)
-  assert.match(row.errorMessage, /不可空白/)
-  review.cancelEditing(row)
-  assert.equal(row.reviewMode, 'uncertain')
-  medicine.startEditing(row)
-  row.draftName = '正式候選'
-  medicine.saveMedicine(row, candidateFor('正式候選'))
-  medicine.setLocked(row, true)
-  assert.equal(row.reviewMode, 'candidate')
-  assert.equal(medicine.assessmentBlockedReason, '')
-  assert.equal(supplementReview.canSubmit.value, true)
   await supplementReview.submit()
-  assert.ok(calls.some((call) => call.path === '/api/assessments'))
+  const sent = JSON.parse(calls.find((call) => call.path === '/api/assessments').body)
+  assert.equal(sent.drugs.selected[0].name, '其他藥品')
+  assert.equal(sent.drugs.selected[0].draft_id, 'A')
+  assert.equal(medicine.medicines.length, 0)
+  addBatch('B')
+  confirm()
+  const editedRow = medicine.medicines[0]
+  medicine.setLocked(editedRow, false)
+  medicine.startEditing(editedRow)
+  editedRow.draftName = '其他藥品'
+  medicine.saveMedicine(editedRow, undefined, 'uncertain')
+  medicine.startEditing(editedRow)
+  editedRow.draftName = '  '
+  medicine.saveMedicine(editedRow, undefined, 'uncertain')
+  medicine.setLocked(editedRow, true)
+  assert.equal(editedRow.isEditing, true)
+  assert.equal(editedRow.isLocked, false)
+  assert.match(editedRow.errorMessage, /不可空白/)
+  review.cancelEditing(editedRow)
+  assert.equal(editedRow.reviewMode, 'uncertain')
+  medicine.startEditing(editedRow)
+  editedRow.draftName = '正式候選'
+  medicine.saveMedicine(editedRow, candidateFor('正式候選'))
+  medicine.setLocked(editedRow, true)
+  assert.equal(editedRow.reviewMode, 'candidate')
 })
 
 test('blank new other/uncertain row is retained with an error and cannot count as confirmed', () => {

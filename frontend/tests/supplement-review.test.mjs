@@ -51,7 +51,7 @@ async function load(id) {
       const bindings = `submit, ingredients, error, canSubmit, nutrientRows, lockedCount, busy, catalogBusy,
          flow, medicine, previews, selectedImageId, confirmedCount, reviewRows, outOfScopeRows,
          isTestExtraction, loadCatalog, doseLabels, doseAmounts, unitOptions, chooseNutrient,
-         nameFor, isReviewFrequency, stage, demo, reviewDemoEnabled`
+         nameFor, isReviewFrequency, stage`
       source = `${imports.map((s) => s.getText(ast)).join('\n')}
         export function setup() {
           ${body.map((s) => s.getText(ast)).join('\n')}

@@ -4,7 +4,6 @@ import { storeToRefs } from 'pinia'
 import {
   useMedicineFlowStore,
   hasValidMedicineReview,
-  uncertainMedicineNotice,
   type MedicineRow,
 } from '../stores/medicineFlow'
 import { getCatalog, type DrugClass } from '../api/catalog'
@@ -17,17 +16,14 @@ import {
 } from '../services/medicineSearchGateway'
 import { errorMessage } from '../api/client'
 import ReviewImageGallery from '../components/ReviewImageGallery.vue'
-import { useReviewDemo } from '../demo/context'
-import { reviewDemoEnabled } from '../demo/enabled'
 import { useRouter } from 'vue-router'
 
-const demo = useReviewDemo()
 const router = useRouter()
 
 const flow = useMedicineFlowStore()
 function goNext() {
-  if (!flow.allConfirmed || (!demo && flow.assessmentBlockedReason)) return
-  void router.push(demo ? '/supplement-review' : '/supplement-upload')
+  if (!flow.allConfirmed) return
+  void router.push('/supplement-upload')
 }
 const { medicines, allConfirmed } = storeToRefs(flow)
 const bulkMessage = ref('')
@@ -47,11 +43,6 @@ function classFor(medicine: MedicineRow) {
       : (medicine.selectedMedicine?.drugClassCode ?? ''))
   )
 }
-const editingUncertain = computed(() =>
-  medicines.value.some(
-    (medicine) => medicine.isEditing && classFor(medicine) === UNCERTAIN_DRUG_CLASS,
-  ),
-)
 async function loadClasses() {
   if (catalogLoading.value) return
   catalogLoading.value = true
@@ -223,7 +214,17 @@ function selectDrug(medicine: MedicineRow, event: Event): void {
   state.selected = { ...candidate }
 }
 
+function canReuseSavedReview(medicine: MedicineRow): boolean {
+  return (
+    hasValidMedicineReview(medicine) &&
+    medicine.draftName.trim() === medicine.name.trim() &&
+    classFor(medicine) === (medicine.selectedMedicine?.drugClassCode ?? '')
+  )
+}
+
 function canSave(medicine: MedicineRow): boolean {
+  if (medicine.isLocked || !medicine.isEditing) return false
+  if (canReuseSavedReview(medicine)) return true
   if (classFor(medicine) === UNCERTAIN_DRUG_CLASS)
     return !!medicine.draftName.trim() && !medicine.isLocked && medicine.isEditing
   const state = lookups.value[medicine.id]
@@ -246,6 +247,7 @@ function saveMedicine(medicine: MedicineRow): void {
   }
   if (classFor(medicine) === UNCERTAIN_DRUG_CLASS)
     flow.saveMedicine(medicine, undefined, 'uncertain')
+  else if (canReuseSavedReview(medicine)) flow.saveMedicine(medicine)
   else flow.saveMedicine(medicine, lookups.value[medicine.id]!.selected!)
   clearLookup(medicine)
 }
@@ -310,9 +312,6 @@ onMounted(loadClasses)
 <template>
   <main>
     <h1>核對你的藥品名稱</h1>
-    <p v-if="reviewDemoEnabled && !demo">
-      <RouterLink to="/review-demo">使用示範資料練習人工校對</RouterLink>
-    </p>
     <p>資料暫存在本機，返回上傳頁可繼續新增批次；重新整理後需要重新上傳。</p>
     <p v-if="!flow.drugBatches.length && !medicines.length" role="status">
       目前沒有藥品資料，請返回上傳藥包圖片，或自行新增藥名。
@@ -335,7 +334,7 @@ onMounted(loadClasses)
         </div>
         <p>儲存只更新本機校對資料；鎖定表示由你確認，尚未送出評估。</p>
         <p>
-          請先編輯並選擇用藥類別，再輸入藥品名稱搜尋；一般類別須選取後端候選藥品並儲存後才能鎖定。選擇「其他／不確定」可自由填寫，但目前只能保留本機校對，無法產生可靠報告。辨識原文仍會保留。
+          已辨識的藥品可直接鎖定，無須重新搜尋。未辨識的藥品或修改名稱後，請選擇用藥類別並搜尋候選藥品；也可選擇「其他／不確定」填寫名稱，儲存並鎖定後繼續。辨識原文仍會保留。
         </p>
         <p v-if="!searchGateway.available" role="status">{{ medicineSearchUnavailable }}</p>
         <p v-if="catalogLoading" role="status">正在載入用藥類別…</p>
@@ -449,9 +448,10 @@ onMounted(loadClasses)
                 許可證：{{ medicine.selectedMedicine.licenseNumber }}
               </p>
               <p v-if="medicine.reviewMode === 'uncertain'">
-                其他／不確定：僅保存本機校對，尚未確認藥品。
+                其他／不確定：請核對名稱，鎖定後可繼續。
               </p>
-              <p v-else-if="!medicine.selectedMedicine">尚未從正式候選藥品選取，請先編輯。</p>
+              <p v-else-if="medicine.reviewMode === 'recognized'">已辨識，可直接鎖定。</p>
+              <p v-else-if="!medicine.selectedMedicine">尚未辨識，請先編輯並完成藥品校對。</p>
               <p v-if="medicine.errorMessage" role="alert">{{ medicine.errorMessage }}</p>
               <div class="review-row-actions">
                 <button
@@ -476,28 +476,12 @@ onMounted(loadClasses)
         </ul>
 
         <button type="button" @click="flow.addMedicine">＋新增</button>
-        <p v-if="editingUncertain" role="status">
-          {{
-            demo
-              ? '此為示範中的其他／不確定藥品，只供本機操作練習，不會作為正式候選或送出評估。'
-              : uncertainMedicineNotice
-          }}
-        </p>
-        <p v-if="flow.assessmentBlockedReason && !demo" role="alert">
-          {{ flow.assessmentBlockedReason }}
-        </p>
-
         <div role="status" aria-live="polite">
           <p v-if="allConfirmed">本機藥品校對已完成，尚未送出評估。</p>
           <p v-else-if="medicines.length > 0">有未確認項目，麻煩請再檢查一次！</p>
         </div>
-        <button
-          class="primary-action"
-          type="button"
-          :disabled="!allConfirmed || (!demo && !!flow.assessmentBlockedReason)"
-          @click="goNext"
-        >
-          {{ demo ? '下一步：示範保健食品校對' : '下一步：保健食品圖片上傳' }}
+        <button class="primary-action" type="button" :disabled="!allConfirmed" @click="goNext">
+          下一步：保健食品圖片上傳
         </button>
         <p v-if="!medicines.length">
           <RouterLink to="/supplement-upload">未提供用藥資料，前往保健食品圖片上傳</RouterLink>

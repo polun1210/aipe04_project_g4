@@ -18,24 +18,23 @@ interface MedicineRowState {
   isLocked: boolean
   errorMessage: string
   selectedMedicine: MedicineCandidate | null
-  reviewMode: 'candidate' | 'uncertain' | null
+  recognizedName: string | null
+  reviewMode: 'recognized' | 'candidate' | 'uncertain' | null
 }
 
 export type MedicineRow = MedicineRowState &
   ({ draftId: string; rowId: string } | { draftId: null; rowId: null })
 
-// 「完成本機校對」不代表後端已能可靠評估其他／不確定的藥品。
 export function hasValidMedicineReview(medicine: MedicineRow): boolean {
   return (
     !!medicine.name.trim() &&
-    (medicine.reviewMode === 'uncertain'
-      ? medicine.selectedMedicine === null
-      : !!medicine.selectedMedicine && medicine.name === medicine.selectedMedicine.name)
+    (medicine.reviewMode === 'recognized'
+      ? medicine.name === medicine.recognizedName
+      : medicine.reviewMode === 'uncertain'
+        ? medicine.selectedMedicine === null
+        : !!medicine.selectedMedicine && medicine.name === medicine.selectedMedicine.name)
   )
 }
-
-export const uncertainMedicineNotice =
-  '「其他／不確定」僅保存本機校對資料，不代表藥品已確認。後端尚無法可靠處理此選擇，目前無法產生可靠報告，因此不會送出評估。原始圖片與辨識資料會保留，重新整理後仍需重新上傳。'
 
 export const useMedicineFlowStore = defineStore('medicineFlow', () => {
   const drugBatches = ref<DrugBatch[]>([])
@@ -55,15 +54,9 @@ export const useMedicineFlowStore = defineStore('medicineFlow', () => {
       ),
   )
 
-  const assessmentBlockedReason = computed(() =>
-    medicines.value.some((medicine) => medicine.reviewMode === 'uncertain')
-      ? uncertainMedicineNotice
-      : '',
-  )
-
   // 尚未全部確認時不產生可送出的清單；這不會呼叫後端。
   const confirmedDrugs = computed<ConfirmedDrug[]>(() => {
-    if (!allConfirmed.value || assessmentBlockedReason.value) return []
+    if (!allConfirmed.value) return []
     return medicines.value.map((medicine) => {
       const name = medicine.name.trim()
       return medicine.draftId === null
@@ -84,6 +77,10 @@ export const useMedicineFlowStore = defineStore('medicineFlow', () => {
     for (const row of savedDraft.rows) {
       const id = `${savedDraft.draft_id}:${row.row_id}`
       if (existingIds.has(id)) continue
+      const recognized =
+        !!row.raw_name.trim() &&
+        (row.scope_status === 'out_of_scope' ||
+          (row.scope_status === 'in_scope' && !!row.active_ingredient_code?.trim()))
       medicines.value.push({
         id,
         draftId: savedDraft.draft_id,
@@ -95,7 +92,8 @@ export const useMedicineFlowStore = defineStore('medicineFlow', () => {
         isLocked: false,
         errorMessage: '',
         selectedMedicine: null,
-        reviewMode: null,
+        recognizedName: recognized ? row.raw_name : null,
+        reviewMode: recognized ? 'recognized' : null,
       })
       existingIds.add(id)
     }
@@ -133,6 +131,7 @@ export const useMedicineFlowStore = defineStore('medicineFlow', () => {
       isLocked: false,
       errorMessage: '',
       selectedMedicine: null,
+      recognizedName: null,
       reviewMode: null,
     })
   }
@@ -157,6 +156,18 @@ export const useMedicineFlowStore = defineStore('medicineFlow', () => {
     const name = medicine.draftName.trim()
     if (!name) {
       medicine.errorMessage = '藥名不可空白'
+      return
+    }
+    // 未改名的既有辨識／校對結果可沿用；改名仍須重新選取候選。
+    if (
+      !candidate &&
+      reviewMode === 'candidate' &&
+      name === medicine.name.trim() &&
+      hasValidMedicineReview(medicine)
+    ) {
+      medicine.draftName = medicine.name
+      medicine.isEditing = false
+      medicine.errorMessage = ''
       return
     }
     if (
@@ -188,7 +199,7 @@ export const useMedicineFlowStore = defineStore('medicineFlow', () => {
   function setLocked(medicine: MedicineRow, locked: boolean): void {
     if (medicine.isEditing || !medicine.name.trim()) return
     if (locked && !hasValidMedicineReview(medicine)) {
-      medicine.errorMessage = '請先編輯並選取正式候選藥品，再鎖定變更。'
+      medicine.errorMessage = '此藥品尚未辨識或名稱已修改，請先編輯並完成藥品校對，再鎖定變更。'
       return
     }
     medicine.isLocked = locked
@@ -203,7 +214,6 @@ export const useMedicineFlowStore = defineStore('medicineFlow', () => {
     drugBatches,
     medicines,
     allConfirmed,
-    assessmentBlockedReason,
     confirmedDrugs,
     resetFlow,
     addDrugBatch,
