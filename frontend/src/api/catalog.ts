@@ -20,10 +20,18 @@ export interface DrugItem {
 
 export interface CatalogResponse {
   known_conditions: KnownCondition[]
-  drug_classes: unknown[]
+  drug_classes: DrugClass[]
   drug_items: DrugItem[]
   drug_nutrient_doses: unknown[]
   ingredients: Ingredient[]
+}
+
+export interface DrugClass {
+  drug_class_code: string
+  display_name_zh: string
+  plain_description_zh: string
+  role: string
+  menu_group: string
 }
 
 export interface Ingredient {

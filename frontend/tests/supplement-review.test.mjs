@@ -30,7 +30,7 @@ async function load(id) {
   if (!id.startsWith('file:')) {
     const exports =
       id === 'vue'
-        ? { ...vue, onMounted() {}, onUnmounted() {} }
+        ? { ...vue, inject: (_key, fallback) => fallback, onMounted() {}, onUnmounted() {} }
         : id === 'pinia'
           ? pinia
           : { ...vueRouter, useRouter: () => router, onBeforeRouteLeave() {} }
