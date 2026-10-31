@@ -5,7 +5,7 @@ const steps = [
   {
     number: '01',
     title: '核對藥品',
-    text: '上傳藥包或藥品照片，辨識後由你核對藥品名稱與實際服用情況。',
+    text: '上傳處方箋或藥品照片，辨識後由你核對藥品名稱與實際服用情況。',
   },
   { number: '02', title: '核對保健食品', text: '上傳保健食品標示照片，辨識成分並確認實際攝取量。' },
   {
@@ -34,7 +34,7 @@ const steps = [
         <div class="hero-visual">
           <img
             :src="heroImage"
-            alt="日光下的木桌上，整齊擺放保健食品瓶、藥包與一杯水"
+            alt="日光下的木桌上，整齊擺放保健食品瓶、處方箋與一杯水"
             width="1536"
             height="1024"
             fetchpriority="high"
@@ -44,13 +44,12 @@ const steps = [
             <p>日常的藥物<br />與保健食品，<br />一起更安心。</p>
             <span class="note-line"></span>
           </div>
-          <span class="image-caption">AI 情境示意圖</span>
         </div>
         <div class="hero-content">
           <span class="eyebrow"><span></span>給自己，也給在乎的人</span>
           <h1 id="hero-title">補充之前，<br />先<span>了解你的搭配。</span></h1>
           <p class="hero-description">
-            上傳藥包與保健食品照片，<br class="tablet-break" />了解攝取上限與用藥交互作用。
+            上傳處方箋與保健食品照片，<br class="tablet-break" />了解攝取上限與用藥交互作用。
           </p>
           <RouterLink class="button start-button" to="/medicine-upload"
             >開始使用<svg
@@ -74,7 +73,6 @@ const steps = [
               <path d="m8 12 3 3 5-6" /></svg
             >辨識後，由你核對資料再評估
           </p>
-          <span class="concept-label">設計示意 · 目前評估與報告為示範版本</span>
         </div>
       </section>
       <section class="guide" aria-labelledby="guide-title">

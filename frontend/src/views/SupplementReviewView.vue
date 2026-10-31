@@ -32,8 +32,10 @@ const catalogBusy = ref(false)
 const error = ref('')
 const busy = ref(false)
 const stage = ref('')
-const nutrientRows = computed(() => flow.products.flatMap(reviewRows))
-const lockedCount = computed(() => nutrientRows.value.filter((row) => row.locked).length)
+
+function productLockedCount(product: SupplementProduct) {
+  return reviewRows(product).filter((row) => row.locked).length
+}
 
 const selectedImageId = ref('')
 
@@ -237,31 +239,35 @@ onBeforeRouteLeave(() => {
                 <h3 :id="`needs-confirmation-${product.id}`">需要你確認</h3>
                 <p>請核對評估範圍內及無法確認的成分，完成後鎖定變更。</p>
                 <div
-                  v-if="nutrientRows.length"
+                  v-if="reviewRows(product).length"
                   class="bulk-actions"
-                  aria-label="本輪營養素鎖定操作"
+                  :aria-label="`${product.name || `保健食品 ${index + 1}`}的營養素鎖定操作`"
                 >
                   <button
                     type="button"
-                    :disabled="lockedCount === nutrientRows.length"
-                    @click="flow.lockAllRows(ingredients)"
+                    :disabled="productLockedCount(product) === reviewRows(product).length"
+                    @click="flow.lockAllRows(ingredients, product)"
                   >
                     一鍵鎖定
                   </button>
-                  <button type="button" :disabled="lockedCount === 0" @click="flow.unlockAllRows()">
+                  <button
+                    type="button"
+                    :disabled="productLockedCount(product) === 0"
+                    @click="flow.unlockAllRows(product)"
+                  >
                     全部解除鎖定
                   </button>
                 </div>
-                <p v-if="nutrientRows.length" role="status" aria-live="polite" aria-atomic="true">
-                  <template v-if="lockedCount === nutrientRows.length">
-                    本輪 {{ lockedCount }} 筆營養素已全部鎖定。
+                <p v-if="reviewRows(product).length" role="status" aria-live="polite" aria-atomic="true">
+                  <template v-if="productLockedCount(product) === reviewRows(product).length">
+                    此產品 {{ productLockedCount(product) }} 筆營養素已全部鎖定。
                   </template>
                   <template v-else>
-                    已鎖定 {{ lockedCount }} 筆營養素，另有
-                    {{ nutrientRows.length - lockedCount }} 筆需要完成校對。
+                    已鎖定 {{ productLockedCount(product) }} 筆營養素，另有
+                    {{ reviewRows(product).length - productLockedCount(product) }} 筆需要完成校對。
                   </template>
                 </p>
-                <p v-if="nutrientRows.length">
+                <p v-if="reviewRows(product).length">
                   一鍵鎖定會跳過編輯中或驗證未通過的營養素，不會送出評估。
                 </p>
                 <p v-if="!reviewRows(product).length">

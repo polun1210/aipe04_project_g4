@@ -229,14 +229,14 @@ onUnmounted(releaseAllPreviews)
 
 <template>
   <main>
-    <h1>先上傳你的藥包照片</h1>
+    <h1>先上傳你的處方箋照片</h1>
     <p id="upload-notice">選圖後按「開始辨識」會上傳圖片，辨識結果仍需由你逐筆校對。</p>
 
     <ul v-if="errorMessages.length" role="alert">
       <li v-for="(message, index) in errorMessages" :key="index">{{ message }}</li>
     </ul>
     <p class="upload-field">
-      <label for="medicine-image">請上傳藥包圖片</label>
+      <label for="medicine-image">請上傳處方箋圖片</label>
       <input
         id="medicine-image"
         type="file"
@@ -258,7 +258,7 @@ onUnmounted(releaseAllPreviews)
         <figure>
           <img
             :src="image.previewUrl"
-            :alt="`${image.file.name} 的本機藥包圖片預覽`"
+            :alt="`${image.file.name} 的本機處方箋圖片預覽`"
             @load="handlePreviewLoad($event, image.id)"
             @error="handlePreviewError($event, image.id)"
           />
@@ -287,7 +287,7 @@ onUnmounted(releaseAllPreviews)
     </button>
 
     <p id="upload-privacy">
-      圖片上傳提醒：藥包照片可能包含姓名、醫院名稱等個人資訊。辨識時，照片會透過 OpenRouter 轉送至
+      圖片上傳提醒：處方箋照片可能包含姓名、醫院名稱等個人資訊。辨識時，照片會透過 OpenRouter 轉送至
       Google 的辨識服務。建議上傳前先遮住姓名等不必要的個人資訊。
     </p>
     <p>
@@ -305,7 +305,7 @@ onUnmounted(releaseAllPreviews)
 
     <dialog ref="nextBatchDialog" aria-labelledby="next-batch-title" @cancel.prevent>
       <template v-if="receivedDraft">
-        <h2 id="next-batch-title">是否還有其他藥包？</h2>
+        <h2 id="next-batch-title">是否還有其他處方箋？</h2>
         <p role="status">草稿已保存在本機，共 {{ flow.drugBatches.length }} 批，請繼續校對。</p>
         <p v-if="receivedDraft.extraction_meta.ocr_version === 'stub'" role="status">
           目前是測試資料，不是實際辨識結果

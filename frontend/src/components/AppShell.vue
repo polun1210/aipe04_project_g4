@@ -7,7 +7,7 @@ const route = useRoute()
 const steps = [
   {
     name: 'medicine-upload',
-    label: '藥包上傳',
+    label: '處方箋上傳',
     icon: 'M4 7h4l2-3h4l2 3h4v13H4Z M16 13a4 4 0 1 1-8 0 4 4 0 0 1 8 0',
   },
   { name: 'medicine-review', label: '核對藥名', icon: 'M6 3h9l4 4v14H6Z M9 11h7 M9 15h7' },
@@ -122,7 +122,6 @@ const sidebarLinks = [
     <footer class="shell-footer">
       <RouterLink to="/">補藥亂吃！</RouterLink>
       <p>本工具提供補充安全檢查資訊，不取代醫師或藥師的專業建議。</p>
-      <span>設計示意</span>
     </footer>
   </div>
 </template>

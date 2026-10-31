@@ -236,15 +236,15 @@ export const useSupplementFlowStore = defineStore('supplementFlow', () => {
     row.error = nutrientError(row.value, ingredients)
     if (!row.editing && !row.error) row.locked = locked
   }
-  function lockAllRows(ingredients: Ingredient[]) {
-    for (const product of products.value) {
+  function lockAllRows(ingredients: Ingredient[], target?: SupplementProduct) {
+    for (const product of target ? [target] : products.value) {
       for (const row of reviewRows(product)) {
         if (!row.locked && !row.editing) setLocked(row, true, ingredients)
       }
     }
   }
-  function unlockAllRows() {
-    for (const product of products.value) {
+  function unlockAllRows(target?: SupplementProduct) {
+    for (const product of target ? [target] : products.value) {
       // 解除鎖定不需通過驗證，讓使用者能重新編輯所有列。
       for (const row of product.rows) row.locked = false
     }
