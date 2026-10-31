@@ -60,6 +60,6 @@ const tips = [
         </li>
       </ol>
     </section>
-    <p class="guide-privacy">上傳前，記得遮住姓名等不必要的個人資訊。</p>
+    <p v-if="supplement" class="guide-privacy">上傳前，記得遮住姓名等不必要的個人資訊。</p>
   </aside>
 </template>

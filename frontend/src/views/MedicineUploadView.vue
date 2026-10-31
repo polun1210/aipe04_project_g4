@@ -230,6 +230,7 @@ onUnmounted(releaseAllPreviews)
 <template>
   <main>
     <h1>先上傳你的處方箋照片</h1>
+    <p role="alert">上傳前，記得遮住姓名等不必要的個人資訊。</p>
     <p id="upload-notice">選圖後按「開始辨識」會上傳圖片，辨識結果仍需由你逐筆校對。</p>
 
     <ul v-if="errorMessages.length" role="alert">

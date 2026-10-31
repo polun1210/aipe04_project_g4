@@ -398,11 +398,13 @@ body:has(.image-lightbox[open]) {
   padding: 0;
   border: 0;
   background: transparent;
-  font-size: 16px;
+  font-size: 0;
+  color: transparent;
   overflow: hidden;
 }
 .app-shell input[type='file']::file-selector-button {
   font: inherit;
+  font-size: 16px;
   font-weight: 800;
   color: var(--navy);
   background: var(--lime);
@@ -1378,10 +1380,8 @@ body:has(.image-lightbox[open]) {
   .app-shell .upload-field label {
     font-size: 21px;
   }
-  .app-shell input[type='file'] {
-    font-size: 14px;
-  }
   .app-shell input[type='file']::file-selector-button {
+    font-size: 14px;
     display: block;
     width: 100%;
     margin-bottom: 12px;
