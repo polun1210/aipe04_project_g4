@@ -266,7 +266,25 @@ for (const width of [1200, 390]) {
       }
       await screenshot('initial')
       if (kind === 'supplement') {
-        await page.fill('#supplement-category', '鈣')
+        await page.click('#supplement-category')
+        const pickerStyle = await page.eval(`(() => {
+          const select = document.querySelector('#supplement-category');
+          const picker = getComputedStyle(select, '::picker(select)');
+          return { open: select.matches(':open'), appearance: picker.appearance,
+            background: picker.backgroundColor, radius: picker.borderRadius };
+        })()`)
+        assert.deepEqual(pickerStyle, {
+          open: true,
+          appearance: 'base-select',
+          background: 'rgb(255, 255, 255)',
+          radius: '14px',
+        })
+        await screenshot('category-open')
+        for (const [key, code] of [['ArrowDown', 40], ['Enter', 13]]) {
+          await page.send('Input.dispatchKeyEvent', { type: 'keyDown', key, windowsVirtualKeyCode: code })
+          await page.send('Input.dispatchKeyEvent', { type: 'keyUp', key, windowsVirtualKeyCode: code })
+        }
+        await until(() => page.eval('!!document.querySelector("#supplement-category").value'))
         await page.fill('#supplement-name', 'QA 測試產品')
       }
       const input = kind === 'medicine' ? '#medicine-image' : '#ingredient-images'
@@ -332,6 +350,13 @@ for (const width of [1200, 390]) {
       assert.equal(await page.eval('!!document.querySelector(".recognition-loading")'), false)
       assert.equal(requests.length, 2)
       assert.ok(requests.every((r) => r.method === 'POST' && r.url.endsWith(kind === 'medicine' ? '/api/drug-drafts' : '/api/supplement-drafts')))
+      if (kind === 'supplement') {
+        await page.click('dialog button:last-child')
+        await until(() => page.eval('location.pathname === "/supplement-review"'))
+        assert.equal(await page.eval('document.querySelector(".product-panel h2")?.textContent'), 'QA 測試產品')
+        assert.equal(await page.eval('!!document.querySelector("input[id^=name-]")'), false)
+        await until(() => page.eval('scrollY === 0'))
+      }
       assert.deepEqual(errors, [])
     })
   }

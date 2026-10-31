@@ -40,7 +40,7 @@ async function createModule(id) {
   if (!id.startsWith('file:')) {
     const exports =
       id === 'vue'
-        ? { ...vue, vModelText: {} } // This renderer sets model refs directly; it does not emulate DOM input events.
+        ? { ...vue, vModelText: {}, vModelSelect: {} } // This renderer sets model refs directly; it does not emulate DOM input events.
         : id === 'pinia'
           ? pinia
           : {

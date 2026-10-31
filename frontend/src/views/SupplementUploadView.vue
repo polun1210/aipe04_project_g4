@@ -23,11 +23,11 @@ const router = useRouter()
 const medicine = useMedicineFlowStore()
 const flow = useSupplementFlowStore()
 const category = ref('')
+const categoryOptions = ['綜合維他命', '魚油', '鈣', '紅麴', '葡萄糖胺']
 const productName = ref('')
 const showRequiredErrors = ref(false)
 const categoryError = computed(() => {
-  if (!category.value.trim()) return '請選擇或輸入保健食品種類。'
-  return category.value.trim().length > 30 ? '保健食品種類最多 30 字。' : ''
+  return categoryOptions.includes(category.value.trim()) ? '' : '請選擇保健食品種類。'
 })
 const nameError = computed(() =>
   productName.value.trim() ? '' : '請填寫保健食品名稱，不能只有空白。',
@@ -166,22 +166,18 @@ onUnmounted(releaseImages)
         <legend>本罐產品的圖片</legend>
         <p>
           <label for="supplement-category">保健食品種類（必填）</label>
-          <input
+          <select
             id="supplement-category"
             v-model="category"
-            list="supplement-categories"
-            maxlength="30"
             required
             :aria-invalid="showRequiredErrors && categoryError ? 'true' : undefined"
             :aria-describedby="showRequiredErrors && categoryError ? 'category-error' : undefined"
-          />
-          <datalist id="supplement-categories">
-            <option value="綜合維他命" />
-            <option value="魚油" />
-            <option value="鈣" />
-            <option value="紅麴" />
-            <option value="葡萄糖胺" />
-          </datalist>
+          >
+            <option value="" disabled>請選擇保健食品種類</option>
+            <option v-for="option in categoryOptions" :key="option" :value="option">
+              {{ option }}
+            </option>
+          </select>
         </p>
         <p
           v-if="showRequiredErrors && categoryError"
@@ -191,7 +187,7 @@ onUnmounted(releaseImages)
         >
           {{ categoryError }}
         </p>
-        <p>可從建議種類選取或自行輸入，最多 30 字；種類不影響辨識或評估。</p>
+        <p>請從選單選擇保健食品種類。</p>
         <p class="upload-field">
           <label for="supplement-name">保健食品名稱（必填）</label>
           <input
