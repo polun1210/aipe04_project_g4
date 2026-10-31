@@ -8,7 +8,7 @@ export type Frequency =
   'daily' | 'alternate_days' | 'weekly_n_times' | 'cyclic_on_off' | 'as_needed'
 export type Numeric = number | '' | null
 
-// 現有保健食品假辨識回 stub-t01；藥包假辨識回 stub。
+// 現有保健食品假辨識回 stub-t01；處方箋假辨識回 stub。
 export function isTestExtraction(version: string) {
   return version === 'stub' || version.startsWith('stub-')
 }

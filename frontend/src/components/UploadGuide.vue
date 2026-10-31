@@ -12,7 +12,7 @@ const tips = [
     <div class="upload-story">
       <span class="story-kicker">從一張照片開始</span>
       <h2>
-        拍下{{ supplement ? '標示' : '藥包' }}，<br />讓 AI 幫你<br />整理{{
+        拍下{{ supplement ? '標示' : '處方箋' }}，<br />讓 AI 幫你<br />整理{{
           supplement ? '成分' : '藥名'
         }}。
       </h2>

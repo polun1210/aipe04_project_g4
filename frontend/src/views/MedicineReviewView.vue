@@ -314,13 +314,13 @@ onMounted(loadClasses)
     <h1>核對你的藥品名稱</h1>
     <p>資料暫存在本機，返回上傳頁可繼續新增批次；重新整理後需要重新上傳。</p>
     <p v-if="!flow.drugBatches.length && !medicines.length" role="status">
-      目前沒有藥品資料，請返回上傳藥包圖片，或自行新增藥名。
+      目前沒有藥品資料，請返回上傳處方箋圖片，或自行新增藥名。
     </p>
     <p><RouterLink to="/medicine-upload">返回藥圖片上傳／新增批次</RouterLink></p>
 
     <div class="review-layout">
       <section class="review-panel review-images" aria-labelledby="image-title">
-        <h2 id="image-title">藥包圖片預覽</h2>
+        <h2 id="image-title">處方箋圖片預覽</h2>
         <ReviewImageGallery v-model:selected-id="selectedImageId" :images="galleryImages" />
       </section>
 
@@ -359,7 +359,7 @@ onMounted(loadClasses)
                   >第 {{ source.batchNumber }} 批：{{ source.fileName ?? '來源圖片遺失' }}</a
                 >
               </p>
-              <p v-else>來源圖片無法取得，請參考原始藥包確認藥名。</p>
+              <p v-else>來源圖片無法取得，請參考原始處方箋確認藥名。</p>
               <p>辨識原文：{{ original?.raw_name ?? '無法取得原文' }}</p>
             </template>
 

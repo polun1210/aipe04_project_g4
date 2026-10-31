@@ -48,10 +48,10 @@ async function load(id) {
       const ast = ts.createSourceFile(id, source, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS)
       const imports = ast.statements.filter(ts.isImportDeclaration)
       const body = ast.statements.filter((statement) => !ts.isImportDeclaration(statement))
-      const bindings = `submit, ingredients, error, canSubmit, nutrientRows, lockedCount, busy, catalogBusy,
+      const bindings = `submit, ingredients, error, canSubmit, busy, catalogBusy,
          flow, medicine, previews, selectedImageId, confirmedCount, reviewRows, outOfScopeRows,
          isTestExtraction, loadCatalog, doseLabels, doseAmounts, unitOptions, chooseNutrient,
-         nameFor, isReviewFrequency, stage`
+         nameFor, isReviewFrequency, stage, productLockedCount`
       source = `${imports.map((s) => s.getText(ast)).join('\n')}
         export function setup() {
           ${body.map((s) => s.getText(ast)).join('\n')}
@@ -146,6 +146,8 @@ function setupReview() {
   review.ingredients.value = ingredients
   return review
 }
+const totalReviewRows = (review) => flow.products.flatMap(review.reviewRows)
+const totalLockedCount = (review) => totalReviewRows(review).filter((row) => row.locked).length
 const json = (value) => JSON.parse(JSON.stringify(value))
 const withoutLockState = () =>
   json(flow.products).map((product) => ({
@@ -170,6 +172,33 @@ beforeEach(() => {
   }
 })
 
+test('product bulk actions affect only the selected product and render independent controls', async () => {
+  const a = addProduct('A')
+  const b = addProduct('B')
+  a.rows.push({ ...json(a.rows[0]), id: 'second' })
+  const review = setupReview()
+  const before = withoutLockState()
+  flow.lockAllRows(ingredients, a)
+  assert.ok(a.rows.every((row) => row.locked))
+  assert.ok(b.rows.every((row) => !row.locked))
+  assert.equal(review.productLockedCount(a), 2)
+  assert.equal(review.productLockedCount(b), 0)
+  const html = await renderReview(review)
+  const panels = html.split('class="product-panel"').slice(1)
+  assert.match(panels[0], /disabled[^>]*>\s*一鍵鎖定/)
+  assert.doesNotMatch(panels[1], /disabled[^>]*>\s*一鍵鎖定/)
+  assert.doesNotMatch(panels[0], /disabled[^>]*>\s*全部解除鎖定/)
+  assert.match(panels[1], /disabled[^>]*>\s*全部解除鎖定/)
+  flow.lockAllRows(ingredients, b)
+  a.rows[0].value.amount = -1
+  flow.unlockAllRows(a)
+  assert.ok(a.rows.every((row) => !row.locked))
+  assert.ok(b.rows.every((row) => row.locked))
+  a.rows[0].value.amount = 100
+  assert.deepEqual(withoutLockState(), before)
+  assert.equal(calls.length, 0)
+})
+
 test('bulk lock covers all batches, skips editing and invalid rows, and changes no input data', () => {
   const a = addProduct('A')
   const b = addProduct('B')
@@ -180,8 +209,8 @@ test('bulk lock covers all batches, skips editing and invalid rows, and changes 
   const review = setupReview()
   const before = withoutLockState()
   flow.lockAllRows(ingredients)
-  assert.equal(review.nutrientRows.value.length, 4)
-  assert.equal(review.lockedCount.value, 2)
+  assert.equal(totalReviewRows(review).length, 4)
+  assert.equal(totalLockedCount(review), 2)
   assert.equal(a.rows[1].locked, false)
   assert.equal(a.rows[1].editing, true)
   assert.equal(b.rows[1].locked, false)
@@ -190,7 +219,7 @@ test('bulk lock covers all batches, skips editing and invalid rows, and changes 
   assert.equal(calls.length, 0) // Locking does not submit or call any API.
   assert.equal(review.canSubmit.value, false)
   flow.lockAllRows(ingredients)
-  assert.equal(review.lockedCount.value, 2) // Safe to repeat.
+  assert.equal(totalLockedCount(review), 2) // Safe to repeat.
 })
 
 test('bulk unlock clears every flag including invalid rows without altering input data', () => {
@@ -255,11 +284,11 @@ test('newly added products keep earlier edits and locks and participate in the n
   flow.lockAllRows(ingredients)
   const b = addProduct('B')
   const review = setupReview()
-  assert.equal(review.lockedCount.value, 1)
+  assert.equal(totalLockedCount(review), 1)
   assert.equal(a.rows[0].value.amount, 250)
   assert.equal(b.rows[0].locked, false)
   flow.lockAllRows(ingredients)
-  assert.equal(review.lockedCount.value, 2)
+  assert.equal(totalLockedCount(review), 2)
   assert.equal(a.rows[0].value.amount, 250)
 })
 
@@ -341,7 +370,7 @@ test('bulk-locked multi-product assessment resets supplement store only after re
   addProduct('B')
   const review = setupReview()
   flow.lockAllRows(ingredients)
-  assert.equal(review.lockedCount.value, 2)
+  assert.equal(totalLockedCount(review), 2)
   assert.equal(review.canSubmit.value, true)
   router.push = async () => {
     assert.equal(flow.products.length, 2)
@@ -355,7 +384,7 @@ test('bulk-locked multi-product assessment resets supplement store only after re
   assert.equal(flow.products.length, 0)
   assert.equal(flow.caseId, null)
   assert.equal(flow.assessmentPayload, null)
-  assert.equal(review.lockedCount.value, 0)
+  assert.equal(totalLockedCount(review), 0)
   const c = addProduct('C')
   assert.equal(flow.products.length, 1)
   assert.equal(c.rows[0].locked, false)
@@ -394,7 +423,7 @@ test('empty round bulk actions are harmless', () => {
   const review = setupReview()
   flow.lockAllRows(ingredients)
   flow.unlockAllRows()
-  assert.equal(review.nutrientRows.value.length, 0)
+  assert.equal(totalReviewRows(review).length, 0)
   assert.equal(review.canSubmit.value, false)
   assert.equal(calls.length, 0)
 })
@@ -419,9 +448,9 @@ test('mixed scopes render separate sections with name-only collapsed out-of-scop
   const review = setupReview()
   assert.equal(review.reviewRows(a).length, 2)
   assert.equal(review.outOfScopeRows(a).length, 1)
-  assert.equal(review.nutrientRows.value.length, 2)
+  assert.equal(totalReviewRows(review).length, 2)
   flow.lockAllRows(ingredients)
-  assert.equal(review.lockedCount.value, 2)
+  assert.equal(totalLockedCount(review), 2)
   assert.equal(review.confirmedCount(a), 2)
   assert.equal(a.rows[1].locked, false)
   assert.equal(a.rows[2].locked, true) // Unresolved still requires confirmation.
@@ -451,7 +480,7 @@ test('out-of-scope rows stay unchanged, unlocked and serialized through submit a
   flow.lockAllRows(ingredients)
   flow.setLocked(a.rows[1], true, ingredients)
   assert.deepEqual(json(a.rows[1]), outsideBefore)
-  assert.equal(review.nutrientRows.value.length, 2)
+  assert.equal(totalReviewRows(review).length, 2)
   assert.equal(productReady(a, ingredients), true)
   assert.equal(productReady(b, ingredients), true)
   assert.equal(review.canSubmit.value, true)
@@ -498,8 +527,8 @@ test('out-of-scope-only products can submit with no nutrient locks', async () =>
   const before = json(a.draft)
   const review = setupReview()
   flow.lockAllRows(ingredients)
-  assert.equal(review.nutrientRows.value.length, 0)
-  assert.equal(review.lockedCount.value, 0)
+  assert.equal(totalReviewRows(review).length, 0)
+  assert.equal(totalLockedCount(review), 0)
   assert.equal(a.rows[0].locked, false)
   assert.equal(productReady(a, ingredients), true)
   assert.equal(review.canSubmit.value, true)
