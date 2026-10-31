@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import {
   useMedicineFlowStore,
@@ -83,6 +83,8 @@ const lookups = ref<
       query: string
       drugClassCode: string
       error: string
+      open: boolean
+      activeIndex: number
     }
   >
 >({})
@@ -152,6 +154,8 @@ async function searchDrug(medicine: MedicineRow): Promise<void> {
     query: name,
     drugClassCode,
     error: '',
+    open: false,
+    activeIndex: -1,
   }
   const state = lookups.value[medicine.id]!
   if (!searchGateway.available) {
@@ -180,6 +184,8 @@ async function searchDrug(medicine: MedicineRow): Promise<void> {
         return
       }
       state.result = { candidates }
+      state.open = candidates.length > 0
+      state.activeIndex = -1
     }
   } catch (error) {
     if (
@@ -195,8 +201,8 @@ async function searchDrug(medicine: MedicineRow): Promise<void> {
   }
 }
 
-function selectDrug(medicine: MedicineRow, event: Event): void {
-  const code = (event.target as HTMLSelectElement).value
+function selectDrug(medicine: MedicineRow, choice: string | Event): void {
+  const code = typeof choice === 'string' ? choice : (choice.target as HTMLSelectElement).value
   const candidate = lookups.value[medicine.id]?.result?.candidates.find((item) => item.id === code)
   const state = lookups.value[medicine.id]
   if (state && !candidate) state.selected = null
@@ -212,6 +218,37 @@ function selectDrug(medicine: MedicineRow, event: Event): void {
   medicine.draftName = candidate.name
   state.query = candidate.name
   state.selected = { ...candidate }
+  state.open = false
+  state.activeIndex = -1
+}
+function handleNameKeydown(medicine: MedicineRow, event: KeyboardEvent): void {
+  const state = lookups.value[medicine.id]
+  if (!state) return
+  if (event.key === 'Escape' || event.key === 'Tab') {
+    if (event.key === 'Escape' && state.open) event.preventDefault()
+    state.open = false
+    state.activeIndex = -1
+    return
+  }
+  const candidates = state.result?.candidates ?? []
+  if (!candidates.length) return
+  if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+    event.preventDefault()
+    state.open = true
+    state.activeIndex =
+      state.activeIndex < 0
+        ? event.key === 'ArrowDown'
+          ? 0
+          : candidates.length - 1
+        : (state.activeIndex + (event.key === 'ArrowDown' ? 1 : -1) + candidates.length) %
+          candidates.length
+    const optionId = `medicine-option-${medicine.id}-${state.activeIndex}`
+    if (typeof document !== 'undefined')
+      void nextTick(() => document.getElementById(optionId)?.scrollIntoView({ block: 'nearest' }))
+  } else if (event.key === 'Enter' && state.open) {
+    event.preventDefault()
+    if (state.activeIndex >= 0) selectDrug(medicine, candidates[state.activeIndex]!.id)
+  }
 }
 
 function canReuseSavedReview(medicine: MedicineRow): boolean {
@@ -334,7 +371,7 @@ onMounted(loadClasses)
         </div>
         <p>儲存只更新本機校對資料；鎖定表示由你確認，尚未送出評估。</p>
         <p>
-          已辨識的藥品可直接鎖定，無須重新搜尋。未辨識的藥品或修改名稱後，請選擇用藥類別並搜尋候選藥品；也可選擇「其他／不確定」填寫名稱，儲存並鎖定後繼續。辨識原文仍會保留。
+          已辨識的藥品可直接鎖定。未辨識的藥品或修改名稱後，請先選擇用藥類別，再輸入藥名並從下方候選清單選取；也可選擇「其他／不確定」填寫名稱，儲存並鎖定後繼續。辨識原文仍會保留。
         </p>
         <p v-if="!searchGateway.available" role="status">{{ medicineSearchUnavailable }}</p>
         <p v-if="catalogLoading" role="status">正在載入用藥類別…</p>
@@ -382,56 +419,103 @@ onMounted(loadClasses)
                 <option :value="UNCERTAIN_DRUG_CLASS">其他／不確定</option>
               </select>
               <label :for="`medicine-name-${medicine.id}`">藥品名稱</label>
-              <input
-                :id="`medicine-name-${medicine.id}`"
-                v-model="medicine.draftName"
-                type="text"
-                :disabled="!classFor(medicine)"
-                @input="inputChanged(medicine)"
-                :aria-invalid="medicine.errorMessage ? 'true' : undefined"
-                :aria-describedby="
-                  medicine.errorMessage ? `medicine-error-${medicine.id}` : undefined
-                "
-              />
-              <button
-                v-if="classFor(medicine) !== UNCERTAIN_DRUG_CLASS"
-                type="button"
-                :disabled="
-                  !searchGateway.available ||
-                  !classFor(medicine) ||
-                  !medicine.draftName.trim() ||
-                  lookups[medicine.id]?.loading
-                "
-                @click="searchDrug(medicine)"
-              >
-                查詢候選藥名
-              </button>
+              <div class="medicine-autocomplete">
+                <input
+                  :id="`medicine-name-${medicine.id}`"
+                  v-model="medicine.draftName"
+                  type="text"
+                  autocomplete="off"
+                  :disabled="!classFor(medicine)"
+                  :role="classFor(medicine) === UNCERTAIN_DRUG_CLASS ? undefined : 'combobox'"
+                  :aria-autocomplete="
+                    classFor(medicine) === UNCERTAIN_DRUG_CLASS ? undefined : 'list'
+                  "
+                  :aria-expanded="
+                    classFor(medicine) === UNCERTAIN_DRUG_CLASS
+                      ? undefined
+                      : Boolean(lookups[medicine.id]?.open)
+                  "
+                  :aria-controls="
+                    lookups[medicine.id]?.open ? `medicine-candidates-${medicine.id}` : undefined
+                  "
+                  :aria-activedescendant="
+                    lookups[medicine.id]?.open && (lookups[medicine.id]?.activeIndex ?? -1) >= 0
+                      ? `medicine-option-${medicine.id}-${lookups[medicine.id]?.activeIndex}`
+                      : undefined
+                  "
+                  :aria-invalid="medicine.errorMessage ? 'true' : undefined"
+                  :aria-describedby="
+                    medicine.errorMessage ? `medicine-error-${medicine.id}` : undefined
+                  "
+                  @input="inputChanged(medicine)"
+                  @keydown="handleNameKeydown(medicine, $event)"
+                />
+                <ul
+                  v-if="
+                    lookups[medicine.id]?.open && lookups[medicine.id]?.result?.candidates.length
+                  "
+                  :id="`medicine-candidates-${medicine.id}`"
+                  class="medicine-suggestions"
+                  role="listbox"
+                  aria-label="候選藥品"
+                >
+                  <li
+                    v-for="(candidate, index) in lookups[medicine.id]?.result?.candidates"
+                    :id="`medicine-option-${medicine.id}-${index}`"
+                    :key="candidate.id"
+                    role="option"
+                    :aria-selected="lookups[medicine.id]?.activeIndex === index"
+                    :class="{ active: lookups[medicine.id]?.activeIndex === index }"
+                    @mousedown.prevent
+                    @click="selectDrug(medicine, candidate.id)"
+                  >
+                    <strong>{{ candidate.name }}</strong>
+                    <span
+                      v-if="
+                        candidate.englishName ||
+                        (candidate.matchedName && candidate.matchedName !== candidate.name)
+                      "
+                    >
+                      {{ candidate.englishName
+                      }}{{
+                        candidate.englishName &&
+                        candidate.matchedName &&
+                        candidate.matchedName !== candidate.name
+                          ? ' · '
+                          : ''
+                      }}{{
+                        candidate.matchedName && candidate.matchedName !== candidate.name
+                          ? `匹配名稱：${candidate.matchedName}`
+                          : ''
+                      }}
+                    </span>
+                    <span v-if="candidate.specification || candidate.licenseNumber">
+                      {{ candidate.specification ? `規格：${candidate.specification}` : ''
+                      }}{{ candidate.specification && candidate.licenseNumber ? ' · ' : ''
+                      }}{{ candidate.licenseNumber ? `許可證：${candidate.licenseNumber}` : '' }}
+                    </span>
+                  </li>
+                </ul>
+              </div>
               <p v-if="lookups[medicine.id]?.loading" role="status">正在查詢藥名…</p>
               <p v-if="lookups[medicine.id]?.error" role="alert">
-                {{ lookups[medicine.id]?.error }} 可按「查詢候選藥名」重試；不會自動確認輸入文字。
+                {{ lookups[medicine.id]?.error }} 輸入文字不會自動確認藥品。
               </p>
-              <template v-if="lookups[medicine.id]?.result">
-                <label :for="`medicine-candidates-${medicine.id}`">候選藥品</label>
-                <select
-                  :id="`medicine-candidates-${medicine.id}`"
-                  @change="selectDrug(medicine, $event)"
-                >
-                  <option value="">請選取實際藥品</option>
-                  <option
-                    v-for="candidate in lookups[medicine.id]?.result?.candidates"
-                    :key="candidate.id"
-                    :value="candidate.id"
-                  >
-                    {{ candidate.name
-                    }}{{ candidate.specification ? `｜規格：${candidate.specification}` : ''
-                    }}{{ candidate.licenseNumber ? `｜許可證：${candidate.licenseNumber}` : '' }}
-                  </option>
-                </select>
-                <p v-if="!lookups[medicine.id]?.result?.candidates.length">
-                  此類別找不到符合的候選藥品，請修改名稱或類別後重試；未找到不代表範圍外。
-                </p>
-                <p v-if="canSave(medicine)" role="status">已選取候選藥品，請確認藥品名稱後儲存。</p>
-              </template>
+              <button
+                v-if="lookups[medicine.id]?.error && searchGateway.available"
+                type="button"
+                @click="searchDrug(medicine)"
+              >
+                重試查詢
+              </button>
+              <p
+                v-if="
+                  lookups[medicine.id]?.result && !lookups[medicine.id]?.result?.candidates.length
+                "
+              >
+                此類別找不到符合的候選藥品，請修改名稱或類別後重試；未找到不代表範圍外。
+              </p>
+              <p v-if="canSave(medicine)" role="status">已選取候選藥品，請確認藥品名稱後儲存。</p>
               <p v-if="medicine.errorMessage" :id="`medicine-error-${medicine.id}`" role="alert">
                 {{ medicine.errorMessage }}
               </p>
