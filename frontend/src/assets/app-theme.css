@@ -503,6 +503,22 @@ body:has(.image-lightbox[open]) {
   font-size: 24px;
   margin-bottom: 16px;
 }
+.app-shell .upload-image-field {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 144px;
+  align-items: center;
+  gap: 24px;
+}
+.app-shell .upload-image-field label {
+  margin-bottom: 0;
+}
+.app-shell .upload-image-field input[type='file'] {
+  width: 144px;
+  max-width: 100%;
+}
+.app-shell .upload-image-field input[type='file']::file-selector-button {
+  margin: 0;
+}
 .app-shell .preview-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr));
@@ -1045,15 +1061,24 @@ body:has(.image-lightbox[open]) {
 .route-reports form fieldset {
   margin: 0;
 }
-.route-reports form fieldset > p {
-  display: inline-block;
-  vertical-align: top;
-  width: min(100%, 280px);
-  margin-right: 18px;
+.route-reports form .report-date-fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 280px));
+  gap: 18px;
+  margin-bottom: 24px;
 }
-.route-reports form button {
+.route-reports form .report-date-fields > p {
+  min-width: 0;
+  margin: 0;
+}
+.route-reports form .report-search-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.route-reports form .report-search-actions button {
   font-size: 16px;
-  margin: 4px 6px 4px 0;
+  margin: 0;
 }
 .app-shell .history-list {
   list-style: none;
@@ -1453,6 +1478,13 @@ body:has(.image-lightbox[open]) {
   .app-shell .upload-field label {
     font-size: 21px;
   }
+  .app-shell .upload-image-field {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+  .app-shell .upload-image-field input[type='file'] {
+    width: 100%;
+  }
   .app-shell input[type='file']::file-selector-button {
     font-size: 14px;
     display: block;
@@ -1534,11 +1566,6 @@ body:has(.image-lightbox[open]) {
   }
   .route-reports form {
     padding: 16px;
-  }
-  .route-reports form fieldset > p {
-    display: block;
-    width: 100%;
-    margin-right: 0;
   }
   .report-content {
     grid-template-columns: minmax(0, 1fr);

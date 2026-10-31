@@ -53,16 +53,20 @@ onMounted(search)
     <form @submit.prevent="search">
       <fieldset :disabled="busy">
         <legend>搜尋報告（台灣時間，含開始與結束當天）</legend>
-        <p>
-          <label for="date-from">開始日期</label><input id="date-from" v-model="from" type="date" />
-        </p>
-        <p><label for="date-to">結束日期</label><input id="date-to" v-model="to" type="date" /></p>
-        <button type="submit">搜尋</button>
-        <button type="button" @click="quick('today')">今天</button>
-        <button type="button" @click="quick('week')">最近 7 天</button>
-        <button type="button" @click="quick('month')">最近 30 天</button>
-        <button type="button" @click="quick('this-month')">本月</button>
-        <button type="button" @click="quick('all')">全部</button>
+        <div class="report-date-fields">
+          <p>
+            <label for="date-from">開始日期</label><input id="date-from" v-model="from" type="date" />
+          </p>
+          <p><label for="date-to">結束日期</label><input id="date-to" v-model="to" type="date" /></p>
+        </div>
+        <div class="report-search-actions">
+          <button type="submit">搜尋</button>
+          <button type="button" @click="quick('today')">今天</button>
+          <button type="button" @click="quick('week')">最近 7 天</button>
+          <button type="button" @click="quick('month')">最近 30 天</button>
+          <button type="button" @click="quick('this-month')">本月</button>
+          <button type="button" @click="quick('all')">全部</button>
+        </div>
       </fieldset>
     </form>
     <p v-if="busy" role="status">正在查詢…</p>

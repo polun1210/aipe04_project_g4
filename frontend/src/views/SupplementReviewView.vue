@@ -42,6 +42,14 @@ const selectedImageId = ref('')
 function confirmedCount(product: SupplementProduct) {
   return reviewRows(product).filter((row) => row.locked && !row.editing && !row.error).length
 }
+function doseOptions(product: SupplementProduct) {
+  const suggested = product.draft.label_suggested_intake?.amount_per_time
+  return [
+    ...(product.doseUnit ? doseAmounts[product.doseUnit] : []),
+    ...(typeof suggested === 'number' && suggested > 0 ? [suggested] : []),
+    ...(typeof product.amount === 'number' && product.amount > 0 ? [product.amount] : []),
+  ].filter((amount, index, options) => options.indexOf(amount) === index)
+}
 const urls = new Map<File, string>()
 const previews = flow.products.flatMap((product) =>
   product.draft.source_images.map((image) => {
@@ -488,22 +496,12 @@ onBeforeRouteLeave(() => {
                   >每次服用量
                   {{ product.doseUnit ? `（${doseLabels[product.doseUnit]}）` : '' }}</label
                 >
-                <input
-                  :id="`intake-${product.id}`"
-                  v-model.number="product.amount"
-                  type="number"
-                  min="0"
-                  step="any"
-                  :list="`doses-${product.id}`"
-                  required
-                />
-                <datalist :id="`doses-${product.id}`">
-                  <option
-                    v-for="amount in product.doseUnit ? doseAmounts[product.doseUnit] : []"
-                    :key="amount"
-                    :value="amount"
-                  />
-                </datalist>
+                <select :id="`intake-${product.id}`" v-model.number="product.amount" required>
+                  <option value="" disabled>請選擇</option>
+                  <option v-for="amount in doseOptions(product)" :key="amount" :value="amount">
+                    {{ amount }} {{ product.doseUnit ? doseLabels[product.doseUnit] : '' }}
+                  </option>
+                </select>
               </p>
             </section>
           </div>

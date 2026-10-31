@@ -51,7 +51,7 @@ async function load(id) {
       const bindings = `submit, ingredients, error, canSubmit, busy, catalogBusy,
          flow, medicine, previews, selectedImageId, confirmedCount, reviewRows, outOfScopeRows,
          isTestExtraction, loadCatalog, doseLabels, doseAmounts, unitOptions, chooseNutrient,
-         nameFor, isReviewFrequency, stage, productLockedCount`
+         nameFor, isReviewFrequency, stage, productLockedCount, doseOptions`
       source = `${imports.map((s) => s.getText(ast)).join('\n')}
         export function setup() {
           ${body.map((s) => s.getText(ast)).join('\n')}
@@ -170,6 +170,20 @@ beforeEach(() => {
       path === '/api/products' ? { product_id: `saved-${calls.length}` } : { case_id: 'case-1' },
     )
   }
+})
+
+test('single dose uses a select and keeps an extracted value outside the common options', async () => {
+  const product = addProduct('A')
+  product.draft.label_suggested_intake.amount_per_time = 7
+  product.amount = 7
+  const review = setupReview()
+  const html = await renderReview(review)
+  assert.match(html, /<select[^>]*id="intake-A"[^>]*>/)
+  assert.match(html, /<option value="7">7 錠<\/option>/)
+  assert.doesNotMatch(html, /<datalist/)
+  product.amount = 2
+  assert.ok(review.doseOptions(product).includes(7))
+  assert.equal(submissionFor(product).user_intake.amount_per_time, 2)
 })
 
 test('product bulk actions affect only the selected product and render independent controls', async () => {
