@@ -62,7 +62,7 @@ async function load(id) {
       const bindings = id.endsWith('MedicineUploadView.vue')
         ? 'startRecognition, startNextBatch, goToReview, selectedImages, receivedDraft, errorMessages'
         : id.endsWith('MedicineReviewView.vue')
-          ? 'setAllLocked, bulkMessage, searchDrug, selectDrug, clearLookup, lookups, saveMedicine, cancelEditing, catalogClasses, drugClasses, canSave, changeClass, inputChanged, confirmedCount, goNext'
+          ? 'setAllLocked, bulkMessage, searchDrug, selectDrug, handleNameKeydown, clearLookup, lookups, saveMedicine, cancelEditing, catalogClasses, drugClasses, canSave, changeClass, inputChanged, confirmedCount, goNext'
           : 'submit, ingredients, error, canSubmit'
       source = `${imports.map((s) => s.getText(ast)).join('\n')}
         export function setup() {
@@ -620,6 +620,40 @@ test('typing automatically searches the selected class after debounce and keeps 
   assert.equal(review.canSave(second), false)
 })
 
+test('suggestions can be navigated and selected by keyboard without saving free text', async () => {
+  medicine.addMedicine()
+  const row = medicine.medicines[0]
+  const review = searchReview(row)
+  row.draftName = '氫'
+  officialGateway.search = async () => [candidateFor('氫氯噻嗪'), candidateFor('氫氯噻嗪複方')]
+  await review.searchDrug(row)
+  const state = review.lookups.value[row.id]
+  assert.equal(state.open, true)
+  assert.equal(review.canSave(row), false)
+  let prevented = 0
+  const key = (name) =>
+    review.handleNameKeydown(row, { key: name, preventDefault: () => prevented++ })
+  key('ArrowDown')
+  assert.equal(state.activeIndex, 0)
+  key('ArrowDown')
+  assert.equal(state.activeIndex, 1)
+  key('Escape')
+  assert.equal(state.open, false)
+  assert.equal(review.canSave(row), false)
+  key('ArrowUp')
+  assert.equal(state.open, true)
+  assert.equal(state.activeIndex, 1)
+  key('Enter')
+  assert.equal(prevented, 5)
+  assert.equal(row.draftName, '氫氯噻嗪複方')
+  assert.equal(state.open, false)
+  assert.equal(review.canSave(row), true)
+  row.draftName = '自由輸入'
+  review.inputChanged(row)
+  assert.equal(review.canSave(row), false)
+  review.clearLookup(row)
+})
+
 test('default gateway calls the existing lookup and filters backend candidates without inventing metadata', async () => {
   officialGateway = undefined
   const gateway = useMedicineSearchGateway()
@@ -628,6 +662,8 @@ test('default gateway calls the existing lookup and filters backend candidates w
     {
       active_ingredient_code: 'ingredient-1',
       display_name_zh: '測試一',
+      matched_name: '測試商品名',
+      english_name: 'Test ingredient',
       drug_class_codes: ['statin', 'ppi'],
     },
     {
@@ -646,6 +682,8 @@ test('default gateway calls the existing lookup and filters backend candidates w
       id: 'ingredient-1',
       name: '測試一',
       drugClassCode: 'statin',
+      matchedName: '測試商品名',
+      englishName: 'Test ingredient',
       specification: null,
       licenseNumber: null,
     },
