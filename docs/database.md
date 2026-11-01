@@ -253,7 +253,7 @@ CSV 版一樣）；`drug_products` 沒有 `snapshot_date`（TFDA 藥名表的快
 
 ## app 的表（12 張）
 
-使用者資料。目前只建好表，`PgStore`（A-3）才開始讀寫。
+使用者資料。`STORE=pg` 時由 `PgStore`（`app/db/store.py`）讀寫；預設 `memory` 存在記憶體，重啟就清空。
 
 ```mermaid
 erDiagram
@@ -359,6 +359,18 @@ erDiagram
 評估個案、判定結果、報告是**凍結的快照**，存成 jsonb 才能原樣重現當時的報告；但要查詢的東西
 （`user_id`、`case_id`、`report_date`、`decision_data_version`、成分列）拆成一般欄位並建索引。
 
+### PgStore 怎麼存
+
+- 每個方法一個交易；連線池（`psycopg_pool.ConnectionPool`）在 FastAPI lifespan 開關（`app/main.py`）。
+- 凍結的快照存 jsonb：`model_dump(mode="json")` 寫入、`model_validate` 讀出，不會漏欄位。
+- `save_product` 同時寫 `products`（快照）和 `product_nutrients`（成分列）；`save_assessment` 同時寫 `assessments` 和 `assessment_products`。
+- 所有讀取都帶 `user_id`：使用者拿不到別人的產品、草稿、評估、報告。
+- `reports.case_id` UNIQUE：同一個評估重複產報告，保留第一份，呼叫端用 `get_report_by_case` 取既有那份。
+- `list_reports` 依 `report_date`（台灣時間的日期）篩選，依 `generated_at` 新到舊。
+- `assessments.decision_data_version` 外鍵指向 `catalog.data_versions`，所以評估個案記的是匯入的參考資料版本（`ReferenceData.version`）。
+- `AUTH=test` 且 `STORE=pg` 時，伺服器啟動會檢查測試帳號與預設基本資料，不存在就建立。
+- 基本資料裡的慢性病讀回來時依 `catalog.known_conditions` 的順序排列。
+
 ## evidence 的表（1 張）
 
 RAG 語料，C-2 才寫入。報告的亮點：規則引用的原文（`catalog.citations`）和 RAG 撈出的段落（`evidence.chunks`）
@@ -393,4 +405,6 @@ DATABASE_URL=postgresql://... uv run pytest tests/db    # 有資料庫時
 - CSV 版與資料庫版回傳的 `ReferenceData` 完全相等（`tests/db/test_catalog_source.py`）
 - 重跑匯入結果相同；中途失敗整批回滾
 - 每個 CHECK 約束都有違反就寫不進去的測試
+- 同一組 Store 行為測試跑記憶體與資料庫兩種實作（`tests/test_store.py`）
+- `STORE=pg` 走完整個 API：重啟後報告歷史還在、使用者之間互相看不到（`tests/db/test_pg_store_api.py`）
 - CI（`.github/workflows/ci.yml`）有 `pgvector/pgvector:pg17` service，會跑這些測試

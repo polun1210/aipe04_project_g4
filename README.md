@@ -26,7 +26,7 @@ cp .env.example .env    # 填 POSTGRES_PASSWORD，並把 DATABASE_URL 裡的密�
 docker compose up -d db
 uv run alembic upgrade head
 uv run python -m app.db.import_catalog
-# 之後設 CATALOG_SOURCE=pg 就會從資料庫讀參考資料
+# 之後設 CATALOG_SOURCE=pg 從資料庫讀參考資料、STORE=pg 把使用者資料存進資料庫
 ```
 
 細節見 [docs/database.md](docs/database.md)。
