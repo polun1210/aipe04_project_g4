@@ -212,10 +212,6 @@ onBeforeRouteLeave(() => {
                 />
               </div>
               <p>
-                <label :for="`name-${product.id}`">產品名稱（必填）</label>
-                <input :id="`name-${product.id}`" v-model="product.name" required />
-              </p>
-              <p>
                 <label :for="`serving-${product.id}`">每份量（幾錠／粒／mL 等）</label>
                 <input
                   :id="`serving-${product.id}`"
@@ -513,7 +509,7 @@ onBeforeRouteLeave(() => {
           </div>
         </section>
         <p v-if="flow.products.length && !canSubmit && !busy">
-          有未確認項目，請填寫產品名稱、鎖定「需要你確認」區的所有成分，並填寫大於 0
+          有未確認項目，請鎖定「需要你確認」區的所有成分，並填寫大於 0
           的每份量與實際服用方式。
         </p>
         <button class="primary-action" type="submit" :disabled="!canSubmit">

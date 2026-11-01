@@ -150,7 +150,7 @@ for (const [description, category, name, missingCategory, missingName] of [
     assert.equal(upload.showRequiredErrors.value, true)
     assert.equal(Boolean(upload.categoryError.value), missingCategory)
     assert.equal(Boolean(upload.nameError.value), missingName)
-    if (missingCategory) assert.match(upload.categoryError.value, /請選擇或輸入保健食品種類/)
+    if (missingCategory) assert.match(upload.categoryError.value, /請選擇保健食品種類/)
     if (missingName) assert.match(upload.nameError.value, /請填寫保健食品名稱/)
     assert.equal(upload.images.value[0], image)
     assert.equal(upload.images.value[0].loaded, true)
@@ -270,7 +270,7 @@ test('long categories and invalid API responses do not discard current fields or
   upload.category.value = '鈣'.repeat(31)
   await upload.recognize()
   assert.equal(calls.length, 0)
-  assert.match(upload.categoryError.value, /最多 30 字/)
+  assert.match(upload.categoryError.value, /請選擇保健食品種類/)
   upload.category.value = '鈣'
   request = async () => Response.json({ product_id: 'invalid' })
   await upload.recognize()
