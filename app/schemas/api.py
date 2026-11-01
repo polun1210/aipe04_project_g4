@@ -17,6 +17,11 @@ details 每張照片一行，例如 "img-02：反光"。
   POST /api/assessments/{case_id}/report          → Report（201；已產生過回 200 與同一份）
   GET  /api/reports?date_from=…&date_to=…         → list[ReportSummary]
   GET  /api/reports/{report_id}                   → Report
+  POST /api/auth/google          ← GoogleLoginRequest → MeResponse（Google 登入，設 session cookie）
+  GET  /api/me                                    → MeResponse
+  GET  /api/me/profile                            → AccountProfile（還沒填回 404）
+  PUT  /api/me/profile           ← AccountProfile → AccountProfile
+  POST /api/logout                                → 204
   GET  /api/health                                → {"status": "ok"}
 """
 
@@ -34,6 +39,17 @@ class ErrorBody(StrictModel):
 
 class ErrorResponse(StrictModel):
     error: ErrorBody
+
+
+class GoogleLoginRequest(StrictModel):
+    credential: str  # Google ID token
+
+
+class MeResponse(StrictModel):
+    user_id: UUID
+    email: str | None
+    name: str | None
+    profile_completed: bool  # 已填出生年月、性別、慢性病；false 時前端導向首次填寫頁
 
 
 class ProductCreated(StrictModel):
