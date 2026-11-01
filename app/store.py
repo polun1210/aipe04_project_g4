@@ -1,9 +1,10 @@
 """產品、草稿、評估結果與報告的存放處。
 
-現在存在記憶體（重啟就沒了）；DB 組員的資料表好了之後，只要換掉 get_store 回傳的實作，
+預設存在記憶體（重啟就沒了）；STORE=pg 時改存資料庫的 app schema（app/db/store.py）。
 網址與前端都不用改。登入方式由環境變數 AUTH 決定（見 app/auth.py）。
 """
 
+import os
 from dataclasses import dataclass
 from datetime import date, timedelta, timezone
 from functools import lru_cache
@@ -38,10 +39,10 @@ class Store(Protocol):
 
     def get_user(self, user_id: UUID) -> AccountUser | None: ...
 
-    def save_product(self, product: VerifiedProduct) -> None: ...
+    def save_product(self, user_id: UUID, product: VerifiedProduct) -> None: ...
 
-    def get_products(self, product_ids: list[UUID]) -> list[VerifiedProduct]:
-        """依傳入順序回傳；找不到的編號直接略過，由呼叫端比對。"""
+    def get_products(self, user_id: UUID, product_ids: list[UUID]) -> list[VerifiedProduct]:
+        """只回這個使用者自己的產品，依傳入順序；找不到或不是自己的編號直接略過，由呼叫端比對。"""
         ...
 
     def get_profile(self, user_id: UUID) -> AccountProfile | None:
@@ -83,22 +84,24 @@ class Store(Protocol):
         ...
 
 
+# 測試帳號（AUTH=test）預設已有的基本資料，和範例個案一致
+TEST_PROFILE = AccountProfile(
+    birth_year=1954,
+    birth_month=3,
+    sex=Sex.MALE,
+    conditions=ExclusiveSelection[ConditionCode](
+        selected=[ConditionCode.HYPERTENSION, ConditionCode.DYSLIPIDEMIA], none_selected=False
+    ),
+)
+TEST_USER_NAME = "測試帳號"
+
+
 class InMemoryStore:
     def __init__(self) -> None:
-        self._products: dict[UUID, VerifiedProduct] = {}
-        self._users: dict[UUID, AccountUser] = {TEST_USER_ID: AccountUser(TEST_USER_ID, None, "測試帳號")}
+        self._products: dict[UUID, tuple[UUID, VerifiedProduct]] = {}
+        self._users: dict[UUID, AccountUser] = {TEST_USER_ID: AccountUser(TEST_USER_ID, None, TEST_USER_NAME)}
         self._google_subs: dict[str, UUID] = {}
-        # 測試帳號預設已有資料，和範例個案一致
-        self._profiles: dict[UUID, AccountProfile] = {
-            TEST_USER_ID: AccountProfile(
-                birth_year=1954,
-                birth_month=3,
-                sex=Sex.MALE,
-                conditions=ExclusiveSelection[ConditionCode](
-                    selected=[ConditionCode.HYPERTENSION, ConditionCode.DYSLIPIDEMIA], none_selected=False
-                ),
-            )
-        }
+        self._profiles: dict[UUID, AccountProfile] = {TEST_USER_ID: TEST_PROFILE}
         self.assessments: list[tuple[CaseProfile, Assessment]] = []
         self.drug_drafts: list[tuple[UUID, DrugDraft]] = []
         self.supplement_drafts: list[tuple[UUID, ExtractionDraft]] = []
@@ -115,11 +118,12 @@ class InMemoryStore:
     def get_user(self, user_id: UUID) -> AccountUser | None:
         return self._users.get(user_id)
 
-    def save_product(self, product: VerifiedProduct) -> None:
-        self._products[product.product_id] = product
+    def save_product(self, user_id: UUID, product: VerifiedProduct) -> None:
+        self._products[product.product_id] = (user_id, product)
 
-    def get_products(self, product_ids: list[UUID]) -> list[VerifiedProduct]:
-        return [self._products[pid] for pid in product_ids if pid in self._products]
+    def get_products(self, user_id: UUID, product_ids: list[UUID]) -> list[VerifiedProduct]:
+        mine = {pid: p for pid, (owner, p) in self._products.items() if owner == user_id}
+        return [mine[pid] for pid in product_ids if pid in mine]
 
     def get_profile(self, user_id: UUID) -> AccountProfile | None:
         return self._profiles.get(user_id)
@@ -173,6 +177,36 @@ def _in_range(day: date, date_from: date | None, date_to: date | None) -> bool:
     return (date_from is None or day >= date_from) and (date_to is None or day <= date_to)
 
 
+def store_mode() -> str:
+    mode = os.environ.get("STORE", "memory")
+    if mode not in ("memory", "pg"):
+        raise RuntimeError(f"STORE 只接受 memory 或 pg，收到 {mode!r}")
+    return mode
+
+
 @lru_cache(maxsize=1)
 def get_store() -> Store:
+    if store_mode() == "pg":
+        from app.db.pool import get_pool  # 預設模式不需要載入資料庫套件
+        from app.db.store import PgStore
+
+        return PgStore(get_pool())
     return InMemoryStore()
+
+
+def init_store() -> None:
+    """伺服器啟動時呼叫：STORE=pg 時開連線池；AUTH=test 時確認測試帳號存在（不存在就建立）。"""
+    if store_mode() != "pg":
+        return
+    store = get_store()
+    if os.environ.get("AUTH", "test") == "test":
+        store.ensure_test_user()  # type: ignore[attr-defined]
+
+
+def close_store() -> None:
+    """伺服器關閉時呼叫：關連線池。"""
+    if store_mode() == "pg":
+        from app.db.pool import close_pool
+
+        close_pool()
+        get_store.cache_clear()

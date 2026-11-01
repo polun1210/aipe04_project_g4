@@ -2,6 +2,8 @@
 
 import os
 import secrets
+from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
 from typing import Any
 
 from fastapi import FastAPI
@@ -11,6 +13,7 @@ from starlette.middleware.sessions import SessionMiddleware
 from app.auth import auth_mode
 from app.errors import register_error_handlers
 from app.routers import assessments, auth, catalog, drugs, products, reports, supplements
+from app.store import close_store, init_store
 
 _DESCRIPTION = """
 - 所有網址都同步回傳：辨識、評估、產生報告都是等回應，不建工作編號。
@@ -28,12 +31,19 @@ def _use_binary_format_for_uploads(schema: dict[str, Any]) -> None:
                 prop["items"] = {"type": "string", "format": "binary"}
 
 
+@asynccontextmanager
+async def lifespan(_: FastAPI) -> AsyncIterator[None]:
+    init_store()  # STORE=pg：開連線池，AUTH=test 時確認測試帳號存在
+    yield
+    close_store()
+
+
 def create_app() -> FastAPI:
     if auth_mode() == "google":
         for name in ("GOOGLE_CLIENT_ID", "SESSION_SECRET"):
             if not os.environ.get(name):
                 raise RuntimeError(f"AUTH=google 時必須在 .env 設定 {name}")
-    app = FastAPI(title="補藥亂吃！API", description=_DESCRIPTION)
+    app = FastAPI(title="補藥亂吃！API", description=_DESCRIPTION, lifespan=lifespan)
     app.add_middleware(
         SessionMiddleware,
         secret_key=os.environ.get("SESSION_SECRET") or secrets.token_urlsafe(32),

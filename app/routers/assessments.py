@@ -96,7 +96,7 @@ def create_assessment(
     if account is None:
         raise ApiError(409, ErrorCode.PROFILE_INCOMPLETE, _PROFILE_INCOMPLETE_MESSAGE)
 
-    products = store.get_products(request.product_ids)
+    products = store.get_products(user_id, request.product_ids)
     found_ids = {p.product_id for p in products}
     missing = [pid for pid in dict.fromkeys(request.product_ids) if pid not in found_ids]
     if missing:
@@ -122,7 +122,7 @@ def create_assessment(
         case_id=case_id,
         user_id=user_id,
         created_at=created_at,
-        decision_data_version=_decision_data_version(),
+        decision_data_version=catalog.load_reference().version,
         basic_profile=BasicProfileSnapshot(age=age, sex=account.sex, age_band=age_band_for(age)),
         conditions=account.conditions,
         drugs=_freeze_drugs(request, catalog, drafts, drug_products),
@@ -132,8 +132,3 @@ def create_assessment(
     store.save_assessment(case, assessment)
     store.save_drug_corrections(user_id, corrections)
     return assessment
-
-
-def _decision_data_version() -> str:
-    """規則表／換算係數／DRIs 的 seed 版本戳。真資料表好了之後改成從資料表讀。"""
-    return "seed-2026w40.1"

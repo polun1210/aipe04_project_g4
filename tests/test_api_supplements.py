@@ -124,7 +124,7 @@ def test_out_of_scope_rows_need_no_lock_and_survive_product_assessment_and_repor
     )
     assert response.status_code == 201, response.text
     product_id = response.json()["product_id"]
-    [product] = store.get_products([UUID(product_id)])
+    [product] = store.get_products(TEST_USER_ID, [UUID(product_id)])
     assert len(product.nutrients) == len(draft["nutrients"])
     assert [row.row_id for row in product.nutrients] == [row["row_id"] for row in draft["nutrients"]]
     outside = [row for row in product.nutrients if row.scope_status == "out_of_scope"]
