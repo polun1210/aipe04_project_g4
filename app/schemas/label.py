@@ -107,7 +107,7 @@ class NutrientDraft(StrictModel):
     standard_code: IngredientCode | None = None  # 名稱標準化結果；範圍外與無法確認為 null
     scope_status: ScopeStatus
     nutrient_form_raw: str | None = None  # 型態原文，例如「檸檬酸鈣」
-    nutrient_form_code: Code | None = None  # 例如 calcium_citrate、epa
+    nutrient_form_code: Code | None = None  # 例如 calcium_citrate_tetrahydrate、epa
     per_serving: float | None = Field(default=None, ge=0)  # 每份含量，照標示原單位
     unit: Unit | None = None
     # 標示有載明元素量時填，單位同 unit：

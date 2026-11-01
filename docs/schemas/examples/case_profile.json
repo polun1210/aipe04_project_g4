@@ -67,9 +67,9 @@
         "servings_per_day_peak": 1, "servings_per_day_average": 1
       },
       "nutrients": [
-        { "row_id": "r01", "raw_name": "檸檬酸鈣", "display_name_zh": "鈣", "standard_code": "calcium", "scope_status": "in_scope", "label_section": "nutrition_table", "nutrient_form_code": "calcium_citrate",
+        { "row_id": "r01", "raw_name": "檸檬酸鈣", "display_name_zh": "鈣", "standard_code": "calcium", "scope_status": "in_scope", "label_section": "nutrition_table", "nutrient_form_code": "calcium_citrate_tetrahydrate",
           "per_serving": 2000, "unit": "mg", "amount_per_serving_standard": 420, "standard_unit": "mg",
-          "elemental_basis": "estimated", "compound_code": "calcium_citrate", "elemental_ratio": 0.21,
+          "elemental_basis": "estimated", "compound_code": "calcium_citrate_tetrahydrate", "elemental_ratio": 0.21,
           "peak_daily_amount": 420, "average_daily_amount": 420, "ul_applicable": true },
         { "row_id": "r02", "raw_name": "維生素D3", "display_name_zh": "維生素 D", "standard_code": "vitamin_d", "scope_status": "in_scope", "label_section": "nutrition_table", "nutrient_form_code": null,
           "per_serving": 1000, "unit": "iu", "amount_per_serving_standard": 25, "standard_unit": "ug",
