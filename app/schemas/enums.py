@@ -312,5 +312,5 @@ class ErrorCode(StrEnum):
     ALL_IMAGES_REJECTED = "all_images_rejected"
     PRODUCT_NOT_FOUND = "product_not_found"  # 送評估的 product_id 後端查不到（資料失效或編號錯誤）
     PROFILE_INCOMPLETE = "profile_incomplete"  # 帳號還沒填出生年月、性別、慢性病，不能評估
-    EXTRACTION_FAILED ="extraction_failed"  # 辨識服務逾時或失敗
+    EXTRACTION_FAILED = "extraction_failed"  # 辨識服務逾時或失敗
     INTERNAL_ERROR = "internal_error"  # 伺服器沒預期到的錯誤；message 固定，不洩漏內部細節

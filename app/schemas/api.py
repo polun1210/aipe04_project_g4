@@ -22,7 +22,7 @@ details 每張照片一行，例如 "img-02：反光"。
   GET  /api/me/profile                            → AccountProfile（還沒填回 404）
   PUT  /api/me/profile           ← AccountProfile → AccountProfile
   POST /api/logout                                → 204
-  GET  /api/health                               → {"status": "ok"}
+  GET  /api/health                                → {"status": "ok"}
 """
 
 from uuid import UUID
