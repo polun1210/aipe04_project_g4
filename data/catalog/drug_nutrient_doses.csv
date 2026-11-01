@@ -1,0 +1,2 @@
+active_ingredient_code,dose_option_mg,nutrient_code,elemental_mg_per_unit,source
+magnesium_oxide,250,magnesium,150.8,氧化鎂含鎂比率 0.603（compound_ratios.csv）× 劑量，四捨五入到小數 1 位

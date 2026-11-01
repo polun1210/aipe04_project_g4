@@ -1,0 +1,19 @@
+compound_code,nutrient_code,display_name_zh,synonyms,formula,ratio,source
+calcium_carbonate,calcium,碳酸鈣,Calcium Carbonate,CaCO3,0.4004,分子量計算：40.078 + 12.011 + 3*15.999
+calcium_citrate_tetrahydrate,calcium,檸檬酸鈣,Calcium Citrate|檸檬酸鈣（四水）,Ca3(C6H5O7)2·4H2O,0.2108,分子量計算：3*40.078 + 2*(6*12.011 + 5*1.008 + 7*15.999) + 4*(2*1.008 + 15.999)
+calcium_lactate_anhydrous,calcium,乳酸鈣,Calcium Lactate|無水乳酸鈣|乳酸鈣（無水）|Calcium Lactate Anhydrous,Ca(C3H5O3)2,0.1837,分子量計算：40.078 + 2*(3*12.011 + 5*1.008 + 3*15.999)
+calcium_lactate_pentahydrate,calcium,五水乳酸鈣,乳酸鈣（五水）|Calcium Lactate Pentahydrate,Ca(C3H5O3)2·5H2O,0.13,分子量計算：40.078 + 2*(3*12.011 + 5*1.008 + 3*15.999) + 5*(2*1.008 + 15.999)
+calcium_gluconate_monohydrate,calcium,葡萄糖酸鈣,Calcium Gluconate,Ca(C6H11O7)2·H2O,0.0894,分子量計算：40.078 + 2*(6*12.011 + 11*1.008 + 7*15.999) + (2*1.008 + 15.999)
+calcium_phosphate_tribasic,calcium,磷酸鈣,Calcium Phosphate|磷酸三鈣,Ca3(PO4)2,0.3876,分子量計算：3*40.078 + 2*(30.974 + 4*15.999)
+calcium_hydrogen_phosphate_anhydrous,calcium,磷酸氫鈣,Dicalcium Phosphate|磷酸二鈣|Calcium Hydrogen Phosphate|無水磷酸氫鈣|磷酸氫鈣（無水）|Dicalcium Phosphate Anhydrous,CaHPO4,0.2946,分子量計算：40.078 + 1.008 + 30.974 + 4*15.999
+calcium_hydrogen_phosphate_dihydrate,calcium,二水磷酸氫鈣,磷酸氫鈣（二水）|Dicalcium Phosphate Dihydrate,CaHPO4·2H2O,0.2329,分子量計算：40.078 + 1.008 + 30.974 + 4*15.999 + 2*(2*1.008 + 15.999)
+magnesium_oxide,magnesium,氧化鎂,Magnesium Oxide,MgO,0.603,分子量計算：24.305 + 15.999
+magnesium_carbonate,magnesium,碳酸鎂,Magnesium Carbonate,MgCO3,0.2883,分子量計算：24.305 + 12.011 + 3*15.999
+magnesium_citrate,magnesium,檸檬酸鎂,Magnesium Citrate,Mg3(C6H5O7)2,0.1616,分子量計算：3*24.305 + 2*(6*12.011 + 5*1.008 + 7*15.999)
+magnesium_gluconate,magnesium,葡萄糖酸鎂,Magnesium Gluconate,Mg(C6H11O7)2,0.0586,分子量計算：24.305 + 2*(6*12.011 + 11*1.008 + 7*15.999)
+magnesium_glycinate,magnesium,甘胺酸鎂,Magnesium Glycinate|雙甘胺酸鎂|Magnesium Bisglycinate,Mg(C2H4NO2)2,0.141,分子量計算：24.305 + 2*(2*12.011 + 4*1.008 + 14.007 + 2*15.999)
+ferrous_fumarate,iron,富馬酸亞鐵,Ferrous Fumarate|反丁烯二酸亞鐵,FeC4H2O4,0.3287,分子量計算：55.845 + 4*12.011 + 2*1.008 + 4*15.999
+ferrous_sulfate_dried,iron,硫酸亞鐵,Ferrous Sulfate|Ferrous Sulphate|乾燥硫酸亞鐵|硫酸亞鐵（乾燥）|Dried Ferrous Sulfate,FeSO4·H2O,0.3287,分子量計算：55.845 + 32.06 + 4*15.999 + (2*1.008 + 15.999)
+ferrous_sulfate_heptahydrate,iron,七水硫酸亞鐵,硫酸亞鐵（七水）|Ferrous Sulfate Heptahydrate,FeSO4·7H2O,0.2009,分子量計算：55.845 + 32.06 + 4*15.999 + 7*(2*1.008 + 15.999)
+ferrous_gluconate_dihydrate,iron,葡萄糖酸亞鐵,Ferrous Gluconate,Fe(C6H11O7)2·2H2O,0.1158,分子量計算：55.845 + 2*(6*12.011 + 11*1.008 + 7*15.999) + 2*(2*1.008 + 15.999)
+ferrous_bisglycinate,iron,甘胺酸亞鐵,Ferrous Bisglycinate|Iron Bisglycinate|螯合鐵,Fe(C2H4NO2)2,0.2738,分子量計算：55.845 + 2*(2*12.011 + 4*1.008 + 14.007 + 2*15.999)
