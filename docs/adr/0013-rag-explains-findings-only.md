@@ -45,7 +45,8 @@ ADR-0006 拒絕「每次評估即時查外部資料庫」的理由（結果不�
 ## 型號必填
 
 embedding 型號由環境變數 `EMBEDDING_MODEL` 指定，**沒有預設值，沒設就報錯**（理由同 [ADR-0011](0011-narration-model-claude-haiku-5-5.md) 的 `NARRATOR_MODEL`：
-型號被悄悄換掉，新舊向量就不能混用，結果也無法追溯）。型號跟著每個切塊存進 `embedding_model`，檢索只比同型號的塊；換型號後重跑 ingest 會整批重算。
+型號被悄悄換掉，新舊向量就不能混用，結果也無法追溯）。目前選定 `qwen/qwen3-embedding-8b`（4096 維）：用評估題組實測，前 8 名命中預期段落 32/36（89%）；換型號成本低（整批重算），所以不算鎖死。
+型號跟著每個切塊存進 `embedding_model`，檢索只比同型號的塊；換型號後重跑 ingest 會整批重算。
 
 ## Consequences
 
