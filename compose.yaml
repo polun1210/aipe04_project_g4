@@ -1,0 +1,21 @@
+# 本機資料庫：docker compose up -d db
+# 帳密從 .env 讀（複製 .env.example 後填）；連接埠只綁本機。
+services:
+  db:
+    image: pgvector/pgvector:pg17
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-g4}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?請先複製 .env.example 成 .env 並設定 POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB:-g4}
+    ports:
+      - "127.0.0.1:5433:5432"
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+volumes:
+  dbdata:

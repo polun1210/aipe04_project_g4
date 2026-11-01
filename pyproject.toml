@@ -5,6 +5,7 @@ description = "補藥亂吃！— AI 個人化營養補充評估系統（第一�
 requires-python = ">=3.12"
 # 系統執行時需要的套件。各模組需要的套件由負責人在自己的分支用 `uv add` 加入。
 dependencies = [
+    "alembic>=1.20.1",
     "fastapi>=0.142.2",
     "google-auth>=2.60.0",
     "google-cloud-vision>=3.16.0",
@@ -12,6 +13,8 @@ dependencies = [
     "itsdangerous>=2.2.0",
     "opencv-python-headless>=5.0.0.93",
     "pillow>=12.3.0",
+    "psycopg-pool>=3.3.3",
+    "psycopg[binary]>=3.3.6",
     "pydantic>=2.7",
     "python-dotenv>=1.2.4",
     "python-multipart>=0.0.32",
@@ -34,6 +37,7 @@ default-groups = ["dev"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["."]
+markers = ["db: 需要 PostgreSQL（沒設 DATABASE_URL 就略過）"]
 
 [tool.ruff.lint]
 # 只抓真正的錯誤（語法錯誤、沒用到的 import、未定義的名稱等），不管風格。
