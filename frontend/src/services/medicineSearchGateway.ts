@@ -25,7 +25,7 @@ const lookupGateway: MedicineSearchGateway = {
   available: true,
   async search(drugClassCode, query) {
     if (!drugClassCode || drugClassCode === UNCERTAIN_DRUG_CLASS || !query.trim()) return []
-    const result = await lookupDrug(query.trim())
+    const result = await lookupDrug(query.trim(), drugClassCode)
     if (
       !Array.isArray(result.candidates) ||
       result.candidates.some(
@@ -40,17 +40,15 @@ const lookupGateway: MedicineSearchGateway = {
       )
     )
       throw new Error('藥品搜尋回應無法確認，請重試。')
-    return result.candidates
-      .filter((candidate) => candidate.drug_class_codes.includes(drugClassCode))
-      .map((candidate) => ({
-        id: candidate.active_ingredient_code,
-        name: candidate.display_name_zh,
-        drugClassCode,
-        ...(candidate.matched_name ? { matchedName: candidate.matched_name } : {}),
-        ...(candidate.english_name ? { englishName: candidate.english_name } : {}),
-        specification: null,
-        licenseNumber: null,
-      }))
+    return result.candidates.map((candidate) => ({
+      id: candidate.active_ingredient_code,
+      name: candidate.display_name_zh,
+      drugClassCode,
+      ...(candidate.matched_name ? { matchedName: candidate.matched_name } : {}),
+      ...(candidate.english_name ? { englishName: candidate.english_name } : {}),
+      specification: null,
+      licenseNumber: null,
+    }))
   },
 }
 export function useMedicineSearchGateway(): MedicineSearchGateway {

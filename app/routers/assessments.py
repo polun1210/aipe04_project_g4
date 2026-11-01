@@ -6,7 +6,7 @@ from fastapi import APIRouter, Depends
 from app.calculator import Calculator, get_calculator
 from app.catalog_source import CatalogSource, get_catalog_source
 from app.corrections import UnknownRowError, drug_corrections
-from app.drug_mapping import map_confirmed_drug
+from app.drug_mapping import DrugProductIndex, get_drug_product_index, map_confirmed_drug
 from app.errors import ApiError
 from app.schemas.api import ErrorResponse
 from app.schemas.assessment import Assessment
@@ -35,12 +35,15 @@ _VALIDATION_MESSAGE = "送出的資料有欄位需要修正"
 
 
 def _freeze_drugs(
-    request: AssessmentRequest, catalog: CatalogSource, drafts: dict[UUID, DrugDraft]
+    request: AssessmentRequest,
+    catalog: CatalogSource,
+    drafts: dict[UUID, DrugDraft],
+    drug_products: DrugProductIndex,
 ) -> ExclusiveSelection[SelectedDrug]:
     """每個確認的藥名對照目錄：沒改名沿用草稿的對照，改過名重新對照；認不得的藥是 unresolved，不是錯誤。"""
     drug_items = catalog.load().drug_items
     selected = [
-        map_confirmed_drug(d.name, _draft_row(drafts, d), drug_items, d.dose_mg, d.times_per_day)
+        map_confirmed_drug(d.name, _draft_row(drafts, d), drug_items, d.dose_mg, d.times_per_day, drug_products)
         for d in request.drugs.selected
     ]
     return ExclusiveSelection[SelectedDrug](selected=selected, none_selected=request.drugs.none_selected)
@@ -85,6 +88,7 @@ def create_assessment(
     request: AssessmentRequest,
     calculator: Calculator = Depends(get_calculator),
     catalog: CatalogSource = Depends(get_catalog_source),
+    drug_products: DrugProductIndex = Depends(get_drug_product_index),
     store: Store = Depends(get_store),
     user_id: UUID = Depends(get_current_user_id),
 ) -> Assessment:
@@ -121,7 +125,7 @@ def create_assessment(
         decision_data_version=_decision_data_version(),
         basic_profile=BasicProfileSnapshot(age=age, sex=account.sex, age_band=age_band_for(age)),
         conditions=account.conditions,
-        drugs=_freeze_drugs(request, catalog, drafts),
+        drugs=_freeze_drugs(request, catalog, drafts, drug_products),
         supplements=products,
     )
     assessment = calculator.assess(case)

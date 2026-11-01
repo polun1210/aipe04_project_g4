@@ -658,6 +658,7 @@ test('default gateway calls the existing lookup and filters backend candidates w
   officialGateway = undefined
   const gateway = useMedicineSearchGateway()
   assert.equal(gateway.available, true)
+  // 類別過濾由後端負責：前端只轉送 drug_class_code，不再自己篩。
   const backend = [
     {
       active_ingredient_code: 'ingredient-1',
@@ -665,11 +666,6 @@ test('default gateway calls the existing lookup and filters backend candidates w
       matched_name: '測試商品名',
       english_name: 'Test ingredient',
       drug_class_codes: ['statin', 'ppi'],
-    },
-    {
-      active_ingredient_code: 'ingredient-2',
-      display_name_zh: '測試二',
-      drug_class_codes: ['ppi'],
     },
   ]
   request = async (path) => {
@@ -692,8 +688,7 @@ test('default gateway calls the existing lookup and filters backend candidates w
   const url = new URL(calls[0].path, 'http://localhost')
   assert.equal(url.pathname, '/api/drugs/lookup')
   assert.equal(url.searchParams.get('name'), '測試')
-  assert.equal(url.searchParams.has('drug_class_code'), false)
-  assert.equal((await gateway.search('missing-class', '測試')).length, 0)
+  assert.equal(url.searchParams.get('drug_class_code'), 'statin')
   const count = calls.length
   assert.equal((await gateway.search(UNCERTAIN_DRUG_CLASS, '測試')).length, 0)
   assert.equal((await gateway.search('statin', ' ')).length, 0)

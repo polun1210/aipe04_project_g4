@@ -3,7 +3,7 @@ from uuid import UUID, uuid4
 from fastapi import APIRouter, Depends, File, Query, UploadFile
 
 from app.catalog_source import CatalogSource, get_catalog_source
-from app.drug_mapping import find_candidates, map_drug_name
+from app.drug_mapping import DrugProductIndex, find_candidates, get_drug_product_index, map_drug_name
 from app.errors import ApiError
 from app.extractor import Extractor, get_extractor
 from app.schemas.api import ErrorResponse
@@ -53,19 +53,22 @@ def create_drug_draft(
     summary="查藥名對照與候選藥名",
     description=(
         "PG-005 藥人工校對頁修改藥名時呼叫。`mapped` 是這個名字現在對照成什麼（與送出評估時一致），"
-        "`candidates` 是名稱包含輸入字串的候選藥物，最多 10 筆。"
+        "`candidates` 是名稱（含 TFDA 許可證品名）包含輸入字串的候選藥物，最多 10 筆。"
+        "有帶 `drug_class_code` 時，先只留屬於該類別的藥，再取前 10 筆；沒帶時行為不變。"
     ),
     responses={422: {"model": ErrorResponse, "description": "藥名是空的"}},
 )
 def lookup_drug(
     name: str = Query(description="使用者輸入的藥名"),
+    drug_class_code: str | None = Query(default=None, description="只列出屬於這個藥物類別的候選（選填）"),
     catalog: CatalogSource = Depends(get_catalog_source),
+    products: DrugProductIndex = Depends(get_drug_product_index),
 ) -> DrugLookupResponse:
     name = name.strip()
     if not name:
         raise ApiError(422, ErrorCode.VALIDATION_ERROR, "送出的資料有欄位需要修正", ["name：請輸入藥名"])
     drug_items = catalog.load().drug_items
     return DrugLookupResponse(
-        mapped=map_drug_name(name, drug_items),
-        candidates=find_candidates(name, drug_items, _MAX_CANDIDATES),
+        mapped=map_drug_name(name, drug_items, products=products),
+        candidates=find_candidates(name, drug_items, _MAX_CANDIDATES, drug_class_code, products),
     )

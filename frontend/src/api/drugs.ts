@@ -23,8 +23,11 @@ export interface DrugLookupResponse {
   candidates: DrugCandidate[]
 }
 
-export function lookupDrug(name: string): Promise<DrugLookupResponse> {
-  return apiRequest<DrugLookupResponse>(`/api/drugs/lookup?${new URLSearchParams({ name })}`)
+// 有給 drugClassCode 時由後端先依類別過濾再取前 10 筆。
+export function lookupDrug(name: string, drugClassCode?: string): Promise<DrugLookupResponse> {
+  const params = new URLSearchParams({ name })
+  if (drugClassCode) params.set('drug_class_code', drugClassCode)
+  return apiRequest<DrugLookupResponse>(`/api/drugs/lookup?${params}`)
 }
 
 export interface BoundingBox {

@@ -199,6 +199,43 @@ def test_assessment_unknown_drug_name_is_frozen_as_unresolved_not_an_error():
     assert unknown.active_ingredient_code is None
 
 
+def _freeze_with_drug_name(name: str):
+    test_client, spy = _run_with_spy()
+    product_id = _create_product(test_client)
+    body = _assessment_request([product_id])
+    drug = body["drugs"]["selected"][0]
+    drug["name"] = name
+    drug.pop("draft_id", None)
+    drug.pop("row_id", None)
+    assert test_client.post("/api/assessments", json=body).status_code == 200
+    [case] = spy.cases
+    return next(d for d in case.drugs.selected if d.raw_name == name)
+
+
+# disclosures 的藥物清單由計算層依凍結個案的 scope_status 產生（B-3）；
+# 這裡確認自由輸入的藥名凍結成不是 in_scope，計算層才會把它列為範圍外或無法確認。
+def test_assessment_free_typed_unknown_drug_is_frozen_as_unresolved_for_disclosures():
+    drug = _freeze_with_drug_name("完全亂打的藥")
+    assert drug.scope_status == "unresolved"
+
+
+def test_assessment_ranitidine_product_is_frozen_as_out_of_scope_for_disclosures():
+    from app.catalog_source import get_catalog_source
+
+    name = next(
+        p.name
+        for p in get_catalog_source().load_drug_products()
+        if any("ranitidine" in o.lower() for o in p.out_of_scope_ingredients)
+    )
+    drug = _freeze_with_drug_name(name)
+    assert drug.scope_status == "out_of_scope"
+    assert drug.active_ingredient_code is None
+
+
+def test_assessment_bare_ranitidine_is_never_in_scope():
+    assert _freeze_with_drug_name("Ranitidine").scope_status != "in_scope"
+
+
 def test_assessment_under_19_account_returns_validation_error(store):
     store.get_profile = lambda user_id: AccountProfile(
         birth_year=datetime.now(UTC).year - 18, birth_month=1, sex="male", conditions={"none_selected": True}
