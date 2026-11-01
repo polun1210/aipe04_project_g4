@@ -19,6 +19,7 @@ from app.schemas.case import CaseProfile
 from app.schemas.enums import TARGET_NUTRIENTS, FrequencyType
 from app.schemas.reference import ReferenceData
 from app.schemas.label import (
+    ExtractionDraft,
     ComputedIntake,
     ComputedNutrient,
     ExtractionMeta,
@@ -80,12 +81,13 @@ def _computed_nutrient(
     ingredients: dict[str, Ingredient],
     ref: ReferenceData,
 ) -> ComputedNutrient:
-    result = standard_amount(row, ingredients.get(row.standard_code) if row.standard_code else None, ref)
+    ingredient = ingredients.get(row.standard_code) if row.standard_code else None
+    result = standard_amount(row, ingredient, ref)
     amount = result.amount
     return ComputedNutrient(
         row_id=row.row_id,
         raw_name=None,
-        display_name_zh=None,
+        display_name_zh=ingredient.display_name_zh if ingredient else None,  # 範圍內才有；其餘為 null
         standard_code=row.standard_code,
         scope_status=row.scope_status,
         label_section=None,
@@ -138,6 +140,23 @@ class RealCalculator:
 
     def assess(self, case: CaseProfile) -> Assessment:
         return assess(case, self.reference)
+
+
+def with_label_names(product: VerifiedProduct, draft: ExtractionDraft | None) -> VerifiedProduct:
+    """依 row_id 把辨識草稿的標示原文與區塊帶進來（raw_name 不可改，後端從草稿取）。
+
+    使用者新增的列（row_id 為 null 或草稿裡沒有）維持 null。
+    """
+    if draft is None:
+        return product
+    rows = {r.row_id: r for r in draft.nutrients}
+    nutrients = [
+        n.model_copy(update={"raw_name": rows[n.row_id].raw_name, "label_section": rows[n.row_id].label_section})
+        if n.row_id in rows
+        else n
+        for n in product.nutrients
+    ]
+    return product.model_copy(update={"nutrients": nutrients})
 
 
 @lru_cache(maxsize=1)

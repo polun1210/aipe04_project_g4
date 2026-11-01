@@ -4,12 +4,12 @@ from uuid import UUID, uuid4
 
 from fastapi import APIRouter, Depends
 
-from app.calculator import Calculator, get_calculator
+from app.calculator import Calculator, get_calculator, with_label_names
 from app.corrections import UnknownRowError, label_corrections
 from app.errors import ApiError
 from app.schemas.api import ErrorResponse, ProductCreated
 from app.schemas.enums import ErrorCode
-from app.schemas.label import VerificationSubmission
+from app.schemas.label import ExtractionDraft, VerificationSubmission
 from app.auth import get_current_user_id
 from app.store import Store, get_store
 
@@ -39,21 +39,27 @@ def create_product(
     user_id: UUID = Depends(get_current_user_id),
 ) -> ProductCreated:
     product_id, verified_at = uuid4(), datetime.now(UTC)
-    if submission.draft_product_id is not None:
-        _save_corrections(store, user_id, submission, product_id, verified_at)
-    product = calculator.verify_product(product_id, submission, verified_at)
+    draft = _find_draft(store, user_id, submission)
+    if draft is not None:
+        _save_corrections(store, user_id, draft, submission, product_id, verified_at)
+    product = with_label_names(calculator.verify_product(product_id, submission, verified_at), draft)
     store.save_product(user_id, product)
     return ProductCreated(product_id=product.product_id)
 
 
-def _save_corrections(
-    store: Store, user_id: UUID, submission: VerificationSubmission, product_id: UUID, at: datetime
-) -> None:
+def _find_draft(store: Store, user_id: UUID, submission: VerificationSubmission) -> ExtractionDraft | None:
+    if submission.draft_product_id is None:
+        return None
     draft = store.get_supplement_draft(user_id, submission.draft_product_id)
     if draft is None:
-        # 修正紀錄只用來統計準確率；草稿找不到（例如伺服器重啟過）不擋使用者送出
+        # 草稿找不到（例如伺服器重啟過）不擋使用者送出：不產生修正紀錄，成分也拿不到標示原文
         logger.warning("找不到辨識草稿 %s，這罐不產生修正紀錄", submission.draft_product_id)
-        return
+    return draft
+
+
+def _save_corrections(
+    store: Store, user_id: UUID, draft: ExtractionDraft, submission: VerificationSubmission, product_id: UUID, at: datetime
+) -> None:
     try:
         corrections = label_corrections(draft, submission, product_id, at)
     except UnknownRowError as e:
