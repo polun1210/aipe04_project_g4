@@ -28,7 +28,7 @@ const steps = [
   { name: 'report', label: '評估報告', icon: 'M4 14h3v7H4Z M11 8h3v13h-3Z M18 3h3v18h-3Z' },
 ]
 const activeStep = computed(() => steps.findIndex((step) => step.name === route.name))
-const isAuth = computed(() => ['login', 'register', 'health-profile'].includes(String(route.name)))
+const isAuth = computed(() => ['login', 'health-profile'].includes(String(route.name)))
 const isUpload = computed(
   () => route.name === 'medicine-upload' || route.name === 'supplement-upload',
 )
@@ -79,7 +79,6 @@ const sidebarLinks = computed(() => [
       <p class="shell-tagline">給長輩與照顧者的<br />AI 營養補充評估</p>
       <nav class="shell-account" aria-label="會員導覽">
         <template v-if="isAuth"
-          ><RouterLink to="/register" class="shell-button secondary">註冊</RouterLink
           ><RouterLink to="/login" class="shell-button">登入</RouterLink></template
         >
         <template v-else

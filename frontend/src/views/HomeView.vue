@@ -25,7 +25,6 @@ const steps = [
       >
       <p class="brand-description">台灣長輩與家人的 AI 營養補充評估工具</p>
       <nav class="account-nav" aria-label="會員導覽">
-        <RouterLink class="button button-outline" to="/register">註冊</RouterLink>
         <RouterLink class="button button-lime" to="/login">登入</RouterLink>
       </nav>
     </header>

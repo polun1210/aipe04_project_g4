@@ -68,6 +68,9 @@ export async function apiRequest<T>(path: string, options: RequestInit = {}): Pr
     )
   }
 
+  // 204 沒有內容（例如登出）
+  if (response.status === 204) return undefined as T
+
   // 請求成功：將 JSON 資料交給呼叫它的程式
   return (await response.json()) as T
 }

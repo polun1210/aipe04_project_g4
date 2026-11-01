@@ -1,26 +1,46 @@
 <script setup lang="ts">
-import { computed, nextTick, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { computed, nextTick, reactive, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import ConditionSelector from '../components/ConditionSelector.vue'
-import { conditionsError, copyConditions, emptyConditions } from '../models/healthProfile'
+import {
+  emptyConditions,
+  profileErrors,
+  profilePayload,
+  type ProfileForm,
+} from '../models/healthProfile'
 import { errorMessage } from '../api/client'
+import { safeRedirect } from '../router/authGuard'
 import { healthProfileUnavailable, useHealthProfileGateway } from '../services/healthProfileGateway'
+import { useSessionStore } from '../stores/session'
 
 const router = useRouter()
+const route = useRoute()
+const session = useSessionStore()
 const gateway = useHealthProfileGateway()
-const conditions = ref(emptyConditions())
+const form = reactive<ProfileForm>({
+  birthYear: '',
+  birthMonth: '',
+  sex: '',
+  conditions: emptyConditions(),
+})
 const attempted = ref(false)
 const saving = ref(false)
 const error = ref('')
 const errorSummary = ref<HTMLElement | null>(null)
-const selectionError = computed(() => conditionsError(conditions.value))
+const errors = computed(() => profileErrors(form))
 const canSave = computed(() => gateway.available && !saving.value)
+const errorFields = [
+  { key: 'birthYear', id: 'birth-year' },
+  { key: 'birthMonth', id: 'birth-month' },
+  { key: 'sex', id: 'profile-sex' },
+  { key: 'conditions', id: 'initial-conditions' },
+] as const
 
 async function handleSubmit() {
   if (saving.value) return
   attempted.value = true
   error.value = ''
-  if (selectionError.value) {
+  if (Object.values(errors.value).some(Boolean)) {
     await nextTick()
     errorSummary.value?.focus()
     return
@@ -31,8 +51,9 @@ async function handleSubmit() {
   }
   saving.value = true
   try {
-    await gateway.saveInitialConditions(copyConditions(conditions.value))
-    await router.push('/medicine-upload')
+    await gateway.saveProfile(profilePayload(form))
+    session.markProfileCompleted()
+    await router.push(safeRedirect(route.query.redirect))
   } catch (reason) {
     error.value = errorMessage(reason)
   } finally {
@@ -53,17 +74,89 @@ async function handleSubmit() {
       :aria-describedby="!gateway.available ? 'health-profile-notice' : undefined"
       @submit.prevent="handleSubmit"
     >
-      <div v-if="attempted && selectionError" ref="errorSummary" role="alert" tabindex="-1">
+      <div
+        v-if="attempted && Object.values(errors).some(Boolean)"
+        ref="errorSummary"
+        role="alert"
+        tabindex="-1"
+      >
         <p>請先完成以下項目：</p>
-        <a href="#initial-conditions">{{ selectionError }}</a>
+        <ul>
+          <template v-for="field in errorFields" :key="field.key"
+            ><li v-if="errors[field.key]">
+              <a :href="`#${field.id}`">{{ errors[field.key] }}</a>
+            </li></template
+          >
+        </ul>
       </div>
       <p v-if="error" role="alert">{{ error }}</p>
       <fieldset :disabled="saving">
         <legend>基本健康資料</legend>
+        <div class="birth-fields">
+          <div>
+            <label for="birth-year">出生年（西元）</label>
+            <input
+              id="birth-year"
+              v-model="form.birthYear"
+              type="text"
+              inputmode="numeric"
+              maxlength="4"
+              required
+              :aria-invalid="attempted && errors.birthYear ? 'true' : undefined"
+              :aria-describedby="attempted && errors.birthYear ? 'birth-year-error' : undefined"
+            />
+            <p v-if="attempted && errors.birthYear" id="birth-year-error" role="alert">
+              {{ errors.birthYear }}
+            </p>
+          </div>
+          <div>
+            <label for="birth-month">出生月</label>
+            <input
+              id="birth-month"
+              v-model="form.birthMonth"
+              type="text"
+              inputmode="numeric"
+              maxlength="2"
+              required
+              :aria-invalid="attempted && errors.birthMonth ? 'true' : undefined"
+              :aria-describedby="attempted && errors.birthMonth ? 'birth-month-error' : undefined"
+            />
+            <p v-if="attempted && errors.birthMonth" id="birth-month-error" role="alert">
+              {{ errors.birthMonth }}
+            </p>
+          </div>
+        </div>
+        <fieldset
+          id="profile-sex"
+          tabindex="-1"
+          :aria-describedby="attempted && errors.sex ? 'profile-sex-error' : undefined"
+          :aria-invalid="attempted && errors.sex ? 'true' : undefined"
+        >
+          <legend>性別（必選一項）</legend>
+          <label
+            ><input
+              type="radio"
+              name="profile-sex"
+              value="male"
+              :checked="form.sex === 'male'"
+              @change="form.sex = 'male'"
+            />男</label
+          >
+          <label
+            ><input
+              type="radio"
+              name="profile-sex"
+              value="female"
+              :checked="form.sex === 'female'"
+              @change="form.sex = 'female'"
+            />女</label
+          >
+          <p v-if="attempted && errors.sex" id="profile-sex-error" role="alert">{{ errors.sex }}</p>
+        </fieldset>
         <ConditionSelector
           id="initial-conditions"
-          v-model="conditions"
-          :error="attempted ? selectionError : ''"
+          v-model="form.conditions"
+          :error="attempted ? errors.conditions : ''"
         />
       </fieldset>
       <button class="primary-action" type="submit" :disabled="!canSave">
@@ -80,6 +173,16 @@ async function handleSubmit() {
   line-height: 1.65;
 }
 .health-profile button {
+  min-height: 50px;
+  font: inherit;
+}
+.birth-fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+  gap: 20px;
+  margin-bottom: 24px;
+}
+.health-profile label:has(input[type='radio']) {
   min-height: 50px;
   font: inherit;
 }

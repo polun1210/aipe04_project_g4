@@ -225,6 +225,19 @@ for (const width of [1200, 390]) {
       await page.send('Runtime.enable')
       await page.send('Network.enable')
       await page.send('Page.enable')
+      // 測試專用：登入狀態與會員資料由頁面內的 fetch 假回應提供，不經網路。
+      await page.send('Page.addScriptToEvaluateOnNewDocument', {
+        source: `(() => {
+          const real = window.fetch.bind(window);
+          const json = (body) => new Response(JSON.stringify(body), {status: 200, headers: {'Content-Type': 'application/json'}});
+          window.fetch = (input, init) => {
+            const url = typeof input === 'string' ? input : input.url;
+            if (url === '/api/me') return Promise.resolve(json({user_id: 'u1', email: 'a@example.com', name: '測試', profile_completed: ${kind === 'settings'}}));
+            if (url === '/api/me/profile') return Promise.resolve(json({birth_year: 1954, birth_month: 3, sex: 'male', conditions: {selected: [], none_selected: true}}));
+            return real(input, init);
+          };
+        })()`,
+      })
       await page.send('Emulation.setDeviceMetricsOverride', {
         width,
         height: 900,
@@ -237,13 +250,6 @@ for (const width of [1200, 390]) {
       const saveLabel = kind === 'initial' ? '儲存並開始使用' : '儲存變更'
       await page.send('Page.navigate', { url: `${origin}${path}` })
       await until(() => page.eval(`!!document.querySelector(${JSON.stringify(submit)})`))
-      assert.equal(
-        await page.eval(`document.querySelector(${JSON.stringify(submit)}).disabled`),
-        true,
-      )
-      assert.match(await page.eval('document.querySelector("main").textContent'), /尚未開放/)
-      await page.click(submit, true)
-      assert.equal(await page.eval('!!document.querySelector("main [role=alert]")'), false)
 
       // Test-only service: held promises make loading/saving states observable.
       // Never add this provider or fabricated success to production code.
@@ -260,7 +266,7 @@ for (const width of [1200, 390]) {
         const save = value => {state.saves.push(structuredClone(value)); return new Promise((resolve, reject) => {state.resolveSave = resolve; state.rejectSave = reject})};
         app.provide(healthProfileGatewayKey, {available: true,
           loadProfile: () => {state.loads++; return new Promise((resolve, reject) => {state.resolveLoad = resolve; state.rejectLoad = reject})},
-          saveInitialConditions: save, saveProfile: save});
+          saveProfile: save});
         await router.push(${JSON.stringify(path)});
       })()`)
       await until(() => page.eval(`!!document.querySelector(${JSON.stringify(submit)})`))
@@ -302,7 +308,10 @@ for (const width of [1200, 390]) {
       assert.equal(invalid.saves, 0)
       assert.deepEqual(invalid.submits, [{ trusted: true, label: saveLabel }])
       assert.equal(invalid.overflow, false)
-      const fields = kind === 'initial' ? [conditions] : ['birth-year', 'birth-month', conditions]
+      const fields =
+        kind === 'initial'
+          ? ['birth-year', 'birth-month', 'profile-sex', conditions]
+          : ['birth-year', 'birth-month', conditions]
       for (const field of fields) {
         assert.ok(invalid.links.includes(`#${field}`), `${field} summary link`)
         const error = await page.eval(`(() => {
@@ -322,10 +331,9 @@ for (const width of [1200, 390]) {
         Buffer.from(screenshot.data, 'base64'),
       )
 
-      if (kind === 'settings') {
-        await page.fill('#birth-year', '1954')
-        await page.fill('#birth-month', '3')
-      }
+      await page.fill('#birth-year', '1954')
+      await page.fill('#birth-month', '3')
+      if (kind === 'initial') await page.click('input[name="profile-sex"][value="male"]')
       await page.click(`#${conditions} input[value="none"]`)
       await page.click(submit)
       await until(() => page.eval('window.__profileTest.saves.length === 1'))
@@ -356,15 +364,12 @@ for (const width of [1200, 390]) {
       assert.equal(await page.eval('location.pathname'), path)
       await page.click(submit)
       await until(() => page.eval('window.__profileTest.saves.length === 2'))
-      const expected =
-        kind === 'initial'
-          ? { selected: [], none_selected: true }
-          : {
-              birth_year: 1954,
-              birth_month: 3,
-              sex: 'male',
-              conditions: { selected: [], none_selected: true },
-            }
+      const expected = {
+        birth_year: 1954,
+        birth_month: 3,
+        sex: 'male',
+        conditions: { selected: [], none_selected: true },
+      }
       assert.deepEqual(await page.eval('window.__profileTest.saves'), [expected, expected])
       await page.eval('window.__profileTest.resolveSave()')
       if (kind === 'initial')

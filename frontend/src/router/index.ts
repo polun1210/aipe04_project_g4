@@ -1,4 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useSessionStore } from '@/stores/session'
+import { resolveAuthRedirect } from './authGuard'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -20,8 +22,7 @@ const router = createRouter({
     },
     {
       path: '/register',
-      name: 'register',
-      component: () => import('@/views/RegisterView.vue'),
+      redirect: '/login',
     },
     {
       path: '/member-center',
@@ -71,6 +72,16 @@ const router = createRouter({
       component: () => import('@/views/ReportView.vue'),
     },
   ],
+})
+
+router.beforeEach(async (to) => {
+  const session = useSessionStore()
+  try {
+    await session.load()
+  } catch {
+    // 查不到登入狀態（後端離線）時當作未登入，頁面本身會顯示錯誤。
+  }
+  return resolveAuthRedirect(to, session.me) ?? true
 })
 
 export default router

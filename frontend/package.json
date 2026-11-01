@@ -6,6 +6,7 @@
   "scripts": {
     "test:medicine-search-browser": "node tests/medicine-search-browser.test.mjs",
     "test:health-profile-browser": "node --test tests/health-profile-browser.test.mjs",
+    "test:auth-guard": "node tests/auth-guard.test.mjs",
     "test:health-profile": "node --experimental-vm-modules tests/health-profile.test.mjs",
     "test:recognition-loading": "node --experimental-vm-modules tests/recognition-loading.test.mjs",
     "test:supplement-review": "node --experimental-vm-modules tests/supplement-review.test.mjs",
@@ -24,7 +25,8 @@
   "dependencies": {
     "pinia": "^4.0.3",
     "vue": "^3.5.42",
-    "vue-router": "^5.3.1"
+    "vue-router": "^5.3.1",
+    "vue3-google-login": "^2.1.4"
   },
   "devDependencies": {
     "@tsconfig/node24": "^24.0.5",
