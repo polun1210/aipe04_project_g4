@@ -18,5 +18,15 @@
 - **COX-2 選擇性抑制劑 × 維生素 E**（出血加成）：兩種仿單都沒有提到維生素 E，NIH ODS 維生素 E 專業版也沒有提到這一類藥。
   維生素 E 保留為目標營養素，只做超量檢查。
 
+- **Thiazide 類利尿劑 × 鈣（鈣滯留 ↑）**：`Calcium-HealthProfessional.md` 全文沒有 thiazide 或 diuretic。
+  這個機轉的原文在 `VitaminD-HealthProfessional.md`（thiazide 減少尿鈣排出，與維生素 D 補充劑併用可能高血鈣），
+  已由 `thiazide-vitamin-d` 涵蓋，不另建鈣的規則。
+- **Statin × 菸鹼素（肌病變加成）**：`Niacin-HealthProfessional.md` 的「Interactions with Medications」只有 isoniazid／pyrazinamide
+  與降血糖藥兩節；statin 只出現在心血管試驗的討論（加菸鹼酸沒有額外保護、死亡率反而較高），沒有肌病變的敘述，不能支持這條規則。
+- **SGLT2 抑制劑 × 鎂（鎂 ↑）**：`Magnesium-HealthProfessional.md` 全文沒有 SGLT2 或 gliflozin，查無原文，不建規則。
+- **Metformin × 葉酸（證據較弱）**：`Folate-HealthProfessional.md` 全文沒有 metformin，「Interactions with Medications」
+  列的是 dolutegravir、levothyroxine、lithium、quinolone、methotrexate、抗癲癇藥、sulfasalazine，查無原文，不建規則。
+- **含鈣制酸劑（碳酸鈣等）的劑量**：第一版不收，`drug_nutrient_doses.csv` 只有氧化鎂，只有氧化鎂計入藥物來源的攝取量。
+
 另有 5 條規則在 nutrition-agent 已退役（`rules.csv` 中 `status = retired`，不進入判定）：
-PPI × 鈣、Atorvastatin × 維生素 D、Simvastatin × 維生素 D、雙胍類 × 菸鹼素、胰島素 × 菸鹼素；退役原因見各規則的 `reason_zh`。
+PPI × 鈣、Atorvastatin × 維生素 D、Simvastatin × 維生素 D、雙胍類 × 菸鹼素、胰島素 × 菸鹼素；退役原因見各規則的 `curation_note`。

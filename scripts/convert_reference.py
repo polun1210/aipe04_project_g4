@@ -105,7 +105,29 @@ NEW_DRAFT_RULES = [
     },
 ]
 NEW_DRAFT_NOTE = "g4 新增草稿，引文逐字取自 NCCIH 原文檔，待組長審"
-RETIRED_NOTE = "退役原因見 reason_zh；完整審查紀錄在 nutrition-agent 的 rules.toml 註解"
+# 組長 2026-11-01 核准的新增規則（覆寫狀態）
+APPROVED_NEW = {"statin-red-yeast-rice": "2026-11-01"}
+APPROVED_NOTE = "g4 新增，引文逐字取自 NCCIH 原文檔；組長 2026-11-01 核准"
+RETIRED_FALLBACK = "nutrition-agent 2026-10-19 人工審查退役，原文不足以支持"
+# 退役理由：來自 nutrition-agent rules.toml 各規則上方的註解
+RETIRED_NOTES = {
+    "ppi-calcium": (
+        "nutrition-agent 2026-10-19 人工審查退役：NIH ODS 只把 PPI 列為可能相關的藥物；直接吸收試驗結果不一致，"
+        "2019 年隨機雙盲試驗未見具臨床意義的差異；2022 年 ACG GERD 指引不建議無骨病風險者例行補鈣或維生素 D；"
+        "仿單警示限於長期或高劑量使用、骨質疏鬆風險，或低血鎂造成的次發性低血鈣。現有輸入模型沒有療程、劑量、骨骼風險，"
+        "無法安全建立條件式規則。這不代表 PPI 絕不影響鈣，只是目前資料無法支持一條通用提醒"
+    ),
+    "atorvastatin-vitamin-d": (
+        "nutrition-agent 2026-10-19 人工審查退役：原文只說高攝取量的維生素 D 可能降低效力，規則模型沒有攝取量門檻，"
+        "會對一般劑量也發出提醒；長者同時使用 statin 與維生素 D 很普遍，提醒會失去意義。等模型支援門檻再重新草擬"
+    ),
+    "biguanide-niacin": (
+        "nutrition-agent 2026-10-19 人工審查退役：原文只針對 high-dose nicotinic acid，成分目錄把菸鹼醯胺也歸在 niacin，"
+        "規則模型沒有型態與攝取量門檻，會對一般綜合維生素也發出提醒；原文說的是任何降血糖藥，只草擬兩類也不完整"
+    ),
+}
+RETIRED_NOTES["simvastatin-vitamin-d"] = RETIRED_NOTES["atorvastatin-vitamin-d"]
+RETIRED_NOTES["insulin-niacin"] = RETIRED_NOTES["biguanide-niacin"]
 
 
 def norm_key(text: str) -> str:
@@ -349,8 +371,13 @@ def build_rules(src: Path) -> tuple[list[list], list[list]]:
             ids.append(cid)
         status = STATUS_MAP[r.get("status", "draft")]
         is_new = r in NEW_DRAFT_RULES
-        reviewed = status != "draft"
         reviewed_at = "2026-10-20" if r["id"] in REVIEWED_1020 else "2026-10-19"
+        note = NEW_DRAFT_NOTE if is_new else None
+        if r["id"] in APPROVED_NEW:
+            status, reviewed_at, note = "reviewed", APPROVED_NEW[r["id"]], APPROVED_NOTE
+        elif status == "retired":
+            note = RETIRED_NOTES.get(r["id"], RETIRED_FALLBACK)
+        reviewed = status != "draft"
         tier = r["citations"][0]["source_type"]
         rule_rows.append([
             r["id"], r["condition_type"], map_class(r["condition_code"]) if r["condition_type"] == "drug_class" else r["condition_code"],
@@ -359,7 +386,7 @@ def build_rules(src: Path) -> tuple[list[list], list[list]]:
             r["reason_zh"], pipe(dict.fromkeys(ids)), tier, status,
             "Claude Code（草擬）" if is_new else CURATED_BY,
             REVIEWER if reviewed else None, reviewed_at if reviewed else None,
-            NEW_DRAFT_NOTE if is_new else (RETIRED_NOTE if status == "retired" else None),
+            note,
         ])  # fmt: skip
     for cid, row in citation_rows.items():
         row[6] = "、".join(populations[cid])

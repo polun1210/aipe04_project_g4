@@ -29,7 +29,7 @@ ATOMIC_WEIGHT = {"H": 1.008, "C": 12.011, "N": 14.007, "O": 15.999, "Mg": 24.305
                  "Ca": 40.078, "Fe": 55.845}  # fmt: skip
 ELEMENT_OF = {"calcium": "Ca", "magnesium": "Mg", "iron": "Fe"}
 G4_COMPOUND_ITEMS = {"losartan_hydrochlorothiazide"}  # g4 範例自加；藥名表以兩個單方成分表示複方
-NEW_DRAFT_RULE_IDS = {"statin-red-yeast-rice", "glucosamine-rx-duplicate"}
+NEW_DRAFT_RULE_IDS = {"glucosamine-rx-duplicate"}
 
 
 @pytest.fixture(scope="module")
@@ -80,7 +80,7 @@ def test_內容相同的引文共用同一個編號(ref):
     assert max(keys.values()) == 1
 
 
-def test_審定規則的建表者與覆核者不同且新增的只有兩條草稿(ref):
+def test_審定規則的建表者與覆核者不同且新增的只剩一條草稿(ref):
     by_status = Counter(r.status for r in ref.rules)
     assert by_status[RuleStatus.REVIEWED] >= 1
     drafts = {r.rule_id for r in ref.rules if r.status is RuleStatus.DRAFT}
