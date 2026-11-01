@@ -174,7 +174,6 @@
   "interactions": [
     {
       "ingredient_code": "calcium",
-      "severity": "attention",
       "requires_professional_review": false,
       "user_has_supplement": true,
       "matched_product_ids": [
@@ -187,8 +186,8 @@
           "condition_type": "drug_class",
           "condition_code": "thiazide_diuretic",
           "interaction_type": "pharmacodynamic",
-          "severity": "attention",
           "advice_code": "consult_before_combining",
+          "requires_professional_review": false,
           "separation_hours": null,
           "reason_zh": "此類利尿劑會減少鈣從尿液排出，併用鈣補充劑可能使血鈣偏高",
           "citation_ids": [
@@ -199,7 +198,6 @@
     },
     {
       "ingredient_code": "magnesium",
-      "severity": "info",
       "requires_professional_review": false,
       "user_has_supplement": true,
       "matched_product_ids": [
@@ -211,8 +209,8 @@
           "condition_type": "drug_class",
           "condition_code": "thiazide_diuretic",
           "interaction_type": "drug_affects_nutrient",
-          "severity": "info",
           "advice_code": "inform_provider",
+          "requires_professional_review": false,
           "separation_hours": null,
           "reason_zh": "此類利尿劑可能增加鎂的流失",
           "citation_ids": [

@@ -16,7 +16,7 @@
 
 相關決策：ADR-0001（輸出宣稱邊界）、ADR-0002（DRIs 為唯一營養標準錨）、
 ADR-0006（外部資料只用來事先整理成表）、ADR-0007（交互作用規則可引用少量非目標營養素成分）、
-ADR-0009（聚合取最高等級，永不降級）。
+ADR-0009（同一成分的多條規則合成一筆；取最高等級的部分已被 ADR-0012 取代）。
 
 ---
 
@@ -97,7 +97,6 @@ TFDA 有效製劑許可證（2026-10-14 快照，約 1.8 萬張）
 - **`ingredient_form_codes`**：空 ＝ 所有型態皆適用。**僅在出處明確區分型態時填寫。**
 - **`requires_supplement_intake`**：是否需要使用者正在補充此成分才觸發。`drug_affects_nutrient` 為 `false`
   （沒補也列出，即「相關營養素」），其餘為 `true`。
-- **`severity`**：`priority`（🔴）／`attention`（🟡）／`info`（🔵）。**判定條件由建表規範定義，目前待決。**
 - **`requires_professional_review`**：報告是否針對此成分**建議使用者諮詢醫師、藥師或營養師**。
   不是指團隊內部的專業審查。
 - **`reason_zh`**：經覆核的固定說明文字。LLM 敘述不得增加此處沒有的機轉或建議。不得含任何數字。
@@ -201,12 +200,11 @@ for condition in active:
 
 ```
 for ingredient in hits 中出現的所有成分:
-    severity                     = max(該成分所有 hit 的 severity)
     requires_professional_review = any(該成分所有 hit 的 requires_professional_review)
     triggers                     = 該成分所有 hit 的條件與規則清單
 ```
 
-**永不降級**：沒有任何資料能降低另一條規則的等級。
+沒有嚴重度分級（ADR-0012）。排序：使用者有補充（`user_has_supplement = true`）的在前，同組內依 `ingredients.csv` 的成分順序。
 
 ---
 
@@ -269,7 +267,7 @@ for ingredient in hits 中出現的所有成分:
 
 | 待決事項 | 影響的欄位 | 狀態 |
 |---|---|---|
-| 建表規範（證據採納、分級、嚴重度、建議行動、是否建議諮詢） | `evidence_tier`、`severity`、`advice_code`、`requires_professional_review` | **待提出。建表開工前必須定稿，不可與建表並行** |
+| 建表規範（證據採納、分級、建議行動、是否建議諮詢） | `evidence_tier`、`advice_code`、`requires_professional_review` | **待提出。建表開工前必須定稿，不可與建表並行** |
 | ADR-0007 允許成分清單 | §五 | 3 項已提名，**待組長正式核准** |
 | COX-2 選擇性抑制劑的兩條規則是否成立 | `rules`（鐵 ↓、× 魚油 n-3／維生素 E 出血加成） | 🔍 整理規則時依 Celecoxib／Etoricoxib 仿單驗證。不成立須以「明確排除」記錄理由 |
 | 維生素 E 的去留 | 目標營養素清單 | 取決於上一列。若 COX-2 兩條皆不成立，維生素 E 將失去唯一藥物錨點 |

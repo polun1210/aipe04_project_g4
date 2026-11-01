@@ -64,7 +64,7 @@
 | ① | `dris_values` | DRIs 數值：營養素 × 性別 × 年齡組 → 建議量與上限 | 計算層 | `DrisValue` |
 | ① | `compound_ratios` | 化合物的元素量比率（例如檸檬酸鈣 → 鈣 0.21） | 計算層 | `CompoundRatio` |
 | ① | `conversion_factors` | 單位與型態換算（IU → µg 等） | 計算層 | `ConversionFactor` |
-| ② | `rules` | 規則表：用藥類別 → 成分 → 方向，含嚴重度、建議行動、說明、覆核狀態 | 規則引擎 | `Rule`（`rules.py`） |
+| ② | `rules` | 規則表：用藥類別 → 成分 → 方向，含建議行動、說明、覆核狀態 | 規則引擎 | `Rule`（`rules.py`） |
 | ② | `citations` | 出處：來源、原文摘錄、適用族群、地區、版本 | 規則引擎、報告 | `Citation`（`rules.py`） |
 
 ①的模型都在 `catalog.py`。想看懂整條流程：先讀 `case_profile.json` 裡最短的一罐（紅麴膠囊），
@@ -187,7 +187,7 @@ uv run python -c "from app.schemas.label import ExtractionDraft; ExtractionDraft
 | `enums.py` | ✅ | |
 | `common.py` | ✅ | |
 | `catalog.py` | ⏳ | 化合物與型態（`nutrient_form_code`、`compound_code`）目前是自由字串，尚無對應的目錄；其餘穩定 |
-| `rules.py` | ✅ | `severity`、`evidence_tier` 的「值」待建表規範，欄位本身不受影響 |
+| `rules.py` | ✅ | `evidence_tier` 的「值」待建表規範，欄位本身不受影響 |
 | `case.py` | ➕ | |
 | `label.py` | ➕ | |
 | `assessment.py` | ✅ | |
@@ -201,7 +201,7 @@ uv run python -c "from app.schemas.label import ExtractionDraft; ExtractionDraft
 
 | 項目 | 欄位 |
 |---|---|
-| 嚴重度判定條件、證據等級 | `Rule.severity`、`Rule.evidence_tier` |
+| 證據等級 | `Rule.evidence_tier` |
 | 規則內容、出處原文 | `rules.csv`、`citations.csv` |
 | DRIs 數值、化合物比率、制酸劑元素量 | `dris_values.csv`、`compound_ratios.csv`、`drug_nutrient_doses.csv` |
 | 有效成分目錄（約 44 項） | `drug_items.csv` |

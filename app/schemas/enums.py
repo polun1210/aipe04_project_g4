@@ -218,21 +218,6 @@ class InteractionType(StrEnum):
     DRUG_AFFECTS_NUTRIENT = "drug_affects_nutrient"  # 藥物影響營養素（沒補也列出）
 
 
-class Severity(StrEnum):
-    """由高到低。聚合時取最高，永不降級（ADR-0009）。"""
-
-    PRIORITY = "priority"  # 🔴
-    ATTENTION = "attention"  # 🟡
-    INFO = "info"  # 🔵
-
-
-SEVERITY_RANK: dict[Severity, int] = {
-    Severity.PRIORITY: 3,
-    Severity.ATTENTION: 2,
-    Severity.INFO: 1,
-}
-
-
 class AdviceCode(StrEnum):
     """建議行動的封閉列舉。不存在也不得新增停用、減量、改吃某產品（ADR-0001）。"""
 

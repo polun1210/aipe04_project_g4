@@ -12,7 +12,7 @@ from app.narrator import NarratorError, OpenRouterNarrator
 from app.reporting import MAX_RETRIES, NarratedReporter, condition_names, narrate
 from app.schemas.assessment import Assessment
 from app.schemas.case import CaseProfile
-from app.schemas.enums import IngredientCode, NarrationKind, Severity
+from app.schemas.enums import IngredientCode, NarrationKind
 from app.schemas.narration import BANNED_PHRASES, NarrationInput, NarrationOutput
 
 EXAMPLES = Path(__file__).parent.parent / "docs" / "schemas" / "examples"
@@ -97,10 +97,10 @@ def test_template_report_is_deterministic(case, assessment):
     assert first == second
 
 
-def test_template_summary_names_top_priority_and_counts(assessment, names, conditions):
+def test_template_summary_names_first_finding_and_counts(assessment, names, conditions):
     summary = template_narration(assessment, names, conditions).items[0].text
     assert "紅麴" in summary
-    assert f"這次共有 {len(assessment.interactions)} 項提醒" in summary
+    assert f"這次有 {len(assessment.interactions)} 項提醒" in summary
 
 
 def test_template_without_findings_still_has_caveat(assessment, names, conditions):
@@ -191,14 +191,11 @@ def test_check_flags_missing_and_extra_interactions(assessment):
     assert result.coverage_violations == ["interaction.potassium：缺少敘述", "interaction.zinc：判定層沒有這條提醒"]
 
 
-def test_check_flags_strong_words_below_priority(assessment):
-    info = next(f for f in assessment.interactions if f.severity is Severity.INFO)
-    result = check_narration(_llm_output(assessment, **{info.ingredient_code: "請立即就醫。"}), assessment)
-    assert result.severity_wording_violations == [f"interaction.{info.ingredient_code}：立即"]
-
-
-def test_check_allows_strong_words_for_priority(assessment):
-    assert check_narration(_llm_output(assessment, red_yeast_rice="請立即和醫師討論。"), assessment).passed
+def test_check_flags_strong_words_for_every_finding(assessment):
+    for finding in assessment.interactions:
+        code = finding.ingredient_code
+        result = check_narration(_llm_output(assessment, **{code: "請立即就醫。"}), assessment)
+        assert result.strong_wording_violations == [f"interaction.{code}：立即"]
 
 
 # ── LLM 重試與備援 ───────────────────────────────────────────

@@ -33,7 +33,6 @@ export interface ReportNutrient {
 export interface ReportInteraction {
   ingredient_code: string
   display_name_zh: string
-  severity: 'priority' | 'attention' | 'info'
   narration: string | null
   requires_professional_review: boolean
   matched_product_ids: string[]

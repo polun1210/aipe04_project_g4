@@ -5,15 +5,14 @@ LLM 寫的白話（以及固定模板）都要通過這裡才能進報告：
   - 禁用詞：BANNED_PHRASES
   - 劑量邊界：數字接單位且不在判定層；停用、減量、改吃之類的建議
   - 涵蓋：每條交互作用提醒剛好一則敘述，不能漏、不能多
-  - 措辭：不是「優先處理」等級卻用了「立即」「危險」之類的強烈字眼
+  - 措辭：一律不准用「立即」「危險」之類的強烈字眼（ADR-0012，系統不分嚴重程度）
 """
 
 import re
-from collections import Counter
 
 from app.narration_template import percent
 from app.schemas.assessment import Assessment
-from app.schemas.enums import NarrationKind, Severity
+from app.schemas.enums import NarrationKind
 from app.schemas.narration import BANNED_PHRASES, NarrationItem, NarrationOutput, OutputCheckResult
 
 # 獨立的數字才檢查；B12、D3、Omega-3、COX-2 這類名稱裡的數字不算
@@ -33,14 +32,14 @@ def check_narration(output: NarrationOutput, assessment: Assessment) -> OutputCh
              if not _is_allowed(m.group(1), allowed)]
     advice = [f"{label}：{w}" for label, text in texts for w in _DOSAGE_ADVICE if w in text]
     coverage = _coverage_violations(output, assessment)
-    wording = _wording_violations(output, assessment)
+    wording = _wording_violations(output)
     return OutputCheckResult(
         passed=not (numbers or banned or doses or advice or coverage or wording),
         number_fidelity_violations=numbers,
         banned_phrase_violations=banned,
         dosage_boundary_violations=doses + advice,
         coverage_violations=coverage,
-        severity_wording_violations=wording,
+        strong_wording_violations=wording,
     )
 
 
@@ -54,8 +53,7 @@ def _allowed_numbers(assessment: Assessment) -> set[float]:
             values |= {n.ul.ul_value, percent(n.ul.ratio), round(n.ul.ratio * 100, 1)}
     for f in assessment.interactions:
         values |= {t.separation_hours for t in f.triggers if t.separation_hours is not None}
-    counts = Counter(f.severity for f in assessment.interactions)
-    values |= {len(assessment.interactions), *counts.values()}
+    values.add(len(assessment.interactions))
     return values | {round(v, 1) for v in values}
 
 
@@ -80,17 +78,5 @@ def _coverage_violations(output: NarrationOutput, assessment: Assessment) -> lis
     )
 
 
-def _wording_violations(output: NarrationOutput, assessment: Assessment) -> list[str]:
-    severity = {f.ingredient_code: f.severity for f in assessment.interactions}
-    has_priority = Severity.PRIORITY in severity.values()
-    violations = []
-    for item in output.items:
-        if item.kind is NarrationKind.SUMMARY:
-            strong_allowed = has_priority
-        elif item.kind is NarrationKind.INTERACTION:
-            strong_allowed = severity.get(item.ingredient_code) is Severity.PRIORITY
-        else:
-            strong_allowed = False
-        if not strong_allowed:
-            violations += [f"{_label(item)}：{w}" for w in _STRONG_WORDS if w in item.text]
-    return violations
+def _wording_violations(output: NarrationOutput) -> list[str]:
+    return [f"{_label(item)}：{w}" for item in output.items for w in _STRONG_WORDS if w in item.text]

@@ -105,8 +105,8 @@ def test_report_numbers_match_assessment():
     assert [n["peak_intake_from_supplements"] for n in report["nutrients"]] == [
         n["peak_intake_from_supplements"] for n in assessment["relevant_nutrients"]
     ]
-    assert [f["severity"] for f in report["interactions"]] == [
-        f["severity"] for f in assessment["interactions"]
+    assert [f["ingredient_code"] for f in report["interactions"]] == [
+        f["ingredient_code"] for f in assessment["interactions"]
     ]
 
 

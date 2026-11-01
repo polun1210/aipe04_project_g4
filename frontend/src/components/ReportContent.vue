@@ -39,7 +39,6 @@ watch(
   },
   { immediate: true },
 )
-const severity = { priority: '優先處理', attention: '留意', info: '資訊' }
 const advice: Record<string, string> = {
   separate_timing: '錯開服用',
   inform_provider: '告知醫師或藥師',
@@ -157,7 +156,7 @@ function sourceUrl(url: string | null) {
       </h2>
       <p v-if="!report.interactions.length">本份報告未列出交互作用；這不代表已排除所有風險。</p>
       <section v-for="interaction in report.interactions" :key="interaction.ingredient_code">
-        <h3>{{ interaction.display_name_zh }}：{{ severity[interaction.severity] }}</h3>
+        <h3>{{ interaction.display_name_zh }}</h3>
         <p v-if="interaction.narration">{{ interaction.narration }}</p>
         <p v-if="interaction.requires_professional_review">請與醫師或藥師討論。</p>
         <ul>

@@ -199,7 +199,6 @@
   "interactions": [
     {
       "ingredient_code": "red_yeast_rice",
-      "severity": "priority",
       "requires_professional_review": true,
       "user_has_supplement": true,
       "matched_product_ids": [
@@ -211,8 +210,8 @@
           "condition_type": "drug_class",
           "condition_code": "statin",
           "interaction_type": "pharmacodynamic",
-          "severity": "priority",
           "advice_code": "consult_before_combining",
+          "requires_professional_review": true,
           "separation_hours": null,
           "reason_zh": "紅麴所含成分與此類藥物的作用機轉相同，併用可能增加肌肉不良反應的風險",
           "citation_ids": [
@@ -240,7 +239,6 @@
     },
     {
       "ingredient_code": "calcium",
-      "severity": "attention",
       "requires_professional_review": false,
       "user_has_supplement": true,
       "matched_product_ids": [
@@ -253,8 +251,8 @@
           "condition_type": "drug_class",
           "condition_code": "thiazide_diuretic",
           "interaction_type": "pharmacodynamic",
-          "severity": "attention",
           "advice_code": "consult_before_combining",
+          "requires_professional_review": false,
           "separation_hours": null,
           "reason_zh": "此類利尿劑會減少鈣從尿液排出，併用鈣補充劑可能使血鈣偏高",
           "citation_ids": [
@@ -281,8 +279,8 @@
           "condition_type": "drug_class",
           "condition_code": "ppi",
           "interaction_type": "drug_affects_nutrient",
-          "severity": "info",
           "advice_code": "inform_provider",
+          "requires_professional_review": false,
           "separation_hours": null,
           "reason_zh": "長期使用此類胃藥可能降低鈣的吸收",
           "citation_ids": [
@@ -310,7 +308,6 @@
     },
     {
       "ingredient_code": "magnesium",
-      "severity": "attention",
       "requires_professional_review": false,
       "user_has_supplement": true,
       "matched_product_ids": [
@@ -322,8 +319,8 @@
           "condition_type": "drug_class",
           "condition_code": "ppi",
           "interaction_type": "drug_affects_nutrient",
-          "severity": "attention",
           "advice_code": "inform_provider",
+          "requires_professional_review": false,
           "separation_hours": null,
           "reason_zh": "長期使用此類胃藥可能造成血中鎂濃度下降",
           "citation_ids": [
@@ -350,8 +347,8 @@
           "condition_type": "drug_class",
           "condition_code": "thiazide_diuretic",
           "interaction_type": "drug_affects_nutrient",
-          "severity": "info",
           "advice_code": "inform_provider",
+          "requires_professional_review": false,
           "separation_hours": null,
           "reason_zh": "此類利尿劑可能增加鎂的流失",
           "citation_ids": [
@@ -379,7 +376,6 @@
     },
     {
       "ingredient_code": "vitamin_b12",
-      "severity": "attention",
       "requires_professional_review": false,
       "user_has_supplement": true,
       "matched_product_ids": [
@@ -391,8 +387,8 @@
           "condition_type": "drug_class",
           "condition_code": "ppi",
           "interaction_type": "drug_affects_nutrient",
-          "severity": "attention",
           "advice_code": "inform_provider",
+          "requires_professional_review": false,
           "separation_hours": null,
           "reason_zh": "長期使用此類胃藥可能降低維生素B12的吸收",
           "citation_ids": [
@@ -420,7 +416,6 @@
     },
     {
       "ingredient_code": "potassium",
-      "severity": "info",
       "requires_professional_review": false,
       "user_has_supplement": false,
       "matched_product_ids": [],
@@ -430,8 +425,8 @@
           "condition_type": "drug_class",
           "condition_code": "acei_arb",
           "interaction_type": "drug_affects_nutrient",
-          "severity": "info",
           "advice_code": "inform_provider",
+          "requires_professional_review": false,
           "separation_hours": null,
           "reason_zh": "此類降血壓藥可能使血中鉀濃度上升，使用含鉀補充劑或低鈉鹽前應先諮詢",
           "citation_ids": [
@@ -458,8 +453,8 @@
           "condition_type": "drug_class",
           "condition_code": "thiazide_diuretic",
           "interaction_type": "drug_affects_nutrient",
-          "severity": "info",
           "advice_code": "inform_provider",
+          "requires_professional_review": false,
           "separation_hours": null,
           "reason_zh": "此類利尿劑可能增加鉀的流失",
           "citation_ids": [

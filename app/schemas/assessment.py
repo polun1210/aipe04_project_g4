@@ -10,7 +10,6 @@ from pydantic import Field, model_validator
 
 from app.schemas.common import FrozenModel
 from app.schemas.enums import (
-    SEVERITY_RANK,
     TARGET_NUTRIENTS,
     AdviceCode,
     ConditionCode,
@@ -20,7 +19,6 @@ from app.schemas.enums import (
     IngredientCode,
     InteractionType,
     ReferenceType,
-    Severity,
     ULPhrasing,
     ULScope,
     Unit,
@@ -75,28 +73,26 @@ class Trigger(FrozenModel):
     condition_type: ConditionType
     condition_code: str
     interaction_type: InteractionType
-    severity: Severity
     advice_code: AdviceCode
+    requires_professional_review: bool
     separation_hours: float | None = None  # findings 裡唯一允許的數字
     reason_zh: str
     citation_ids: list[str] = Field(min_length=1)
 
 
 class InteractionFinding(FrozenModel):
-    """每個成分一筆，已聚合：取最高等級，永不降級（ADR-0009）。不含任何攝取量數字。"""
+    """每個成分一筆，已聚合；沒有嚴重度分級（ADR-0012）。不含任何攝取量數字。"""
 
     ingredient_code: IngredientCode
-    severity: Severity
-    requires_professional_review: bool
+    requires_professional_review: bool  # 任一 trigger 為 true 就是 true
     user_has_supplement: bool
     matched_product_ids: list[UUID]
     triggers: list[Trigger] = Field(min_length=1)
 
     @model_validator(mode="after")
-    def _max_severity(self) -> "InteractionFinding":
-        highest = max(self.triggers, key=lambda t: SEVERITY_RANK[t.severity]).severity
-        if self.severity is not highest:
-            raise ValueError("severity 必須是所有 triggers 中的最高等級")
+    def _consistent(self) -> "InteractionFinding":
+        if self.requires_professional_review is not any(t.requires_professional_review for t in self.triggers):
+            raise ValueError("requires_professional_review 必須等於任一 trigger 為 true")
         if self.user_has_supplement != bool(self.matched_product_ids):
             raise ValueError("user_has_supplement 與 matched_product_ids 不一致")
         return self

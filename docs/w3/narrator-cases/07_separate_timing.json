@@ -42,7 +42,6 @@
   "interactions": [
     {
       "ingredient_code": "iron",
-      "severity": "attention",
       "requires_professional_review": false,
       "user_has_supplement": true,
       "matched_product_ids": [
@@ -54,8 +53,8 @@
           "condition_type": "drug_class",
           "condition_code": "antacid_laxative",
           "interaction_type": "absorption",
-          "severity": "attention",
           "advice_code": "separate_timing",
+          "requires_professional_review": false,
           "separation_hours": 2,
           "reason_zh": "制酸劑會降低鐵的吸收，兩者應錯開服用時間",
           "citation_ids": [
