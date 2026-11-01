@@ -31,6 +31,11 @@ class PgStore:
     def __init__(self, pool: ConnectionPool) -> None:
         self._pool = pool
 
+    def has_data_version(self, version: str) -> bool:
+        """這版參考資料匯入過了嗎（assessments.decision_data_version 的外鍵目標）。"""
+        with self._pool.connection() as conn:
+            return conn.execute("SELECT 1 FROM catalog.data_versions WHERE version = %s", [version]).fetchone() is not None
+
     # ── 帳號與基本資料 ──────────────────────────────────────
 
     def ensure_test_user(self) -> None:

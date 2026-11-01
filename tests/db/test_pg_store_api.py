@@ -77,3 +77,14 @@ def test_STORE的值不認得時直接報錯(monkeypatch):
     monkeypatch.setenv("STORE", "redis")
     with pytest.raises(RuntimeError, match="memory 或 pg"):
         store_mode()
+
+
+def test_資料庫沒有這版參考資料時啟動就報錯並提示匯入(pg_env, monkeypatch):
+    class OldCatalog:
+        def load_reference(self):
+            return type("Ref", (), {"version": "9999.0.0"})()
+
+    monkeypatch.setattr("app.store.get_catalog_source", lambda: OldCatalog())
+    with pytest.raises(RuntimeError, match="import_catalog"):
+        with TestClient(create_app()):
+            pass

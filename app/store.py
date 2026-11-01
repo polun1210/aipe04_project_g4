@@ -11,6 +11,7 @@ from functools import lru_cache
 from typing import Protocol
 from uuid import UUID, uuid4
 
+from app.catalog_source import get_catalog_source
 from app.schemas.assessment import Assessment
 from app.schemas.case import AccountProfile, CaseProfile
 from app.schemas.common import ExclusiveSelection
@@ -199,6 +200,13 @@ def init_store() -> None:
     if store_mode() != "pg":
         return
     store = get_store()
+    # 評估個案記的是參考資料版本，資料庫有外鍵指向 catalog.data_versions：版本不在，之後每次評估都會 500
+    version = get_catalog_source().load_reference().version
+    if not store.has_data_version(version):  # type: ignore[attr-defined]
+        raise RuntimeError(
+            f"資料庫沒有參考資料版本 {version}，請先執行 python -m app.db.import_catalog 匯入 data/catalog/"
+            "（STORE=pg 搭配 CATALOG_SOURCE=csv 時，CSV 的版本也必須已匯入資料庫）"
+        )
     if os.environ.get("AUTH", "test") == "test":
         store.ensure_test_user()  # type: ignore[attr-defined]
 
