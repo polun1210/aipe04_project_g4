@@ -3,12 +3,12 @@
 import pytest
 
 from app.catalog_source import get_catalog_source
-from app.drug_mapping import DrugProductIndex, find_candidates, map_confirmed_drug, map_drug_name
+from app.drug_mapping import drug_product_index_of, find_candidates, map_confirmed_drug, map_drug_name
 from app.schemas.drug_label import DrugDraftRow
 
 SOURCE = get_catalog_source()
 DRUG_ITEMS = SOURCE.load().drug_items
-PRODUCTS = DrugProductIndex(SOURCE.load_drug_products())
+PRODUCTS = drug_product_index_of(SOURCE)
 
 
 def _first_product(code: str) -> str:
@@ -28,10 +28,23 @@ def test_product_name_ignores_width_case_and_spaces():
     assert drug.scope_status == "in_scope"
 
 
-def test_compound_product_takes_first_ingredient_and_union_of_classes():
+def test_compound_product_uses_catalog_compound_item_and_union_of_classes():
     drug = map_drug_name("Candanxo F.C. Tablets 50/12.5 mg", DRUG_ITEMS, products=PRODUCTS)
-    assert drug.active_ingredient_code == "hydrochlorothiazide"
+    assert drug.active_ingredient_code == "losartan_hydrochlorothiazide"
     assert set(drug.drug_class_codes) == {"thiazide_diuretic", "acei_arb"}
+
+
+def test_compound_without_catalog_item_prefers_ingredient_with_rule():
+    caduet = next(p.name for p in SOURCE.load_drug_products() if p.name.lower().startswith("caduet"))
+    drug = map_drug_name(caduet, DRUG_ITEMS, products=PRODUCTS)
+    assert drug.active_ingredient_code == "atorvastatin"  # 不是 amlodipine：atorvastatin 有成分觸發規則
+
+
+def test_compound_without_catalog_item_or_rule_takes_first():
+    from app.drug_mapping import _representative
+
+    items = [i for i in DRUG_ITEMS if i.active_ingredient_code in ("glucosamine_sulfate", "magnesium_oxide")]
+    assert _representative(items, DRUG_ITEMS, frozenset()) is items[0]
 
 
 def test_ranitidine_product_is_never_in_scope():

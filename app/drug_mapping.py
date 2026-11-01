@@ -18,7 +18,9 @@ def _normalize(text: str) -> str:
 class DrugProductIndex:
     """TFDA 品名（約 4 萬筆）的正規化索引：啟動時建一次，查詢時完全相符走 dict。"""
 
-    def __init__(self, products: list[DrugProduct]) -> None:
+    def __init__(self, products: list[DrugProduct], rule_ingredients: frozenset[str] = frozenset()) -> None:
+        # 有「以成分觸發」的規則（condition_type = drug_ingredient）的成分代碼，複方挑代表成分時優先
+        self.rule_ingredients = rule_ingredients
         self._by_name: dict[str, DrugProduct] = {}
         for product in products:
             self._by_name.setdefault(_normalize(product.name), product)
@@ -33,7 +35,9 @@ class DrugProductIndex:
 
 @lru_cache(maxsize=4)
 def drug_product_index_of(catalog: CatalogSource) -> DrugProductIndex:
-    return DrugProductIndex(catalog.load_drug_products())
+    rules = catalog.load_reference().rules
+    rule_ingredients = frozenset(r.condition_code for r in rules if r.condition_type == "drug_ingredient")
+    return DrugProductIndex(catalog.load_drug_products(), rule_ingredients)
 
 
 def get_drug_product_index() -> DrugProductIndex:
@@ -73,7 +77,7 @@ def map_drug_name(
     if item is None:
         product = products.get(name) if products else None
         if product is not None:
-            return _from_product(name, product, drug_items, dose_mg, times_per_day)
+            return _from_product(name, product, drug_items, products, dose_mg, times_per_day)
         return SelectedDrug(
             raw_name=name,
             scope_status=ScopeStatus.UNRESOLVED,
@@ -110,20 +114,40 @@ def map_confirmed_drug(
     return _in_scope(name, item, dose_mg, times_per_day)
 
 
+def _representative(items: list[DrugItem], drug_items: list[DrugItem], rule_ingredients: frozenset[str]) -> DrugItem:
+    """複方挑一個成分代表（SelectedDrug 只放一個成分）。
+
+    (a) 目錄有成分組合完全相同的複方品項（代碼以 _ 拆開的集合相同）→ 用它；
+    (b) 否則優先選有「以成分觸發」規則的成分；(c) 都沒有取第一個。
+    """
+    codes = {i.active_ingredient_code for i in items}
+    if len(codes) > 1:
+        combo = next((i for i in drug_items if set(i.active_ingredient_code.split("_")) == codes), None)
+        if combo is not None:
+            return combo
+    return next((i for i in items if i.active_ingredient_code in rule_ingredients), items[0])
+
+
 def _from_product(
-    name: str, product: DrugProduct, drug_items: list[DrugItem], dose_mg: float | None, times_per_day: int | None
+    name: str,
+    product: DrugProduct,
+    drug_items: list[DrugItem],
+    index: DrugProductIndex,
+    dose_mg: float | None,
+    times_per_day: int | None,
 ) -> SelectedDrug:
     by_code = {i.active_ingredient_code: i for i in drug_items}
     items = [by_code[c] for c in product.active_ingredient_codes if c in by_code]
     if not items:
         status = ScopeStatus.OUT_OF_SCOPE if product.out_of_scope_ingredients else ScopeStatus.UNRESOLVED
         return SelectedDrug(raw_name=name, scope_status=status, dose_mg=dose_mg, times_per_day=times_per_day)
+    rep = _representative(items, drug_items, index.rule_ingredients)
     classes = list(dict.fromkeys(c for i in items for c in i.drug_class_codes))
     return SelectedDrug(
         raw_name=name,
         scope_status=ScopeStatus.IN_SCOPE,
-        active_ingredient_code=items[0].active_ingredient_code,
-        display_name_zh=items[0].display_name_zh,
+        active_ingredient_code=rep.active_ingredient_code,
+        display_name_zh=rep.display_name_zh,
         drug_class_codes=classes,
         dose_mg=dose_mg,
         times_per_day=times_per_day,

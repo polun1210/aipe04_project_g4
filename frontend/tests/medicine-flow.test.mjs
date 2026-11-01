@@ -654,7 +654,7 @@ test('suggestions can be navigated and selected by keyboard without saving free 
   review.clearLookup(row)
 })
 
-test('default gateway calls the existing lookup and filters backend candidates without inventing metadata', async () => {
+test('default gateway calls the existing lookup and passes the class to the backend and maps its candidates without inventing metadata', async () => {
   officialGateway = undefined
   const gateway = useMedicineSearchGateway()
   assert.equal(gateway.available, true)
