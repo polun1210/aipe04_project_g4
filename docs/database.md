@@ -13,7 +13,7 @@
 
 ```
 data/catalog/*.csv（git，正本）──匯入腳本──► catalog.* 表 ──► catalog.v_* view ──► PgCatalogSource
-data/sources/**/*.md（git）────ingest──────► evidence.chunks ───────────────────► 檢索（C-2）
+data/sources/**/*.md（git）────ingest──────► evidence.chunks ───────────────────► 檢索（app/rag）
 後端 API ──────────────────────────────────► app.* 表 ◄──────────────────────────► PgStore（A-3）
 ```
 
@@ -374,9 +374,9 @@ erDiagram
 
 ## evidence 的表（1 張）
 
-RAG 語料，C-2 才寫入。報告的亮點：規則引用的原文（`catalog.citations`）和 RAG 撈出的段落（`evidence.chunks`）
+RAG 語料，由 `python -m app.rag.ingest` 寫入（設計見 [ADR-0013](adr/0013-rag-explains-findings-only.md)）。報告的亮點：規則引用的原文（`catalog.citations`）和 RAG 撈出的段落（`evidence.chunks`）
 指向同一張 `catalog.source_documents`，判定的依據和解釋的依據是同一批文件，都能回溯到原檔第幾行。
-`embedding` 不固定維度、不建向量索引（ADR-0003：4096 維超過 pgvector 近似索引上限，先用成分標籤篩選再算距離）。
+`embedding` 不固定維度、不建向量索引（4096 維超過 pgvector 近似索引上限，先用成分標籤篩選再算距離）。
 
 ```mermaid
 erDiagram
@@ -394,6 +394,17 @@ erDiagram
     }
 ```
 
+### ingest 與檢索
+
+```bash
+uv run python -m app.db.import_catalog     # 先登記 source_documents（引文引用的文件＋data/sources/ 其餘文件）
+EMBEDDING_MODEL=... uv run python -m app.rag.ingest   # 切塊、算 embedding、寫入 evidence.chunks；沒設 EMBEDDING_MODEL 會報錯
+uv run python evals/rag/run.py --live      # 檢索評估：預期原文段落有沒有在前 8 名
+```
+
+重跑 ingest 只替新增的塊算 embedding；文件改了就換掉舊塊，文件被移走就刪掉它的塊，換 `EMBEDDING_MODEL` 會整批重算。
+`app.rag.search.retrieve_evidence` 先用 `ingredient_codes` 篩選，再依餘弦相似度排序，每份文件最多先取 2 段。
+
 ## 測試
 
 ```bash
@@ -406,6 +417,7 @@ DATABASE_URL=postgresql://... uv run pytest tests/db    # 有資料庫時
 - CSV 版與資料庫版回傳的 `ReferenceData` 完全相等（`tests/db/test_catalog_source.py`）
 - 重跑匯入結果相同；中途失敗整批回滾
 - 每個 CHECK 約束都有違反就寫不進去的測試
+- RAG：ingest 冪等、換型號重算、文件改了換舊塊；檢索的成分篩選與每份文件上限（假 embedder，`tests/db/test_rag_*.py`）
 - 同一組 Store 行為測試跑記憶體與資料庫兩種實作（`tests/test_store.py`）
 - `STORE=pg` 走完整個 API：重啟後報告歷史還在、使用者之間互相看不到（`tests/db/test_pg_store_api.py`）
 - CI（`.github/workflows/ci.yml`）有 `pgvector/pgvector:pg17` service，會跑這些測試

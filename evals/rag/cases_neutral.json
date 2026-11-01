@@ -1,0 +1,372 @@
+[
+  {
+    "id": "metformin-niacin",
+    "question": "我在吃庫魯化控制血糖，綜合維他命裡有菸鹼酸，會有影響嗎？",
+    "ingredient_code": "niacin",
+    "drug_ingredient_codes": [
+      "metformin"
+    ],
+    "expected_evidence": [
+      {
+        "document_path": "nih_ods/Niacin-HealthProfessional.md",
+        "contains": "can raise blood glucose levels by causing or aggravating insulin resistance"
+      }
+    ],
+    "expected_points": [
+      {
+        "label": "高劑量菸鹼酸可能使血糖上升",
+        "any_of": [
+          "血糖"
+        ]
+      },
+      {
+        "label": "提到高劑量",
+        "any_of": [
+          "高劑量",
+          "大劑量",
+          "劑量"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "atorvastatin-vitamin-d",
+    "question": "我在吃立普妥降膽固醇，又補充高劑量維生素 D，可以嗎？",
+    "ingredient_code": "vitamin_d",
+    "drug_ingredient_codes": [
+      "atorvastatin"
+    ],
+    "expected_evidence": [
+      {
+        "document_path": "nih_ods/VitaminD-HealthProfessional.md",
+        "contains": "might reduce the potency of atorvastatin (Lipitor)"
+      }
+    ],
+    "expected_points": [
+      {
+        "label": "高劑量維生素 D 可能降低他汀藥效",
+        "any_of": [
+          "藥效",
+          "效果",
+          "效力"
+        ]
+      },
+      {
+        "label": "提到 atorvastatin 或他汀類",
+        "any_of": [
+          "atorvastatin",
+          "Atorvastatin",
+          "他汀",
+          "阿托伐他汀"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rosuvastatin-vitamin-d",
+    "question": "吃冠脂妥的人需要額外補維生素 D 嗎？",
+    "ingredient_code": "vitamin_d",
+    "drug_ingredient_codes": [
+      "rosuvastatin"
+    ],
+    "expected_evidence": [
+      {
+        "document_path": "nih_ods/VitaminD-HealthProfessional.md",
+        "contains": "statins may also reduce vitamin D synthesis"
+      }
+    ],
+    "expected_points": [
+      {
+        "label": "他汀類可能減少維生素 D 合成",
+        "any_of": [
+          "合成"
+        ]
+      },
+      {
+        "label": "提到他汀類",
+        "any_of": [
+          "他汀",
+          "statin",
+          "Statin"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "simvastatin-vitamin-c",
+    "question": "I take simvastatin. Is it OK to take vitamin C supplements?",
+    "ingredient_code": "vitamin_c",
+    "drug_ingredient_codes": [
+      "simvastatin"
+    ],
+    "expected_evidence": [
+      {
+        "document_path": "nih_ods/VitaminC-HealthProfessional.md",
+        "contains": "may attenuate the increase in high-density lipoprotein levels"
+      }
+    ],
+    "expected_points": [
+      {
+        "label": "抗氧化劑可能削弱 HDL 上升",
+        "any_of": [
+          "HDL",
+          "高密度脂蛋白",
+          "好膽固醇"
+        ]
+      },
+      {
+        "label": "提到與其他抗氧化劑併用",
+        "any_of": [
+          "抗氧化"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "simvastatin-vitamin-e",
+    "question": "我吃辛伐他汀（simvastatin），想補充維生素 E，有什麼要注意？",
+    "ingredient_code": "vitamin_e",
+    "drug_ingredient_codes": [
+      "simvastatin"
+    ],
+    "expected_evidence": [
+      {
+        "document_path": "nih_ods/VitaminE-HealthProfessional.md",
+        "contains": "blunted the rise in high-density lipoprotein (HDL) cholesterol levels"
+      }
+    ],
+    "expected_points": [
+      {
+        "label": "抗氧化劑可能削弱 HDL 上升",
+        "any_of": [
+          "HDL",
+          "高密度脂蛋白",
+          "好膽固醇"
+        ]
+      },
+      {
+        "label": "提到與其他抗氧化劑併用",
+        "any_of": [
+          "抗氧化"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "hydrochlorothiazide-zinc",
+    "question": "我吃降血壓的利尿劑，鋅會不會流失？",
+    "ingredient_code": "zinc",
+    "drug_ingredient_codes": [
+      "hydrochlorothiazide"
+    ],
+    "expected_evidence": [
+      {
+        "document_path": "nih_ods/Zinc-HealthProfessional.md",
+        "contains": "hydrochlorothiazide (e.g., Esidrix, HydroDIURIL), increase zinc excretion in the urine"
+      }
+    ],
+    "expected_points": [
+      {
+        "label": "利尿劑增加尿中鋅排出",
+        "any_of": [
+          "排出",
+          "排泄",
+          "流失"
+        ]
+      },
+      {
+        "label": "提到 thiazide 類利尿劑",
+        "any_of": [
+          "利尿劑",
+          "thiazide",
+          "噻嗪"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "indapamide-potassium",
+    "question": "我吃吲達帕胺（indapamide），需要補鉀嗎？",
+    "ingredient_code": "potassium",
+    "drug_ingredient_codes": [
+      "indapamide"
+    ],
+    "expected_evidence": [
+      {
+        "document_path": "nih_ods/Potassium-HealthProfessional.md",
+        "contains": "increases urinary potassium excretion and can lead to hypokalemia"
+      }
+    ],
+    "expected_points": [
+      {
+        "label": "利尿劑增加尿中鉀排出",
+        "any_of": [
+          "排出",
+          "排泄",
+          "流失"
+        ]
+      },
+      {
+        "label": "可能低血鉀",
+        "any_of": [
+          "低血鉀",
+          "鉀過低",
+          "hypokalemia"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "hydrochlorothiazide-magnesium-nih",
+    "question": "Does hydrochlorothiazide affect magnesium levels?",
+    "ingredient_code": "magnesium",
+    "drug_ingredient_codes": [
+      "hydrochlorothiazide"
+    ],
+    "expected_evidence": [
+      {
+        "document_path": "nih_ods/Magnesium-HealthProfessional.md",
+        "contains": "can increase the loss of magnesium in urine and lead to magnesium depletion"
+      }
+    ],
+    "expected_points": [
+      {
+        "label": "利尿劑增加尿中鎂流失",
+        "any_of": [
+          "流失",
+          "排出",
+          "排泄"
+        ]
+      },
+      {
+        "label": "長期使用",
+        "any_of": [
+          "長期"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "omeprazole-b12",
+    "question": "我吃樂酸克治胃食道逆流好幾年了，要擔心維生素 B12 嗎？",
+    "ingredient_code": "vitamin_b12",
+    "drug_ingredient_codes": [
+      "omeprazole"
+    ],
+    "expected_evidence": [
+      {
+        "document_path": "nih_ods/VitaminB12-HealthProfessional.md",
+        "contains": "Gastric acid inhibitors include proton pump inhibitors, such as omeprazole (Prilosec)"
+      },
+      {
+        "document_path": "nih_ods/VitaminB12-HealthProfessional.md",
+        "contains": "They can interfere with vitamin B12 absorption from food"
+      }
+    ],
+    "expected_points": [
+      {
+        "label": "胃酸抑制劑可能降低食物中 B12 吸收",
+        "any_of": [
+          "吸收"
+        ]
+      },
+      {
+        "label": "提到胃酸",
+        "any_of": [
+          "胃酸"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "nizatidine-b12",
+    "question": "Can nizatidine cause vitamin B12 deficiency?",
+    "ingredient_code": "vitamin_b12",
+    "drug_ingredient_codes": [
+      "nizatidine"
+    ],
+    "expected_evidence": [
+      {
+        "document_path": "nih_ods/VitaminB12-HealthProfessional.md",
+        "contains": "They can interfere with vitamin B12 absorption from food"
+      }
+    ],
+    "expected_points": [
+      {
+        "label": "胃酸抑制劑可能降低食物中 B12 吸收",
+        "any_of": [
+          "吸收"
+        ]
+      },
+      {
+        "label": "提到 H2 阻斷劑或胃酸抑制劑",
+        "any_of": [
+          "H2",
+          "組織胺",
+          "胃酸"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "metformin-glucosamine",
+    "question": "我有糖尿病在吃降血糖藥，可以吃葡萄糖胺顧關節嗎？",
+    "ingredient_code": "glucosamine",
+    "drug_ingredient_codes": [
+      "metformin"
+    ],
+    "expected_evidence": [
+      {
+        "document_path": "nccih/Glucosamine-NCCIH.md",
+        "contains": "glucosamine may cause increases in blood glucose (sugar) levels in some people"
+      }
+    ],
+    "expected_points": [
+      {
+        "label": "葡萄糖胺可能使部分人血糖上升",
+        "any_of": [
+          "血糖"
+        ]
+      },
+      {
+        "label": "建議監測或告知醫師",
+        "any_of": [
+          "監測",
+          "醫師",
+          "醫生",
+          "藥師"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "valsartan-potassium",
+    "question": "我吃纈沙坦（valsartan）降血壓，可以用含鉀的低鈉鹽嗎？",
+    "ingredient_code": "potassium",
+    "drug_ingredient_codes": [
+      "valsartan"
+    ],
+    "expected_evidence": [
+      {
+        "document_path": "nih_ods/Potassium-HealthProfessional.md",
+        "contains": "These medications reduce urinary potassium excretion, which can lead to hyperkalemia"
+      }
+    ],
+    "expected_points": [
+      {
+        "label": "ARB 減少鉀排出、可能高血鉀",
+        "any_of": [
+          "高血鉀",
+          "鉀過高",
+          "hyperkalemia"
+        ]
+      },
+      {
+        "label": "建議監測鉀",
+        "any_of": [
+          "監測"
+        ]
+      }
+    ]
+  }
+]
