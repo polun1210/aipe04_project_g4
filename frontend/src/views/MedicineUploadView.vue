@@ -236,7 +236,7 @@ onUnmounted(releaseAllPreviews)
     <ul v-if="errorMessages.length" role="alert">
       <li v-for="(message, index) in errorMessages" :key="index">{{ message }}</li>
     </ul>
-    <p class="upload-field">
+    <p class="upload-field upload-image-field">
       <label for="medicine-image">請上傳處方箋圖片</label>
       <input
         id="medicine-image"

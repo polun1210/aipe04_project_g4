@@ -1,9 +1,13 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
+import { useMedicineFlowStore } from '../stores/medicineFlow'
+import { useSupplementFlowStore } from '../stores/supplementFlow'
 import UploadGuide from './UploadGuide.vue'
 
 const route = useRoute()
+const medicine = useMedicineFlowStore()
+const supplement = useSupplementFlowStore()
 const steps = [
   {
     name: 'medicine-upload',
@@ -31,19 +35,30 @@ const isUpload = computed(
 const hasSidebar = computed(
   () => (!isAuth.value && activeStep.value === -1) || route.name === 'report',
 )
-const sidebarLinks = [
+const hasPendingAssessment = computed(
+  () =>
+    medicine.drugBatches.length > 0 || medicine.medicines.length > 0 || supplement.products.length > 0,
+)
+const assessmentPath = computed(() => {
+  if (supplement.products.length) return '/supplement-review'
+  if (medicine.allConfirmed) return '/supplement-upload'
+  if (medicine.drugBatches.length || medicine.medicines.length) return '/medicine-review'
+  return '/medicine-upload'
+})
+const sidebarLinks = computed(() => [
   { to: '/', label: '首頁', icon: 'M3 11 12 3l9 8 M5 10v11h14V10 M9 21v-7h6v7' },
-  { to: '/medicine-upload', label: '上傳藥品照片', icon: steps[0]!.icon },
-  { to: '/medicine-review', label: '確認藥品名稱', icon: steps[1]!.icon },
-  { to: '/supplement-upload', label: '上傳保健食品標示', icon: steps[2]!.icon },
-  { to: '/supplement-review', label: '確認成分與攝取量', icon: steps[3]!.icon },
-  { to: '/reports', label: '查看評估報告', icon: steps[4]!.icon },
+  {
+    to: assessmentPath.value,
+    label: hasPendingAssessment.value ? '繼續評估' : '開始新的評估',
+    icon: steps[0]!.icon,
+  },
+  { to: '/reports', label: '歷史報告', icon: steps[4]!.icon },
   {
     to: '/member-center',
     label: '會員中心',
     icon: 'M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0 M4 21v-3a8 8 0 0 1 16 0v3Z',
   },
-]
+])
 </script>
 
 <template>

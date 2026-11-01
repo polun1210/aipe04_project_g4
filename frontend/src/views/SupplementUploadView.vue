@@ -202,7 +202,7 @@ onUnmounted(releaseImages)
           {{ nameError }}
         </p>
         <p>請填寫產品包裝上的名稱，辨識後仍可在人工校對頁修改。</p>
-        <p class="upload-field">
+        <p class="upload-field upload-image-field">
           <label for="ingredient-images">成分表</label>
           <input
             id="ingredient-images"
@@ -212,7 +212,7 @@ onUnmounted(releaseImages)
             @change="selectFiles($event, 'ingredients')"
           />
         </p>
-        <p class="upload-field">
+        <p class="upload-field upload-image-field">
           <label for="nutrition-images">營養標示</label>
           <input
             id="nutrition-images"
