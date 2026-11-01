@@ -116,3 +116,13 @@ def test_同一組換算條件不能有兩筆(db):
             "INSERT INTO catalog.conversion_factors (nutrient_code, from_unit, to_unit, factor, applies_to_form, source) "
             "VALUES ('vitamin_d', 'iu', 'ug', 0.03, 'all', '重複')"
         )
+
+
+def test_同一個藥與營養素的劑量不能有兩列(db):
+    # 計算層會把每一列都按劑量比例加進去，兩列就變兩倍
+    with pytest.raises(errors.UniqueViolation):
+        db.execute(
+            "INSERT INTO catalog.drug_nutrient_doses "
+            "(active_ingredient_code, dose_option_mg, nutrient_code, elemental_mg_per_unit, source, ord) "
+            "VALUES ('magnesium_oxide', 500, 'magnesium', 301.6, '重複', 999)"
+        )

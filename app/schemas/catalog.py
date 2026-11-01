@@ -143,3 +143,15 @@ class CatalogResponse(StrictModel):
     drug_items: list[DrugItem]
     drug_nutrient_doses: list[DrugNutrientDose]
     ingredients: list[Ingredient]
+
+    @model_validator(mode="after")
+    def _one_dose_row_per_drug_nutrient(self) -> "CatalogResponse":
+        """計算層把同一個（成分、營養素）的每一列都按劑量比例加進去，所以只能有一列，否則會重複計算。
+        真的需要多個劑量選項時，要先決定計算層怎麼挑列，再放寬這裡。"""
+        seen: set[tuple[str, str]] = set()
+        for row in self.drug_nutrient_doses:
+            key = (row.active_ingredient_code, row.nutrient_code)
+            if key in seen:
+                raise ValueError(f"drug_nutrient_doses 的 {key[0]}／{key[1]} 有不只一列，計算時會重複加總")
+            seen.add(key)
+        return self
