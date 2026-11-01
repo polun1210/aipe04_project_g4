@@ -30,6 +30,7 @@ from app.store import Store, get_store
 router = APIRouter(tags=["評估"])
 
 _UNKNOWN_PRODUCT_MESSAGE = "部分保健食品資料已失效，請重新上傳後再評估"
+_PROFILE_INCOMPLETE_MESSAGE = "請先填寫出生年月、性別與慢性疾病"
 _VALIDATION_MESSAGE = "送出的資料有欄位需要修正"
 
 
@@ -67,7 +68,13 @@ def _draft_row(drafts: dict[UUID, DrugDraft], drug: ConfirmedDrug) -> DrugDraftR
         "藥名有帶 `draft_id`／`row_id` 時，後端拿藥包草稿比對，存下修正紀錄（05c）。"
     ),
     responses={
-        409: {"model": ErrorResponse, "description": "有 product_id 查不到，details 列出是哪幾個"},
+        409: {
+            "model": ErrorResponse,
+            "description": (
+                "有 product_id 查不到（`product_not_found`，details 列出是哪幾個），"
+                "或帳號還沒填健康資料（`profile_incomplete`）"
+            ),
+        },
         422: {
             "model": ErrorResponse,
             "description": "送出的資料不完整、row_id 不在藥包草稿裡，或帳號的年齡不在可評估範圍",
@@ -81,6 +88,10 @@ def create_assessment(
     store: Store = Depends(get_store),
     user_id: UUID = Depends(get_current_user_id),
 ) -> Assessment:
+    account = store.get_profile(user_id)
+    if account is None:
+        raise ApiError(409, ErrorCode.PROFILE_INCOMPLETE, _PROFILE_INCOMPLETE_MESSAGE)
+
     products = store.get_products(request.product_ids)
     found_ids = {p.product_id for p in products}
     missing = [pid for pid in dict.fromkeys(request.product_ids) if pid not in found_ids]
@@ -88,7 +99,6 @@ def create_assessment(
         details = [f"product_ids：{pid}" for pid in missing]
         raise ApiError(409, ErrorCode.PRODUCT_NOT_FOUND, _UNKNOWN_PRODUCT_MESSAGE, details)
 
-    account = store.get_profile(user_id)
     created_at = datetime.now(UTC)
     age = age_on(account.birth_year, account.birth_month, created_at.date())
     if age < MIN_AGE:

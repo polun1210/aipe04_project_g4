@@ -1,13 +1,14 @@
 """產品、草稿、評估結果與報告的存放處。
 
 現在存在記憶體（重啟就沒了）；DB 組員的資料表好了之後，只要換掉 get_store 回傳的實作，
-網址與前端都不用改。還沒有登入前，一律用固定的測試帳號。
+網址與前端都不用改。登入方式由環境變數 AUTH 決定（見 app/auth.py）。
 """
 
+from dataclasses import dataclass
 from datetime import date, timedelta, timezone
 from functools import lru_cache
 from typing import Protocol
-from uuid import UUID
+from uuid import UUID, uuid4
 
 from app.schemas.assessment import Assessment
 from app.schemas.case import AccountProfile, CaseProfile
@@ -21,16 +22,33 @@ TAIPEI_TZ = timezone(timedelta(hours=8))  # 報告日期以台灣時間判斷是
 TEST_USER_ID = UUID("b0000000-0000-4000-8000-000000000001")  # 同 case_profile.json 範例
 
 
+@dataclass(frozen=True)
+class AccountUser:
+    """登入帳號的基本資料（後端內部使用，不進 API 模型）。"""
+
+    user_id: UUID
+    email: str | None
+    name: str | None
+
+
 class Store(Protocol):
+    def find_or_create_google_user(self, sub: str, email: str | None, name: str | None) -> UUID:
+        """同一個 Google sub 永遠回同一個 UUID；已存在時更新 email、name。"""
+        ...
+
+    def get_user(self, user_id: UUID) -> AccountUser | None: ...
+
     def save_product(self, product: VerifiedProduct) -> None: ...
 
     def get_products(self, product_ids: list[UUID]) -> list[VerifiedProduct]:
         """依傳入順序回傳；找不到的編號直接略過，由呼叫端比對。"""
         ...
 
-    def get_profile(self, user_id: UUID) -> AccountProfile:
-        """評估時從帳號讀出的基本資料。"""
+    def get_profile(self, user_id: UUID) -> AccountProfile | None:
+        """評估時從帳號讀出的基本資料；還沒填過回 None。"""
         ...
+
+    def save_profile(self, user_id: UUID, profile: AccountProfile) -> None: ...
 
     def save_assessment(self, case: CaseProfile, assessment: Assessment) -> None: ...
 
@@ -68,6 +86,19 @@ class Store(Protocol):
 class InMemoryStore:
     def __init__(self) -> None:
         self._products: dict[UUID, VerifiedProduct] = {}
+        self._users: dict[UUID, AccountUser] = {TEST_USER_ID: AccountUser(TEST_USER_ID, None, "測試帳號")}
+        self._google_subs: dict[str, UUID] = {}
+        # 測試帳號預設已有資料，和範例個案一致
+        self._profiles: dict[UUID, AccountProfile] = {
+            TEST_USER_ID: AccountProfile(
+                birth_year=1954,
+                birth_month=3,
+                sex=Sex.MALE,
+                conditions=ExclusiveSelection[ConditionCode](
+                    selected=[ConditionCode.HYPERTENSION, ConditionCode.DYSLIPIDEMIA], none_selected=False
+                ),
+            )
+        }
         self.assessments: list[tuple[CaseProfile, Assessment]] = []
         self.drug_drafts: list[tuple[UUID, DrugDraft]] = []
         self.supplement_drafts: list[tuple[UUID, ExtractionDraft]] = []
@@ -75,22 +106,26 @@ class InMemoryStore:
         self.drug_corrections: list[tuple[UUID, DrugCorrection]] = []
         self._reports: list[tuple[UUID, Report]] = []
 
+    def find_or_create_google_user(self, sub: str, email: str | None, name: str | None) -> UUID:
+        user_id = self._google_subs.get(sub) or uuid4()
+        self._google_subs[sub] = user_id
+        self._users[user_id] = AccountUser(user_id, email, name)
+        return user_id
+
+    def get_user(self, user_id: UUID) -> AccountUser | None:
+        return self._users.get(user_id)
+
     def save_product(self, product: VerifiedProduct) -> None:
         self._products[product.product_id] = product
 
     def get_products(self, product_ids: list[UUID]) -> list[VerifiedProduct]:
         return [self._products[pid] for pid in product_ids if pid in self._products]
 
-    def get_profile(self, user_id: UUID) -> AccountProfile:
-        """第一週沒有登入：固定回測試帳號，和範例個案一致。"""
-        return AccountProfile(
-            birth_year=1954,
-            birth_month=3,
-            sex=Sex.MALE,
-            conditions=ExclusiveSelection[ConditionCode](
-                selected=[ConditionCode.HYPERTENSION, ConditionCode.DYSLIPIDEMIA], none_selected=False
-            ),
-        )
+    def get_profile(self, user_id: UUID) -> AccountProfile | None:
+        return self._profiles.get(user_id)
+
+    def save_profile(self, user_id: UUID, profile: AccountProfile) -> None:
+        self._profiles[user_id] = profile
 
     def save_assessment(self, case: CaseProfile, assessment: Assessment) -> None:
         self.assessments.append((case, assessment))
