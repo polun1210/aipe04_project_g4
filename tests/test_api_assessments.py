@@ -6,12 +6,13 @@ from uuid import UUID, uuid4
 import pytest
 from fastapi.testclient import TestClient
 
-from app.calculator import FakeCalculator, get_calculator
+from app.catalog_source import get_catalog_source
+from app.calculator import RealCalculator, get_calculator
 from app.main import create_app
 from app.schemas.assessment import Assessment
 from app.schemas.case import AccountProfile, CaseProfile, age_on
 from app.schemas.drug_label import DrugDraft
-from app.schemas.label import VerificationSubmission, VerifiedProduct
+from app.schemas.label import ExtractionDraft, VerificationSubmission, VerifiedProduct
 from app.store import TEST_USER_ID, InMemoryStore, get_store
 
 EXAMPLES = Path(__file__).parent.parent / "docs" / "schemas" / "examples"
@@ -136,7 +137,7 @@ def test_assessment_is_saved_with_test_user(client, store):
 
 def _run_with_spy():
     app = create_app()
-    spy = SpyCalculator(FakeCalculator())
+    spy = SpyCalculator(RealCalculator())
     store = InMemoryStore()
     app.dependency_overrides[get_store] = lambda: store
     app.dependency_overrides[get_calculator] = lambda: spy
@@ -306,7 +307,7 @@ def test_assessment_calculator_failure_returns_internal_error_without_leaking(cl
 def _client_with_drug_draft(owner: UUID):
     """存一份藥包草稿：原文是整串（含劑量），辨識時已用商品名對到 atorvastatin。"""
     app = create_app()
-    spy = SpyCalculator(FakeCalculator())
+    spy = SpyCalculator(RealCalculator())
     store = InMemoryStore()
     draft = DrugDraft.model_validate(
         {
@@ -354,3 +355,50 @@ def test_assessment_ignores_other_users_drug_draft():
     test_client.post("/api/assessments", json=body)
     [drug] = spy.cases[0].drugs.selected
     assert drug.scope_status == "unresolved"
+
+
+def test_assessment_changes_with_the_products(client):
+    def submission(code: str, amount: float) -> dict:
+        return {
+            "product_name": "測試品",
+            "serving_info": {"serving_size": 1, "dose_unit": "tablet"},
+            "user_intake": {"frequency_type": "daily", "times_per_day": 1, "amount_per_time": 1},
+            "nutrients": [{"row_id": "r1", "standard_code": code, "scope_status": "in_scope", "per_serving": amount, "unit": "mg"}],
+        }
+
+    def assess(code: str, amount: float) -> dict:
+        created = client.post("/api/products", json=submission(code, amount))
+        assert created.status_code == 201
+        response = client.post("/api/assessments", json=_assessment_request([created.json()["product_id"]]))
+        assert response.status_code == 200
+        return response.json()
+
+    zinc, vitamin_c = assess("zinc", 10), assess("vitamin_c", 500)
+    assert [n["nutrient_code"] for n in zinc["relevant_nutrients"]] != [n["nutrient_code"] for n in vitamin_c["relevant_nutrients"]]
+    assert zinc["decision_data_version"] == get_catalog_source().load_reference().version
+
+
+def test_draft_names_reach_disclosures_through_assessment(client, store):
+    draft = ExtractionDraft.model_validate(_example("04_supplement_draft.json"))
+    store.save_supplement_draft(TEST_USER_ID, draft)
+    rows = {r.row_id: r for r in draft.nutrients}
+    confirmed = [
+        {"row_id": "r01", "standard_code": "vitamin_d", "scope_status": "in_scope", "per_serving": 10, "unit": "ug"},
+        {"row_id": "r05", "standard_code": None, "scope_status": "out_of_scope"},
+        {"row_id": "r08", "standard_code": None, "scope_status": "unresolved"},
+        {"row_id": None, "standard_code": "zinc", "scope_status": "in_scope", "per_serving": 5, "unit": "mg"},  # 使用者新增
+    ]
+    submission = {
+        **_example("05a_verification_submission.json"),
+        "draft_product_id": str(draft.product_id),
+        "nutrients": confirmed,
+    }
+    created = client.post("/api/products", json=submission)
+    assert created.status_code == 201
+    [stored] = store.get_products(TEST_USER_ID, [UUID(created.json()["product_id"])])
+    assert [n.raw_name for n in stored.nutrients] == [rows["r01"].raw_name, rows["r05"].raw_name, rows["r08"].raw_name, None]
+    assert [n.display_name_zh for n in stored.nutrients] == ["維生素 D", None, None, "鋅"]
+
+    body = client.post("/api/assessments", json=_assessment_request([created.json()["product_id"]])).json()
+    assert body["disclosures"]["unresolved_ingredients"] == [rows["r08"].raw_name]
+    assert body["disclosures"]["out_of_scope_ingredients"] == [rows["r05"].raw_name]

@@ -8,7 +8,8 @@ from uuid import uuid4
 import pytest
 from fastapi.testclient import TestClient
 
-from app.calculator import FakeCalculator, undetermined_amounts
+from app.assessing import undetermined_amounts
+from app.calculator import RealCalculator
 from app.catalog_source import get_catalog_source
 from app.main import create_app
 from app.reporting import NarratedReporter
@@ -40,7 +41,7 @@ UNRESOLVED = {"row_id": "r03", "standard_code": None, "scope_status": "unresolve
 @pytest.fixture
 def case() -> CaseProfile:
     base = CaseProfile.model_validate(_example("case_profile.json"))
-    product = FakeCalculator().verify_product(
+    product = RealCalculator().verify_product(
         uuid4(), _submission_with_rows([SEAWEED_CALCIUM, RED_YEAST, UNRESOLVED]), AT
     )
     return base.model_copy(update={"supplements": [product]})
@@ -53,15 +54,21 @@ def test_only_target_nutrients_with_unknown_amount_are_undetermined(case):
     ]
 
 
-def test_fake_calculator_fills_undetermined_from_case(case):
-    assessment = FakeCalculator().assess(case)
+def test_real_calculator_fills_undetermined_from_case(case):
+    assessment = RealCalculator().assess(case)
     assert [u.nutrient_code for u in assessment.disclosures.undetermined_amounts] == ["calcium"]
 
 
 def test_every_disclosure_reaches_report_unchanged(case):
-    assessment = FakeCalculator().assess(case)
+    assessment = RealCalculator().assess(case)
     disclosures = assessment.disclosures.model_copy(
-        update={"unresolved_drugs": ["看不清楚的藥"], "unresolved_ingredients": ["海藻鈣粉"]}
+        update={
+            "unresolved_drugs": ["看不清楚的藥"],
+            "unresolved_ingredients": ["海藻鈣粉"],
+            "out_of_scope_ingredients": ["硬脂酸鎂"],
+            "out_of_scope_drugs": ["Zyloric 100mg"],
+            "drug_source_not_counted": ["calcium"],
+        }
     )
     assessment = assessment.model_copy(update={"disclosures": disclosures})
     report = NarratedReporter(get_catalog_source(), narrator=None).build(case, assessment, AT)
@@ -72,7 +79,7 @@ def test_every_disclosure_reaches_report_unchanged(case):
 
 
 def test_summary_mentions_undetermined_amount_and_unresolved_drug(case):
-    assessment = FakeCalculator().assess(case)
+    assessment = RealCalculator().assess(case)
     disclosures = assessment.disclosures.model_copy(update={"unresolved_drugs": ["看不清楚的藥"]})
     assessment = assessment.model_copy(update={"disclosures": disclosures})
     summary = NarratedReporter(get_catalog_source(), narrator=None).build(case, assessment, AT).summary
