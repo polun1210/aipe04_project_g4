@@ -10,7 +10,7 @@ details 每張照片一行，例如 "img-02：反光"。
 端點一覽（對照 docs/schemas/README.md）：
   GET  /api/catalog                               → CatalogResponse
   POST /api/drug-drafts          (multipart: images) → DrugDraft（201）
-  GET  /api/drugs/lookup?name=…                   → DrugLookupResponse
+  GET  /api/drugs/lookup?name=…[&drug_class_code=…] → DrugLookupResponse（有帶類別時先過濾再取前 10 筆）
   POST /api/supplement-drafts    (multipart: ingredient_images, nutrition_images, category) → ExtractionDraft（201）
   POST /api/products                              ← VerificationSubmission → ProductCreated（201）
   POST /api/assessments                           ← AssessmentRequest → Assessment（確定性計算，同步回傳）

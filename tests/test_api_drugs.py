@@ -120,3 +120,25 @@ def test_lookup_blank_name_is_422(client, name):
     response = client.get("/api/drugs/lookup", params={"name": name})
     assert response.status_code == 422
     assert response.json()["error"]["code"] == "validation_error"
+
+
+def test_lookup_with_class_returns_only_that_class(client):
+    body = client.get("/api/drugs/lookup", params={"name": "a", "drug_class_code": "ppi"}).json()
+    assert body["candidates"]
+    assert all("ppi" in c["drug_class_codes"] for c in body["candidates"])
+
+
+def test_lookup_without_class_is_unchanged(client):
+    body = client.get("/api/drugs/lookup", params={"name": "立普妥"}).json()
+    assert body["candidates"][0]["active_ingredient_code"] == "atorvastatin"
+
+
+def test_lookup_finds_tfda_product_name(client):
+    body = client.get("/api/drugs/lookup", params={"name": "Candanxo F.C. Tablets 50/12.5 mg"}).json()
+    assert body["mapped"]["scope_status"] == "in_scope"
+    assert {c["active_ingredient_code"] for c in body["candidates"]} >= {"losartan", "hydrochlorothiazide"}
+
+
+def test_lookup_ranitidine_is_not_in_scope(client):
+    body = client.get("/api/drugs/lookup", params={"name": "Ranitidine"}).json()
+    assert body["mapped"]["scope_status"] != "in_scope"
