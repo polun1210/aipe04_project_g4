@@ -1,0 +1,17 @@
+code,category,display_name_zh,standard_unit,accepted_units,synonyms,ul_scope
+calcium,target_nutrient,鈣,mg,mg,鈣|Calcium|鈣質|元素鈣,total_intake
+magnesium,target_nutrient,鎂,mg,mg,鎂|Magnesium|鎂質|元素鎂,supplement_only
+iron,target_nutrient,鐵,mg,mg,鐵|Iron|鐵質|元素鐵,supplement_only
+zinc,target_nutrient,鋅,mg,mg,鋅|Zinc|鋅質|元素鋅,total_intake
+potassium,target_nutrient,鉀,mg,mg,鉀|Potassium|鉀質|元素鉀,
+vitamin_d,target_nutrient,維生素 D,ug,ug|iu,維生素 D|Vitamin D|維他命D|維他命 D|維生素D|Vitamin D3|維生素D3|維他命D3|Cholecalciferol,total_intake
+vitamin_e,target_nutrient,維生素 E,mg_ate,mg_ate|iu|mg,維生素 E|Vitamin E|維他命E|維他命 E|維生素E|α-生育醇|Tocopherol,total_intake
+vitamin_b12,target_nutrient,維生素 B12,ug,ug,維生素 B12|Vitamin B12|維他命B12|維他命 B12|維生素B12|鈷胺素|Cobalamin|Cyanocobalamin,
+folate,target_nutrient,葉酸,ug,ug,葉酸|Folate|Folic Acid|維生素 B9|維他命B9|5-MTHF|L-5-MTHF|甲基葉酸|Methylfolate|L-Methylfolate|5-甲基四氫葉酸|L-5-甲基四氫葉酸,total_intake
+niacin,target_nutrient,菸鹼素,mg_ne,mg_ne|mg,菸鹼素|Niacin|菸鹼酸|菸鹼醯胺|Nicotinamide|維生素 B3|維他命B3|煙鹼酸|尼克酸,total_intake
+vitamin_c,target_nutrient,維生素 C,mg,mg,維生素 C|Vitamin C|維他命C|維他命 C|維生素C|抗壞血酸|Ascorbic Acid,total_intake
+vitamin_b6,target_nutrient,維生素 B6,mg,mg,維生素 B6|Vitamin B6|維他命B6|維他命 B6|維生素B6|吡哆醇|Pyridoxine,total_intake
+selenium,target_nutrient,硒,ug,ug,硒|Selenium|硒質,total_intake
+red_yeast_rice,allowed_ingredient,紅麴,,,紅麴|Red Yeast Rice|紅麴菌發酵米|紅麴米|紅麴萃取物|紅麴粉|紅麴粉末|Monacolin K|莫那可林 K,
+glucosamine,allowed_ingredient,葡萄糖胺,,,葡萄糖胺|Glucosamine|氨基葡萄糖|胺基葡萄糖|硫酸葡萄糖胺|鹽酸葡萄糖胺|葡萄糖胺鹽酸鹽|結晶型硫酸鹽葡萄糖胺|Glucosamine Sulfate|Glucosamine Sulphate,
+omega_3,allowed_ingredient,魚油 n-3,,,魚油 n-3|魚油|Fish Oil|Omega-3|Omega 3|n-3|EPA|DHA|深海魚油|Concentrated fish Omega-3 triglycerides,

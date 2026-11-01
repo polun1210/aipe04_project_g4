@@ -1,0 +1,8 @@
+nutrient_code,from_unit,to_unit,factor,applies_to_form,source
+vitamin_d,iu,ug,0.025,all,DRIs 第八版總表註 (7)：維生素 D 1 μg = 40 I.U.
+vitamin_e,iu,mg_ate,0.67,all,NRC 1989 第 100 頁：1 IU = 1 mg all-rac-α-生育醇醋酸酯；推導為 0.74 × 0.911
+vitamin_e,mg,mg_ate,1.0,d_alpha_tocopherol,NRC 1989 第 100 頁明載：一 α-TE 是 1 mg RRR-α-生育醇的活性
+vitamin_e,mg,mg_ate,0.91,d_alpha_tocopheryl_acetate,NRC 1989 第 100 頁定義推導：1.00 × 醋酸酯質量比 0.911
+vitamin_e,mg,mg_ate,0.74,dl_alpha_tocopherol,NRC 1989 第 100 頁明載：all-rac-α-生育醇的毫克數乘 0.74
+vitamin_e,mg,mg_ate,0.67,dl_alpha_tocopheryl_acetate,NRC 1989 第 100 頁定義推導：0.74 × 醋酸酯質量比 0.911
+niacin,mg,mg_ne,1.0,all,DRIs 第八版總表註 (9)：菸鹼素以菸鹼素當量表示

@@ -15,13 +15,14 @@ from dataclasses import dataclass
 from functools import lru_cache
 from pathlib import Path
 
+from app.catalog_source import CATALOG_DIR as _CATALOG_DIR
 from app.extraction.engines.base import LabelReading, ReadingRow, ServingReading
 from app.schemas.enums import ALLOWED_INGREDIENTS, DoseUnit, IngredientCode, LabelSection, ScopeStatus, Unit
 from app.schemas.label import LabelSuggestedIntake, NutrientDraft, ServingInfoDraft
 
 RULE_LAYER_VERSION = "vlm-r2"  # 改規則就要加版本，草稿的 rule_layer_version 會跟著變
 # 與 app/catalog_source.py 讀同一份成分目錄；DB 版目錄好了之後兩邊一起換
-CATALOG_DIR = Path(__file__).resolve().parents[2] / "docs" / "schemas" / "examples" / "catalog"
+CATALOG_DIR = _CATALOG_DIR
 
 # ─── 單位 ───────────────────────────────────────────────────
 

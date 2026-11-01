@@ -85,6 +85,7 @@ class Citation(StrictModel):
     jurisdiction: Jurisdiction
     retrieved_at: date
     source_version: str | None = None
+    document_path: str | None = None  # 原文檔，相對 data/sources/（逐字核對測試用）
 
 
 class RuleCandidate(StrictModel):

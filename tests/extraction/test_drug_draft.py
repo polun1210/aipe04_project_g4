@@ -17,10 +17,12 @@ from app.schemas.label import SourceImage
 RECORDED = Path(__file__).parents[1] / "fixtures" / "engine_responses" / "openrouter-drug"
 DRAFT_ID = UUID("d1000000-0000-4000-8000-000000000009")
 ITEMS = get_catalog_source().load().drug_items
-# 26 張裡含目錄內藥品的 7 張；其他藥都不在目錄裡，應該是無法判定
+# 26 張裡含目錄內藥品的 13 張（目錄是 data/catalog/ 的完整 16 類用藥）；其他藥不在目錄裡，應該是無法判定
 IN_CATALOG = {
     "rx01": "atorvastatin", "rx02": "atorvastatin", "rx03": "atorvastatin", "rx04": "atorvastatin",
     "rx22": "atorvastatin", "rx05": "losartan_hydrochlorothiazide", "rx06": "losartan",
+    "rx07": "zolpidem", "rx08": "celecoxib", "rx11": "acetaminophen", "rx14": "amlodipine",
+    "rx17": "amlodipine", "rx19": "metformin",
 }  # fmt: skip
 
 

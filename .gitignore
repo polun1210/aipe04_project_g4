@@ -20,8 +20,10 @@ Thumbs.db
 .idea/
 .vscode/
 
-# 標示照片：有版權，只留本機，不進 repo
-/data/
+# 標示照片：有版權，只留本機，不進 repo。參考資料（data/catalog、data/sources）是正本，要進 git
+/data/*
+!/data/catalog/
+!/data/sources/
 
 # 引擎原始回應很大（Cloud Vision 一張約 1 MB），只留本機；repo 只放轉換後的精簡結果，避免拖慢全組 clone
 tests/fixtures/engine_responses/*/raw/

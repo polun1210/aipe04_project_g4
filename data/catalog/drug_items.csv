@@ -1,0 +1,43 @@
+active_ingredient_code,display_name_zh,english_name,drug_class_codes,common_tradenames_tw,related_conditions,requires_dose
+hydrochlorothiazide,氫氯噻嗪,Hydrochlorothiazide,thiazide_diuretic,Dichlotride,hypertension,false
+indapamide,吲達帕胺,Indapamide,thiazide_diuretic,吲達帕胺,hypertension,false
+losartan,洛沙坦,Losartan,acei_arb,可悅您,hypertension,false
+valsartan,纈沙坦,Valsartan,acei_arb,纈沙坦,hypertension,false
+irbesartan,厄貝沙坦,Irbesartan,acei_arb,厄貝沙坦,hypertension,false
+telmisartan,替米沙坦,Telmisartan,acei_arb,替米沙坦,hypertension,false
+lisinopril,賴諾普利,Lisinopril,acei_arb,賴諾普利,hypertension,false
+amlodipine,氨氯地平,Amlodipine,ccb,氨氯地平,hypertension,false
+felodipine,非洛地平,Felodipine,ccb,非洛地平,hypertension,false
+metformin,二甲雙胍,Metformin,biguanide,二甲雙胍,t2dm,false
+insulin,胰島素,Insulin,insulin,胰島素,t2dm,false
+empagliflozin,恩格列淨,Empagliflozin,sglt2,恩格列淨,t2dm,false
+dapagliflozin,達格列淨,Dapagliflozin,sglt2,達格列淨,t2dm,false
+atorvastatin,阿托伐他汀,Atorvastatin,statin,立普妥,dyslipidemia,false
+rosuvastatin,瑞舒伐他汀,Rosuvastatin,statin,瑞舒伐他汀,dyslipidemia,false
+simvastatin,辛伐他汀,Simvastatin,statin,辛伐他汀,dyslipidemia,false
+pravastatin,普伐他汀,Pravastatin,statin,普伐他汀,dyslipidemia,false
+ezetimibe,依澤替米貝,Ezetimibe,ezetimibe,依澤替米貝,dyslipidemia,false
+celecoxib,塞來昔布,Celecoxib,cox2_inhibitor,塞來昔布,chronic_arthritis,false
+etoricoxib,依託考昔,Etoricoxib,cox2_inhibitor,依託考昔,chronic_arthritis,false
+acetaminophen,乙醯胺酚,Acetaminophen,acetaminophen,乙醯胺酚,chronic_arthritis,false
+glucosamine_sulfate,硫酸葡萄糖胺,Glucosamine sulfate,glucosamine_rx,硫酸葡萄糖胺,chronic_arthritis,false
+glucosamine_hydrochloride,鹽酸葡萄糖胺,Glucosamine hydrochloride,glucosamine_rx,鹽酸葡萄糖胺,chronic_arthritis,false
+estazolam,艾司唑崙,Estazolam,bzd_zdrug,艾司唑崙,chronic_insomnia,false
+lorazepam,蘿拉西泮,Lorazepam,bzd_zdrug,蘿拉西泮,chronic_insomnia,false
+zolpidem,唑吡坦,Zolpidem,bzd_zdrug,唑吡坦,chronic_insomnia,false
+zopiclone,佐沛克隆,Zopiclone,bzd_zdrug,佐沛克隆,chronic_insomnia,false
+melatonin,褪黑激素,Melatonin,melatonin_rx,褪黑激素,chronic_insomnia,false
+omeprazole,奧美拉唑,Omeprazole,ppi,奧美拉唑,,false
+esomeprazole,埃索美拉唑,Esomeprazole,ppi,耐適恩,,false
+lansoprazole,蘭索拉唑,Lansoprazole,ppi,蘭索拉唑,,false
+pantoprazole,泮托拉唑,Pantoprazole,ppi,泮托拉唑,,false
+rabeprazole,雷貝拉唑,Rabeprazole,ppi,雷貝拉唑,,false
+famotidine,法莫替丁,Famotidine,h2ra,法莫替丁,,false
+cimetidine,西咪替丁,Cimetidine,h2ra,西咪替丁,,false
+nizatidine,尼扎替丁,Nizatidine,h2ra,尼扎替丁,,false
+calcium_carbonate,碳酸鈣,Calcium carbonate,antacid_laxative,碳酸鈣,,false
+magnesium_hydroxide,氫氧化鎂,Magnesium hydroxide,antacid_laxative,氫氧化鎂,,false
+aluminum_hydroxide,氫氧化鋁,Aluminum hydroxide,antacid_laxative,氫氧化鋁,,false
+aluminum_magnesium_compound,鋁鎂複方,Aluminum magnesium compound,antacid_laxative,鋁鎂複方,,false
+magnesium_oxide,氧化鎂,Magnesium oxide,antacid_laxative,氧化鎂錠,,true
+losartan_hydrochlorothiazide,洛沙坦＋氫氯噻嗪（複方）,Losartan + Hydrochlorothiazide,acei_arb|thiazide_diuretic,Hyzaar,hypertension,false
