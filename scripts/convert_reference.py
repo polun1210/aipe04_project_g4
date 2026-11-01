@@ -10,7 +10,6 @@
 import argparse
 import csv
 import re
-import shutil
 import tomllib
 import unicodedata
 from collections.abc import Sequence
@@ -313,8 +312,8 @@ def locate_section(text: str, quote: str) -> str:
 
 def document_meta(path: Path, text: str) -> tuple[str, str | None]:
     """(url, source_version)。NIH 的網址在第一行連結，NCCIH 在開頭註解。"""
-    m = re.search(r"\((https://ods\.od\.nih\.gov/factsheets/[^)#]+)", text) or re.search(
-        r"來源：(https?://\S+?)（", text
+    m = re.search(r"來源：(https?://\S+?)（", text) or re.search(
+        r"\((https://ods\.od\.nih\.gov/factsheets/[^)#]+)", text
     )
     if not m:
         raise SystemExit(f"{path.name} 找不到網址")
@@ -377,7 +376,9 @@ def copy_sources(src: Path) -> None:
             if stale.name not in wanted:
                 stale.unlink()
         for name in sorted(wanted):
-            shutil.copyfile(root / sub / name, dest / name)
+            # 換行統一成 LF，不同系統重轉的結果才會一樣
+            text = (root / sub / name).read_bytes().replace(b"\r\n", b"\n")
+            (dest / name).write_bytes(text)
 
 
 def main() -> None:
