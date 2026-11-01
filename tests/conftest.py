@@ -17,7 +17,7 @@ from psycopg import sql
 from app.db.config import sqlalchemy_url
 from app.db.import_catalog import import_catalog
 
-ROOT = Path(__file__).resolve().parents[2]
+ROOT = Path(__file__).resolve().parents[1]
 
 
 def pytest_collection_modifyitems(items: list[pytest.Item]) -> None:
