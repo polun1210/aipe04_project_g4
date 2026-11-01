@@ -9,6 +9,21 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    # 資料庫測試（tests/db）用的 PostgreSQL；測試會另建 postgres_test 資料庫，不動這一個
+    services:
+      postgres:
+        image: pgvector/pgvector:pg17
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 3s
+          --health-timeout 3s
+          --health-retries 20
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/postgres
     steps:
       - uses: actions/checkout@v7
       # 這個 action 沒有「v10」這種主版本標籤，要寫完整版本號
