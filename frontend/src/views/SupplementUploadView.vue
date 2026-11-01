@@ -201,7 +201,7 @@ onUnmounted(releaseImages)
         <p v-if="showRequiredErrors && nameError" id="name-error" class="field-error" role="alert">
           {{ nameError }}
         </p>
-        <p>請填寫產品包裝上的名稱，辨識後仍可在人工校對頁修改。</p>
+        <p>請填寫產品包裝上的名稱，人工校對頁會沿用這個名稱。</p>
         <p class="upload-field upload-image-field">
           <label for="ingredient-images">成分表</label>
           <input
