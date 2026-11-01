@@ -18,7 +18,7 @@ flowchart TB
 
     subgraph Backend["FastAPI 後端"]
         direction TB
-        R["① 網址層 routers/<br/>12 個網址，/docs 可直接操作"]
+        R["① 網址層 routers/<br/>14 個網址，/docs 可直接操作"]
         S["② 共用處理<br/>上傳檢查 uploads・藥名對照 drug_mapping・統一錯誤 errors"]
 
         subgraph RP["③ 替換點：約定固定，實作可換"]

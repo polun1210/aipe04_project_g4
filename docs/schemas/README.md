@@ -85,11 +85,12 @@
 | PG-005 藥人工校對頁 | `GET /api/drugs/lookup?name=…` | query：`name` | `mapped`（與評估時一致的對照結果）＋ `candidates`（候選藥名，最多 10 筆） | `CatalogSource.load` | 已完成 |
 | PG-006 保健食品圖片上傳頁 | `POST /api/supplement-drafts` | multipart：`ingredient_images`、`nutrition_images`（合計 1 張以上）、`category`（API 選填、最多 30 字；辨識讀不到名稱時填進草稿的 `product_name`。前端目前一律送 5 個種類之一，而且產品名稱由民眾在這頁必填，會蓋掉草稿的 `product_name`） | `04_supplement_draft`，HTTP 201 | `save_supplement_draft` | 已完成（`EXTRACTOR=openrouter` 時真辨識，沒設時回範例） |
 | PG-007 保健食品人工校對頁 | `POST /api/products` | `05a_verification_submission`（`product_name` 必填，沿用民眾在 PG-006 填的名稱，校對頁不再修改；空字串或只有空白回 422） | `product_id`，HTTP 201 | `save_product` | 已完成（假版本） |
-| PG-007 → PG-008 | `POST /api/assessments` | `03_assessment_request`（確認後的藥名；`product_ids` 放前面存好的產品） | `06_assessment` | `get_products`、`get_profile`、`save_assessment` | 已完成（假版本） |
+| PG-007 → PG-008 | `POST /api/assessments` | `03_assessment_request`（確認後的藥名；`product_ids` 放前面存好的產品） | `06_assessment`；帳號還沒填健康資料回 409 `profile_incomplete` | `get_products`、`get_profile`、`save_assessment` | 已完成（假版本） |
 | PG-008 報告呈現頁 | `POST /api/assessments/{case_id}/report` | — | `08_report`；第一次 201，已產生過回 200 與同一份 | `get_report_by_case`、`get_case`、`save_report` | 已完成（假版本） |
 | PG-011 報告記錄查詢頁 | `GET /api/reports?date_from=…&date_to=…` | query：兩個日期（選填、含當天、台灣時間） | `list[ReportSummary]`，新到舊 | `list_reports` | 已完成 |
 | PG-012 報告記錄詳細資料頁 | `GET /api/reports/{report_id}` | — | `08_report` | `get_report` | 已完成（假版本） |
-| PG-002 登入頁 | `POST /api/auth/google`、`GET /api/me`、`POST /api/logout` | `{"credential": Google ID token}`；其餘無 | `MeResponse`（`user_id`、`email`、`name`）；登出 204 | `find_or_create_google_user`、`get_user` | 已完成 |
+| PG-002 登入頁 | `POST /api/auth/google`、`GET /api/me`、`POST /api/logout` | `{"credential": Google ID token}`；其餘無 | `MeResponse`（`user_id`、`email`、`name`、`profile_completed`）；登出 204 | `find_or_create_google_user`、`get_user` | 已完成 |
+| PG-010 設定頁（與首次填寫頁） | `GET`／`PUT /api/me/profile` | PUT：`AccountProfile`（出生年月、性別、慢性病） | `AccountProfile`；GET 還沒填回 404 | `get_profile`、`save_profile` | 已完成 |
 
 PDF 用瀏覽器列印，不需要網址。不屬於自己的資料（個案、報告）一律回 404，不回 403。
 

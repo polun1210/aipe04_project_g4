@@ -6,6 +6,7 @@ from fastapi import APIRouter, Depends, Request, Response
 from app.auth import GoogleIdentity, auth_mode, get_current_user_id, get_google_verifier
 from app.errors import ApiError
 from app.schemas.api import ErrorResponse, GoogleLoginRequest, MeResponse
+from app.schemas.case import AccountProfile
 from app.schemas.enums import ErrorCode
 from app.store import Store, get_store
 
@@ -18,7 +19,12 @@ def _me(store: Store, user_id: UUID) -> MeResponse:
     user = store.get_user(user_id)
     if user is None:
         raise ApiError(401, ErrorCode.UNAUTHORIZED, "請先登入")
-    return MeResponse(user_id=user.user_id, email=user.email, name=user.name)
+    return MeResponse(
+        user_id=user.user_id,
+        email=user.email,
+        name=user.name,
+        profile_completed=store.get_profile(user_id) is not None,
+    )
 
 
 @router.post(
@@ -46,6 +52,38 @@ def google_login(
 @router.get("/api/me", response_model=MeResponse, summary="目前登入者", responses=_UNAUTHORIZED)
 def get_me(store: Store = Depends(get_store), user_id: UUID = Depends(get_current_user_id)) -> MeResponse:
     return _me(store, user_id)
+
+
+@router.get(
+    "/api/me/profile",
+    response_model=AccountProfile,
+    summary="讀取健康資料",
+    description="PG-010 設定頁載入時呼叫。還沒填過回 404。",
+    responses={**_UNAUTHORIZED, 404: {"model": ErrorResponse, "description": "還沒填健康資料"}},
+)
+def get_profile(store: Store = Depends(get_store), user_id: UUID = Depends(get_current_user_id)) -> AccountProfile:
+    profile = store.get_profile(user_id)
+    if profile is None:
+        raise ApiError(404, ErrorCode.NOT_FOUND, "還沒填寫健康資料")
+    return profile
+
+
+@router.put(
+    "/api/me/profile",
+    response_model=AccountProfile,
+    summary="儲存健康資料",
+    description=(
+        "首次填寫頁與 PG-010 設定頁送出。只檢查格式；年齡是否滿 19 歲在評估當天才算（POST /api/assessments）。"
+    ),
+    responses={**_UNAUTHORIZED, 422: {"model": ErrorResponse, "description": "欄位格式錯誤"}},
+)
+def put_profile(
+    profile: AccountProfile,
+    store: Store = Depends(get_store),
+    user_id: UUID = Depends(get_current_user_id),
+) -> AccountProfile:
+    store.save_profile(user_id, profile)
+    return profile
 
 
 @router.post("/api/logout", status_code=204, summary="登出（沒登入也回 204）")

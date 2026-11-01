@@ -19,6 +19,8 @@ details 每張照片一行，例如 "img-02：反光"。
   GET  /api/reports/{report_id}                   → Report
   POST /api/auth/google          ← GoogleLoginRequest → MeResponse（Google 登入，設 session cookie）
   GET  /api/me                                    → MeResponse
+  GET  /api/me/profile                            → AccountProfile（還沒填回 404）
+  PUT  /api/me/profile           ← AccountProfile → AccountProfile
   POST /api/logout                                → 204
   GET  /api/health                               → {"status": "ok"}
 """
@@ -47,6 +49,7 @@ class MeResponse(StrictModel):
     user_id: UUID
     email: str | None
     name: str | None
+    profile_completed: bool  # 已填出生年月、性別、慢性病；false 時前端導向首次填寫頁
 
 
 class ProductCreated(StrictModel):

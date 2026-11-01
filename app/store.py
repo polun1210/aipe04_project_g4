@@ -44,9 +44,11 @@ class Store(Protocol):
         """依傳入順序回傳；找不到的編號直接略過，由呼叫端比對。"""
         ...
 
-    def get_profile(self, user_id: UUID) -> AccountProfile:
-        """評估時從帳號讀出的基本資料。"""
+    def get_profile(self, user_id: UUID) -> AccountProfile | None:
+        """評估時從帳號讀出的基本資料；還沒填過回 None。"""
         ...
+
+    def save_profile(self, user_id: UUID, profile: AccountProfile) -> None: ...
 
     def save_assessment(self, case: CaseProfile, assessment: Assessment) -> None: ...
 
@@ -86,6 +88,17 @@ class InMemoryStore:
         self._products: dict[UUID, VerifiedProduct] = {}
         self._users: dict[UUID, AccountUser] = {TEST_USER_ID: AccountUser(TEST_USER_ID, None, "測試帳號")}
         self._google_subs: dict[str, UUID] = {}
+        # 測試帳號預設已有資料，和範例個案一致
+        self._profiles: dict[UUID, AccountProfile] = {
+            TEST_USER_ID: AccountProfile(
+                birth_year=1954,
+                birth_month=3,
+                sex=Sex.MALE,
+                conditions=ExclusiveSelection[ConditionCode](
+                    selected=[ConditionCode.HYPERTENSION, ConditionCode.DYSLIPIDEMIA], none_selected=False
+                ),
+            )
+        }
         self.assessments: list[tuple[CaseProfile, Assessment]] = []
         self.drug_drafts: list[tuple[UUID, DrugDraft]] = []
         self.supplement_drafts: list[tuple[UUID, ExtractionDraft]] = []
@@ -108,16 +121,11 @@ class InMemoryStore:
     def get_products(self, product_ids: list[UUID]) -> list[VerifiedProduct]:
         return [self._products[pid] for pid in product_ids if pid in self._products]
 
-    def get_profile(self, user_id: UUID) -> AccountProfile:
-        """第一週沒有登入：固定回測試帳號，和範例個案一致。"""
-        return AccountProfile(
-            birth_year=1954,
-            birth_month=3,
-            sex=Sex.MALE,
-            conditions=ExclusiveSelection[ConditionCode](
-                selected=[ConditionCode.HYPERTENSION, ConditionCode.DYSLIPIDEMIA], none_selected=False
-            ),
-        )
+    def get_profile(self, user_id: UUID) -> AccountProfile | None:
+        return self._profiles.get(user_id)
+
+    def save_profile(self, user_id: UUID, profile: AccountProfile) -> None:
+        self._profiles[user_id] = profile
 
     def save_assessment(self, case: CaseProfile, assessment: Assessment) -> None:
         self.assessments.append((case, assessment))

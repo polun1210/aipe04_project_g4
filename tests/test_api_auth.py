@@ -39,7 +39,7 @@ def test_沒設_AUTH_時_me_回測試帳號(monkeypatch, store):
     monkeypatch.delenv("AUTH", raising=False)
     res = _client(store).get("/api/me")
     assert res.status_code == 200
-    assert res.json() == {"user_id": str(TEST_USER_ID), "email": None, "name": "測試帳號"}
+    assert res.json() == {"user_id": str(TEST_USER_ID), "email": None, "name": "測試帳號", "profile_completed": True}
 
 
 def test_沒設_AUTH_時_google_登入回_404(monkeypatch, store):
