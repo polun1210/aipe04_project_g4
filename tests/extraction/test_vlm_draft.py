@@ -140,9 +140,9 @@ def test_元素量的三種寫法(tmp_path):
     rows = _each(tmp_path, [_row("檸檬酸鈣(含純鈣50mg)", 238, "毫克"), _row("鈣(碳酸鈣)", 200, "毫克"), _row("檸檬酸鈣", 2000, "毫克")])
     got = [(n.standard_code, n.nutrient_form_code, n.per_serving, n.stated_elemental_amount) for n in rows]
     assert got == [
-        ("calcium", "calcium_citrate", 238, 50),
+        ("calcium", "calcium_citrate_tetrahydrate", 238, 50),
         ("calcium", "calcium_carbonate", 200, 200),
-        ("calcium", "calcium_citrate", 2000, None),
+        ("calcium", "calcium_citrate_tetrahydrate", 2000, None),
     ]
 
 

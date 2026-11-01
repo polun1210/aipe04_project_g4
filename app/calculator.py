@@ -2,7 +2,7 @@
 
 昊昀的真版本好了之後，只要換掉 get_calculator 回傳的實作，網址與前端都不用改。
 真版本需要的輸入輸出就是這兩個函式的簽名；FakeCalculator 只做「整條能通」所需的最少事情：
-  - verify_product：只做份數乘法，不做單位換算與元素量推估（缺元素量的列標為 unknown）
+  - verify_product：單位換算與元素量推估交給 app/elemental.py
   - assess：一律回傳 06_assessment 範例（case_id 與版本戳換成這次的）；
     只有「含量無法判定」的揭露照這次的個案產生
 所以 FakeCalculator 的數字不可當作正確結果。
@@ -14,9 +14,13 @@ from pathlib import Path
 from typing import Protocol
 from uuid import UUID
 
+from app.catalog_source import get_catalog_source
+from app.elemental import standard_amount
 from app.schemas.assessment import Assessment, UndeterminedAmount
+from app.schemas.catalog import Ingredient
 from app.schemas.case import CaseProfile
-from app.schemas.enums import TARGET_NUTRIENTS, ElementalBasis, FrequencyType, ScopeStatus
+from app.schemas.enums import TARGET_NUTRIENTS, ElementalBasis, FrequencyType
+from app.schemas.reference import ReferenceData
 from app.schemas.label import (
     ComputedIntake,
     ComputedNutrient,
@@ -73,14 +77,15 @@ def _computed_intake(submission: VerificationSubmission) -> ComputedIntake:
     )
 
 
-def _computed_nutrient(row: NutrientConfirmed, servings_peak: float | None, servings_average: float | None) -> ComputedNutrient:
-    amount, basis = None, ElementalBasis.UNKNOWN
-    if row.scope_status is ScopeStatus.IN_SCOPE and row.per_serving is not None:
-        if row.stated_elemental_amount is not None:
-            amount, basis = row.stated_elemental_amount, ElementalBasis.LABEL_STATED
-        elif row.nutrient_form_code is None:
-            amount, basis = row.per_serving, ElementalBasis.NOT_APPLICABLE
-    quantifiable = amount is not None and servings_peak is not None
+def _computed_nutrient(
+    row: NutrientConfirmed,
+    servings_peak: float | None,
+    servings_average: float | None,
+    ingredients: dict[str, Ingredient],
+    ref: ReferenceData,
+) -> ComputedNutrient:
+    result = standard_amount(row, ingredients.get(row.standard_code) if row.standard_code else None, ref)
+    amount = result.amount
     return ComputedNutrient(
         row_id=row.row_id,
         raw_name=None,
@@ -92,24 +97,38 @@ def _computed_nutrient(row: NutrientConfirmed, servings_peak: float | None, serv
         per_serving=row.per_serving,
         unit=row.unit,
         amount_per_serving_standard=amount,
-        standard_unit=row.unit if amount is not None else None,
-        elemental_basis=basis,
-        peak_daily_amount=amount * servings_peak if quantifiable else None,
-        average_daily_amount=amount * servings_average if quantifiable else None,
+        standard_unit=result.standard_unit,
+        conversion=result.conversion,
+        elemental_basis=result.basis,
+        compound_code=result.compound_code,
+        elemental_ratio=result.ratio,
+        peak_daily_amount=amount * servings_peak if amount is not None and servings_peak is not None else None,
+        average_daily_amount=amount * servings_average if amount is not None and servings_average is not None else None,
         ul_applicable=row.standard_code in TARGET_NUTRIENTS and row.standard_code not in _NO_UL_NUTRIENTS,
     )
 
 
 class FakeCalculator:
+    def __init__(self, reference: ReferenceData | None = None) -> None:
+        self._reference = reference
+
+    @property
+    def reference(self) -> ReferenceData:
+        if self._reference is None:
+            self._reference = get_catalog_source().load_reference()
+        return self._reference
+
     def verify_product(self, product_id: UUID, submission: VerificationSubmission, verified_at: datetime) -> VerifiedProduct:
         intake = _computed_intake(submission)
+        ref = self.reference
+        ingredients = {i.code: i for i in ref.catalog.ingredients}
         return VerifiedProduct(
             product_id=product_id,
             product_name=submission.product_name,
             serving_info=submission.serving_info,
             user_intake=intake,
             nutrients=[
-                _computed_nutrient(row, intake.servings_per_day_peak, intake.servings_per_day_average)
+                _computed_nutrient(row, intake.servings_per_day_peak, intake.servings_per_day_average, ingredients, ref)
                 for row in submission.nutrients
             ],
             verified_at=verified_at,

@@ -107,10 +107,10 @@ def _parens(text: str) -> list[str]:
     return re.findall(r"[(（\[【]([^()（）\[\]【】]*)[)）\]】]", text)
 
 
-# 化合物名 → (成分, 型態代碼)。只收型態代碼已在目錄使用、規則表會用到，或 supplement-label-output.md 列出的。
+# 化合物名 → (成分, 型態代碼)：比率表（compound_ratios.csv）的中文名與同義詞由 load_names 加進來。
+# 這裡只留比率表沒有的型態：不參與元素量換算的葡萄糖胺鹽類，以及菸鹼素兩種型態（換算走 conversion_factors）。
 # 葡萄糖胺只有鹽酸鹽有型態代碼（小組 spec「型態代碼」）；硫酸鹽認得是葡萄糖胺，但不填型態
-_COMPOUNDS = {
-    "碳酸鈣": ("calcium", "calcium_carbonate"), "檸檬酸鈣": ("calcium", "calcium_citrate"),
+_STATIC_COMPOUNDS = {
     "葡萄糖胺鹽酸鹽": ("glucosamine", "glucosamine_hcl"), "鹽酸葡萄糖胺": ("glucosamine", "glucosamine_hcl"),
     "胺基葡萄糖鹽酸鹽": ("glucosamine", "glucosamine_hcl"),
     "葡萄糖胺硫酸鹽": ("glucosamine", None), "硫酸葡萄糖胺": ("glucosamine", None),
@@ -121,15 +121,18 @@ _COMPOUNDS = {
 @dataclass(frozen=True)
 class Names:
     synonyms: dict[str, IngredientCode]
+    compounds: dict[str, tuple[str, str | None]]  # 化合物名 → (成分, 型態代碼)
     out_of_scope: frozenset[str]
     version: str
 
 
 @lru_cache
 def load_names(catalog_dir: Path = CATALOG_DIR) -> Names:
-    """同義詞表 ＝ ingredients.csv 的 synonyms ＋ out_of_scope_names.csv。版本 ＝ 兩檔內容的雜湊。"""
+    """同義詞表 ＝ ingredients.csv 的 synonyms ＋ out_of_scope_names.csv；化合物名來自 compound_ratios.csv。
+    版本 ＝ 三檔內容的雜湊。"""
     ing_path, oos_path = catalog_dir / "ingredients.csv", catalog_dir / "out_of_scope_names.csv"
-    digest = hashlib.sha256(ing_path.read_bytes() + oos_path.read_bytes()).hexdigest()[:12]
+    cmp_path = catalog_dir / "compound_ratios.csv"
+    digest = hashlib.sha256(ing_path.read_bytes() + oos_path.read_bytes() + cmp_path.read_bytes()).hexdigest()[:12]
     synonyms: dict[str, IngredientCode] = {}
     with ing_path.open(encoding="utf-8-sig") as f:
         for row in csv.DictReader(f):
@@ -137,7 +140,13 @@ def load_names(catalog_dir: Path = CATALOG_DIR) -> Names:
                 synonyms[_key(name)] = IngredientCode(row["code"])
     with oos_path.open(encoding="utf-8-sig") as f:
         out = frozenset(_key(r["name"]) for r in csv.DictReader(f))
-    return Names(synonyms=synonyms, out_of_scope=out, version=f"syn-{digest}")
+    compounds = {_key(name): v for name, v in _STATIC_COMPOUNDS.items()}
+    with cmp_path.open(encoding="utf-8-sig") as f:
+        for row in csv.DictReader(f):
+            names = [row["display_name_zh"], *row["synonyms"].split("|")]
+            for name in filter(None, names):
+                compounds[_key(name)] = (row["nutrient_code"], row["compound_code"])
+    return Names(synonyms=synonyms, compounds=compounds, out_of_scope=out, version=f"syn-{digest}")
 
 
 def _candidates(raw_name: str) -> list[str]:
@@ -162,14 +171,14 @@ def match_name(raw_name: str, names: Names) -> NameMatch:
     for cand in _candidates(raw_name):
         if cand in names.synonyms:
             code = names.synonyms[cand]
-            form_raw = next((p for p in _parens(_norm(raw_name)) if _key(p) in _COMPOUNDS), None)
-            form_code = _COMPOUNDS[_key(form_raw)][1] if form_raw else None
+            form_raw = next((p for p in _parens(_norm(raw_name)) if _key(p) in names.compounds), None)
+            form_code = names.compounds[_key(form_raw)][1] if form_raw else None
             form_code = form_code or _special_form(code, raw_name)
             # 「鈣(碳酸鈣)」的數字是元素量；允許成分（「葡萄糖胺(葡萄糖胺鹽酸鹽)」）沒有元素量
             elemental = form_raw is not None and code not in ALLOWED_INGREDIENTS
             return NameMatch(code, form_code, form_raw, False, elemental)
-        if cand in _COMPOUNDS:
-            code, form = _COMPOUNDS[cand]
+        if cand in names.compounds:
+            code, form = names.compounds[cand]
             return NameMatch(IngredientCode(code), form, _strip_parens(_norm(raw_name)).strip(), False, False)
     form = _special_form(None, raw_name)
     if form in ("epa", "dha", "n3_total", "fish_oil"):
