@@ -294,7 +294,8 @@ def undetermined_amounts(case: CaseProfile) -> list[UndeterminedAmount]:
 def _disclosures(case: CaseProfile, ref: ReferenceData, drug_intake: dict[str, Fraction]) -> Disclosures:
     rows = [(n, p) for p in case.supplements for n in p.nutrients]
     drugs = case.drugs.selected
-    has_in_scope_drug = any(d.scope_status is ScopeStatus.IN_SCOPE for d in drugs)
+    # 範圍外、無法確認的藥也算：系統認不得它，一樣沒把它的鈣、鎂、鐵算進來
+    has_any_drug = bool(drugs)
     present = {n.standard_code for n, _ in rows if n.scope_status is ScopeStatus.IN_SCOPE}
     return Disclosures(
         covered_known_conditions=list(ConditionCode),
@@ -310,7 +311,7 @@ def _disclosures(case: CaseProfile, ref: ReferenceData, drug_intake: dict[str, F
         unresolved_drugs=[d.raw_name for d in drugs if d.scope_status is ScopeStatus.UNRESOLVED],
         # 有用藥的人，鈣、鎂、鐵只要出現在補充劑裡，除了取得劑量的制酸劑之外都沒有算進藥品來源
         drug_source_not_counted=[
-            code for code in _DRUG_SOURCE_NUTRIENTS if has_in_scope_drug and code in present and code not in drug_intake
+            code for code in _DRUG_SOURCE_NUTRIENTS if has_any_drug and code in present and code not in drug_intake
         ],
         undetermined_amounts=undetermined_amounts(case),
     )

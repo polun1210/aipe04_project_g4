@@ -272,3 +272,11 @@ def test_case_and_version_are_carried_over():
     a = run(case)
     assert (a.case_id, a.decision_data_version) == (case.case_id, REF.version)
     assert isinstance(a.case_id, UUID)
+
+
+@pytest.mark.parametrize("status", ["out_of_scope", "unresolved"])
+def test_only_unrecognized_drugs_still_disclose_drug_source_not_counted(status):
+    # 吃的藥系統認不得，一樣沒有算進鈣、鐵的來源，還是要揭露
+    other = SelectedDrug(raw_name="某種藥", scope_status=status)
+    a = run(make_case([product(row("calcium", 500), row("iron", 10))], [other]))
+    assert a.disclosures.drug_source_not_counted == ["calcium", "iron"]
