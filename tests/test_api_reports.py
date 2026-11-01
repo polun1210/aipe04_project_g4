@@ -62,6 +62,17 @@ def test_create_report_twice_returns_same_report_with_200(client):
     assert second.json()["report_id"] == first.json()["report_id"]
 
 
+def test_concurrent_create_report_returns_the_stored_one(client, store, monkeypatch):
+    case_id = _assess(client)
+    first = client.post(f"/api/assessments/{case_id}/report").json()
+    # 模擬同時送兩次：第二個請求查的時候第一份還沒存好，所以查不到、自己又產一份
+    monkeypatch.setattr(store, "get_report_by_case", lambda user_id, case_id: None)
+    second = client.post(f"/api/assessments/{case_id}/report")
+    assert second.status_code == 200
+    assert second.json()["report_id"] == first["report_id"]
+    assert client.get(f"/api/reports/{second.json()['report_id']}").status_code == 200
+
+
 def test_create_report_for_unknown_case_is_404(client):
     response = client.post(f"/api/assessments/{uuid4()}/report")
     assert response.status_code == 404

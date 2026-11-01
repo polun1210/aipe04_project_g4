@@ -220,12 +220,15 @@ class PgStore:
 
     # ── 報告 ────────────────────────────────────────────────
 
-    def save_report(self, user_id: UUID, report: Report) -> None:
-        """一個評估只有一份報告（case_id UNIQUE）：已經有就不覆蓋，呼叫端用 get_report_by_case 取既有那份。"""
+    def save_report(self, user_id: UUID, report: Report) -> Report:
+        """一個評估只有一份報告（case_id UNIQUE）：已經有就不覆蓋，回傳實際存著的那份。
+
+        ON CONFLICT 會等先寫入的交易 commit，所以沒寫進去時，接著的 SELECT 一定讀得到那份。
+        """
         with self._pool.connection() as conn:
-            conn.execute(
+            inserted = conn.execute(
                 "INSERT INTO app.reports (report_id, case_id, user_id, generated_at, report_date, report) "
-                "VALUES (%s, %s, %s, %s, %s, %s) ON CONFLICT (case_id) DO NOTHING",
+                "VALUES (%s, %s, %s, %s, %s, %s) ON CONFLICT (case_id) DO NOTHING RETURNING report_id",
                 [
                     report.report_id,
                     report.case_id,
@@ -234,7 +237,11 @@ class PgStore:
                     report.generated_at.astimezone(TAIPEI_TZ).date(),
                     _json(report),
                 ],
-            )
+            ).fetchone()
+            if inserted is not None:
+                return report
+            row = conn.execute("SELECT report FROM app.reports WHERE case_id = %s", [report.case_id]).fetchone()
+        return Report.model_validate(row[0])
 
     def get_report_by_case(self, user_id: UUID, case_id: UUID) -> Report | None:
         return self._one_report("case_id = %s AND user_id = %s", [case_id, user_id])

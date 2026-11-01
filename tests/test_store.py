@@ -186,9 +186,11 @@ def test_使用者拿不到別人的評估與報告(store, user):
 def test_同一個評估重複產報告時讀回既有那份(store, user):
     case, _ = _saved_case(store, user)
     first, second = _report(case.case_id), _report(case.case_id)
-    store.save_report(user, first)
-    store.save_report(user, second)
+    assert store.save_report(user, first) == first
+    # 同時送兩次「產生報告」：第二份沒存進去，要拿回第一份，不然前端拿到的 report_id 查不到
+    assert store.save_report(user, second) == first
     assert store.get_report_by_case(user, case.case_id) == first
+    assert store.get_report(user, second.report_id) is None
 
 
 def test_報告歷史依產生時間新到舊(store, user):
