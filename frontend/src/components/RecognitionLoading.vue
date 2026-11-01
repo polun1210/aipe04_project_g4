@@ -20,13 +20,23 @@
   --recognition-background: var(--navy, #142332);
   --recognition-document: var(--white, #fff);
   --recognition-accent: var(--lime, #d4e887);
+  position: fixed;
+  z-index: 1000;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-sizing: border-box;
+  width: min(420px, calc(100% - 32px));
+  max-height: calc(100dvh - 32px);
+  overflow-y: auto;
   display: grid;
   justify-items: center;
   gap: 8px;
-  margin-block: 20px;
+  margin: 0;
   padding: 24px 16px 32px;
   border-radius: 24px;
   background: var(--recognition-background);
+  box-shadow: 0 16px 64px #14233255;
   color: var(--recognition-document);
   text-align: center;
 }
