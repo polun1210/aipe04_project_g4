@@ -75,7 +75,7 @@
 ## 哪一頁 → 哪個網址 → 用哪個範例檔
 
 頁面編號對應 `docs/frontend/sitemap_v4.md` 的 PG-xxx。網址前綴一律是 `/api`；所有網址同步回傳；失敗時一律回 `api_error` 格式。
-「讀寫的資料」是 `app/store.py` 的 `Store` 方法名稱，之後換成資料庫時，每個方法都帶 `user_id`（還沒登入前一律用測試帳號）。
+「讀寫的資料」是 `app/store.py` 的 `Store` 方法名稱，之後換成資料庫時，每個方法都帶 `user_id`（`AUTH=test` 時一律用測試帳號，`AUTH=google` 時用登入者）。
 「狀態」欄：**已完成**＝回真資料；**已完成（假版本）**＝網址與格式正確，內容是範例資料，真版本由負責的組員替換；**之後**＝網址與格式待定，還沒做。
 
 | 頁面 | 方法與網址 | 送出 | 收到 | 讀寫的資料 | 狀態 |
@@ -89,7 +89,7 @@
 | PG-008 報告呈現頁 | `POST /api/assessments/{case_id}/report` | — | `08_report`；第一次 201，已產生過回 200 與同一份 | `get_report_by_case`、`get_case`、`save_report` | 已完成（假版本） |
 | PG-011 報告記錄查詢頁 | `GET /api/reports?date_from=…&date_to=…` | query：兩個日期（選填、含當天、台灣時間） | `list[ReportSummary]`，新到舊 | `list_reports` | 已完成 |
 | PG-012 報告記錄詳細資料頁 | `GET /api/reports/{report_id}` | — | `08_report` | `get_report` | 已完成（假版本） |
-| PG-002／003／010 登入、註冊、設定 | 待定 | — | — | — | 之後 |
+| PG-002 登入頁 | `POST /api/auth/google`、`GET /api/me`、`POST /api/logout` | `{"credential": Google ID token}`；其餘無 | `MeResponse`（`user_id`、`email`、`name`）；登出 204 | `find_or_create_google_user`、`get_user` | 已完成 |
 
 PDF 用瀏覽器列印，不需要網址。不屬於自己的資料（個案、報告）一律回 404，不回 403。
 

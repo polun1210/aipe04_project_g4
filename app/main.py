@@ -1,17 +1,21 @@
 """FastAPI 進入點。啟動：uv run uvicorn app.main:app --reload"""
 
+import os
+import secrets
 from typing import Any
 
 from fastapi import FastAPI
 from fastapi.openapi.utils import get_openapi
+from starlette.middleware.sessions import SessionMiddleware
 
+from app.auth import auth_mode
 from app.errors import register_error_handlers
-from app.routers import assessments, catalog, drugs, products, reports, supplements
+from app.routers import assessments, auth, catalog, drugs, products, reports, supplements
 
 _DESCRIPTION = """
 - 所有網址都同步回傳：辨識、評估、產生報告都是等回應，不建工作編號。
 - 失敗格式統一：一律回 `ErrorResponse`（`error.code`、`error.message`、選填的 `error.details`）。
-- 還沒登入前，一律用測試帳號。
+- 登入由環境變數 `AUTH` 切換：`test`（預設）一律用測試帳號；`google` 用 Google 登入與 session cookie。
 """
 
 
@@ -25,8 +29,20 @@ def _use_binary_format_for_uploads(schema: dict[str, Any]) -> None:
 
 
 def create_app() -> FastAPI:
+    if auth_mode() == "google":
+        for name in ("GOOGLE_CLIENT_ID", "SESSION_SECRET"):
+            if not os.environ.get(name):
+                raise RuntimeError(f"AUTH=google 時必須在 .env 設定 {name}")
     app = FastAPI(title="補藥亂吃！API", description=_DESCRIPTION)
+    app.add_middleware(
+        SessionMiddleware,
+        secret_key=os.environ.get("SESSION_SECRET") or secrets.token_urlsafe(32),
+        max_age=86400,
+        same_site="lax",
+        https_only=os.environ.get("SESSION_HTTPS_ONLY", "false").lower() == "true",
+    )
     register_error_handlers(app)
+    app.include_router(auth.router)
     app.include_router(catalog.router)
     app.include_router(drugs.router)
     app.include_router(products.router)

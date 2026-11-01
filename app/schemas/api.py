@@ -17,7 +17,10 @@ details 每張照片一行，例如 "img-02：反光"。
   POST /api/assessments/{case_id}/report          → Report（201；已產生過回 200 與同一份）
   GET  /api/reports?date_from=…&date_to=…         → list[ReportSummary]
   GET  /api/reports/{report_id}                   → Report
-  GET  /api/health                                → {"status": "ok"}
+  POST /api/auth/google          ← GoogleLoginRequest → MeResponse（Google 登入，設 session cookie）
+  GET  /api/me                                    → MeResponse
+  POST /api/logout                                → 204
+  GET  /api/health                               → {"status": "ok"}
 """
 
 from uuid import UUID
@@ -34,6 +37,16 @@ class ErrorBody(StrictModel):
 
 class ErrorResponse(StrictModel):
     error: ErrorBody
+
+
+class GoogleLoginRequest(StrictModel):
+    credential: str  # Google ID token
+
+
+class MeResponse(StrictModel):
+    user_id: UUID
+    email: str | None
+    name: str | None
 
 
 class ProductCreated(StrictModel):
