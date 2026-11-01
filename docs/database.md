@@ -230,6 +230,7 @@ CSV 版一樣）；`drug_products` 沒有 `snapshot_date`（TFDA 藥名表的快
 | `ingredients` | `CHECK (category='allowed_ingredient' OR standard_unit IS NOT NULL)` | 目標營養素沒有標準單位 |
 | `compounds` | `CHECK (ratio > 0 AND ratio <= 1)` | 元素比率超過 100% |
 | `conversion_factors` | `UNIQUE (nutrient_code, from_unit, to_unit, applies_to_form)` | 同一組換算有兩筆（計算層取第一筆符合的列） |
+| `drug_nutrient_doses` | `UNIQUE (active_ingredient_code, nutrient_code)` | 同一個藥與營養素有兩列劑量（計算層每列都按比例加，會重複計算） |
 | `dris_values` | `CHECK (ul_value IS NULL OR ul_value > 0)`、PK 三欄 | 上限為零、同一族群重複兩個值 |
 
 每條都有「違反就寫不進去」的測試：`tests/db/test_constraints.py`。
@@ -365,7 +366,7 @@ erDiagram
 - 凍結的快照存 jsonb：`model_dump(mode="json")` 寫入、`model_validate` 讀出，不會漏欄位。
 - `save_product` 同時寫 `products`（快照）和 `product_nutrients`（成分列）；`save_assessment` 同時寫 `assessments` 和 `assessment_products`。
 - 所有讀取都帶 `user_id`：使用者拿不到別人的產品、草稿、評估、報告。
-- `reports.case_id` UNIQUE：同一個評估重複產報告，保留第一份，呼叫端用 `get_report_by_case` 取既有那份。
+- `reports.case_id` UNIQUE：同一個評估重複產報告，保留第一份；`save_report` 回傳實際存著的那份（同時送兩次時，後到的那份不會存進去）。
 - `list_reports` 依 `report_date`（台灣時間的日期）篩選，依 `generated_at` 新到舊。
 - `assessments.decision_data_version` 外鍵指向 `catalog.data_versions`，所以評估個案記的是匯入的參考資料版本（`ReferenceData.version`）。
 - `AUTH=test` 且 `STORE=pg` 時，伺服器啟動會檢查測試帳號與預設基本資料，不存在就建立。

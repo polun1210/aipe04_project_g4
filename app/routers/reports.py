@@ -46,8 +46,11 @@ def create_report(
         raise ApiError(404, ErrorCode.NOT_FOUND, "找不到要求的資料")
     case, assessment = found
     report = reporter.build(case, assessment, datetime.now(UTC))
-    store.save_report(user_id, report)
-    return report
+    # 同時送兩次時，後到的那份不會存進去；回實際存著的那份，前端拿到的 report_id 才查得到
+    stored = store.save_report(user_id, report)
+    if stored.report_id != report.report_id:
+        response.status_code = 200  # 跟「已經產生過」一樣
+    return stored
 
 
 @router.get(

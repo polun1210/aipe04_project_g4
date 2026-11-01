@@ -74,7 +74,9 @@ class Store(Protocol):
         """不存在或不屬於這個使用者都回 None。"""
         ...
 
-    def save_report(self, user_id: UUID, report: Report) -> None: ...
+    def save_report(self, user_id: UUID, report: Report) -> Report:
+        """一個評估只存一份報告：已經有就不覆蓋，回傳實際存著的那份（呼叫端要回這份給前端）。"""
+        ...
 
     def get_report_by_case(self, user_id: UUID, case_id: UUID) -> Report | None: ...
 
@@ -159,8 +161,12 @@ class InMemoryStore:
             None,
         )
 
-    def save_report(self, user_id: UUID, report: Report) -> None:
+    def save_report(self, user_id: UUID, report: Report) -> Report:
+        existing = next((r for _, r in self._reports if r.case_id == report.case_id), None)
+        if existing is not None:
+            return existing
         self._reports.append((user_id, report))
+        return report
 
     def get_report_by_case(self, user_id: UUID, case_id: UUID) -> Report | None:
         return next((r for u, r in self._reports if u == user_id and r.case_id == case_id), None)

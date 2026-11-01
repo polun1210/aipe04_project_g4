@@ -215,3 +215,12 @@ def test_制酸劑元素量與氧化鎂比率一致(ref):
 def test_版本檔與讀回的版本一致(ref):
     assert ref.version == (CATALOG_DIR / "VERSION").read_text(encoding="utf-8").strip()
     assert re.fullmatch(r"\d{4}\.\d+\.\d+", ref.version)
+
+
+def test_同一個藥與營養素的劑量只能有一列(ref):
+    # 計算層會把每一列都按劑量比例加進去，兩列就變兩倍（app/assessing.py _drug_intakes）
+    row = ref.catalog.drug_nutrient_doses[0]
+    doubled = row.model_copy(update={"dose_option_mg": row.dose_option_mg * 2})
+    data = ref.catalog.model_dump() | {"drug_nutrient_doses": [row.model_dump(), doubled.model_dump()]}
+    with pytest.raises(ValueError, match="不只一列"):
+        type(ref.catalog).model_validate(data)
