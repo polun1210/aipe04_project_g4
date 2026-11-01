@@ -68,7 +68,7 @@ def test_create_product_returns_new_product_id(client):
 
 def test_create_product_stores_recomputed_product(client, store):
     product_id = UUID(_create_product(client))
-    [stored] = store.get_products([product_id])
+    [stored] = store.get_products(TEST_USER_ID, [product_id])
     submission = VerificationSubmission.model_validate(_example("05a_verification_submission.json"))
     assert stored.product_name == submission.product_name
     assert len(stored.nutrients) == len(submission.nutrients)
@@ -104,7 +104,7 @@ def test_create_product_strips_product_name(client, store):
     body["product_name"] = "  魚油  "
     response = client.post("/api/products", json=body)
     assert response.status_code == 201
-    [stored] = store.get_products([UUID(response.json()["product_id"])])
+    [stored] = store.get_products(TEST_USER_ID, [UUID(response.json()["product_id"])])
     assert stored.product_name == "魚油"
 
 

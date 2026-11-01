@@ -42,7 +42,7 @@ def create_product(
     if submission.draft_product_id is not None:
         _save_corrections(store, user_id, submission, product_id, verified_at)
     product = calculator.verify_product(product_id, submission, verified_at)
-    store.save_product(product)
+    store.save_product(user_id, product)
     return ProductCreated(product_id=product.product_id)
 
 
