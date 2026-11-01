@@ -229,6 +229,7 @@ CSV 版一樣）；`drug_products` 沒有 `snapshot_date`（TFDA 藥名表的快
 | `rules` | `CHECK (reason_zh !~ '(^|[^A-Za-z0-9-])[0-9]')` | 說明文字夾帶數字（B12 這種名稱不算） |
 | `ingredients` | `CHECK (category='allowed_ingredient' OR standard_unit IS NOT NULL)` | 目標營養素沒有標準單位 |
 | `compounds` | `CHECK (ratio > 0 AND ratio <= 1)` | 元素比率超過 100% |
+| `conversion_factors` | `UNIQUE (nutrient_code, from_unit, to_unit, applies_to_form)` | 同一組換算有兩筆（計算層取第一筆符合的列） |
 | `dris_values` | `CHECK (ul_value IS NULL OR ul_value > 0)`、PK 三欄 | 上限為零、同一族群重複兩個值 |
 
 每條都有「違反就寫不進去」的測試：`tests/db/test_constraints.py`。

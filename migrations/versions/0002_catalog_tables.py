@@ -145,7 +145,8 @@ CREATE TABLE catalog.conversion_factors (
     to_unit text NOT NULL,
     factor numeric NOT NULL CHECK (factor > 0),
     applies_to_form text NOT NULL,
-    source text NOT NULL
+    source text NOT NULL,
+    UNIQUE (nutrient_code, from_unit, to_unit, applies_to_form)
 );
 
 CREATE TABLE catalog.source_documents (

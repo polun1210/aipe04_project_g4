@@ -107,3 +107,12 @@ def test_使用者資料表的約束(db):
     db.execute("INSERT INTO app.users (user_id, google_sub) VALUES (gen_random_uuid(), 'sub-1')")
     with pytest.raises(errors.UniqueViolation):
         db.execute("INSERT INTO app.users (user_id, google_sub) VALUES (gen_random_uuid(), 'sub-1')")
+
+
+def test_同一組換算條件不能有兩筆(db):
+    # 計算層取第一筆符合的列，前提是營養素、原單位、目標單位、型態不重複
+    with pytest.raises(errors.UniqueViolation):
+        db.execute(
+            "INSERT INTO catalog.conversion_factors (nutrient_code, from_unit, to_unit, factor, applies_to_form, source) "
+            "VALUES ('vitamin_d', 'iu', 'ug', 0.03, 'all', '重複')"
+        )
