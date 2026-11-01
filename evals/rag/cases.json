@@ -1,0 +1,608 @@
+[
+  {
+    "id": "metformin-b12",
+    "question": "我吃 metformin，同時補充維生素 B12，這兩者有什麼關係？",
+    "ingredient_code": "vitamin_b12",
+    "drug_ingredient_codes": [
+      "metformin"
+    ],
+    "expected_evidence": [
+      {
+        "document_path": "nih_ods/VitaminB12-HealthProfessional.md",
+        "contains": "might reduce the absorption of vitamin B12"
+      }
+    ],
+    "expected_points": [
+      {
+        "label": "藥物可能降低維生素 B12 吸收",
+        "any_of": [
+          "吸收"
+        ]
+      },
+      {
+        "label": "提到 metformin 或二甲雙胍",
+        "any_of": [
+          "metformin",
+          "Metformin",
+          "二甲雙胍"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ppi-magnesium",
+    "question": "我長期吃氫離子幫浦抑制劑（esomeprazole），補充鎂有什麼要注意？",
+    "ingredient_code": "magnesium",
+    "drug_ingredient_codes": [
+      "esomeprazole"
+    ],
+    "expected_evidence": [
+      {
+        "document_path": "nih_ods/Magnesium-HealthProfessional.md",
+        "contains": "can cause hypomagnesemia when taken for prolonged periods"
+      }
+    ],
+    "expected_points": [
+      {
+        "label": "長期使用可能使體內鎂偏低",
+        "any_of": [
+          "偏低",
+          "降低",
+          "不足"
+        ]
+      },
+      {
+        "label": "提到氫離子幫浦抑制劑",
+        "any_of": [
+          "氫離子幫浦",
+          "PPI",
+          "esomeprazole"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "pantoprazole-b12",
+    "question": "我每天吃胃藥泮托拉唑（pantoprazole），有在補充維生素 B12，需要注意什麼？",
+    "ingredient_code": "vitamin_b12",
+    "drug_ingredient_codes": [
+      "pantoprazole"
+    ],
+    "expected_evidence": [
+      {
+        "document_path": "nih_ods/VitaminB12-HealthProfessional.md",
+        "contains": "Gastric acid inhibitors include proton pump inhibitors, such as omeprazole (Prilosec) and lansoprazole (Prevacid)"
+      },
+      {
+        "document_path": "nih_ods/VitaminB12-HealthProfessional.md",
+        "contains": "They can interfere with vitamin B12 absorption from food by slowing the release of gastric acid into the stomach"
+      }
+    ],
+    "expected_points": [
+      {
+        "label": "減少胃酸而影響 B12 吸收",
+        "any_of": [
+          "胃酸"
+        ]
+      },
+      {
+        "label": "長期可能缺乏",
+        "any_of": [
+          "缺乏",
+          "不足",
+          "偏低"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "famotidine-b12",
+    "question": "我常吃法莫替丁（famotidine）治胃食道逆流，吃 B12 有關係嗎？",
+    "ingredient_code": "vitamin_b12",
+    "drug_ingredient_codes": [
+      "famotidine"
+    ],
+    "expected_evidence": [
+      {
+        "document_path": "nih_ods/VitaminB12-HealthProfessional.md",
+        "contains": "histamine 2-receptor antagonists, such as cimetidine (Tagamet)"
+      },
+      {
+        "document_path": "nih_ods/VitaminB12-HealthProfessional.md",
+        "contains": "They can interfere with vitamin B12 absorption from food by slowing the release of gastric acid into the stomach"
+      }
+    ],
+    "expected_points": [
+      {
+        "label": "減少胃酸而影響 B12 吸收",
+        "any_of": [
+          "胃酸"
+        ]
+      },
+      {
+        "label": "長期可能缺乏",
+        "any_of": [
+          "缺乏",
+          "不足",
+          "偏低"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "rabeprazole-iron",
+    "question": "我在吃雷貝拉唑（rabeprazole），醫生說我貧血要補鐵，這兩個一起吃可以嗎？",
+    "ingredient_code": "iron",
+    "drug_ingredient_codes": [
+      "rabeprazole"
+    ],
+    "expected_evidence": [
+      {
+        "document_path": "nih_ods/Iron-HealthProfessional.md",
+        "contains": "reduce the acidity of stomach contents, they can reduce iron absorption"
+      }
+    ],
+    "expected_points": [
+      {
+        "label": "可能減少鐵的吸收",
+        "any_of": [
+          "吸收"
+        ]
+      },
+      {
+        "label": "原因是胃酸降低",
+        "any_of": [
+          "胃酸",
+          "酸度"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "indapamide-magnesium",
+    "question": "我吃降血壓的利尿劑吲達帕胺（indapamide），要不要補鎂？",
+    "ingredient_code": "magnesium",
+    "drug_ingredient_codes": [
+      "indapamide"
+    ],
+    "expected_evidence": [
+      {
+        "document_path": "nih_ods/Magnesium-HealthProfessional.md",
+        "contains": "can increase the loss of magnesium in urine and lead to magnesium depletion"
+      }
+    ],
+    "expected_points": [
+      {
+        "label": "鎂從尿液流失",
+        "any_of": [
+          "尿"
+        ]
+      },
+      {
+        "label": "可能造成鎂不足",
+        "any_of": [
+          "不足",
+          "缺乏",
+          "偏低",
+          "流失"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "hydrochlorothiazide-potassium",
+    "question": "我吃氫氯噻嗪（hydrochlorothiazide）降血壓，補充鉀有什麼要注意？",
+    "ingredient_code": "potassium",
+    "drug_ingredient_codes": [
+      "hydrochlorothiazide"
+    ],
+    "expected_evidence": [
+      {
+        "document_path": "nih_ods/Potassium-HealthProfessional.md",
+        "contains": "increases urinary potassium excretion and can lead to hypokalemia"
+      }
+    ],
+    "expected_points": [
+      {
+        "label": "鉀從尿液流失",
+        "any_of": [
+          "尿"
+        ]
+      },
+      {
+        "label": "可能低血鉀",
+        "any_of": [
+          "低血鉀",
+          "偏低",
+          "不足"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "indapamide-zinc",
+    "question": "吃利尿劑吲達帕胺（indapamide）的人，鋅會不會不夠？",
+    "ingredient_code": "zinc",
+    "drug_ingredient_codes": [
+      "indapamide"
+    ],
+    "expected_evidence": [
+      {
+        "document_path": "nih_ods/Zinc-HealthProfessional.md",
+        "contains": "increase zinc excretion in the urine"
+      }
+    ],
+    "expected_points": [
+      {
+        "label": "鋅從尿液流失",
+        "any_of": [
+          "尿"
+        ]
+      },
+      {
+        "label": "血中鋅可能下降",
+        "any_of": [
+          "下降",
+          "降低",
+          "偏低",
+          "不足",
+          "流失"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "hydrochlorothiazide-vitamin-d",
+    "question": "我吃氫氯噻嗪（hydrochlorothiazide），又吃高劑量維生素 D，會有問題嗎？",
+    "ingredient_code": "vitamin_d",
+    "drug_ingredient_codes": [
+      "hydrochlorothiazide"
+    ],
+    "expected_evidence": [
+      {
+        "document_path": "nih_ods/VitaminD-HealthProfessional.md",
+        "contains": "The combination of these diuretics with vitamin D supplements (which increase intestinal calcium absorption) might lead to hypercalcemia"
+      }
+    ],
+    "expected_points": [
+      {
+        "label": "可能高血鈣",
+        "any_of": [
+          "高血鈣",
+          "血鈣"
+        ]
+      },
+      {
+        "label": "併用前先諮詢",
+        "any_of": [
+          "醫師",
+          "醫療人員",
+          "藥師",
+          "諮詢"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "telmisartan-potassium",
+    "question": "我吃替米沙坦（telmisartan）控制血壓，可以吃鉀補充劑嗎？",
+    "ingredient_code": "potassium",
+    "drug_ingredient_codes": [
+      "telmisartan"
+    ],
+    "expected_evidence": [
+      {
+        "document_path": "nih_ods/Potassium-HealthProfessional.md",
+        "contains": "These medications reduce urinary potassium excretion, which can lead to hyperkalemia."
+      },
+      {
+        "document_path": "nih_ods/Potassium-HealthProfessional.md",
+        "contains": "Experts recommend monitoring potassium status in people taking ACE inhibitors or ARBs"
+      }
+    ],
+    "expected_points": [
+      {
+        "label": "可能高血鉀",
+        "any_of": [
+          "高血鉀",
+          "血鉀過高",
+          "偏高"
+        ]
+      },
+      {
+        "label": "需要監測血鉀",
+        "any_of": [
+          "監測",
+          "檢查",
+          "追蹤"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "lisinopril-potassium",
+    "question": "我吃賴諾普利（lisinopril），同時想補充鉀，安全嗎？",
+    "ingredient_code": "potassium",
+    "drug_ingredient_codes": [
+      "lisinopril"
+    ],
+    "expected_evidence": [
+      {
+        "document_path": "nih_ods/Potassium-HealthProfessional.md",
+        "contains": "These medications reduce urinary potassium excretion, which can lead to hyperkalemia."
+      },
+      {
+        "document_path": "nih_ods/Potassium-HealthProfessional.md",
+        "contains": "Experts recommend monitoring potassium status in people taking ACE inhibitors or ARBs"
+      }
+    ],
+    "expected_points": [
+      {
+        "label": "可能高血鉀",
+        "any_of": [
+          "高血鉀",
+          "血鉀過高",
+          "偏高"
+        ]
+      },
+      {
+        "label": "需要監測血鉀",
+        "any_of": [
+          "監測",
+          "檢查",
+          "追蹤"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "holdout-lansoprazole-b12",
+    "question": "我吃蘭索拉唑（lansoprazole）好幾年了，需要擔心維生素 B12 嗎？",
+    "ingredient_code": "vitamin_b12",
+    "drug_ingredient_codes": [
+      "lansoprazole"
+    ],
+    "expected_evidence": [
+      {
+        "document_path": "tfda/lansoprazole/衛部藥輸字第026128號.md",
+        "contains": "可能導致胃酸減少或缺乏而引起氰鈷胺素(維生素B12)的吸收障礙"
+      }
+    ],
+    "expected_points": [
+      {
+        "label": "胃酸減少影響 B12 吸收",
+        "any_of": [
+          "胃酸"
+        ]
+      },
+      {
+        "label": "長期使用才明顯",
+        "any_of": [
+          "長期"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "holdout-metformin-b12-label",
+    "question": "糖尿病吃二甲雙胍（metformin），仿單有提到維生素 B12 嗎？",
+    "ingredient_code": "vitamin_b12",
+    "drug_ingredient_codes": [
+      "metformin"
+    ],
+    "expected_evidence": [
+      {
+        "document_path": "tfda/metformin/衛署藥輸字第007152號.md",
+        "contains": "長期使用metformin會減少vitamin"
+      }
+    ],
+    "expected_points": [
+      {
+        "label": "減少 B12 吸收",
+        "any_of": [
+          "吸收"
+        ]
+      },
+      {
+        "label": "長期使用",
+        "any_of": [
+          "長期"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "holdout-hydrochlorothiazide-magnesium",
+    "question": "吃氫氯噻嗪（hydrochlorothiazide），鎂會不會流失？",
+    "ingredient_code": "magnesium",
+    "drug_ingredient_codes": [
+      "hydrochlorothiazide"
+    ],
+    "expected_evidence": [
+      {
+        "document_path": "tfda/hydrochlorothiazide/內衛藥製字第000141號.md",
+        "contains": "本藥會增加鎂之排泄，引起低血鎂症"
+      }
+    ],
+    "expected_points": [
+      {
+        "label": "鎂排出增加",
+        "any_of": [
+          "排泄",
+          "排出",
+          "流失"
+        ]
+      },
+      {
+        "label": "可能低血鎂",
+        "any_of": [
+          "低血鎂",
+          "偏低",
+          "不足"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "holdout-indapamide-calcium",
+    "question": "我吃吲達帕胺（indapamide），每天也吃鈣片，要注意什麼？",
+    "ingredient_code": "calcium",
+    "drug_ingredient_codes": [
+      "indapamide"
+    ],
+    "expected_evidence": [
+      {
+        "document_path": "tfda/indapamide/衛署藥輸字第022387號.md",
+        "contains": "因尿中鈣排出量減少，會使血鈣過高的危險性增加"
+      }
+    ],
+    "expected_points": [
+      {
+        "label": "鈣從尿液排出減少",
+        "any_of": [
+          "尿"
+        ]
+      },
+      {
+        "label": "可能血鈣過高",
+        "any_of": [
+          "血鈣過高",
+          "高血鈣",
+          "偏高"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "holdout-irbesartan-potassium",
+    "question": "我吃厄貝沙坦（irbesartan），可以用含鉀的低鈉鹽嗎？",
+    "ingredient_code": "potassium",
+    "drug_ingredient_codes": [
+      "irbesartan"
+    ],
+    "expected_evidence": [
+      {
+        "document_path": "tfda/irbesartan/衛署藥輸字第022843號.md",
+        "contains": "irbesarten併用留鉀利尿劑、補鉀劑、含鉀代鹽"
+      }
+    ],
+    "expected_points": [
+      {
+        "label": "血鉀可能上升",
+        "any_of": [
+          "上升",
+          "升高",
+          "高血鉀",
+          "偏高"
+        ]
+      },
+      {
+        "label": "需要監測",
+        "any_of": [
+          "監測",
+          "檢查",
+          "追蹤"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "holdout-losartan-potassium",
+    "question": "吃洛沙坦（losartan）的人可以補充鉀嗎？",
+    "ingredient_code": "potassium",
+    "drug_ingredient_codes": [
+      "losartan"
+    ],
+    "expected_evidence": [
+      {
+        "document_path": "tfda/losartan/衛署藥輸字第021914號.md",
+        "contains": "鉀補充劑、含鉀代鹽或其他會增加血清鉀的藥物"
+      }
+    ],
+    "expected_points": [
+      {
+        "label": "血鉀可能上升",
+        "any_of": [
+          "上升",
+          "升高",
+          "高血鉀",
+          "偏高"
+        ]
+      },
+      {
+        "label": "提到鉀補充劑",
+        "any_of": [
+          "鉀補充",
+          "補鉀",
+          "含鉀"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "holdout-omeprazole-magnesium",
+    "question": "長期吃奧美拉唑（omeprazole），要不要注意鎂？",
+    "ingredient_code": "magnesium",
+    "drug_ingredient_codes": [
+      "omeprazole"
+    ],
+    "expected_evidence": [
+      {
+        "document_path": "tfda/omeprazole/衛部藥輸字第027334號.md",
+        "contains": "醫療人員宜於用藥前及用藥後定期監測病人血中鎂濃度"
+      }
+    ],
+    "expected_points": [
+      {
+        "label": "可能低血鎂",
+        "any_of": [
+          "低血鎂",
+          "偏低",
+          "不足"
+        ]
+      },
+      {
+        "label": "定期監測",
+        "any_of": [
+          "監測",
+          "檢查",
+          "追蹤"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "holdout-atorvastatin-red-yeast-rice",
+    "question": "我在吃降膽固醇的阿托伐他汀（atorvastatin），還能吃紅麴嗎？",
+    "ingredient_code": "red_yeast_rice",
+    "drug_ingredient_codes": [
+      "atorvastatin"
+    ],
+    "expected_evidence": [
+      {
+        "document_path": "nccih/RedYeastRice-NCCIH.md",
+        "contains": "Monacolin K is structurally identical to the medicine lovastatin."
+      }
+    ],
+    "expected_points": [
+      {
+        "label": "紅麴含與降膽固醇藥相同的成分",
+        "any_of": [
+          "lovastatin",
+          "洛伐他汀",
+          "monacolin",
+          "莫納可林"
+        ]
+      },
+      {
+        "label": "併用前先諮詢",
+        "any_of": [
+          "醫師",
+          "醫療人員",
+          "藥師",
+          "諮詢"
+        ]
+      }
+    ]
+  }
+]

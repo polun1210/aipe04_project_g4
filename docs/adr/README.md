@@ -18,6 +18,7 @@
 | [0010](0010-recognition-route-vlm-gemini-flash.md) | 為什麼辨識用 Gemini 3.8 Flash 這類 VLM 直接看圖，而不是 OCR 加規則、或自己訓練 OCR？ |
 | [0011](0011-narration-model-claude-haiku-5-5.md) | 報告的中文敘述為什麼選 Claude Haiku 5.5？三個模型怎麼比、輸出怎麼檢查？ |
 | [0012](0012-no-severity-grading.md) | 為什麼不做嚴重度分級？交互作用怎麼排序？ |
+| [0013](0013-rag-explains-findings-only.md) | 為什麼報告可以用 RAG 引用原文，卻不能讓它改變判定？語料怎麼固定？ |
 
 ## 想做的事和某份 ADR 不同，怎麼辦？
 

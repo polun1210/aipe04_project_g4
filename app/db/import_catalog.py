@@ -5,8 +5,11 @@
 流程：先用 CsvCatalogSource（Pydantic 逐列驗證）讀進來，再在「一個交易」裡清空舊資料、寫入新資料、
 記一筆 data_versions。中途失敗整批回滾；重跑結果相同（冪等，idempotent）。
 
-known_conditions、ingredients、data_versions 會被 app 的表參照，所以用「更新或新增＋刪掉不在新資料裡的列」，
-不直接清空；其餘的表先全部清掉再寫入。
+known_conditions、ingredients、data_versions 會被 app 的表參照，source_documents 會被 evidence.chunks 參照，
+所以用「更新或新增＋刪掉不在新資料裡的列」，不直接清空；其餘的表先全部清掉再寫入。
+
+source_documents：引文引用的文件（屬性取自引文）加上 data/sources/ 裡沒被引用的文件（RAG 語料，屬性取自檔案內容）。
+文件從 data/sources/ 移走時，它在 evidence.chunks 的切塊一併刪除；文件內容改了要重跑 app.rag.ingest。
 """
 
 import argparse
@@ -18,13 +21,14 @@ import psycopg
 from pydantic import BaseModel
 
 from app.catalog_source import CATALOG_DIR, CsvCatalogSource
+from app.rag.corpus import describe_document, discover_documents
 from app.db.config import database_url
 from app.schemas.reference import ReferenceData
 
 SOURCES_DIR = CATALOG_DIR.parent / "sources"
 # 清空順序：子表在前。known_conditions、ingredients 不在裡面（見模組說明）
 _CLEAR_ORDER = (
-    "rule_citations", "rules", "citations", "source_documents", "drug_product_ingredients",
+    "rule_citations", "rules", "citations", "drug_product_ingredients",
     "drug_products", "drug_nutrient_doses", "drug_tradenames", "drug_item_conditions",
     "drug_item_classes", "drug_items", "drug_classes", "ingredient_synonyms", "dris_values",
     "compounds", "conversion_factors", "out_of_scope_names",
@@ -85,6 +89,18 @@ def _source_documents(ref: ReferenceData, sources_dir: Path) -> list[tuple[Any, 
     ]
 
 
+def _all_source_documents(ref: ReferenceData, sources_dir: Path) -> list[tuple[Any, ...]]:
+    """被引文引用的文件，加上 data/sources/ 裡其餘的 RAG 語料文件。"""
+    cited = _source_documents(ref, sources_dir)
+    cited_ids = {row[0] for row in cited}
+    extra = [
+        describe_document(d).as_tuple()
+        for d in discover_documents(sources_dir, ref.catalog)
+        if d.document_id not in cited_ids
+    ]
+    return sorted([*cited, *extra], key=lambda row: row[0])
+
+
 def _check_unique_synonyms(ref: ReferenceData) -> None:
     owner: dict[str, str] = {}
     for ing in ref.catalog.ingredients:
@@ -95,7 +111,7 @@ def _check_unique_synonyms(ref: ReferenceData) -> None:
 
 def _write(cur: psycopg.Cursor, ref: ReferenceData, products: list, sources_dir: Path) -> None:
     cat = ref.catalog
-    docs = _source_documents(ref, sources_dir)
+    docs = _all_source_documents(ref, sources_dir)
     _check_unique_synonyms(ref)
 
     cur.execute(
@@ -161,7 +177,8 @@ def _write(cur: psycopg.Cursor, ref: ReferenceData, products: list, sources_dir:
             [(r["nutrient_code"], r["from_unit"], r["to_unit"], r["factor"], r["applies_to_form"], r["source"])
              for r in _rows(ref.conversion_factors)])  # fmt: skip
 
-    _insert(cur, "source_documents",
+    cur.execute("DELETE FROM evidence.chunks WHERE document_id <> ALL(%s)", [[d[0] for d in docs]])
+    _upsert(cur, "source_documents", "document_id",
             ["document_id", "source", "title", "url", "jurisdiction", "retrieved_at", "source_version", "file_path"],
             docs)  # fmt: skip
     citations = _rows(ref.citations)
