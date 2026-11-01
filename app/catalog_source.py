@@ -4,6 +4,7 @@
 get_catalog_source 回傳的實作，網址與前端都不用改。
 """
 
+import os
 from functools import cached_property, lru_cache
 from pathlib import Path
 from typing import Protocol
@@ -92,4 +93,12 @@ class CsvCatalogSource:
 
 @lru_cache(maxsize=1)
 def get_catalog_source() -> CatalogSource:
+    """CATALOG_SOURCE=csv（預設，不需要資料庫）或 pg（讀 catalog.v_* view）。"""
+    mode = os.environ.get("CATALOG_SOURCE", "csv")
+    if mode == "pg":
+        from app.db.catalog_source import PgCatalogSource  # 預設模式不需要載入資料庫套件
+
+        return PgCatalogSource()
+    if mode != "csv":
+        raise RuntimeError(f"CATALOG_SOURCE 只接受 csv 或 pg，收到 {mode!r}")
     return CsvCatalogSource(CATALOG_DIR)

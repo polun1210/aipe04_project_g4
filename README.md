@@ -17,6 +17,20 @@ uv sync            # 安裝環境（第一次需要先裝 uv，見 docs/uv-guide
 uv run pytest      # 看到 passed、沒有 failed，就表示環境沒問題
 ```
 
+### 本機起資料庫（選用）
+
+預設值（`CATALOG_SOURCE=csv`、`STORE=memory`）不需要資料庫，`uv run pytest` 照常能跑。要試資料庫版：
+
+```bash
+cp .env.example .env    # 填 POSTGRES_PASSWORD，並把 DATABASE_URL 裡的密碼改成一樣的
+docker compose up -d db
+uv run alembic upgrade head
+uv run python -m app.db.import_catalog
+# 之後設 CATALOG_SOURCE=pg 就會從資料庫讀參考資料
+```
+
+細節見 [docs/database.md](docs/database.md)。
+
 ---
 
 ## 想知道什麼，看哪裡
@@ -32,6 +46,7 @@ uv run pytest      # 看到 passed、沒有 failed，就表示環境沒問題
 | 為什麼這樣設計 | [docs/adr/README.md](docs/adr/README.md) |
 | 怎麼安裝環境、加套件 | [docs/uv-guide.md](docs/uv-guide.md) |
 | 怎麼協作、發 PR、commit 怎麼寫 | [CONTRIBUTING.md](CONTRIBUTING.md) |
+| 資料庫有哪些表、怎麼起、怎麼匯入 | [docs/database.md](docs/database.md) |
 | DRIs 資料有哪些要注意的地方 | [docs/dris-reference-notes.md](docs/dris-reference-notes.md) |
 
 **不知道從哪開始：先讀 [docs/prd.md](docs/prd.md)，再看 [docs/schemas/README.md](docs/schemas/README.md) 裡跟你的模組有關的那幾個檔案。**
@@ -45,6 +60,9 @@ app/                  後端（FastAPI）
   schemas/            所有 JSON／CSV 的資料格式（Pydantic 模型）
   routers/            API 網址
   extraction/         照片辨識（VLM）
+  db/                 資料庫：匯入腳本、PgCatalogSource
+migrations/           資料庫表結構（Alembic）
+data/                 參考資料正本（catalog/ 的 CSV、sources/ 的原文檔）
 frontend/             前端（Vue 3 + Vite）
 tests/                自動檢查：範例與格式規則有沒有被破壞
 docs/
