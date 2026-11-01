@@ -20,7 +20,7 @@ from app.extraction.engines.openrouter import Route, Transport, _strict, http_tr
 from app.schemas.enums import IngredientCode, NarrationKind
 from app.schemas.narration import NarrationInput, NarrationOutput
 
-PROMPT_VERSION = "narration-v1"  # 改提示詞或輸出結構就要加版本
+PROMPT_VERSION = "narration-v2"  # 改提示詞或輸出結構就要加版本
 TEMPERATURE = 0.2  # 措辭可以不同，但隨機程度調低
 TIMEOUT_SECONDS = 30
 
@@ -34,7 +34,7 @@ PROMPT = """你是幫長輩解釋「用藥與保健食品檢查結果」的助�
 5. 建議只能是這三種之一：錯開服用時間、告知醫師或藥師、併用前先和醫師或藥師討論。
    不可以叫人停藥、減量、改吃別的產品。
 6. 不可以出現「安全」「可放心」「無問題」「沒有交互作用」「不會超標」「確診」這類保證的字眼。
-7. 等級不是 priority 的提醒，不要用「立即」「緊急」「危險」「嚴重」這類強烈字眼。
+7. 不要用「立即」「緊急」「危險」「嚴重」這類強烈字眼。
 8. user_has_supplement 為 false 的提醒，要說明使用者沒有補充這個成分，是因為服用的藥物而提醒。
 9. 句子簡短，用台灣繁體中文，稱呼使用者為「你」。
 

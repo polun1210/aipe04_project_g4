@@ -48,7 +48,6 @@
   "interactions": [
     {
       "ingredient_code": "zinc",
-      "severity": "info",
       "requires_professional_review": false,
       "user_has_supplement": true,
       "matched_product_ids": [
@@ -60,8 +59,8 @@
           "condition_type": "drug_class",
           "condition_code": "ppi",
           "interaction_type": "drug_affects_nutrient",
-          "severity": "info",
           "advice_code": "inform_provider",
+          "requires_professional_review": false,
           "separation_hours": null,
           "reason_zh": "長期使用此類胃藥可能降低鋅的吸收",
           "citation_ids": [

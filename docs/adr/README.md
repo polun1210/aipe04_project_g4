@@ -14,9 +14,10 @@
 | [0005](0005-peak-vs-average-intake.md) | 為什麼上限比對用單日峰值、不用平均？為什麼有兩個攝取量欄位？ |
 | [0006](0006-evidence-sources-build-time-only.md) | 為什麼評估時不即時查 SUPP.AI、TFDA 等外部資料庫？ |
 | [0007](0007-interaction-rules-may-reference-non-target-ingredients.md) | 為什麼紅麴、葡萄糖胺、魚油不在 13 項目標營養素裡，卻會被檢查？ |
-| [0009](0009-rule-aggregation-max-severity-never-downgrade.md) | 同一成分被多條規則命中時，為什麼只顯示最高等級？ |
+| [0009](0009-rule-aggregation-max-severity-never-downgrade.md) | （已被 0012 取代）同一成分被多條規則命中時，為什麼只顯示最高等級？ |
 | [0010](0010-recognition-route-vlm-gemini-flash.md) | 為什麼辨識用 Gemini 3.8 Flash 這類 VLM 直接看圖，而不是 OCR 加規則、或自己訓練 OCR？ |
 | [0011](0011-narration-model-claude-haiku-5-5.md) | 報告的中文敘述為什麼選 Claude Haiku 5.5？三個模型怎麼比、輸出怎麼檢查？ |
+| [0012](0012-no-severity-grading.md) | 為什麼不做嚴重度分級？交互作用怎麼排序？ |
 
 ## 想做的事和某份 ADR 不同，怎麼辦？
 

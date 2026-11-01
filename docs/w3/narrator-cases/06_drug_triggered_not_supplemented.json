@@ -36,7 +36,6 @@
   "interactions": [
     {
       "ingredient_code": "vitamin_b12",
-      "severity": "attention",
       "requires_professional_review": false,
       "user_has_supplement": false,
       "matched_product_ids": [],
@@ -46,8 +45,8 @@
           "condition_type": "drug_class",
           "condition_code": "biguanide",
           "interaction_type": "drug_affects_nutrient",
-          "severity": "attention",
           "advice_code": "inform_provider",
+          "requires_professional_review": false,
           "separation_hours": null,
           "reason_zh": "長期使用此類降血糖藥可能降低維生素B12的吸收",
           "citation_ids": [
@@ -58,7 +57,6 @@
     },
     {
       "ingredient_code": "potassium",
-      "severity": "info",
       "requires_professional_review": false,
       "user_has_supplement": false,
       "matched_product_ids": [],
@@ -68,8 +66,8 @@
           "condition_type": "drug_class",
           "condition_code": "acei_arb",
           "interaction_type": "drug_affects_nutrient",
-          "severity": "info",
           "advice_code": "inform_provider",
+          "requires_professional_review": false,
           "separation_hours": null,
           "reason_zh": "此類降血壓藥可能使血中鉀濃度上升，使用含鉀補充劑或低鈉鹽前應先諮詢",
           "citation_ids": [

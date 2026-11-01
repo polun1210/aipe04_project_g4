@@ -5,7 +5,6 @@
   "interactions": [
     {
       "ingredient_code": "red_yeast_rice",
-      "severity": "priority",
       "requires_professional_review": true,
       "user_has_supplement": true,
       "matched_product_ids": [
@@ -17,8 +16,8 @@
           "condition_type": "drug_class",
           "condition_code": "statin",
           "interaction_type": "pharmacodynamic",
-          "severity": "priority",
           "advice_code": "consult_before_combining",
+          "requires_professional_review": true,
           "separation_hours": null,
           "reason_zh": "紅麴所含成分與此類藥物的作用機轉相同，併用可能增加肌肉不良反應的風險",
           "citation_ids": [
@@ -29,7 +28,6 @@
     },
     {
       "ingredient_code": "glucosamine",
-      "severity": "attention",
       "requires_professional_review": false,
       "user_has_supplement": true,
       "matched_product_ids": [
@@ -41,8 +39,8 @@
           "condition_type": "drug_class",
           "condition_code": "insulin",
           "interaction_type": "pharmacodynamic",
-          "severity": "attention",
           "advice_code": "inform_provider",
+          "requires_professional_review": false,
           "separation_hours": null,
           "reason_zh": "葡萄糖胺可能影響血糖控制，使用胰島素者應告知醫師",
           "citation_ids": [
@@ -53,7 +51,6 @@
     },
     {
       "ingredient_code": "omega_3",
-      "severity": "info",
       "requires_professional_review": false,
       "user_has_supplement": true,
       "matched_product_ids": [
@@ -65,8 +62,8 @@
           "condition_type": "drug_class",
           "condition_code": "acei_arb",
           "interaction_type": "pharmacodynamic",
-          "severity": "info",
           "advice_code": "inform_provider",
+          "requires_professional_review": false,
           "separation_hours": null,
           "reason_zh": "魚油可能有輕微降血壓作用，與降血壓藥併用時可留意血壓變化",
           "citation_ids": [

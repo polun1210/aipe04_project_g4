@@ -7,13 +7,11 @@
 from decimal import ROUND_HALF_UP, Decimal
 
 from app.schemas.assessment import Assessment, InteractionFinding, RelevantNutrient
-from app.schemas.enums import SEVERITY_RANK, ElementalBasis, IngredientCode, NarrationKind, Severity, ULPhrasing
+from app.schemas.enums import ElementalBasis, IngredientCode, NarrationKind, ULPhrasing
 from app.schemas.narration import NarrationItem, NarrationOutput
 
 TEMPLATE_MODEL = "template"
-TEMPLATE_PROMPT_VERSION = "template-v1"
-
-SEVERITY_LABEL = {Severity.PRIORITY: "優先處理", Severity.ATTENTION: "需留意", Severity.INFO: "提醒"}
+TEMPLATE_PROMPT_VERSION = "template-v2"
 
 _UL_SENTENCE = {
     ULPhrasing.EXCEEDED_SUPPLEMENT_ONLY: "{name}的補充劑攝取已超過上限攝取量。",
@@ -78,10 +76,6 @@ def _interaction_summary(assessment: Assessment, names: dict[IngredientCode, str
     findings = assessment.interactions
     if not findings:
         return "這次的用藥與保健食品沒有命中本系統的任何規則，但這不等於一定適合你，有疑問請詢問醫師或藥師。"
-    counts = "、".join(
-        f"{SEVERITY_LABEL[s]} {n} 項" for s in Severity if (n := sum(f.severity is s for f in findings))
-    )
-    top = max(findings, key=lambda f: SEVERITY_RANK[f.severity])
-    top_names = "、".join(names[f.ingredient_code] for f in findings if f.severity is top.severity)
-    return f"這次共有 {len(findings)} 項提醒（{counts}），最需要先看的是{top_names}。"
+    # findings 已依排序規則排好（使用者有補充的在前），第一個就是最值得先看的
+    return f"這次有 {len(findings)} 項提醒，可以先看{names[findings[0].ingredient_code]}。"
 

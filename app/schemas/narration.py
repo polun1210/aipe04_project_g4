@@ -58,4 +58,4 @@ class OutputCheckResult(StrictModel):
     banned_phrase_violations: list[str]
     dosage_boundary_violations: list[str]  # 數字接 mg／ug／IU 且不在授權集合；停用、減量詞彙
     coverage_violations: list[str]  # 每條提醒都要有敘述，不能漏、不能多
-    severity_wording_violations: list[str]  # 措辭比嚴重等級強（例如「提醒」等級寫「立即」）
+    strong_wording_violations: list[str]  # 用了「立即」「危險」這類強烈字眼（ADR-0012）

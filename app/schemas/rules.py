@@ -1,7 +1,7 @@
 """交接點 ②：規則表與出處（建表組 → 後端規則引擎）。
 
 rules.csv、citations.csv 各一列 ＝ 一個模型實例。
-嚴重度判定條件、evidence_tier 的值由建表規範決定（待定稿），欄位先放著。
+evidence_tier 的值由建表規範決定（待定稿），欄位先放著。
 """
 
 import re
@@ -21,7 +21,6 @@ from app.schemas.enums import (
     InteractionType,
     Jurisdiction,
     RuleStatus,
-    Severity,
 )
 
 # 獨立的數字（劑量、時數）才算違規；B12、D3、n-3、COX-2 這類名稱裡的數字不算
@@ -38,7 +37,6 @@ class Rule(StrictModel):
     ingredient_form_codes: PipeList[str] = Field(default_factory=list)  # 空 ＝ 所有型態適用
     interaction_type: InteractionType
     requires_supplement_intake: bool
-    severity: Severity
     requires_professional_review: bool  # 報告是否建議使用者諮詢醫師、藥師
     advice_code: AdviceCode
     separation_hours: float | None = Field(default=None, gt=0)
@@ -90,7 +88,7 @@ class Citation(StrictModel):
 
 
 class RuleCandidate(StrictModel):
-    """建表 pipeline 的 LLM 抽取輸出（離線，不進 app 執行期）。嚴重度與建議行動由人決定。"""
+    """建表 pipeline 的 LLM 抽取輸出（離線，不進 app 執行期）。建議行動由人決定。"""
 
     candidate_id: str
     nutrient_code: IngredientCode
@@ -105,5 +103,4 @@ class RuleCandidate(StrictModel):
     source_url: HttpUrl
     jurisdiction: Jurisdiction
     retrieved_at: date
-    severity: None = None  # LLM 不得填寫
     advice_code: None = None  # LLM 不得填寫

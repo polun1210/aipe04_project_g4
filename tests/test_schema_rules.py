@@ -23,7 +23,7 @@ from app.schemas.rules import Rule
 VALID_RULE = {
     "rule_id": "R-0001", "condition_type": "drug_class", "condition_code": "ppi",
     "ingredient_code": "vitamin_b12", "interaction_type": "drug_affects_nutrient",
-    "requires_supplement_intake": False, "severity": "attention",
+    "requires_supplement_intake": False,
     "requires_professional_review": False, "advice_code": "inform_provider",
     "reason_zh": "長期使用此類胃藥可能降低維生素B12的吸收", "citation_ids": ["c1"],
     "evidence_tier": "tbd", "status": "draft", "curated_by": "A",
@@ -32,7 +32,7 @@ VALID_RULE = {
 TRIGGER = {
     "rule_id": "R-1", "condition_type": "drug_class", "condition_code": "ppi",
     "interaction_type": "drug_affects_nutrient", "advice_code": "inform_provider",
-    "reason_zh": "說明", "citation_ids": ["c1"],
+    "requires_professional_review": False, "reason_zh": "說明", "citation_ids": ["c1"],
 }
 
 
@@ -191,12 +191,15 @@ def test_reviewer_must_differ_from_curator():
 # ─── 評估與 API ───
 
 
-def test_aggregated_severity_must_be_the_highest():
+def test_finding_review_flag_must_be_any_of_triggers():
     with pytest.raises(ValidationError):
         InteractionFinding(
-            ingredient_code="magnesium", severity="info", requires_professional_review=False,
+            ingredient_code="magnesium", requires_professional_review=False,
             user_has_supplement=False, matched_product_ids=[],
-            triggers=[{**TRIGGER, "severity": "attention"}, {**TRIGGER, "severity": "info"}],
+            triggers=[
+                {**TRIGGER, "requires_professional_review": True},
+                {**TRIGGER, "requires_professional_review": False},
+            ],
         )
 
 
