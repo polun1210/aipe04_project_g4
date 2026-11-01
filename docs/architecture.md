@@ -4,7 +4,7 @@
 
 - 資料處理的**步驟順序**（照片 → 辨識 → 核對 → 判定 → 敘述 → 報告）見 `docs/prd.md` 第七節。
 - 每一步交接的**資料格式**見 `docs/schemas/README.md` 的 ①～⑧。
-- 每個網址的**輸入輸出**見 `README.md` 的 API 對照表，或啟動後開 `/docs`。
+- 每個網址的**輸入輸出**見 `docs/schemas/README.md` 的「哪一頁 → 哪個網址」，或啟動後開 `/docs`。
 
 ---
 
@@ -52,13 +52,13 @@ flowchart TB
     classDef done fill:#d4edda,stroke:#28a745,color:#000
     classDef partial fill:#fff3cd,stroke:#d39e00,color:#000
     classDef todo fill:#f8d7da,stroke:#c82333,color:#000
-    class R,S done
-    class CS,EX,ST,RE partial
+    class R,S,EX done
+    class CS,ST,RE partial
     class CA todo
 ```
 
 圖例：綠色＝已完成；黃色＝能用但還不是最終版本；紅色＝目前回固定範例。
-虛線＝之後要接上的連線，目前還沒接。
+虛線＝要設環境變數才會接上（`EXTRACTOR=openrouter`、`NARRATOR=openrouter`；沒設時用假版本或固定模板），或之後才接（資料庫）。
 
 ### 四層的分工
 
@@ -81,7 +81,7 @@ flowchart TB
 | 替換點 | 約定的方法 | 現在的實作 | 之後換成 | 接到 |
 |---|---|---|---|---|
 | CatalogSource | `load()`、`load_citations()` | 讀 `docs/schemas/examples/catalog/*.csv` | 讀資料庫 | catalog 區 |
-| Extractor | `check_quality()`、`extract_supplement()`、`extract_drugs()` | 品質一律通過；草稿回範例 | 保健食品接 `app/extraction/engines/openrouter.py`（已寫好）；藥包辨識待寫 | OpenRouter |
+| Extractor | `check_quality()`、`extract_supplement()`、`extract_drugs()` | `EXTRACTOR=openrouter`：品質檢查、保健食品與藥包（處方箋）辨識都是真的；沒設時（`stub`，開發與 CI 用）品質一律通過、草稿回範例 | — | OpenRouter |
 | Calculator | `verify_product()`、`assess()` | 份數換算是真的；判定一律回 `06_assessment` 範例 | 單位換算、元素量推估、規則引擎 | catalog 區（規則表） |
 | Reporter | `build()` | 判定層照抄、補中文名稱與完整出處；敘述用固定模板（`NARRATOR=template`）。`NARRATOR=openrouter` 時改由 LLM 寫，過輸出檢查（`app/narration_check.py`），不合格重試 2 次，再失敗用固定模板 | 模板句子換成羿文的版本；LLM 型號已選定 `anthropic/claude-haiku-5.5`（服務商 `anthropic`，見 ADR-0011） | LLM 服務 |
 | Store | 產品、草稿、評估、報告的存取，全部帶 `user_id` | 記憶體（重啟就清空） | 讀寫資料庫 | app 區 |
@@ -103,7 +103,7 @@ sequenceDiagram
     participant RE as Reporter
     participant ST as Store
 
-    U->>FE: PG-004 拍藥包
+    U->>FE: PG-004 上傳處方箋
     FE->>BE: POST /api/drug-drafts
     BE->>EX: check_quality → extract_drugs
     BE->>ST: 存藥包草稿
@@ -150,7 +150,7 @@ PG-011／PG-012 查歷史報告時，只讀 Store：`GET /api/reports`、`GET /a
 | 上傳檔案檢查 | `uploads.py` | 否 |
 | 影像品質檢查 | Extractor `check_quality` | 否 |
 | 影像辨識 | Extractor `extract_*` → OpenRouter | **是（VLM）** |
-| 名稱對照 | 藥名：`drug_mapping.py`；成分名：**尚未實作**（草稿的成分代碼目前來自範例） | 否 |
+| 名稱對照 | 藥名：`drug_mapping.py`；成分名：`extraction/rules.py`（與成分目錄同義詞完全比對） | 否 |
 | 人工核對 | 前端 PG-005、PG-007 | — |
 | 凍結評估個案 | `routers/assessments.py` | 否 |
 | 計算層 → 規則引擎 | Calculator | 否 |
