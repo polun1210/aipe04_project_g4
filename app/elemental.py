@@ -6,7 +6,8 @@
   沒有型態代碼（維生素等）          → not_applicable，直接用標示量
   允許成分（紅麴、葡萄糖胺、魚油）  → 只判有沒有，不換算
 
-計算全部用 Fraction，輸出才轉 float，避免 0.1 + 0.2 這類浮點誤差。
+每份元素量用 Fraction 計算，輸出才轉 float，避免 0.1 + 0.2 這類浮點誤差；
+每日量在 calculator.py 以 float 乘份數。
 """
 
 from dataclasses import dataclass
