@@ -987,6 +987,45 @@ body:has(.image-lightbox[open]) {
 .app-shell .review-list form input {
   margin-bottom: 14px;
 }
+.app-shell .medicine-autocomplete {
+  margin-bottom: 14px;
+}
+.app-shell .review-list form .medicine-autocomplete input {
+  margin-bottom: 0;
+}
+.app-shell .medicine-suggestions {
+  list-style: none;
+  max-height: 280px;
+  overflow-y: auto;
+  margin: 4px 0 0;
+  padding: 6px;
+  border: 1px solid #a4b1b9;
+  border-radius: 12px;
+  background: var(--white);
+  box-shadow: 0 12px 32px #14233226;
+}
+.app-shell .medicine-suggestions li {
+  min-height: 52px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.app-shell .medicine-suggestions li:is(:hover, .active) {
+  background: var(--soft-lime);
+}
+.app-shell .medicine-suggestions li.active {
+  outline: 2px solid var(--navy);
+  outline-offset: -2px;
+}
+.app-shell .medicine-suggestions strong,
+.app-shell .medicine-suggestions span {
+  display: block;
+  overflow-wrap: anywhere;
+}
+.app-shell .medicine-suggestions span {
+  color: var(--muted);
+  font-size: 14px;
+}
 .app-shell .review-list button {
   margin-bottom: 8px;
 }

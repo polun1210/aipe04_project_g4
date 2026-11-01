@@ -80,7 +80,7 @@ async function connect(url) {
         `(async () => { document.querySelector(${JSON.stringify(selector)}).scrollIntoView({block:'center'}); await new Promise(requestAnimationFrame); await new Promise(requestAnimationFrame); })()`,
       )
       const point = await page.eval(
-        `(() => {const el=document.querySelector(${JSON.stringify(selector)}); if(!el)throw new Error('Missing click target'); el.scrollIntoView({block:'center'}); const r=el.getBoundingClientRect(); return {x:r.x+r.width/2,y:r.y+r.height/2,disabled:el.disabled};})()`,
+        `(() => {const el=document.querySelector(${JSON.stringify(selector)}); if(!el)throw new Error('Missing click target'); el.scrollIntoView({block:'center'}); const r=el.getBoundingClientRect(); return {x:r.x+r.width/2,y:r.y+r.height/2,disabled:!!el.disabled};})()`,
       )
       assert.equal(point.disabled, disabled, selector)
       for (const type of ['mousePressed', 'mouseReleased'])
@@ -248,7 +248,8 @@ try {
     })()`)
     const classSelect = 'select[id^="medicine-class-"]',
       nameInput = 'input[id^="medicine-name-"]',
-      candidateSelect = 'select[id^="medicine-candidates-"]',
+      candidateList = 'ul[id^="medicine-candidates-"]',
+      candidateOption = 'li[role="option"]',
       save = 'li form button[type="submit"]',
       lock = 'li .review-row-actions input[type="checkbox"]',
       next = 'button.primary-action'
@@ -271,28 +272,49 @@ try {
       '其他／不確定',
     )
     await page.select(classSelect, different)
-    await page.fill(nameInput, candidate.display_name_zh)
-    await until(() => page.eval(`!!document.querySelector(${JSON.stringify(candidateSelect)})`))
-    assert.equal(
-      await page.eval(
-        `!!document.querySelector(${JSON.stringify(candidateSelect)}).querySelector('option[value="${candidate.active_ingredient_code}"]')`,
+    await page.fill(nameInput, candidate.display_name_zh.slice(0, 1))
+    await until(() =>
+      page.eval(
+        'document.querySelector("li form")?.textContent.includes("此類別找不到符合的候選藥品")',
       ),
+    )
+    assert.equal(
+      await page.eval(`!!document.querySelector(${JSON.stringify(candidateList)})`),
       false,
     )
     await page.select(classSelect, category)
     await until(() =>
       page.eval(
-        `!!document.querySelector(${JSON.stringify(candidateSelect)})?.querySelector('option[value="${candidate.active_ingredient_code}"]')`,
+        `!!document.querySelector(${JSON.stringify(candidateList)})?.querySelector(${JSON.stringify(candidateOption)})`,
       ),
     )
     assert.equal(await page.eval(`document.querySelector(${JSON.stringify(save)}).disabled`), true)
     assert.equal(
       await page.eval(
-        `document.querySelector(${JSON.stringify(candidateSelect)}).textContent.includes('規格：') || document.querySelector(${JSON.stringify(candidateSelect)}).textContent.includes('許可證：')`,
+        `document.querySelector(${JSON.stringify(candidateList)}).textContent.includes('規格：') || document.querySelector(${JSON.stringify(candidateList)}).textContent.includes('許可證：')`,
       ),
       false,
     )
-    await page.select(candidateSelect, candidate.active_ingredient_code)
+    assert.equal(
+      await page.eval(`document.querySelector(${JSON.stringify(nameInput)}).getAttribute('role')`),
+      'combobox',
+    )
+    assert.equal(
+      await page.eval(
+        `document.querySelector(${JSON.stringify(nameInput)}).getAttribute('aria-expanded')`,
+      ),
+      'true',
+    )
+    await page.screenshot(`suggestions-${width}.png`)
+    await page.click(candidateOption)
+    assert.equal(
+      await page.eval(`document.querySelector(${JSON.stringify(nameInput)}).value`),
+      candidate.display_name_zh,
+    )
+    assert.equal(
+      await page.eval(`!!document.querySelector(${JSON.stringify(candidateList)})`),
+      false,
+    )
     await page.click(save)
     await page.click(lock)
     assert.equal(await page.eval(`document.querySelector(${JSON.stringify(next)}).disabled`), false)
@@ -313,7 +335,7 @@ try {
       lookupCount,
     )
     assert.equal(
-      await page.eval(`!!document.querySelector(${JSON.stringify(candidateSelect)})`),
+      await page.eval(`!!document.querySelector(${JSON.stringify(candidateList)})`),
       false,
     )
     await page.click(save)
@@ -358,13 +380,32 @@ try {
     await until(() => page.eval('!window.__medicineTest.medicines[0].isLocked'))
     await page.click('li .review-row-actions button')
     await page.select(classSelect, category)
-    await page.fill(nameInput, candidate.display_name_zh)
+    await page.fill(nameInput, candidate.display_name_zh.slice(0, 1))
     await until(() =>
       page.eval(
-        `!!document.querySelector(${JSON.stringify(candidateSelect)})?.querySelector('option[value="${candidate.active_ingredient_code}"]')`,
+        `!!document.querySelector(${JSON.stringify(candidateList)})?.querySelector(${JSON.stringify(candidateOption)})`,
       ),
     )
-    await page.select(candidateSelect, candidate.active_ingredient_code)
+    await page.eval(`document.querySelector(${JSON.stringify(nameInput)}).focus()`)
+    for (const [key, code] of [
+      ['ArrowDown', 40],
+      ['Enter', 13],
+    ]) {
+      await page.send('Input.dispatchKeyEvent', {
+        type: 'keyDown',
+        key,
+        windowsVirtualKeyCode: code,
+      })
+      await page.send('Input.dispatchKeyEvent', { type: 'keyUp', key, windowsVirtualKeyCode: code })
+    }
+    assert.equal(
+      await page.eval(`document.querySelector(${JSON.stringify(nameInput)}).value`),
+      candidate.display_name_zh,
+    )
+    assert.equal(
+      await page.eval(`!!document.querySelector(${JSON.stringify(candidateList)})`),
+      false,
+    )
     await page.click(save)
     await page.click(lock)
     await page.eval('window.__testRouter.push("/supplement-review")')

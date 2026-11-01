@@ -8,6 +8,8 @@ export interface MedicineCandidate {
   id: string
   name: string
   drugClassCode: string
+  matchedName?: string
+  englishName?: string
   specification: string | null
   licenseNumber: string | null
 }
@@ -44,6 +46,8 @@ const lookupGateway: MedicineSearchGateway = {
         id: candidate.active_ingredient_code,
         name: candidate.display_name_zh,
         drugClassCode,
+        ...(candidate.matched_name ? { matchedName: candidate.matched_name } : {}),
+        ...(candidate.english_name ? { englishName: candidate.english_name } : {}),
         specification: null,
         licenseNumber: null,
       }))
@@ -61,6 +65,8 @@ export function isMedicineCandidate(value: MedicineCandidate): boolean {
     !!value.name.trim() &&
     typeof value.drugClassCode === 'string' &&
     !!value.drugClassCode.trim() &&
+    (value.matchedName === undefined || typeof value.matchedName === 'string') &&
+    (value.englishName === undefined || typeof value.englishName === 'string') &&
     (value.specification === null || typeof value.specification === 'string') &&
     (value.licenseNumber === null || typeof value.licenseNumber === 'string')
   )
