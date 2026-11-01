@@ -7,7 +7,7 @@ import { compileScript, compileTemplate, parse } from '@vue/compiler-sfc'
 import ts from 'typescript'
 import * as vue from 'vue'
 
-let navigation, httpCalls
+let navigation, httpCalls, routeQuery, sessionCalls
 const context = vm.createContext({
   console,
   fetch: () => {
@@ -17,10 +17,10 @@ const context = vm.createContext({
 })
 const pendingModules = new Map()
 const exposures = {
-  HealthProfileView: 'conditions, handleSubmit, canSave, error, saving',
+  HealthProfileView: 'form, handleSubmit, canSave, error, saving',
   SettingsView:
-    'form, password, handleSubmit, handleCancel, loadProfile, canSave, error, saved, loaded, loading',
-  RegisterView: 'form, handleSubmit',
+    'form, handleSubmit, handleCancel, loadProfile, canSave, error, saved, loaded, loading',
+  MemberCenterView: 'handleLogout, error, loggingOut',
 }
 const RouterLink = {
   props: ['to'],
@@ -35,12 +35,30 @@ function load(id) {
 }
 async function createModule(id) {
   let module
-  if (!id.startsWith('file:')) {
+  if (id.endsWith('/stores/session.ts')) {
+    const exports = {
+      useSessionStore: () => ({
+        me: { name: '王小明', email: 'a@example.com' },
+        markProfileCompleted: () => sessionCalls.push('markProfileCompleted'),
+        logout: async () => {
+          sessionCalls.push('logout')
+        },
+      }),
+    }
+    module = new vm.SyntheticModule(
+      Object.keys(exports),
+      function () {
+        for (const [key, value] of Object.entries(exports)) this.setExport(key, value)
+      },
+      { context },
+    )
+  } else if (!id.startsWith('file:')) {
     const exports =
       id === 'vue'
         ? { ...vue, vModelText: {}, vModelRadio: {} }
         : {
             RouterLink,
+            useRoute: () => ({ query: routeQuery }),
             useRouter: () => ({
               push: async (path) => {
                 navigation.push(path)
@@ -101,7 +119,6 @@ async function source(path) {
 }
 const { default: Initial } = await source('../src/views/HealthProfileView.vue')
 const { default: Settings } = await source('../src/views/SettingsView.vue')
-const { default: Register } = await source('../src/views/RegisterView.vue')
 const { default: MemberCenter } = await source('../src/views/MemberCenterView.vue')
 const { healthProfileGatewayKey } = await source('../src/services/healthProfileGateway.ts')
 const { conditionsError, profileErrors, profilePayload } = await source(
@@ -171,6 +188,10 @@ async function check(view, value, checked = true) {
   checkbox(view, value).props.onChange({ target: { checked } })
   await vue.nextTick()
 }
+async function fillProfile(view, overrides = {}) {
+  Object.assign(view.exposed.form, { birthYear: '1954', birthMonth: '3', sex: 'male', ...overrides })
+  await vue.nextTick()
+}
 const json = (value) => JSON.parse(JSON.stringify(value))
 async function flushPromises() {
   // nextTick only drains Vue's render queue. The service mock's host Promise
@@ -189,7 +210,6 @@ function gateway(overrides = {}) {
     available: true,
     loadProfile: async () => structuredClone(profile),
     saveProfile: async () => {},
-    saveInitialConditions: async () => {},
     ...overrides,
   }
 }
@@ -204,6 +224,8 @@ function deferred() {
 beforeEach(() => {
   navigation = []
   httpCalls = 0
+  routeQuery = {}
+  sessionCalls = []
 })
 
 test('initial page renders exact choices, real labels, keyboard checkboxes and unavailable save', async () => {
@@ -229,10 +251,13 @@ test('initial page renders exact choices, real labels, keyboard checkboxes and u
   ])
     assert.match(text(view.root), new RegExp(label))
   assert.equal(all(view.root).find((item) => item.type === 'button').props.disabled, true)
+  for (const id of ['birth-year', 'birth-month', 'profile-sex'])
+    assert.ok(all(view.root).some((item) => item.props.id === id))
   await view.exposed.handleSubmit()
   assert.ok(all(view.root).some((item) => item.props.role === 'alert' && item.focused))
   await check(view, 'none')
-  assert.equal(conditionsError(view.exposed.conditions), '')
+  assert.equal(conditionsError(view.exposed.form.conditions), '')
+  await fillProfile(view)
   await view.exposed.handleSubmit()
   assert.match(view.exposed.error, /尚未開放/)
   assert.deepEqual(navigation, [])
@@ -241,9 +266,8 @@ test('initial page renders exact choices, real labels, keyboard checkboxes and u
 })
 
 for (const [name, component, getSelection] of [
-  ['initial', Initial, (v) => v.exposed.conditions],
+  ['initial', Initial, (v) => v.exposed.form.conditions],
   ['settings', Settings, (v) => v.exposed.form.conditions],
-  ['register', Register, (v) => v.exposed.form.conditions],
 ])
   test(`${name}: shared checkbox component preserves none-selection exclusivity in both directions`, async () => {
     const view = mount(component)
@@ -272,7 +296,7 @@ test('initial save waits for real service success, blocks empty submissions and 
   const view = mount(
     Initial,
     gateway({
-      saveInitialConditions: (value) => {
+      saveProfile: (value) => {
         calls.push(json(value))
         return pending.promise
       },
@@ -281,15 +305,18 @@ test('initial save waits for real service success, blocks empty submissions and 
   await view.exposed.handleSubmit()
   assert.equal(calls.length, 0)
   await check(view, 'none')
+  await fillProfile(view)
   assert.equal(view.exposed.canSave, true)
   const saving = view.exposed.handleSubmit()
   await view.exposed.handleSubmit()
   assert.equal(calls.length, 1)
-  assert.deepEqual(calls[0], { selected: [], none_selected: true })
+  assert.deepEqual(calls[0], profile)
   assert.deepEqual(navigation, [])
+  assert.deepEqual(sessionCalls, [])
   pending.resolve()
   await saving
   assert.deepEqual(navigation, ['/medicine-upload'])
+  assert.deepEqual(sessionCalls, ['markProfileCompleted'])
   view.unmount()
 })
 
@@ -297,7 +324,7 @@ test('initial save failure retains choices and never navigates to recognition', 
   const view = mount(
     Initial,
     gateway({
-      saveInitialConditions: async () => {
+      saveProfile: async () => {
         throw new ApiError(503, {
           error: { code: 'unavailable', message: '儲存失敗，請稍後重試。' },
         })
@@ -305,17 +332,53 @@ test('initial save failure retains choices and never navigates to recognition', 
     }),
   )
   await check(view, 'hypertension')
+  await fillProfile(view)
   await view.exposed.handleSubmit()
   assert.match(view.exposed.error, /儲存失敗/)
   assert.deepEqual(navigation, [])
-  assert.deepEqual(json(view.exposed.conditions.selected), ['hypertension'])
+  assert.deepEqual(sessionCalls, [])
+  assert.deepEqual(json(view.exposed.form.conditions.selected), ['hypertension'])
   assert.equal(view.exposed.canSave, true)
   view.unmount()
 })
 
-test('settings contains birth fields and single-choice sex radios, preserves password and blocks unavailable saving', async () => {
+for (const [name, missing] of [
+  ['birth year', { birthYear: '' }],
+  ['birth month', { birthMonth: '' }],
+  ['sex', { sex: '' }],
+]) {
+  test(`initial save is blocked when ${name} is missing`, async () => {
+    const calls = []
+    const view = mount(Initial, gateway({ saveProfile: async (value) => calls.push(value) }))
+    await check(view, 'none')
+    await fillProfile(view, missing)
+    await view.exposed.handleSubmit()
+    assert.equal(calls.length, 0)
+    assert.deepEqual(navigation, [])
+    view.unmount()
+  })
+}
+
+test('initial save returns to a safe redirect and ignores external ones', async () => {
+  for (const [redirect, expected] of [
+    ['/supplement-review', '/supplement-review'],
+    ['//evil.example', '/medicine-upload'],
+    ['https://evil.example', '/medicine-upload'],
+  ]) {
+    navigation = []
+    routeQuery = { redirect }
+    const view = mount(Initial, gateway())
+    await check(view, 'none')
+    await fillProfile(view)
+    await view.exposed.handleSubmit()
+    assert.deepEqual(navigation, [expected])
+    view.unmount()
+  }
+})
+
+test('settings contains birth fields and single-choice sex radios and blocks unavailable saving', async () => {
   const view = mount(Settings)
-  for (const id of ['birth-year', 'birth-month', 'settings-password'])
+  for (const id of ['birth-year', 'birth-month'])
     assert.ok(all(view.root).some((item) => item.props.id === id))
   const radios = all(view.root).filter((item) => item.props.type === 'radio')
   assert.deepEqual(
@@ -344,7 +407,7 @@ test('settings contains birth fields and single-choice sex radios, preserves pas
   view.unmount()
 })
 
-test('settings loads profile, validates and serializes existing contract without a password', async () => {
+test('settings loads profile, validates and serializes existing contract', async () => {
   const calls = []
   const pending = deferred()
   const view = mount(
@@ -363,7 +426,6 @@ test('settings loads profile, validates and serializes existing contract without
   assert.equal(view.exposed.loaded, true)
   assert.equal(view.exposed.form.birthYear, '1954')
   assert.equal(view.exposed.canSave, true)
-  view.exposed.password = 'not-part-of-health-data'
   view.exposed.form.birthMonth = '13'
   await view.exposed.handleSubmit()
   assert.equal(calls.length, 0)
@@ -427,19 +489,21 @@ test('profile validation follows existing year/month/sex and condition code cont
   assert.ok(conditionsError({ selected: ['hypertension'], none_selected: true }))
 })
 
-test('member center retains settings, reports and disabled logout; routes remain available', async () => {
+test('member center shows the signed-in user and logs out to the home page', async () => {
   const view = mount(MemberCenter)
+  assert.match(text(view.root), /王小明/)
   const links = all(view.root)
     .filter((item) => item.type === 'a')
     .map((item) => item.props.href)
   for (const route of ['/settings', '/reports', '/medicine-upload', '/'])
     assert.ok(links.includes(route))
-  assert.ok(
-    all(view.root).some(
-      (item) =>
-        item.type === 'button' && 'disabled' in item.props && item.props.disabled !== false && text(item).includes('登出'),
-    ),
-  )
+  const button = all(view.root).find((item) => item.type === 'button' && text(item).includes('登出'))
+  assert.ok(button)
+  assert.ok(!button.props.disabled)
+  await view.exposed.handleLogout()
+  assert.deepEqual(sessionCalls, ['logout'])
+  assert.deepEqual(navigation, ['/'])
+  assert.doesNotMatch(text(view.root), /尚未開放/)
   const routes = await readFile(new URL('../src/router/index.ts', import.meta.url), 'utf8')
   for (const path of ['/health-profile', '/settings', '/medicine-upload', '/supplement-upload'])
     assert.ok(routes.includes(`path: '${path}'`))

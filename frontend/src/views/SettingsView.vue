@@ -20,8 +20,6 @@ const form = reactive<ProfileForm>({
   sex: '',
   conditions: emptyConditions(),
 })
-// 登入方式尚未定案，保留原有密碼介面；不納入健康資料 payload。
-const password = ref('')
 const attempted = ref(false)
 const loading = ref(false)
 const loaded = ref(false)
@@ -194,18 +192,6 @@ onMounted(loadProfile)
           :error="attempted ? errors.conditions : ''"
         />
       </fieldset>
-      <section aria-labelledby="password-setting-title">
-        <h2 id="password-setting-title">密碼設定</h2>
-        <p id="password-setting-notice">密碼變更尚未開放。此欄位不會隨健康資料送出。</p>
-        <label for="settings-password">密碼</label>
-        <input
-          id="settings-password"
-          v-model="password"
-          type="password"
-          autocomplete="new-password"
-          aria-describedby="password-setting-notice"
-        />
-      </section>
       <div class="profile-actions">
         <button type="button" :disabled="saving" @click="handleCancel">取消</button>
         <button class="primary-action" type="submit" :disabled="!canSave">

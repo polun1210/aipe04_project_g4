@@ -1,38 +1,48 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { RouterLink } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
+import { GoogleLogin, type CallbackTypes } from 'vue3-google-login'
+import { errorMessage } from '../api/client'
+import { safeRedirect } from '../router/authGuard'
+import { useSessionStore } from '../stores/session'
 
-const email = ref<string>('')
-const password = ref<string>('')
+const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID as string | undefined
+const route = useRoute()
+const router = useRouter()
+const session = useSessionStore()
+const message = ref('')
 
-function handleSubmit(): void {
-  // 暫不執行登入動作；保留函式供學習表單事件。
-  return
+// Google 登入成功後，把憑證交給後端，再依健康資料是否填過導頁
+const handleLoginSuccess: CallbackTypes.CredentialCallback = async (response) => {
+  message.value = ''
+  if (!response.credential) {
+    message.value = '未取得 Google 登入憑證。'
+    return
+  }
+  try {
+    const me = await session.login(response.credential)
+    const target = safeRedirect(route.query.redirect)
+    await router.push(
+      me.profile_completed ? target : { name: 'health-profile', query: { redirect: target } },
+    )
+  } catch (error) {
+    message.value = errorMessage(error)
+  }
+}
+
+const handleLoginError = () => {
+  message.value = 'Google 登入失敗或已取消，請再試一次。'
 }
 </script>
 
 <template>
   <main>
     <h1>登入</h1>
-    <p id="login-notice">目前可開啟註冊表單，但登入與建立帳號功能尚未開放。</p>
-
-    <!-- @submit：Vue 語法，監聽表單送出事件。
-    .prevent：阻止瀏覽器原本的表單送出行為，避免重新載入頁面。
-    "handleSubmit"：事件發生時執行的函式。 -->
-    <form aria-describedby="login-notice" @submit.prevent="handleSubmit">
-      <p>
-        <!-- v-model="email" 提供雙向綁定 -->
-        <label for="email">帳號（Email）</label>
-        <input id="email" v-model="email" type="email" autocomplete="username" />
-      </p>
-
-      <p>
-        <label for="password">密碼</label>
-        <input id="password" v-model="password" type="password" autocomplete="current-password" />
-      </p>
-
-      <RouterLink to="/register">註冊</RouterLink>
-      <button type="submit" disabled>登入（尚未開放）</button>
-    </form>
+    <p id="login-notice">請使用 Google 帳號登入。第一次登入需再填寫基本健康資料。</p>
+    <p v-if="!clientId" role="status">Google 登入尚未設定。</p>
+    <div v-else class="google-login-container">
+      <GoogleLogin :client-id="clientId" :callback="handleLoginSuccess" :error="handleLoginError" />
+    </div>
+    <p v-if="message" role="alert">{{ message }}</p>
   </main>
 </template>

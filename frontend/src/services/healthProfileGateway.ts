@@ -1,12 +1,11 @@
 import { inject, type InjectionKey } from 'vue'
-import type { AccountProfile, ConditionSelection } from '../models/healthProfile'
+import type { AccountProfile } from '../models/healthProfile'
 
-// 這是前端整合介面，不是尚未確認的 HTTP API 契約。
-// API 確認後由 App provide 實作；只有真正完成後端儲存，save 才可 resolve。
+// 前端整合介面；實作見 healthProfileApi.ts，由 main.ts provide。
+// 只有真正完成後端儲存，save 才可 resolve。首次填寫與日後修改都用 saveProfile。
 export interface HealthProfileGateway {
   readonly available: boolean
   loadProfile(): Promise<AccountProfile>
-  saveInitialConditions(conditions: ConditionSelection): Promise<void>
   saveProfile(profile: AccountProfile): Promise<void>
 }
 
@@ -19,7 +18,6 @@ async function unavailable(): Promise<never> {
 const unavailableGateway: HealthProfileGateway = Object.freeze({
   available: false,
   loadProfile: unavailable,
-  saveInitialConditions: unavailable,
   saveProfile: unavailable,
 })
 

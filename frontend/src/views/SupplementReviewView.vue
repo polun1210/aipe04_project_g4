@@ -2,7 +2,7 @@
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { isNavigationFailure, onBeforeRouteLeave, useRouter } from 'vue-router'
 import { getCatalog, type Ingredient } from '../api/catalog'
-import { errorMessage } from '../api/client'
+import { ApiError, errorMessage } from '../api/client'
 import ReviewImageGallery from '../components/ReviewImageGallery.vue'
 import {
   createProduct,
@@ -148,6 +148,12 @@ async function submit() {
     medicine.resetFlow()
     flow.resetFlow()
   } catch (reason) {
+    if (reason instanceof ApiError && reason.body.error.code === 'profile_incomplete') {
+      // 健康資料還沒填：導去填寫，完成後回到這頁（資料暫存在 store，不會消失）。
+      busy.value = false
+      await router.push({ name: 'health-profile', query: { redirect: '/supplement-review' } })
+      return
+    }
     error.value = errorMessage(reason)
   } finally {
     busy.value = false
