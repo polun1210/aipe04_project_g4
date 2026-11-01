@@ -80,7 +80,7 @@ flowchart TB
 
 | 替換點 | 約定的方法 | 現在的實作 | 之後換成 | 接到 |
 |---|---|---|---|---|
-| CatalogSource | `load()`、`load_citations()` | 讀 `docs/schemas/examples/catalog/*.csv` | 讀資料庫 | catalog 區 |
+| CatalogSource | `load()`、`load_citations()`、`load_reference()`、`load_drug_products()` | 讀 `data/catalog/*.csv`（由 `scripts/convert_reference.py` 轉檔產生，格式範例在 `docs/schemas/examples/catalog/`） | 讀資料庫 | catalog 區 |
 | Extractor | `check_quality()`、`extract_supplement()`、`extract_drugs()` | `EXTRACTOR=openrouter`：品質檢查、保健食品與藥包（處方箋）辨識都是真的；沒設時（`stub`，開發與 CI 用）品質一律通過、草稿回範例 | — | OpenRouter |
 | Calculator | `verify_product()`、`assess()` | 份數換算是真的；判定一律回 `06_assessment` 範例 | 單位換算、元素量推估、規則引擎 | catalog 區（規則表） |
 | Reporter | `build()` | 判定層照抄、補中文名稱與完整出處；敘述用固定模板（`NARRATOR=template`）。`NARRATOR=openrouter` 時改由 LLM 寫，過輸出檢查（`app/narration_check.py`），不合格重試 2 次，再失敗用固定模板 | 模板句子換成羿文的版本；LLM 型號已選定 `anthropic/claude-haiku-5.5`（服務商 `anthropic`，見 ADR-0011） | LLM 服務 |

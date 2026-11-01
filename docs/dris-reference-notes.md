@@ -92,6 +92,7 @@ repo 內有兩份 md 轉檔：`DRIs_Table.md`（總表）、`DRIs_Full.md`（完
   （本文 L22619 附近：`DFE = 食物葉酸 + 1.7 × 人工合成葉酸`，適用與食物同時攝取；
   空腹時 1 µg DFE = 0.5 µg 合成葉酸）；上限比對時，直接以合成葉酸 µg 比對 1000 µg，不乘 1.7。
   甲基葉酸（5-MTHF）等其他型態的歸屬，本文未見討論，**仍為待決**。
+  `data/catalog/dris_values.csv` 的葉酸 `unit` 一律寫 `ug`：建議量為 DFE，上限為合成葉酸。
 - **鎂**：藥用鎂（如氧化鎂軟便劑、含鎂制酸劑）屬非食物性鎂，依原文應計入上限比對。
   這使藥物輸入與補充劑來源攝取量產生交集，見 `drug_nutrient_doses.csv`（`docs/schemas/examples/catalog/`）與 `RelevantNutrient.intake_from_drugs`。
 

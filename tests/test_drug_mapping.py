@@ -1,10 +1,10 @@
 import pytest
 
-from app.catalog_source import _EXAMPLE_CATALOG_DIR, CsvCatalogSource
+from app.catalog_source import EXAMPLE_CATALOG_DIR, CsvCatalogSource
 from app.drug_mapping import find_candidates, map_confirmed_drug, map_drug_name
 from app.schemas.drug_label import DrugDraftRow
 
-DRUG_ITEMS = CsvCatalogSource(_EXAMPLE_CATALOG_DIR).load().drug_items
+DRUG_ITEMS = CsvCatalogSource(EXAMPLE_CATALOG_DIR).load().drug_items
 
 
 def test_tradename_hits_in_scope_with_catalog_fields():

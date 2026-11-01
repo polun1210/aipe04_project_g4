@@ -1,7 +1,7 @@
 """交接點 ①：目錄資料（建表組 → 後端、前端選單）。
 
-每個類別對應 data/catalogs/ 底下一個 CSV，一列 ＝ 一個模型實例。
-範例見 docs/schemas/examples/catalog/。
+每個類別對應 data/catalog/ 底下一個 CSV，一列 ＝ 一個模型實例。
+格式範例見 docs/schemas/examples/catalog/。
 """
 
 from typing import Annotated
@@ -115,8 +115,11 @@ class DrisValue(StrictModel):
 class CompoundRatio(StrictModel):
     """compound_ratios.csv：化合物的元素量比率（ADR-0004）。不得硬編碼在程式裡。"""
 
-    compound_code: Code  # 例如 calcium_citrate
+    compound_code: Code  # 例如 calcium_citrate_tetrahydrate
     nutrient_code: IngredientCode
+    display_name_zh: str  # 校對介面與報告顯示的化合物名稱
+    synonyms: PipeList[str] = Field(default_factory=list)  # 名稱標準化用
+    formula: str | None = None  # 化學式，例如 CaCO3
     ratio: float = Field(gt=0, le=1)
     source: str
 
