@@ -5,7 +5,7 @@ from uuid import uuid4
 
 import pytest
 
-from app.calculator import FakeCalculator
+from app.calculator import RealCalculator
 from app.catalog_source import get_catalog_source
 from app.elemental import standard_amount
 from app.schemas.enums import ElementalBasis, Unit
@@ -105,7 +105,7 @@ def test_verify_product_daily_amounts_use_standard_amount():
             "nutrient_form_code": "calcium_carbonate", "per_serving": 500, "unit": "mg",
         }],
     })  # fmt: skip
-    [row] = FakeCalculator().verify_product(uuid4(), submission, AT).nutrients
+    [row] = RealCalculator().verify_product(uuid4(), submission, AT).nutrients
     # 每天 4 粒 ÷ 每份 2 粒 ＝ 2 份；隔天吃平均 1 份
     assert row.elemental_basis is ElementalBasis.ESTIMATED
     assert row.amount_per_serving_standard == pytest.approx(200.2)
@@ -124,7 +124,7 @@ def test_verify_product_unknown_amount_has_no_daily_amount():
             "nutrient_form_code": "zinc_gluconate", "per_serving": 70, "unit": "mg",
         }],
     })  # fmt: skip
-    [row] = FakeCalculator().verify_product(uuid4(), submission, AT).nutrients
+    [row] = RealCalculator().verify_product(uuid4(), submission, AT).nutrients
     assert (row.elemental_basis, row.peak_daily_amount, row.amount_per_serving_standard) == (
         ElementalBasis.UNKNOWN, None, None,
     )

@@ -6,7 +6,8 @@ from uuid import UUID, uuid4
 import pytest
 from fastapi.testclient import TestClient
 
-from app.calculator import FakeCalculator, get_calculator
+from app.catalog_source import get_catalog_source
+from app.calculator import RealCalculator, get_calculator
 from app.main import create_app
 from app.schemas.assessment import Assessment
 from app.schemas.case import AccountProfile, CaseProfile, age_on
@@ -136,7 +137,7 @@ def test_assessment_is_saved_with_test_user(client, store):
 
 def _run_with_spy():
     app = create_app()
-    spy = SpyCalculator(FakeCalculator())
+    spy = SpyCalculator(RealCalculator())
     store = InMemoryStore()
     app.dependency_overrides[get_store] = lambda: store
     app.dependency_overrides[get_calculator] = lambda: spy
@@ -306,7 +307,7 @@ def test_assessment_calculator_failure_returns_internal_error_without_leaking(cl
 def _client_with_drug_draft(owner: UUID):
     """存一份藥包草稿：原文是整串（含劑量），辨識時已用商品名對到 atorvastatin。"""
     app = create_app()
-    spy = SpyCalculator(FakeCalculator())
+    spy = SpyCalculator(RealCalculator())
     store = InMemoryStore()
     draft = DrugDraft.model_validate(
         {
@@ -354,3 +355,24 @@ def test_assessment_ignores_other_users_drug_draft():
     test_client.post("/api/assessments", json=body)
     [drug] = spy.cases[0].drugs.selected
     assert drug.scope_status == "unresolved"
+
+
+def test_assessment_changes_with_the_products(client):
+    def submission(code: str, amount: float) -> dict:
+        return {
+            "product_name": "測試品",
+            "serving_info": {"serving_size": 1, "dose_unit": "tablet"},
+            "user_intake": {"frequency_type": "daily", "times_per_day": 1, "amount_per_time": 1},
+            "nutrients": [{"row_id": "r1", "standard_code": code, "scope_status": "in_scope", "per_serving": amount, "unit": "mg"}],
+        }
+
+    def assess(code: str, amount: float) -> dict:
+        created = client.post("/api/products", json=submission(code, amount))
+        assert created.status_code == 201
+        response = client.post("/api/assessments", json=_assessment_request([created.json()["product_id"]]))
+        assert response.status_code == 200
+        return response.json()
+
+    zinc, vitamin_c = assess("zinc", 10), assess("vitamin_c", 500)
+    assert [n["nutrient_code"] for n in zinc["relevant_nutrients"]] != [n["nutrient_code"] for n in vitamin_c["relevant_nutrients"]]
+    assert zinc["decision_data_version"] == get_catalog_source().load_reference().version
