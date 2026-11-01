@@ -106,6 +106,7 @@ NEW_DRAFT_RULES = [
 ]
 NEW_DRAFT_NOTE = "g4 新增草稿，引文逐字取自 NCCIH 原文檔，待組長審"
 # 組長 2026-11-01 核准的新增規則（覆寫狀態）
+NOT_COPIED = {"DRIs_Full.md"}  # DRIs 全文：沒有引文出自它，留到 C-2 決定 RAG 語料時再評估
 APPROVED_NEW = {"statin-red-yeast-rice": "2026-11-01"}
 APPROVED_NOTE = "g4 新增，引文逐字取自 NCCIH 原文檔；組長 2026-11-01 核准"
 RETIRED_FALLBACK = "nutrition-agent 2026-10-19 人工審查退役，原文不足以支持"
@@ -398,7 +399,7 @@ def copy_sources(src: Path) -> None:
     for sub, pattern in (("nih_ods", "*-HealthProfessional.md"), ("nccih", "*.md"), ("dris", "*.md")):
         dest = SOURCES_OUT / sub
         dest.mkdir(parents=True, exist_ok=True)
-        wanted = {p.name for p in (root / sub).glob(pattern)}
+        wanted = {p.name for p in (root / sub).glob(pattern)} - NOT_COPIED
         for stale in dest.glob("*"):
             if stale.name not in wanted:
                 stale.unlink()
