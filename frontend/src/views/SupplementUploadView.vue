@@ -23,7 +23,7 @@ const router = useRouter()
 const medicine = useMedicineFlowStore()
 const flow = useSupplementFlowStore()
 const category = ref('')
-const categoryOptions = ['綜合維他命', '魚油', '鈣', '紅麴', '葡萄糖胺']
+const categoryOptions = ['綜合維他命', '魚油', '礦物質（鈣、鎂、鐵、鋅等）', '紅麴', '葡萄糖胺', '其他']
 const productName = ref('')
 const showRequiredErrors = ref(false)
 const categoryError = computed(() => {

@@ -193,7 +193,7 @@ function mount(kind) {
   if (kind === 'medicine')
     exposed.selectedImages = [{ id: 1, file, previewUrl: 'blob:medicine', isLoaded: true }]
   else {
-    exposed.category = '鈣'
+    exposed.category = '礦物質（鈣、鎂、鐵、鋅等）'
     exposed.productName = '我的鈣片'
     exposed.images = [{ id: 1, file, kind: 'nutrition', url: 'blob:supplement', loaded: true }]
   }
