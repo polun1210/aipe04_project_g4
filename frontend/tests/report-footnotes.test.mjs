@@ -99,3 +99,15 @@ test('不安全網址不產生連結但仍顯示該則', async () => {
   assert.match(html, /來源1 — 標題1/)
   assert.doesNotMatch(html, /查看來源/)
 })
+
+test('原因已以句號結尾時不重複補句號，沒有句號時才補', async () => {
+  const withReason = (reason) => {
+    const r = report({})
+    r.interactions[0].triggers = [{ ...trigger, reason_zh: reason }]
+    return r
+  }
+  const done = await render(withReason('已有句號。'))
+  assert.match(done, /降血脂藥：已有句號。</)
+  assert.doesNotMatch(done, /。。/)
+  assert.match(await render(withReason('沒有句號')), /降血脂藥：沒有句號。</)
+})

@@ -97,6 +97,7 @@ def _run_flow() -> dict:
         out["lookup"] = lookup
 
         product_ids = []
+        expected_names: dict[str, list[str]] = {"out_of_scope": [], "unresolved": []}
         for category in ("綜合維他命", "魚油"):
             files = [
                 ("ingredient_images", ("i.png", png, "image/png")),
@@ -108,6 +109,10 @@ def _run_flow() -> dict:
                 (201,),
             )
             body = {**submission, "draft_product_id": draft["product_id"]}
+            names = {r["row_id"]: r["raw_name"] for r in draft["nutrients"]}
+            for n in submission["nutrients"]:
+                if n["scope_status"] in expected_names and names.get(n["row_id"]):
+                    expected_names[n["scope_status"]].append(names[n["row_id"]])
             created = _step(f"校對送出 POST /api/products（{category}）", client.post("/api/products", json=body), (201,))
             product_ids.append(created["product_id"])
 
@@ -118,6 +123,7 @@ def _run_flow() -> dict:
 
         report = _step("產生報告 POST /api/assessments/{id}/report", client.post(f"/api/assessments/{case_id}/report"), (201,))
         out["report"] = report
+        _check_ingredient_disclosures(report["disclosures"], expected_names)
         again = _step("重複產生報告（應回同一份）", client.post(f"/api/assessments/{case_id}/report"), (200,))
         if again["report_id"] != report["report_id"]:
             raise StepFailed("重複產生報告：report_id 不一致")
@@ -129,6 +135,17 @@ def _run_flow() -> dict:
         if fetched != report:
             raise StepFailed("單份報告：內容和產生時不一致（凍結失敗）")
     return out
+
+
+def _check_ingredient_disclosures(disclosures: dict, expected: dict[str, list[str]]) -> None:
+    """校對時選了「無法確認」「不在評估範圍」的成分，報告揭露必須列出原文名稱。"""
+    for status, field in (("out_of_scope", "out_of_scope_ingredients"), ("unresolved", "unresolved_ingredients")):
+        want = list(dict.fromkeys(expected[status]))
+        if not want:
+            raise StepFailed(f"揭露檢查：測試資料裡沒有 {status} 的成分，檢查失效")
+        if disclosures[field] != want:
+            raise StepFailed(f"揭露 {field}：預期 {want}，實際 {disclosures[field]}")
+    print("  [OK ] 報告揭露列出無法確認與不在範圍的成分", flush=True)
 
 
 def _normalize(value, seen: dict[str, str]):

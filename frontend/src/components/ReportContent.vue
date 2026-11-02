@@ -70,6 +70,9 @@ function ulText(nutrient: ReportNutrient) {
   return templates[ul.phrasing] ?? '請依上限數據與醫師或藥師討論。'
 }
 const footnotes = computed(() => props.report.footnotes ?? [])
+function withPeriod(text: string) {
+  return text.endsWith('。') ? text : `${text}。`
+}
 function sourceUrl(url: string | null) {
   return url && /^https?:\/\//i.test(url) ? url : undefined
 }
@@ -171,7 +174,7 @@ function sourceUrl(url: string | null) {
         <p v-if="interaction.requires_professional_review">請與醫師或藥師討論。</p>
         <ul>
           <li v-for="trigger in interaction.triggers" :key="trigger.rule_id">
-            {{ trigger.condition_display_name_zh }}：{{ trigger.reason_zh }}。
+            {{ trigger.condition_display_name_zh }}：{{ withPeriod(trigger.reason_zh) }}
           </li>
         </ul>
       </section>

@@ -498,6 +498,7 @@ test('out-of-scope rows stay unchanged, unlocked and serialized through submit a
   assert.equal(productReady(a, ingredients), true)
   assert.equal(productReady(b, ingredients), true)
   assert.equal(review.canSubmit.value, true)
+  assert.equal(submissionFor(a).draft_product_id, a.draft.product_id) // 後端靠它帶入標示原文給報告揭露
   assert.equal(submissionFor(a).nutrients.length, 2)
   assert.deepEqual(json(submissionFor(a).nutrients[1]), {
     row_id: 'outside',

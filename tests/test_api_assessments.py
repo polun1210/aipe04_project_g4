@@ -402,3 +402,28 @@ def test_draft_names_reach_disclosures_through_assessment(client, store):
     body = client.post("/api/assessments", json=_assessment_request([created.json()["product_id"]])).json()
     assert body["disclosures"]["unresolved_ingredients"] == [rows["r08"].raw_name]
     assert body["disclosures"]["out_of_scope_ingredients"] == [rows["r05"].raw_name]
+
+
+def test_drug_scope_names_reach_disclosures_through_assessment(client, store):
+    """藥名範圍外（辨識時已判定）與無法確認（自己新增、對不到）時，揭露列出藥名。"""
+    draft = DrugDraft.model_validate(
+        {
+            **_example("04_drug_draft.json"),
+            "rows": [
+                {"row_id": "d01", "raw_name": "Zyloric 100mg", "source_image_id": "img-01",
+                 "scope_status": "out_of_scope"}
+            ],
+        }
+    )
+    store.save_drug_draft(TEST_USER_ID, draft)
+    request = _assessment_request([_create_product(client)])
+    request["drugs"] = {
+        "selected": [
+            {"draft_id": str(draft.draft_id), "row_id": "d01", "name": "Zyloric 100mg"},
+            {"draft_id": None, "row_id": None, "name": "完全對不到的藥名xyz"},
+        ],
+        "none_selected": False,
+    }
+    body = client.post("/api/assessments", json=request).json()
+    assert body["disclosures"]["out_of_scope_drugs"] == ["Zyloric 100mg"]
+    assert body["disclosures"]["unresolved_drugs"] == ["完全對不到的藥名xyz"]
