@@ -69,6 +69,7 @@ function ulText(nutrient: ReportNutrient) {
   }
   return templates[ul.phrasing] ?? '請依上限數據與醫師或藥師討論。'
 }
+const footnotes = computed(() => props.report.footnotes ?? [])
 function sourceUrl(url: string | null) {
   return url && /^https?:\/\//i.test(url) ? url : undefined
 }
@@ -154,7 +155,15 @@ function sourceUrl(url: string | null) {
       <p v-if="!report.interactions.length">本份報告未列出交互作用；這不代表已排除所有風險。</p>
       <section v-for="interaction in report.interactions" :key="interaction.ingredient_code">
         <h3>{{ interaction.display_name_zh }}</h3>
-        <p v-if="interaction.narration">{{ interaction.narration }}</p>
+        <p v-if="interaction.narration">
+          {{ interaction.narration
+          }}<sup
+            v-for="number in interaction.footnote_numbers ?? []"
+            :key="number"
+            class="footnote-ref"
+            >[{{ number }}]</sup
+          >
+        </p>
         <p v-if="interaction.requires_professional_review">請與醫師或藥師討論。</p>
         <ul>
           <li v-for="trigger in interaction.triggers" :key="trigger.rule_id">
@@ -177,6 +186,25 @@ function sourceUrl(url: string | null) {
           </li>
         </template>
       </ul>
+    </section>
+    <section v-if="footnotes.length" aria-labelledby="report-footnotes" class="report-footnotes">
+      <h2 id="report-footnotes">參考資料</h2>
+      <ol>
+        <li v-for="note in footnotes" :key="note.number" :value="note.number">
+          <span>[{{ note.number }}] {{ note.source_name }} — {{ note.title }}（{{ note.section }}）</span>
+          <a
+            v-if="sourceUrl(note.url)"
+            :href="sourceUrl(note.url)"
+            target="_blank"
+            rel="noopener noreferrer"
+            >查看來源</a
+          >
+          <details>
+            <summary>原文節錄</summary>
+            <p>{{ note.excerpt }}</p>
+          </details>
+        </li>
+      </ol>
     </section>
     <section aria-labelledby="report-disclosures">
       <h2 id="report-disclosures">

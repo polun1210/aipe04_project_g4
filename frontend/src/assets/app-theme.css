@@ -1709,3 +1709,23 @@ body:has(.image-lightbox[open]) {
     overflow-wrap: anywhere;
   }
 }
+
+/* 報告頁：腳註與好讀度（僅新增） */
+.report-content > section.report-footnotes {
+  grid-column: 1 / -1;
+}
+.report-content .report-footnotes ol {
+  padding-left: 1.4em;
+}
+.report-content .report-footnotes li {
+  margin-bottom: 12px;
+}
+.report-content .report-footnotes li > a {
+  margin-left: 8px;
+}
+.report-content .footnote-ref {
+  margin-left: 2px;
+  font-size: 0.75em;
+  font-weight: 700;
+  color: var(--navy);
+}
