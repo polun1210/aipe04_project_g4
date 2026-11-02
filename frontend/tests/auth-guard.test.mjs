@@ -30,7 +30,12 @@ test('沒登入：首頁與登入頁放行', () => {
 })
 
 test('登入但沒填健康資料：評估流程導去 health-profile 並帶 redirect', () => {
-  for (const name of ['medicine-upload', 'medicine-review', 'supplement-upload', 'supplement-review'])
+  for (const name of [
+    'medicine-upload',
+    'medicine-review',
+    'supplement-upload',
+    'supplement-review',
+  ])
     assert.deepEqual(resolveAuthRedirect(to(name), fresh), {
       name: 'health-profile',
       query: { redirect: `/${name}` },
@@ -47,13 +52,20 @@ test('登入且已填：全部放行', () => {
     assert.equal(resolveAuthRedirect(to(name), done), null)
 })
 
-test('已登入又進 login：導到 /medicine-upload', () => {
+test('已登入又進 login：依基本資料是否完成決定下一頁', () => {
   assert.deepEqual(resolveAuthRedirect(to('login'), done), { path: '/medicine-upload' })
-  assert.deepEqual(resolveAuthRedirect(to('login'), fresh), { path: '/medicine-upload' })
+  assert.deepEqual(resolveAuthRedirect(to('login'), fresh), { path: '/health-profile' })
 })
 
 test('redirect 只接受站內路徑，外站被擋', () => {
   assert.equal(safeRedirect('/supplement-review'), '/supplement-review')
-  for (const bad of ['//evil.example', 'https://evil.example', 'javascript:alert(1)', '', undefined, ['/a']])
+  for (const bad of [
+    '//evil.example',
+    'https://evil.example',
+    'javascript:alert(1)',
+    '',
+    undefined,
+    ['/a'],
+  ])
     assert.equal(safeRedirect(bad), '/medicine-upload')
 })

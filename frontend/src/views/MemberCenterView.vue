@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { RouterLink, useRouter } from 'vue-router'
+import { RouterLink, useRoute, useRouter } from 'vue-router'
 import { errorMessage } from '../api/client'
 import { useSessionStore } from '../stores/session'
 
 const router = useRouter()
+const route = useRoute()
 const session = useSessionStore()
 const loggingOut = ref(false)
 const error = ref('')
@@ -27,6 +28,7 @@ async function handleLogout() {
 <template>
   <main>
     <h1>會員中心</h1>
+    <p v-if="route.query.profileSaved === '1'" role="status">基本資料已儲存。</p>
     <p v-if="session.me">已登入：{{ session.me.name || session.me.email }}</p>
 
     <div class="member-actions">

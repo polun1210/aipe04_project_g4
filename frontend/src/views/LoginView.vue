@@ -22,9 +22,7 @@ const handleLoginSuccess: CallbackTypes.CredentialCallback = async (response) =>
   try {
     const me = await session.login(response.credential)
     const target = safeRedirect(route.query.redirect)
-    await router.push(
-      me.profile_completed ? target : { name: 'health-profile', query: { redirect: target } },
-    )
+    await router.push(me.profile_completed ? target : { name: 'health-profile' })
   } catch (error) {
     message.value = errorMessage(error)
   }

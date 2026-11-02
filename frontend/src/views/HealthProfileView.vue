@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, reactive, ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 import ConditionSelector from '../components/ConditionSelector.vue'
 import {
   emptyConditions,
@@ -9,12 +9,10 @@ import {
   type ProfileForm,
 } from '../models/healthProfile'
 import { errorMessage } from '../api/client'
-import { safeRedirect } from '../router/authGuard'
 import { healthProfileUnavailable, useHealthProfileGateway } from '../services/healthProfileGateway'
 import { useSessionStore } from '../stores/session'
 
 const router = useRouter()
-const route = useRoute()
 const session = useSessionStore()
 const gateway = useHealthProfileGateway()
 const form = reactive<ProfileForm>({
@@ -53,7 +51,7 @@ async function handleSubmit() {
   try {
     await gateway.saveProfile(profilePayload(form))
     session.markProfileCompleted()
-    await router.push(safeRedirect(route.query.redirect))
+    await router.push({ path: '/medicine-upload', query: { profileSaved: '1' } })
   } catch (reason) {
     error.value = errorMessage(reason)
   } finally {
@@ -64,8 +62,8 @@ async function handleSubmit() {
 
 <template>
   <main class="health-profile">
-    <h1>歡迎使用補藥亂吃！</h1>
-    <p>開始使用前，請先完成基本健康資料。</p>
+    <h1>完成基本資料</h1>
+    <p>第一次使用，請先完成基本健康資料，儲存後即可上傳處方箋照片。</p>
     <p v-if="!gateway.available" id="health-profile-notice" role="status">
       {{ healthProfileUnavailable }}完成串接前，無法由此頁開始辨識。
     </p>
@@ -160,9 +158,9 @@ async function handleSubmit() {
         />
       </fieldset>
       <button class="primary-action" type="submit" :disabled="!canSave">
-        {{ saving ? '儲存中…' : '儲存並開始使用' }}
+        {{ saving ? '儲存中…' : '儲存並開始上傳' }}
       </button>
-      <p v-if="!gateway.available">儲存並開始使用：尚未開放。</p>
+      <p v-if="!gateway.available">儲存並開始上傳：尚未開放。</p>
     </form>
   </main>
 </template>

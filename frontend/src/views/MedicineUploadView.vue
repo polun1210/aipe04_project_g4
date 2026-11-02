@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onUnmounted, ref, shallowRef } from 'vue'
-import { onBeforeRouteLeave, useRouter } from 'vue-router'
+import { onBeforeRouteLeave, useRoute, useRouter } from 'vue-router'
 import { isUsableDraft, uploadDrugDraft, type DrugDraft } from '../api/drugs'
 import { ApiError } from '../api/client'
 import RecognitionLoading from '../components/RecognitionLoading.vue'
@@ -18,6 +18,7 @@ const MAX_FILE_BYTES = 3_000_000
 const selectedImages = ref<SelectedImage[]>([])
 const errorMessages = ref<string[]>([])
 const router = useRouter()
+const route = useRoute()
 const flow = useMedicineFlowStore()
 const isUploading = ref(false)
 const isNavigating = ref(false)
@@ -230,6 +231,7 @@ onUnmounted(releaseAllPreviews)
 <template>
   <main>
     <h1>先上傳你的處方箋照片</h1>
+    <p v-if="route.query.profileSaved === '1'" role="status">基本資料已儲存，請上傳處方箋照片。</p>
     <p role="alert">上傳前，記得遮住姓名等不必要的個人資訊。</p>
     <p id="upload-notice">選圖後按「開始辨識」會上傳圖片，辨識結果仍需由你逐筆校對。</p>
 
