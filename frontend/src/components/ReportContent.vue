@@ -153,7 +153,11 @@ function sourceUrl(url: string | null) {
         <span class="section-index" aria-hidden="true">03</span>交互作用
       </h2>
       <p v-if="!report.interactions.length">本份報告未列出交互作用；這不代表已排除所有風險。</p>
-      <section v-for="interaction in report.interactions" :key="interaction.ingredient_code">
+      <section
+        v-for="interaction in report.interactions"
+        :key="interaction.ingredient_code"
+        :class="{ 'interaction-review': interaction.requires_professional_review }"
+      >
         <h3>{{ interaction.display_name_zh }}</h3>
         <p v-if="interaction.narration">
           {{ interaction.narration
@@ -235,13 +239,13 @@ function sourceUrl(url: string | null) {
       <p v-if="report.disclosures.out_of_scope_ingredients.length">
         不在評估範圍的成分：{{ report.disclosures.out_of_scope_ingredients.join('、') }}
       </p>
-      <p v-if="report.disclosures.unresolved_ingredients.length">
+      <p v-if="report.disclosures.unresolved_ingredients.length" class="disclosure-unassessed">
         無法確認的成分：{{ report.disclosures.unresolved_ingredients.join('、') }}，請諮詢藥師。
       </p>
       <p v-if="report.disclosures.out_of_scope_drugs.length">
         不在評估範圍的藥品：{{ report.disclosures.out_of_scope_drugs.join('、') }}
       </p>
-      <p v-if="report.disclosures.unresolved_drugs.length">
+      <p v-if="report.disclosures.unresolved_drugs.length" class="disclosure-unassessed">
         無法確認的藥品：{{
           report.disclosures.unresolved_drugs.join('、')
         }}，無法判斷是否有交互作用，請諮詢藥師。
