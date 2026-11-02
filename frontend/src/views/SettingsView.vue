@@ -11,8 +11,10 @@ import {
 } from '../models/healthProfile'
 import { errorMessage } from '../api/client'
 import { healthProfileUnavailable, useHealthProfileGateway } from '../services/healthProfileGateway'
+import { useSessionStore } from '../stores/session'
 
 const router = useRouter()
+const session = useSessionStore()
 const gateway = useHealthProfileGateway()
 const form = reactive<ProfileForm>({
   birthYear: '',
@@ -81,7 +83,9 @@ async function handleSubmit() {
   saving.value = true
   try {
     await gateway.saveProfile(profilePayload(form))
+    session.markProfileCompleted()
     saved.value = true
+    await router.push({ path: '/member-center', query: { profileSaved: '1' } })
   } catch (reason) {
     error.value = errorMessage(reason)
   } finally {
@@ -93,11 +97,11 @@ onMounted(loadProfile)
 
 <template>
   <main class="profile-settings">
-    <h1>個人資料設定</h1>
+    <h1>編輯基本資料</h1>
     <p id="settings-notice">
       {{
         gateway.available
-          ? '請確認基本資料與慢性疾病，完成後儲存變更。'
+          ? '請確認基本資料與慢性疾病，儲存後將返回會員中心。'
           : '目前無法載入或儲存會員資料，欄位預設空白，修改不會送出。儲存變更尚未開放。'
       }}
     </p>
@@ -195,7 +199,7 @@ onMounted(loadProfile)
       <div class="profile-actions">
         <button type="button" :disabled="saving" @click="handleCancel">取消</button>
         <button class="primary-action" type="submit" :disabled="!canSave">
-          {{ saving ? '儲存中…' : '儲存變更' }}
+          {{ saving ? '儲存中…' : '儲存並返回會員中心' }}
         </button>
       </div>
     </form>

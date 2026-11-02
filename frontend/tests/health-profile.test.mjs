@@ -189,7 +189,12 @@ async function check(view, value, checked = true) {
   await vue.nextTick()
 }
 async function fillProfile(view, overrides = {}) {
-  Object.assign(view.exposed.form, { birthYear: '1954', birthMonth: '3', sex: 'male', ...overrides })
+  Object.assign(view.exposed.form, {
+    birthYear: '1954',
+    birthMonth: '3',
+    sex: 'male',
+    ...overrides,
+  })
   await vue.nextTick()
 }
 const json = (value) => JSON.parse(JSON.stringify(value))
@@ -230,8 +235,8 @@ beforeEach(() => {
 
 test('initial page renders exact choices, real labels, keyboard checkboxes and unavailable save', async () => {
   const view = mount(Initial)
-  assert.match(text(view.root), /歡迎使用補藥亂吃！/)
-  assert.match(text(view.root), /開始使用前，請先完成基本健康資料。/)
+  assert.match(text(view.root), /完成基本資料/)
+  assert.match(text(view.root), /儲存後即可上傳處方箋照片/)
   assert.match(text(view.root), /是否有慢性疾病？/)
   assert.match(text(view.root), /尚未開放/)
   const checks = all(view.root).filter(
@@ -315,7 +320,7 @@ test('initial save waits for real service success, blocks empty submissions and 
   assert.deepEqual(sessionCalls, [])
   pending.resolve()
   await saving
-  assert.deepEqual(navigation, ['/medicine-upload'])
+  assert.deepEqual(json(navigation), [{ path: '/medicine-upload', query: { profileSaved: '1' } }])
   assert.deepEqual(sessionCalls, ['markProfileCompleted'])
   view.unmount()
 })
@@ -359,11 +364,12 @@ for (const [name, missing] of [
   })
 }
 
-test('initial save returns to a safe redirect and ignores external ones', async () => {
-  for (const [redirect, expected] of [
-    ['/supplement-review', '/supplement-review'],
-    ['//evil.example', '/medicine-upload'],
-    ['https://evil.example', '/medicine-upload'],
+test('initial save starts at prescription upload regardless of the original entry', async () => {
+  for (const redirect of [
+    '/member-center',
+    '/supplement-review',
+    '//evil.example',
+    'https://evil.example',
   ]) {
     navigation = []
     routeQuery = { redirect }
@@ -371,7 +377,7 @@ test('initial save returns to a safe redirect and ignores external ones', async 
     await check(view, 'none')
     await fillProfile(view)
     await view.exposed.handleSubmit()
-    assert.deepEqual(navigation, [expected])
+    assert.deepEqual(json(navigation), [{ path: '/medicine-upload', query: { profileSaved: '1' } }])
     view.unmount()
   }
 })
@@ -433,13 +439,18 @@ test('settings loads profile, validates and serializes existing contract', async
   const saving = view.exposed.handleSubmit()
   assert.equal(view.exposed.saved, false)
   assert.deepEqual(calls, [profile])
+  await view.exposed.handleSubmit()
+  view.exposed.handleCancel()
+  assert.equal(calls.length, 1)
+  assert.deepEqual(navigation, [])
   pending.resolve()
   await saving
   assert.equal(view.exposed.saved, true)
   view.exposed.form.birthYear = '1955'
   await vue.nextTick()
   assert.equal(view.exposed.saved, false)
-  assert.deepEqual(navigation, [])
+  assert.deepEqual(json(navigation), [{ path: '/member-center', query: { profileSaved: '1' } }])
+  assert.deepEqual(sessionCalls, ['markProfileCompleted'])
   view.unmount()
 })
 
@@ -497,7 +508,9 @@ test('member center shows the signed-in user and logs out to the home page', asy
     .map((item) => item.props.href)
   for (const route of ['/settings', '/reports', '/medicine-upload', '/'])
     assert.ok(links.includes(route))
-  const button = all(view.root).find((item) => item.type === 'button' && text(item).includes('登出'))
+  const button = all(view.root).find(
+    (item) => item.type === 'button' && text(item).includes('登出'),
+  )
   assert.ok(button)
   assert.ok(!button.props.disabled)
   await view.exposed.handleLogout()

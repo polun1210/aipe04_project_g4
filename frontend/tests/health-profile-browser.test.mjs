@@ -247,7 +247,7 @@ for (const width of [1200, 390]) {
       const path = kind === 'initial' ? '/health-profile' : '/settings'
       const submit = 'main button[type="submit"]'
       const conditions = kind === 'initial' ? 'initial-conditions' : 'profile-conditions'
-      const saveLabel = kind === 'initial' ? '儲存並開始使用' : '儲存變更'
+      const saveLabel = kind === 'initial' ? '儲存並開始上傳' : '儲存並返回會員中心'
       await page.send('Page.navigate', { url: `${origin}${path}` })
       await until(() => page.eval(`!!document.querySelector(${JSON.stringify(submit)})`))
 
@@ -372,18 +372,13 @@ for (const width of [1200, 390]) {
       }
       assert.deepEqual(await page.eval('window.__profileTest.saves'), [expected, expected])
       await page.eval('window.__profileTest.resolveSave()')
-      if (kind === 'initial')
-        await until(() => page.eval('location.pathname === "/medicine-upload"'))
-      else {
-        await until(() =>
-          page.eval('document.querySelector("main").textContent.includes("個人資料已儲存。")'),
-        )
-        assert.equal(await page.eval('location.pathname'), '/settings')
-        assert.equal(
-          await page.eval(`document.querySelector(${JSON.stringify(submit)}).disabled`),
-          false,
-        )
-      }
+      const destination = kind === 'initial' ? '/medicine-upload' : '/member-center'
+      await until(() => page.eval(`location.pathname === ${JSON.stringify(destination)}`))
+      await until(() =>
+        page.eval(
+          'document.querySelector("main [role=status]")?.textContent.includes("基本資料已儲存")',
+        ),
+      )
       assert.deepEqual(browserErrors, [])
       assert.deepEqual(apiRequests, [])
     })

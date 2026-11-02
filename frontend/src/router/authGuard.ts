@@ -36,7 +36,9 @@ export function safeRedirect(value: unknown): string {
 // 回傳要導去的位置；null 表示放行。
 export function resolveAuthRedirect(to: GuardTarget, me: Me | null) {
   const name = String(to.name ?? '')
-  if (name === 'login') return me ? { path: DEFAULT_AFTER_LOGIN } : null
+  if (name === 'login') {
+    return me ? { path: me.profile_completed ? DEFAULT_AFTER_LOGIN : '/health-profile' } : null
+  }
   if (loginRequired.has(name) && !me) {
     return { name: 'login', query: { redirect: to.fullPath } }
   }
