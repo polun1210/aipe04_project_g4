@@ -29,7 +29,10 @@ async function handleLogout() {
   <main>
     <h1>會員中心</h1>
     <p v-if="route.query.profileSaved === '1'" role="status">基本資料已儲存。</p>
-    <p v-if="session.me">已登入：{{ session.me.name || session.me.email }}</p>
+    <div v-if="session.me" class="member-welcome">
+      <h2>歡迎回來{{ session.me.name?.trim() ? `，${session.me.name.trim()}` : '' }}！</h2>
+      <p>在這裡管理您的基本資料，查看過去的評估記錄。</p>
+    </div>
 
     <div class="member-actions">
       <RouterLink to="/settings"
@@ -48,6 +51,20 @@ async function handleLogout() {
         {{ loggingOut ? '登出中…' : '登出' }}
       </button>
     </p>
-    <p><RouterLink to="/">回主頁</RouterLink></p>
   </main>
 </template>
+
+<style scoped>
+.member-welcome {
+  margin-bottom: 28px;
+}
+.member-welcome h2 {
+  font-size: clamp(24px, 3vw, 36px);
+  margin-bottom: 12px;
+  overflow-wrap: anywhere;
+}
+.member-welcome p {
+  color: var(--muted);
+  line-height: 1.7;
+}
+</style>

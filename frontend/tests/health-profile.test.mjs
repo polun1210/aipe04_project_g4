@@ -7,7 +7,7 @@ import { compileScript, compileTemplate, parse } from '@vue/compiler-sfc'
 import ts from 'typescript'
 import * as vue from 'vue'
 
-let navigation, httpCalls, routeQuery, sessionCalls
+let navigation, httpCalls, routeQuery, sessionCalls, sessionUser
 const context = vm.createContext({
   console,
   fetch: () => {
@@ -38,7 +38,7 @@ async function createModule(id) {
   if (id.endsWith('/stores/session.ts')) {
     const exports = {
       useSessionStore: () => ({
-        me: { name: '王小明', email: 'a@example.com' },
+        me: sessionUser,
         markProfileCompleted: () => sessionCalls.push('markProfileCompleted'),
         logout: async () => {
           sessionCalls.push('logout')
@@ -227,6 +227,7 @@ function deferred() {
   return { promise, resolve, reject }
 }
 beforeEach(() => {
+  sessionUser = { name: '王小明', email: 'a@example.com' }
   navigation = []
   httpCalls = 0
   routeQuery = {}
@@ -502,12 +503,15 @@ test('profile validation follows existing year/month/sex and condition code cont
 
 test('member center shows the signed-in user and logs out to the home page', async () => {
   const view = mount(MemberCenter)
-  assert.match(text(view.root), /王小明/)
+  assert.match(text(view.root), /歡迎回來，王小明！/)
+  assert.match(text(view.root), /在這裡管理您的基本資料，查看過去的評估記錄。/)
+  assert.doesNotMatch(text(view.root), /已登入|回主頁/)
   const links = all(view.root)
     .filter((item) => item.type === 'a')
     .map((item) => item.props.href)
-  for (const route of ['/settings', '/reports', '/medicine-upload', '/'])
+  for (const route of ['/settings', '/reports', '/medicine-upload'])
     assert.ok(links.includes(route))
+  assert.ok(!links.includes('/'))
   const button = all(view.root).find(
     (item) => item.type === 'button' && text(item).includes('登出'),
   )
@@ -521,4 +525,14 @@ test('member center shows the signed-in user and logs out to the home page', asy
   for (const path of ['/health-profile', '/settings', '/medicine-upload', '/supplement-upload'])
     assert.ok(routes.includes(`path: '${path}'`))
   view.unmount()
+})
+
+test('member greeting without a name does not use the email as a salutation', () => {
+  for (const name of [null, '', '   ']) {
+    sessionUser = { name, email: 'a@example.com' }
+    const view = mount(MemberCenter)
+    assert.match(text(view.root), /歡迎回來！/)
+    assert.doesNotMatch(text(view.root), /a@example.com|歡迎回來，/)
+    view.unmount()
+  }
 })
