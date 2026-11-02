@@ -111,3 +111,27 @@ test('原因已以句號結尾時不重複補句號，沒有句號時才補', as
   assert.doesNotMatch(done, /。。/)
   assert.match(await render(withReason('沒有句號')), /降血脂藥：沒有句號。</)
 })
+
+test('範圍外成分以收合清單呈現並顯示總數，無則不渲染', async () => {
+  const names = ['成分甲', '成分乙', '成分丙']
+  const html = await render(
+    report({
+      disclosures: { ...report({}).disclosures, out_of_scope_ingredients: names },
+    }),
+  )
+  assert.match(html, /<details[^>]*class="out-of-scope-details"[^>]*>/)
+  assert.doesNotMatch(html, /out-of-scope-details"[^>]* open/)
+  assert.match(html, /<summary>\s*不在評估範圍的成分（共 3 項）\s*<\/summary>/)
+  assert.equal((html.match(/<li>\s*成分[甲乙丙]\s*<\/li>/g) ?? []).length, 3)
+  assert.doesNotMatch(html, /成分甲、成分乙/)
+  assert.doesNotMatch(await render(report({})), /不在評估範圍的成分/)
+})
+
+test('無法確認的成分維持警示段落、不收合', async () => {
+  const html = await render(
+    report({
+      disclosures: { ...report({}).disclosures, unresolved_ingredients: ['X', 'Y'] },
+    }),
+  )
+  assert.match(html, /disclosure-unassessed[^>]*>\s*無法確認的成分：X、Y，請諮詢藥師。/)
+})

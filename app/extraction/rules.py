@@ -158,6 +158,17 @@ def _candidates(raw_name: str) -> list[str]:
     return [_key(c) for c in [base, parts[0] if parts else "", parts[-1] if parts else "", tail] if c]
 
 
+def synonym_index(ingredients) -> dict[str, IngredientCode]:
+    """成分目錄 → {正規化同義詞: 成分代碼}，給 exact_ingredient_code 用。"""
+    return {_key(name): i.code for i in ingredients for name in i.synonyms}
+
+
+def exact_ingredient_code(raw_name: str, synonyms: dict[str, IngredientCode]) -> IngredientCode | None:
+    """去括號後整串名稱「完全等於」某成分的同義詞才回傳代碼；不拿片段或中英並列的任一段比對。
+    給揭露用：「維生素C(維生素C、玉米澱粉)」是維生素C 的原料組成列，括號裡的賦形劑不影響判斷。"""
+    return synonyms.get(_key(_strip_parens(_norm(raw_name))))
+
+
 @dataclass(frozen=True)
 class NameMatch:
     code: IngredientCode | None

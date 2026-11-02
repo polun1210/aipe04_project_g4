@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { getCatalog, type Ingredient } from '../api/catalog'
 import type { Report, ReportNutrient } from '../api/reports'
 import { taipeiDateTime } from '../api/reports'
@@ -18,6 +18,26 @@ const unitLabels: Record<Unit, string> = {
 function unitLabel(unit: string) {
   return Object.hasOwn(unitLabels, unit) ? unitLabels[unit as Unit] : unit
 }
+// 範圍外成分清單預設收合；列印／另存 PDF 前強制展開，列印後還原
+const outOfScopeDetails = ref<HTMLDetailsElement | null>(null)
+let openedBeforePrint = false
+function expandForPrint() {
+  const el = outOfScopeDetails.value
+  openedBeforePrint = !!el && !el.open
+  if (el) el.open = true
+}
+function restoreAfterPrint() {
+  if (outOfScopeDetails.value && openedBeforePrint) outOfScopeDetails.value.open = false
+  openedBeforePrint = false
+}
+onMounted(() => {
+  window.addEventListener('beforeprint', expandForPrint)
+  window.addEventListener('afterprint', restoreAfterPrint)
+})
+onBeforeUnmount(() => {
+  window.removeEventListener('beforeprint', expandForPrint)
+  window.removeEventListener('afterprint', restoreAfterPrint)
+})
 const ingredients = ref<Ingredient[]>([])
 const nutrientNames = computed(
   () =>
@@ -198,7 +218,11 @@ function sourceUrl(url: string | null) {
       <h2 id="report-footnotes">參考資料</h2>
       <ol>
         <li v-for="note in footnotes" :key="note.number" :value="note.number">
-          <span>[{{ note.number }}] {{ note.source_name }} — {{ note.title }}（{{ note.section }}）</span>
+          <span
+            >[{{ note.number }}] {{ note.source_name }} — {{ note.title }}（{{
+              note.section
+            }}）</span
+          >
           <a
             v-if="sourceUrl(note.url)"
             :href="sourceUrl(note.url)"
@@ -239,9 +263,20 @@ function sourceUrl(url: string | null) {
             .join('、')
         }}。
       </p>
-      <p v-if="report.disclosures.out_of_scope_ingredients.length">
-        不在評估範圍的成分：{{ report.disclosures.out_of_scope_ingredients.join('、') }}
-      </p>
+      <details
+        v-if="report.disclosures.out_of_scope_ingredients.length"
+        ref="outOfScopeDetails"
+        class="out-of-scope-details"
+      >
+        <summary>
+          不在評估範圍的成分（共 {{ report.disclosures.out_of_scope_ingredients.length }} 項）
+        </summary>
+        <ul class="out-of-scope-list">
+          <li v-for="(name, index) in report.disclosures.out_of_scope_ingredients" :key="index">
+            {{ name }}
+          </li>
+        </ul>
+      </details>
       <p v-if="report.disclosures.unresolved_ingredients.length" class="disclosure-unassessed">
         無法確認的成分：{{ report.disclosures.unresolved_ingredients.join('、') }}，請諮詢藥師。
       </p>
