@@ -109,6 +109,7 @@ export function productReady(product: SupplementProduct, ingredients: Ingredient
 export function submissionFor(product: SupplementProduct): VerificationSubmission {
   if (!isReviewFrequency(product.frequency)) throw new Error('請重新選擇有效的服用頻率。')
   return {
+    draft_product_id: product.draft.product_id,
     product_name: product.name.trim(),
     serving_info: {
       serving_size: Number(product.servingSize),
