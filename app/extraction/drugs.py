@@ -137,9 +137,16 @@ def build_draft(
     draft_id: UUID, quality: list[SourceImage], recordings: list[EngineRecording], drug_items: list[DrugItem]
 ) -> DrugDraft:
     rows: list[DrugDraftRow] = []
+    seen: set[tuple[str, str]] = set()  # (來源圖, 有效成分代碼)
     for rec in recordings:
         for item in parse(rec).items:
             code = map_item(item.raw_name, item.brand_name, item.generic_names, drug_items)
+            # 同一張圖上同一有效成分只留第一列：同一盒藥的品牌名與中文名常被讀成兩列。
+            # 不同來源圖（真的有兩盒同成分藥）與認不出成分的列不合併
+            if code is not None:
+                if (rec.image_id, code) in seen:
+                    continue
+                seen.add((rec.image_id, code))
             rows.append(
                 DrugDraftRow(
                     row_id=f"d{len(rows) + 1:02d}",

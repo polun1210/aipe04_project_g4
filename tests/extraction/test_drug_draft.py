@@ -103,3 +103,36 @@ def test_模型回傳不符格式時回錯誤而不是空草稿(make_jpeg):
             engine,
             ITEMS,
         )
+
+
+def _recording_with(items: list[dict], image_id: str = "rx22") -> EngineRecording:
+    rec = EngineRecording.model_validate_json((RECORDED / "rx22.json").read_text(encoding="utf-8"))
+    response = json.loads(rec.model_dump_json())["response"]
+    response["choices"][0]["message"]["content"] = json.dumps({"items": items})
+    return rec.model_copy(update={"response": response, "image_id": image_id})
+
+
+def _item(raw_name: str, generic: str | None = "Atorvastatin") -> dict:
+    return {"raw_name": raw_name, "brand_name": None, "generic_names": [generic] if generic else [], "box_2d": None}
+
+
+def _build(*recs: EngineRecording):
+    quality = [SourceImage(image_id=r.image_id, quality_status=QualityStatus.ACCEPTED) for r in recs]
+    return build_draft(DRAFT_ID, quality, list(recs), ITEMS)
+
+
+def test_同一張圖同一成分的兩列只留第一列():
+    items = [_item("Lipitor Atorvastatin"), _item("立普妥膜衣錠 Atorvastatin 10 毫克"), _item("Losartan", "Losartan")]
+    draft = _build(_recording_with(items))
+    assert [r.raw_name for r in draft.rows] == ["Lipitor Atorvastatin", "Losartan"]
+    assert [r.row_id for r in draft.rows] == ["d01", "d02"]
+
+
+def test_不同來源圖的相同成分不合併():
+    draft = _build(_recording_with([_item("A")], "imgA"), _recording_with([_item("B")], "imgB"))
+    assert [r.raw_name for r in draft.rows] == ["A", "B"]
+
+
+def test_認不出成分的列不合併():
+    draft = _build(_recording_with([_item("不明藥甲", None), _item("不明藥乙", None)]))
+    assert len(draft.rows) == 2
