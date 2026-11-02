@@ -3,9 +3,11 @@ import { computed } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 import { useMedicineFlowStore } from '../stores/medicineFlow'
 import { useSupplementFlowStore } from '../stores/supplementFlow'
+import { useSessionStore } from '../stores/session'
 import UploadGuide from './UploadGuide.vue'
 
 const route = useRoute()
+const session = useSessionStore()
 const medicine = useMedicineFlowStore()
 const supplement = useSupplementFlowStore()
 const steps = [
@@ -37,7 +39,9 @@ const hasSidebar = computed(
 )
 const hasPendingAssessment = computed(
   () =>
-    medicine.drugBatches.length > 0 || medicine.medicines.length > 0 || supplement.products.length > 0,
+    medicine.drugBatches.length > 0 ||
+    medicine.medicines.length > 0 ||
+    supplement.products.length > 0,
 )
 const assessmentPath = computed(() => {
   if (supplement.products.length) return '/supplement-review'
@@ -53,11 +57,6 @@ const sidebarLinks = computed(() => [
     icon: steps[0]!.icon,
   },
   { to: '/reports', label: '歷史報告', icon: steps[4]!.icon },
-  {
-    to: '/member-center',
-    label: '會員中心',
-    icon: 'M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0 M4 21v-3a8 8 0 0 1 16 0v3Z',
-  },
 ])
 </script>
 
@@ -78,15 +77,14 @@ const sidebarLinks = computed(() => [
       >
       <p class="shell-tagline">給長輩與照顧者的<br />AI 營養補充評估</p>
       <nav class="shell-account" aria-label="會員導覽">
-        <template v-if="isAuth"
-          ><RouterLink to="/login" class="shell-button">登入</RouterLink></template
-        >
+        <RouterLink v-if="route.name === 'login'" to="/" class="shell-button">回主頁</RouterLink>
+        <RouterLink v-else-if="!session.me" to="/login" class="shell-button">登入</RouterLink>
         <template v-else
           ><RouterLink to="/member-center" class="account-link"
             ><svg viewBox="0 0 24 24" aria-hidden="true">
               <path d="M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0 M4 21v-3a8 8 0 0 1 16 0v3Z" /></svg
             >會員中心</RouterLink
-          ><span class="demo-badge">測試帳號</span></template
+          ></template
         >
       </nav>
     </header>

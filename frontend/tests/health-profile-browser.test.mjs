@@ -104,7 +104,7 @@ async function connect(url) {
         el.scrollIntoView({block: 'center'});
         const rect = el.getBoundingClientRect();
         return {x: rect.x + rect.width / 2, y: rect.y + rect.height / 2,
-          disabled: el.disabled, height: rect.height};
+          disabled: Boolean(el.disabled), height: rect.height};
       })()`)
       assert.equal(point.disabled, disabled, `${selector}: disabled state`)
       await page.send('Input.dispatchMouseEvent', {
@@ -383,4 +383,129 @@ for (const width of [1200, 390]) {
       assert.deepEqual(apiRequests, [])
     })
   }
+}
+
+for (const width of [1200, 320, 360, 390, 430]) {
+  test(`account navigation ${width}px: login, greeting, logout and responsive Google button`, async () => {
+    const info = await (
+      await fetch(`http://127.0.0.1:${chromePort}/json/new?about:blank`, { method: 'PUT' })
+    ).json()
+    const page = await connect(info.webSocketDebuggerUrl)
+    await page.send('Runtime.enable')
+    await page.send('Page.enable')
+    // Mock only the Google SDK boundary; the Vue callback, session store and navigation stay real.
+    await page.send('Fetch.enable', {
+      patterns: [{ urlPattern: 'https://accounts.google.com/gsi/client*' }],
+    })
+    page.on('Fetch.requestPaused', async ({ requestId }) => {
+      const sdk = `window.google = {accounts: {id: {
+        initialize(config) { window.__googleCallback = config.callback },
+        renderButton(container, config) {
+          window.__googleButtonConfig = config;
+          const button = document.createElement('button');
+          button.id = 'test-google-button';
+          button.textContent = '使用 Google 帳戶登入';
+          // Match the SDK's large button dimensions without inheriting app button styles.
+          button.style.cssText = 'all: initial; display: inline-block; box-sizing: border-box; height: 40px; font: 14px sans-serif; border: 1px solid #747775; border-radius: 20px; text-align: center; cursor: pointer';
+          button.style.width = config.width + 'px';
+          button.onclick = () => window.__googleCallback({credential: 'test-only'});
+          container.replaceChildren(button);
+        }
+      }}};`
+      await page.send('Fetch.fulfillRequest', {
+        requestId,
+        responseCode: 200,
+        responseHeaders: [{ name: 'Content-Type', value: 'application/javascript' }],
+        body: Buffer.from(sdk).toString('base64'),
+      })
+    })
+    await page.send('Page.addScriptToEvaluateOnNewDocument', {
+      source: `(() => {
+        let loggedIn = false;
+        const real = window.fetch.bind(window);
+        const me = {user_id: 'u1', name: '王小明', email: 'a@example.com', profile_completed: true};
+        const json = (body, status = 200) => new Response(JSON.stringify(body), {status, headers: {'Content-Type': 'application/json'}});
+        window.fetch = (input, init) => {
+          if (input === '/api/me') return Promise.resolve(loggedIn ? json(me) : json({error: {code: 'unauthorized', message: '請先登入'}}, 401));
+          if (input === '/api/auth/google') { loggedIn = true; return Promise.resolve(json(me)) }
+          if (input === '/api/logout') { loggedIn = false; return Promise.resolve(new Response(null, {status: 204})) }
+          return real(input, init);
+        };
+      })()`,
+    })
+    await page.send('Emulation.setDeviceMetricsOverride', {
+      width,
+      height: 900,
+      deviceScaleFactor: 1,
+      mobile: width < 500,
+    })
+    await page.send('Page.navigate', { url: origin })
+    await until(() =>
+      page.eval('document.querySelector(".account-nav a")?.textContent.trim() === "登入"'),
+    )
+    await page.click('.account-nav a')
+    await until(() => page.eval('!!document.querySelector("#test-google-button")'))
+    assert.equal(
+      await page.eval('document.querySelector(".shell-account a").textContent.trim()'),
+      '回主頁',
+    )
+    assert.equal(
+      await page.eval('document.querySelector(".shell-account a").getAttribute("href")'),
+      '/',
+    )
+    const config = await page.eval('window.__googleButtonConfig')
+    assert.equal(config.theme, 'outline')
+    assert.equal(config.shape, 'pill')
+    assert.equal(config.size, 'large')
+    const buttonSize = await page.eval(`(() => {
+      const button = document.querySelector('#test-google-button').getBoundingClientRect();
+      const container = document.querySelector('.google-login-container').getBoundingClientRect();
+      return {width: button.width, height: button.height, available: container.width};
+    })()`)
+    assert.ok(
+      Math.abs(buttonSize.height - 64) < 1,
+      'Google large button should be about 64px tall at 1.6x scale',
+    )
+    assert.ok(buttonSize.width <= buttonSize.available, 'Scaled button must fit its container')
+    assert.equal(await page.eval('document.documentElement.scrollWidth > innerWidth'), false)
+    await page.click('#test-google-button')
+    await until(() => page.eval('location.pathname === "/medicine-upload"'))
+    await page.click('.shell-account a')
+    await until(() =>
+      page.eval(
+        'document.querySelector(".member-welcome h2")?.textContent === "歡迎回來，王小明！"',
+      ),
+    )
+    assert.equal(
+      await page.eval('document.querySelector("main").textContent.includes("回主頁")'),
+      false,
+    )
+    assert.equal(
+      await page.eval('document.querySelector(".shell-header").textContent.includes("測試帳號")'),
+      false,
+    )
+    assert.equal(
+      await page.eval(
+        `document.querySelectorAll('.shell-sidebar a[href="/member-center"]').length`,
+      ),
+      0,
+    )
+    assert.equal(
+      await page.eval(
+        `document.querySelectorAll('.shell-account a[href="/member-center"]').length`,
+      ),
+      1,
+    )
+    await page.eval('document.querySelector(".shell-brand").click()')
+    await until(() =>
+      page.eval('document.querySelector(".account-nav a")?.textContent.trim() === "會員中心"'),
+    )
+    await page.click('.account-nav a')
+    await until(() => page.eval('location.pathname === "/member-center"'))
+    await page.click('main button')
+    await until(() =>
+      page.eval('document.querySelector(".account-nav a")?.textContent.trim() === "登入"'),
+    )
+    assert.equal(await page.eval('location.pathname'), '/')
+  })
 }

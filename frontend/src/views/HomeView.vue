@@ -1,5 +1,7 @@
 ﻿<script setup lang="ts">
 import { RouterLink } from 'vue-router'
+import { useSessionStore } from '../stores/session'
+const session = useSessionStore()
 const heroImage = `${import.meta.env.BASE_URL}home-supplements.webp`
 const steps = [
   {
@@ -25,7 +27,9 @@ const steps = [
       >
       <p class="brand-description">台灣長輩與家人的 AI 營養補充評估工具</p>
       <nav class="account-nav" aria-label="會員導覽">
-        <RouterLink class="button button-lime" to="/login">登入</RouterLink>
+        <RouterLink class="button button-lime" :to="session.me ? '/member-center' : '/login'">
+          {{ session.me ? '會員中心' : '登入' }}
+        </RouterLink>
       </nav>
     </header>
     <main id="home-main" tabindex="-1">
