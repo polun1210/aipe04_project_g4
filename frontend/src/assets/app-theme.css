@@ -1751,3 +1751,41 @@ body:has(.image-lightbox[open]) {
   background: rgba(0, 0, 0, 0.04);
   line-height: 1.7;
 }
+
+/* 手機版（窄螢幕）補強：只新增規則，不改桌面版與列印樣式 */
+@media (max-width: 480px) {
+  .shell-sidebar nav {
+    flex-wrap: wrap;
+    overflow-x: visible;
+  }
+  .shell-sidebar nav a {
+    flex: 1 1 auto;
+    justify-content: center;
+  }
+  .shell-brand,
+  .shell-footer a,
+  .app-shell .page-view a:not(.primary-action),
+  .app-shell summary {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+  .report-content li > a,
+  .report-content section > a {
+    margin-top: 4px;
+    margin-bottom: 4px;
+  }
+  .app-shell label:has(> input[type='checkbox']),
+  .app-shell label:has(> input[type='radio']) {
+    margin-right: 8px;
+  }
+  .report-content .report-footnotes li > a {
+    margin-left: 0;
+    display: flex;
+  }
+}
+@media (max-width: 360px) {
+  .shell-brand {
+    font-size: 22px;
+  }
+}
