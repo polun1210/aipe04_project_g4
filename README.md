@@ -17,6 +17,15 @@ uv sync            # 安裝環境（第一次需要先裝 uv，見 docs/uv-guide
 uv run pytest      # 看到 passed、沒有 failed，就表示環境沒問題
 ```
 
+### 一個指令跑起全系統（Docker）
+
+```bash
+cp .env.example .env    # 填 POSTGRES_PASSWORD
+docker compose up -d --build    # 前端 http://127.0.0.1:8080
+```
+
+細節（變數、log、重置）見 [docs/deploy.md](docs/deploy.md)。
+
 ### 本機起資料庫（選用）
 
 預設值（`CATALOG_SOURCE=csv`、`STORE=memory`）不需要資料庫，`uv run pytest` 照常能跑。要試資料庫版：
