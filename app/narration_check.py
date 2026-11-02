@@ -5,15 +5,17 @@ LLM 寫的白話（以及固定模板）都要通過這裡才能進報告：
   - 禁用詞：BANNED_PHRASES
   - 劑量邊界：數字接單位且不在判定層；停用、減量、改吃之類的建議
   - 涵蓋：每條交互作用提醒剛好一則敘述，不能漏、不能多
+  - 引用：引用的 chunk_id 必須在這次檢索結果裡；某條交互作用有檢索到證據，說明就至少引用一段
   - 措辭：一律不准用「立即」「危險」之類的強烈字眼（ADR-0012，系統不分嚴重程度）
 """
 
 import re
+from collections.abc import Sequence
 
 from app.narration_template import percent
 from app.schemas.assessment import Assessment
 from app.schemas.enums import NarrationKind
-from app.schemas.narration import BANNED_PHRASES, NarrationItem, NarrationOutput, OutputCheckResult
+from app.schemas.narration import BANNED_PHRASES, NarrationEvidence, NarrationItem, NarrationOutput, OutputCheckResult
 
 # 獨立的數字才檢查；B12、D3、Omega-3、COX-2 這類名稱裡的數字不算
 _NUMBER = re.compile(r"(?<![A-Za-z0-9.\-－])\d+(?:\.\d+)?")
@@ -23,7 +25,9 @@ _STRONG_WORDS = ("立即", "立刻", "馬上", "緊急", "危險", "嚴重")
 _TOLERANCE = 1e-6
 
 
-def check_narration(output: NarrationOutput, assessment: Assessment) -> OutputCheckResult:
+def check_narration(
+    output: NarrationOutput, assessment: Assessment, evidence: Sequence[NarrationEvidence] = ()
+) -> OutputCheckResult:
     allowed = _allowed_numbers(assessment)
     texts = [(_label(i), i.text) for i in output.items]
     numbers = [f"{label}：{n}" for label, text in texts for n in _NUMBER.findall(text) if not _is_allowed(n, allowed)]
@@ -33,13 +37,15 @@ def check_narration(output: NarrationOutput, assessment: Assessment) -> OutputCh
     advice = [f"{label}：{w}" for label, text in texts for w in _DOSAGE_ADVICE if w in text]
     coverage = _coverage_violations(output, assessment)
     wording = _wording_violations(output)
+    cited = _evidence_violations(output, evidence)
     return OutputCheckResult(
-        passed=not (numbers or banned or doses or advice or coverage or wording),
+        passed=not (numbers or banned or doses or advice or coverage or wording or cited),
         number_fidelity_violations=numbers,
         banned_phrase_violations=banned,
         dosage_boundary_violations=doses + advice,
         coverage_violations=coverage,
         strong_wording_violations=wording,
+        evidence_violations=cited,
     )
 
 
@@ -80,3 +86,15 @@ def _coverage_violations(output: NarrationOutput, assessment: Assessment) -> lis
 
 def _wording_violations(output: NarrationOutput) -> list[str]:
     return [f"{_label(item)}：{w}" for item in output.items for w in _STRONG_WORDS if w in item.text]
+
+
+def _evidence_violations(output: NarrationOutput, evidence: Sequence[NarrationEvidence]) -> list[str]:
+    retrieved = {e.chunk_id for e in evidence}
+    available = {e.for_ingredient for e in evidence}
+    unknown = [f"{_label(i)}：引用了沒檢索到的 {cid}" for i in output.items for cid in i.evidence_ids if cid not in retrieved]
+    missing = [
+        f"{_label(i)}：有檢索到證據卻沒有引用"
+        for i in output.items
+        if i.kind is NarrationKind.INTERACTION and i.ingredient_code in available and not i.evidence_ids
+    ]
+    return unknown + missing

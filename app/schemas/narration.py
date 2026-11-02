@@ -18,15 +18,29 @@ BANNED_PHRASES = (
 )
 
 
+class NarrationEvidence(StrictModel):
+    """檢索到的一段原文（ADR-0013）。LLM 只能引用這裡的 chunk_id，不能自己編出處。"""
+
+    for_ingredient: IngredientCode  # 這段是替哪一條交互作用檢索的
+    chunk_id: str
+    source: str  # nih_ods / nccih / dris_tw / tfda_label
+    title: str
+    url: str | None
+    section: str
+    text: str
+
+
 class NarrationInput(StrictModel):
     assessment: Assessment
     citations: list[Citation]  # 依 triggers 的 citation_ids 查表取回
+    evidence: list[NarrationEvidence] = Field(default_factory=list)  # 空 ＝ 沒有檢索，退回只用規則引文
 
 
 class NarrationItem(StrictModel):
     kind: NarrationKind
     ingredient_code: IngredientCode | None  # summary 為 null；其餘對應 Assessment 裡的那一筆
     text: str = Field(min_length=1)
+    evidence_ids: list[str] = Field(default_factory=list)  # 引用的 chunk_id；interaction 有證據可引時至少一個
 
     @model_validator(mode="after")
     def _code_matches_kind(self) -> "NarrationItem":
@@ -59,3 +73,4 @@ class OutputCheckResult(StrictModel):
     dosage_boundary_violations: list[str]  # 數字接 mg／ug／IU 且不在授權集合；停用、減量詞彙
     coverage_violations: list[str]  # 每條提醒都要有敘述，不能漏、不能多
     strong_wording_violations: list[str]  # 用了「立即」「危險」這類強烈字眼（ADR-0012）
+    evidence_violations: list[str] = Field(default_factory=list)  # 引用了沒檢索到的 ID；有證據卻沒引用

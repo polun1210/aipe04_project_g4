@@ -45,8 +45,8 @@
 | ⑤ | `05c_drug_corrections` | 送出評估時，後端比對「藥包草稿」與「確認的藥名」產生的**藥名修正紀錄**（改名、新增、刪除），用來量測藥包辨識準確率 | 後端內部 | `DrugCorrection`（`drug_label.py`） |
 | — | `case_profile` | **凍結的評估個案**：基本資料、用藥、所有已核對產品的完整快照，是計算層的唯一輸入 | 後端內部 | `CaseProfile`（`case.py`） |
 | ⑥ | `06_assessment` | 計算層與規則引擎的結論：營養素與上限（跨產品加總）、交互作用、揭露事項。等級與數字在這裡就確定 | 後端 → 敘述層 | `Assessment`（`assessment.py`） |
-| ⑦ | `07_narration_output` | LLM 寫的白話說明，加上所用模型與 prompt 版本；先過輸出檢查才會進報告 | 敘述層 → 後端 | `NarrationOutput`（`narration.py`） |
-| ⑧ | `08_report` | 最終報告：評估結果＋顯示名稱＋展開的出處＋通過檢查的敘述 | 後端 → 報告頁／PDF | `Report`（`report.py`） |
+| ⑦ | `07_narration_output` | LLM 寫的白話說明，加上所用模型與 prompt 版本；先過輸出檢查才會進報告。每則交互作用說明帶 `evidence_ids`（引用的檢索原文段落，`NarrationItem`） | 敘述層 → 後端 | `NarrationOutput`（`narration.py`） |
+| ⑧ | `08_report` | 最終報告：評估結果＋顯示名稱＋展開的出處＋通過檢查的敘述＋腳註（`footnotes`：RAG 檢索到的原文；每則交互作用的 `footnote_numbers` 指向它，編號依第一次被引用的順序；沒有資料庫、檢索失敗或 `NARRATOR=template` 時為空） | 後端 → 報告頁／PDF | `Report`（`report.py`） |
 | — | `api_error` | 所有 API 失敗時的統一錯誤格式 | 後端 → 前端 | `ErrorResponse`（`api.py`） |
 
 ### CSV：建表資料（載入資料庫後供執行時查詢）

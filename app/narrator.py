@@ -20,7 +20,7 @@ from app.extraction.engines.openrouter import Route, Transport, _strict, http_tr
 from app.schemas.enums import IngredientCode, NarrationKind
 from app.schemas.narration import NarrationInput, NarrationOutput
 
-PROMPT_VERSION = "narration-v2"  # 改提示詞或輸出結構就要加版本
+PROMPT_VERSION = "narration-v3"  # 改提示詞或輸出結構就要加版本
 TEMPERATURE = 0.2  # 措辭可以不同，但隨機程度調低
 TIMEOUT_SECONDS = 30
 
@@ -37,11 +37,18 @@ PROMPT = """你是幫長輩解釋「用藥與保健食品檢查結果」的助�
 7. 不要用「立即」「緊急」「危險」「嚴重」這類強烈字眼。
 8. user_has_supplement 為 false 的提醒，要說明使用者沒有補充這個成分，是因為服用的藥物而提醒。
 9. 句子簡短，用台灣繁體中文，稱呼使用者為「你」。
+10. evidence 是替各條交互作用檢索到的原文段落（for_ingredient 指出屬於哪一條）。kind=interaction 的說明要依這些原文寫，
+    並在 evidence_ids 填入你用到的 chunk_id，只能填 evidence 裡出現過的 ID，不能自己編。
+    evidence 裡沒有該條交互作用的段落時，evidence_ids 填空陣列。原文裡的數字、劑量不要照抄；說明的內容不可超出原文。
+    kind=nutrient 與 kind=summary 的 evidence_ids 填空陣列。
 
 成分中文名稱：{names}
 
 判定層結論：
 {assessment}
+
+證據段落 evidence：
+{evidence}
 """
 
 
@@ -57,6 +64,7 @@ class _LlmItem(BaseModel):
     kind: NarrationKind
     ingredient_code: IngredientCode | None
     text: str
+    evidence_ids: list[str] = []  # 回應缺這欄當作沒引用；送出的 schema 仍要求必填
 
 
 class _LlmNarration(BaseModel):
@@ -77,6 +85,9 @@ class OpenRouterNarrator:
         prompt = PROMPT.format(
             names=json.dumps({k.value: v for k, v in names.items()}, ensure_ascii=False),
             assessment=request.assessment.model_dump_json(exclude={"case_id"}),
+            evidence=json.dumps(
+                [e.model_dump(mode="json", exclude={"url", "title"}) for e in request.evidence], ensure_ascii=False
+            ),
         )
         try:
             response = self._send(self._body(prompt), TIMEOUT_SECONDS)

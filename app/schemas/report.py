@@ -7,7 +7,7 @@
 from datetime import datetime
 from uuid import UUID
 
-from pydantic import model_validator
+from pydantic import Field, model_validator
 
 from app.schemas.assessment import (
     Disclosures,
@@ -66,10 +66,24 @@ class ReportTrigger(Trigger):
     citations: list[Citation]  # 展開後的完整出處（凍結，規則日後改動不影響舊報告）
 
 
+class ReportFootnote(FrozenModel):
+    """RAG 檢索到的原文段落（ADR-0013）。編號依在報告中第一次被引用的順序，從 1 起算。"""
+
+    number: int = Field(ge=1)
+    chunk_id: str
+    source: str  # nih_ods / nccih / dris_tw / tfda_label
+    source_name: str  # 來源的顯示名稱
+    title: str  # 文件標題
+    section: str
+    url: str | None
+    excerpt: str  # 原文節錄，過長會以「…」截斷
+
+
 class ReportInteraction(InteractionFinding):
     display_name_zh: str
     triggers: list[ReportTrigger]
     narration: str | None
+    footnote_numbers: list[int] = Field(default_factory=list)  # 這則說明引用的 Report.footnotes 編號；空 ＝ 沒有佐證原文
 
 
 class Report(FrozenModel):
@@ -87,6 +101,7 @@ class Report(FrozenModel):
     nutrients: list[ReportNutrient]
     interactions: list[ReportInteraction]
     disclosures: Disclosures
+    footnotes: list[ReportFootnote] = Field(default_factory=list)  # 沒有檢索或檢索失敗時為空
 
 
 class ReportSummary(FrozenModel):

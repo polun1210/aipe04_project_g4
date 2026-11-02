@@ -235,7 +235,8 @@
         }
       ],
       "display_name_zh": "紅麴",
-      "narration": "紅麴所含的成分與Statin類降血脂藥的作用方式相同，一起使用可能提高肌肉不良反應的風險。"
+      "narration": "紅麴所含的成分與Statin類降血脂藥的作用方式相同，一起使用可能提高肌肉不良反應的風險。",
+      "footnote_numbers": [1, 2]
     },
     {
       "ingredient_code": "calcium",
@@ -478,7 +479,8 @@
         }
       ],
       "display_name_zh": "鉀",
-      "narration": "你並未補充鉀，但你服用的降血壓藥可能影響血中鉀的濃度，因此列出提醒你留意。"
+      "narration": "你並未補充鉀，但你服用的降血壓藥可能影響血中鉀的濃度，因此列出提醒你留意。",
+      "footnote_numbers": []
     }
   ],
   "disclosures": {
@@ -544,5 +546,27 @@
       "iron"
     ],
     "undetermined_amounts": []
-  }
+  },
+  "footnotes": [
+    {
+      "number": 1,
+      "chunk_id": "nccih/red-yeast-rice#3",
+      "source": "nccih",
+      "source_name": "美國國家輔助與整合健康中心（NCCIH）",
+      "title": "Red Yeast Rice",
+      "section": "Side Effects and Risks",
+      "url": "https://www.nccih.nih.gov/health/red-yeast-rice",
+      "excerpt": "Red yeast rice may contain monacolin K, which is chemically identical to the prescription drug lovastatin. ..."
+    },
+    {
+      "number": 2,
+      "chunk_id": "tfda/atorvastatin/example#12",
+      "source": "tfda_label",
+      "source_name": "衛福部食藥署藥品仿單",
+      "title": "Atorvastatin 仿單",
+      "section": "交互作用",
+      "url": null,
+      "excerpt": "與其他降血脂藥物併用時，肌肉病變的風險可能增加。 ..."
+    }
+  ]
 }
