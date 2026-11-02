@@ -109,7 +109,7 @@ function readyImages() {
   upload.images.value[0].loaded = true // Same state change as the template's @load handler.
 }
 function validFields() {
-  upload.category.value = '  鈣  '
+  upload.category.value = '  魚油  '
   upload.productName.value = '  我的鈣片  '
 }
 beforeEach(() => {
@@ -135,8 +135,8 @@ beforeEach(() => {
 for (const [description, category, name, missingCategory, missingName] of [
   ['category missing', '', '鈣片', true, false],
   ['category whitespace only', ' \t\u3000 ', '鈣片', true, false],
-  ['name missing', '鈣', '', false, true],
-  ['name whitespace only', '鈣', ' \t\u3000 ', false, true],
+  ['name missing', '魚油', '', false, true],
+  ['name whitespace only', '魚油', ' \t\u3000 ', false, true],
   ['both missing', '', '', true, true],
 ]) {
   test(`${description}: Chinese validation errors and no API call`, async () => {
@@ -169,7 +169,7 @@ test('correcting missing fields clears errors and permits recognition with the e
   assert.equal(calls.length, 1)
   assert.equal(calls[0].path, '/api/supplement-drafts')
   assert.deepEqual([...calls[0].body.keys()], ['nutrition_images', 'category'])
-  assert.equal(calls[0].body.get('category'), '鈣')
+  assert.equal(calls[0].body.get('category'), '魚油')
   assert.equal(flow.products[0].name, '我的鈣片')
   assert.equal(flow.products[0].draft.product_name, fixture.product_name) // Preserve OCR original.
   assert.equal(upload.received.value, true)
@@ -186,7 +186,7 @@ test('API failure preserves fields and previews and can be retried', async () =>
   }
   await upload.recognize()
   assert.ok(upload.error.value)
-  assert.equal(upload.category.value, '  鈣  ')
+  assert.equal(upload.category.value, '  魚油  ')
   assert.equal(upload.productName.value, '  我的鈣片  ')
   assert.equal(upload.images.value.length, 1)
   assert.equal(upload.images.value[0].loaded, true)
@@ -271,7 +271,7 @@ test('long categories and invalid API responses do not discard current fields or
   await upload.recognize()
   assert.equal(calls.length, 0)
   assert.match(upload.categoryError.value, /請選擇保健食品種類/)
-  upload.category.value = '鈣'
+  upload.category.value = '魚油'
   request = async () => Response.json({ product_id: 'invalid' })
   await upload.recognize()
   assert.equal(flow.products.length, 0)

@@ -172,7 +172,6 @@ onBeforeRouteLeave(() => {
   <main class="supplement-review">
     <h1>確認成分與實際攝取量</h1>
     <p>資料暫存在本機，重新整理後需要重新上傳。請依原始標示確認每份量及成分。</p>
-    <p>目前評估與報告使用後端示範實作及測試帳號，結果不代表你的實際健康評估。</p>
     <p><RouterLink to="/supplement-upload">返回上傳／新增其他保健食品</RouterLink></p>
     <p v-if="!flow.products.length">目前沒有保健食品資料，請先上傳圖片。</p>
     <p v-if="medicine.medicines.length && !medicine.allConfirmed" role="alert">

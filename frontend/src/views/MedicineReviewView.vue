@@ -535,7 +535,9 @@ onMounted(loadClasses)
                 其他／不確定：請核對名稱，鎖定後可繼續。
               </p>
               <p v-else-if="medicine.reviewMode === 'recognized'">已辨識，可直接鎖定。</p>
-              <p v-else-if="!medicine.selectedMedicine">尚未辨識，請先編輯並完成藥品校對。</p>
+              <p v-else-if="!medicine.selectedMedicine">
+                {{ medicine.name.trim() ? '尚未對應藥品資料，請先編輯完成校對再鎖定' : '請輸入藥品名稱並選擇藥品' }}
+              </p>
               <p v-if="medicine.errorMessage" role="alert">{{ medicine.errorMessage }}</p>
               <div class="review-row-actions">
                 <button

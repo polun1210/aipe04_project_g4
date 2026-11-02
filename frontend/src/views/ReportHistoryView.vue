@@ -49,7 +49,7 @@ onMounted(search)
   <main>
     <p><RouterLink to="/member-center">← 返回會員中心</RouterLink></p>
     <h1>報告記錄</h1>
-    <p>查看過去的營養補充評估報告。目前顯示測試帳號資料，後端重啟後記錄可能消失。</p>
+    <p>查看過去的營養補充評估報告。</p>
     <form @submit.prevent="search">
       <fieldset :disabled="busy">
         <legend>搜尋報告（台灣時間，含開始與結束當天）</legend>

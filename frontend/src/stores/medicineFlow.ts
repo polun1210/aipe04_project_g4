@@ -199,7 +199,7 @@ export const useMedicineFlowStore = defineStore('medicineFlow', () => {
   function setLocked(medicine: MedicineRow, locked: boolean): void {
     if (medicine.isEditing || !medicine.name.trim()) return
     if (locked && !hasValidMedicineReview(medicine)) {
-      medicine.errorMessage = '此藥品尚未辨識或名稱已修改，請先編輯並完成藥品校對，再鎖定變更。'
+      medicine.errorMessage = '此藥品尚未對應藥品資料（或名稱已修改），請先編輯完成校對再鎖定。'
       return
     }
     medicine.isLocked = locked

@@ -77,9 +77,6 @@ function sourceUrl(url: string | null) {
 <template>
   <article class="report-content">
     <h1>我的營養補充評估報告</h1>
-    <p role="status">
-      目前後端計算與報告仍為示範實作，使用測試帳號與範例內容，並非你的正式健康評估。
-    </p>
     <p>產生時間：{{ taipeiDateTime(report.generated_at) }}（台灣時間）</p>
     <p>報告編號：{{ report.report_id }}</p>
     <p>{{ report.summary }}</p>
@@ -223,7 +220,7 @@ function sourceUrl(url: string | null) {
       </p>
       <details>
         <summary>查看出處</summary>
-        <p v-if="!citations.length">後端未提供出處資料。</p>
+        <p v-if="!citations.length">本次評估沒有觸發任何規則，因此沒有可列的出處。</p>
         <section v-for="citation in citations" :key="citation.citation_id">
           <h3>{{ citation.source }} — {{ citation.section }}</h3>
           <p>{{ citation.quote }}</p>
