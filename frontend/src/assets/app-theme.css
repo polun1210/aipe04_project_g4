@@ -116,14 +116,6 @@ body:has(.image-lightbox[open]) {
   width: 24px;
   height: 24px;
 }
-.demo-badge {
-  font-size: 13px;
-  border: 1px solid #bbc6cc;
-  padding: 4px 10px;
-  border-radius: 7px;
-  color: var(--muted);
-  white-space: nowrap;
-}
 .app-shell .shell-button,
 .app-shell button {
   display: inline-flex;
@@ -1444,9 +1436,6 @@ body:has(.image-lightbox[open]) {
     gap: 5px;
   }
   .account-link svg {
-    display: none;
-  }
-  .demo-badge {
     display: none;
   }
   .app-shell .shell-button {
