@@ -13,7 +13,7 @@ from app.reporting import MAX_RETRIES, NarratedReporter, condition_names, narrat
 from app.schemas.assessment import Assessment
 from app.schemas.case import CaseProfile
 from app.schemas.enums import IngredientCode, NarrationKind
-from app.schemas.narration import BANNED_PHRASES, NarrationInput, NarrationOutput
+from app.schemas.narration import BANNED_PHRASES, NarrationEvidence, NarrationInput, NarrationOutput
 
 EXAMPLES = Path(__file__).parent.parent / "docs" / "schemas" / "examples"
 GENERATED_AT = datetime(2026, 10, 23, 9, 0, tzinfo=UTC)
@@ -269,3 +269,123 @@ def test_openrouter_narrator_network_error_is_narrator_error(assessment, names):
     narrator = OpenRouterNarrator(send, Route("vendor/model-1", "vendor"))
     with pytest.raises(NarratorError):
         narrator.narrate(NarrationInput(assessment=assessment, citations=[]), names)
+
+
+
+# ── 證據與腳註（C-3） ────────────────────────────────────────
+
+
+def _evidence(assessment: Assessment, chunk_ids=("c1", "c2")) -> list[NarrationEvidence]:
+    return [
+        NarrationEvidence(
+            for_ingredient=f.ingredient_code,
+            chunk_id=f"{f.ingredient_code.value}:{cid}",
+            source="nih_ods",
+            title="Fact sheet",
+            url="https://example.org/fact",
+            section="Interactions",
+            text="原文段落" * 200,
+        )
+        for f in assessment.interactions
+        for cid in chunk_ids
+    ]
+
+
+def _cited_output(assessment: Assessment, ids_for) -> NarrationOutput:
+    base = _llm_output(assessment)
+    items = [
+        i.model_copy(update={"evidence_ids": ids_for(i.ingredient_code)})
+        if i.kind is NarrationKind.INTERACTION
+        else i
+        for i in base.items
+    ]
+    return NarrationOutput(items=items, model=base.model, prompt_version=base.prompt_version)
+
+
+class FakeEvidenceSource:
+    def __init__(self, evidence=None, error: Exception | None = None) -> None:
+        self._evidence, self._error = evidence or [], error
+
+    def retrieve(self, case, assessment):
+        if self._error:
+            raise self._error
+        return self._evidence
+
+
+def test_check_passes_when_every_interaction_cites_retrieved_evidence(assessment):
+    evidence = _evidence(assessment)
+    output = _cited_output(assessment, lambda code: [f"{code.value}:c1"])
+    assert check_narration(output, assessment, evidence).passed
+
+
+def test_check_flags_unknown_evidence_id(assessment):
+    output = _cited_output(assessment, lambda code: ["made-up"])
+    result = check_narration(output, assessment, _evidence(assessment))
+    assert not result.passed
+    assert any("made-up" in v for v in result.evidence_violations)
+
+
+def test_check_flags_interaction_without_citation(assessment):
+    result = check_narration(_llm_output(assessment), assessment, _evidence(assessment))
+    assert not result.passed
+    assert len(result.evidence_violations) == len(assessment.interactions)
+
+
+def test_check_does_not_require_citation_without_evidence(assessment):
+    assert check_narration(_llm_output(assessment), assessment, []).passed
+
+
+def test_report_has_numbered_footnotes_from_cited_evidence(case, assessment):
+    evidence = _evidence(assessment)
+    first = assessment.interactions[0].ingredient_code
+    output = _cited_output(assessment, lambda code: [f"{code.value}:c2", f"{code.value}:c1"])
+    reporter = NarratedReporter(get_catalog_source(), FakeNarrator([output]), FakeEvidenceSource(evidence))
+    report = reporter.build(case, assessment, GENERATED_AT)
+    assert [f.number for f in report.footnotes] == list(range(1, len(report.footnotes) + 1))
+    assert report.footnotes[0].chunk_id == f"{first.value}:c2"
+    assert report.footnotes[0].source_name.startswith("美國國家衛生研究院")
+    assert report.footnotes[0].excerpt.endswith("…")
+    assert report.interactions[0].footnote_numbers == [1, 2]
+    assert all(i.footnote_numbers for i in report.interactions)
+
+
+def test_report_without_retriever_has_no_footnotes(case, assessment):
+    reporter = NarratedReporter(get_catalog_source(), FakeNarrator([_llm_output(assessment)]), None)
+    report = reporter.build(case, assessment, GENERATED_AT)
+    assert report.footnotes == []
+    assert all(i.footnote_numbers == [] for i in report.interactions)
+
+
+def test_report_survives_retrieval_failure(case, assessment):
+    source = FakeEvidenceSource(error=RuntimeError("db down"))
+    reporter = NarratedReporter(get_catalog_source(), FakeNarrator([_llm_output(assessment)]), source)
+    report = reporter.build(case, assessment, GENERATED_AT)
+    assert report.narration_model == "fake-llm"
+    assert report.footnotes == []
+
+
+def test_template_mode_does_not_retrieve(case, assessment):
+    source = FakeEvidenceSource(error=AssertionError("不應該檢索"))
+    report = NarratedReporter(get_catalog_source(), None, source).build(case, assessment, GENERATED_AT)
+    assert report.narration_model == TEMPLATE_MODEL
+    assert report.footnotes == []
+
+
+def test_narrate_falls_back_to_template_when_citations_never_valid(assessment, names, conditions):
+    narrator = FakeNarrator([_llm_output(assessment)])  # 有證據卻從不引用
+    output = narrate(narrator, assessment, names, conditions, [], _evidence(assessment))
+    assert output.model == TEMPLATE_MODEL
+    assert narrator.calls == MAX_RETRIES + 1
+
+
+def test_check_flags_citing_another_ingredients_evidence(assessment):
+    first, second = assessment.interactions[0].ingredient_code, assessment.interactions[1].ingredient_code
+    output = _cited_output(assessment, lambda code: [f"{(second if code is first else first).value}:c1"])
+    result = check_narration(output, assessment, _evidence(assessment))
+    assert not result.passed
+    assert any("其他成分" in v for v in result.evidence_violations)
+
+
+def test_check_passes_when_citing_own_ingredients_evidence(assessment):
+    output = _cited_output(assessment, lambda code: [f"{code.value}:c2"])
+    assert check_narration(output, assessment, _evidence(assessment)).passed
