@@ -280,3 +280,33 @@ def test_only_unrecognized_drugs_still_disclose_drug_source_not_counted(status):
     other = SelectedDrug(raw_name="某種藥", scope_status=status)
     a = run(make_case([product(row("calcium", 500), row("iron", 10))], [other]))
     assert a.disclosures.drug_source_not_counted == ["calcium", "iron"]
+
+
+def _extra_row(row_id: str, raw_name: str) -> dict:
+    return {"row_id": row_id, "scope_status": "out_of_scope", "_raw_name": raw_name}
+
+
+def _labelled_product(*rows: dict):
+    """raw_name 由後端從草稿帶入（with_label_names），測試直接補在驗證後的列上。"""
+    p = product(*[{k: v for k, v in r.items() if k != "_raw_name"} for r in rows])
+    names = {r["row_id"]: r["_raw_name"] for r in rows if "_raw_name" in r}
+    return p.model_copy(update={"nutrients": [
+        n.model_copy(update={"raw_name": names[n.row_id]}) if n.row_id in names else n for n in p.nutrients
+    ]})
+
+
+def test_ingredient_breakdown_row_of_assessed_nutrient_is_not_disclosed_as_out_of_scope():
+    rows = [
+        row("vitamin_c", 100),
+        _extra_row("x1", "維生素C(維生素C、玉米澱粉)"),
+        _extra_row("x2", "維生素D3(木薯澱粉、阿拉伯膠)"),  # 維生素D 本案沒有評估：照舊揭露
+        _extra_row("x3", "硬脂酸鎂"),
+    ]
+    a = run(make_case([_labelled_product(*rows)]))
+    assert a.disclosures.out_of_scope_ingredients == ["維生素D3(木薯澱粉、阿拉伯膠)", "硬脂酸鎂"]
+
+
+def test_name_only_mentioning_assessed_nutrient_in_parentheses_is_still_disclosed():
+    rows = [row("calcium", 300), _extra_row("x1", "天然海藻粉(含鈣)"), _extra_row("x2", "高效 鈣 配方")]
+    a = run(make_case([_labelled_product(*rows)]))
+    assert a.disclosures.out_of_scope_ingredients == ["天然海藻粉(含鈣)", "高效 鈣 配方"]

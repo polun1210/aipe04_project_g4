@@ -14,6 +14,7 @@ from dataclasses import dataclass, field
 from fractions import Fraction
 from uuid import UUID
 
+from app.extraction.rules import exact_ingredient_code, synonym_index
 from app.schemas.assessment import (
     Assessment,
     Disclosures,
@@ -305,7 +306,7 @@ def _disclosures(case: CaseProfile, ref: ReferenceData, drug_intake: dict[str, F
         drugs_none=case.drugs.none_selected,
         healthy_population_caveat=bool(case.conditions.selected),
         peak_same_day_assumption=any(p.user_intake.frequency_type is not FrequencyType.DAILY for p in case.supplements),
-        out_of_scope_ingredients=_names(rows, ScopeStatus.OUT_OF_SCOPE),
+        out_of_scope_ingredients=_out_of_scope_names(rows, present, ref),
         unresolved_ingredients=_names(rows, ScopeStatus.UNRESOLVED),
         out_of_scope_drugs=[d.raw_name for d in drugs if d.scope_status is ScopeStatus.OUT_OF_SCOPE],
         unresolved_drugs=[d.raw_name for d in drugs if d.scope_status is ScopeStatus.UNRESOLVED],
@@ -320,3 +321,18 @@ def _disclosures(case: CaseProfile, ref: ReferenceData, drug_intake: dict[str, F
 def _names(rows, status: ScopeStatus) -> list[str]:
     """raw_name 去重、保留出現順序；沒有原文的列（使用者新增）略過。"""
     return list(dict.fromkeys(n.raw_name for n, _ in rows if n.scope_status is status and n.raw_name))
+
+
+def _out_of_scope_names(rows, assessed: set, ref: ReferenceData) -> list[str]:
+    """範圍外名稱，但略過「已評估目標營養素的原料組成列」。
+
+    成分欄或另一張圖裡的「維生素D3(木薯澱粉、阿拉伯膠…)」會被判成範圍外（營養標示方框那列才代表該營養素），
+    它的營養素本身已在報告裡評估，再列一次只會讓清單灌水。只有去括號後名稱完全等於
+    某個「同一份草稿已評估」的目標營養素的同義詞才略過；認不得、只是括號內提到的，一律照舊揭露。"""
+    synonyms = synonym_index(i for i in ref.catalog.ingredients if i.code in TARGET_NUTRIENTS)
+    kept = [
+        (n, p)
+        for n, p in rows
+        if not (n.raw_name and exact_ingredient_code(n.raw_name, synonyms) in assessed)
+    ]
+    return _names(kept, ScopeStatus.OUT_OF_SCOPE)
