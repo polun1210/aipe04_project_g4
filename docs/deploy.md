@@ -44,9 +44,20 @@ backend 容器啟動會執行 `scripts/docker_init.sh`，依序：
 
 1. `alembic upgrade head`：建表
 2. `python -m app.db.import_catalog`：匯入參考資料
-3. `python -m app.rag.ingest`：匯入 RAG 語料。沒有 `OPENROUTER_API_KEY` 時跳過並印警告；匯入失敗也只警告、後端照常啟動
+3. `python -m app.rag.ingest`：匯入 RAG 語料。沒有 `OPENROUTER_API_KEY` 時跳過；匯入失敗也只警告、後端照常啟動。結尾會印一行 `RAG 狀態`（已匯入幾段／跳過原因）
 
 三步都可重複執行，重跑不會重複匯入。
+
+## 啟動後檢查 RAG 語料
+
+報告沒有腳註時，先確認語料有沒有匯入：
+
+```bash
+docker compose logs backend | grep "RAG 狀態"
+docker compose exec db psql -U g4 -c "select count(*) from evidence.chunks"
+```
+
+段數要大於 0。為 0 通常是沒設 `OPENROUTER_API_KEY`（或匯入失敗）；補好 `.env` 後 `docker compose up -d --force-recreate backend` 重跑初始化。
 
 ## 看 log
 
@@ -77,5 +88,5 @@ docker compose -p g4-test down -v
 ## 常見問題
 
 - `請先複製 .env.example 成 .env`：沒建 `.env` 或沒填 `POSTGRES_PASSWORD`。
-- 埠被占用：改 `.env` 的 `DB_PORT`、`FRONTEND_PORT`。
+- 埠被占用：改 `.env` 的 `DB_PORT`（預設 5433）、`FRONTEND_PORT`（預設 8080）這兩個變數；不設則維持預設。
 - 密碼含特殊符號導致 backend 連不上資料庫：換成純英數字，再 `docker compose down -v` 重來（舊資料庫還是舊密碼）。
