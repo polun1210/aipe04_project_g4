@@ -5,7 +5,7 @@ LLM 寫的白話（以及固定模板）都要通過這裡才能進報告：
   - 禁用詞：BANNED_PHRASES
   - 劑量邊界：數字接單位且不在判定層；停用、減量、改吃之類的建議
   - 涵蓋：每條交互作用提醒剛好一則敘述，不能漏、不能多
-  - 引用：引用的 chunk_id 必須在這次檢索結果裡；某條交互作用有檢索到證據，說明就至少引用一段
+  - 引用：引用的 chunk_id 必須在這次檢索結果裡，且 interaction 只能引用替自己成分檢索的段落；某條交互作用有檢索到證據，說明就至少引用一段
   - 措辭：一律不准用「立即」「危險」之類的強烈字眼（ADR-0012，系統不分嚴重程度）
 """
 
@@ -14,7 +14,7 @@ from collections.abc import Sequence
 
 from app.narration_template import percent
 from app.schemas.assessment import Assessment
-from app.schemas.enums import NarrationKind
+from app.schemas.enums import IngredientCode, NarrationKind
 from app.schemas.narration import BANNED_PHRASES, NarrationEvidence, NarrationItem, NarrationOutput, OutputCheckResult
 
 # 獨立的數字才檢查；B12、D3、Omega-3、COX-2 這類名稱裡的數字不算
@@ -89,12 +89,20 @@ def _wording_violations(output: NarrationOutput) -> list[str]:
 
 
 def _evidence_violations(output: NarrationOutput, evidence: Sequence[NarrationEvidence]) -> list[str]:
+    """interaction 說明只能引用替自己這條成分檢索的段落；其他種類的說明可引用整次檢索結果。"""
     retrieved = {e.chunk_id for e in evidence}
-    available = {e.for_ingredient for e in evidence}
-    unknown = [f"{_label(i)}：引用了沒檢索到的 {cid}" for i in output.items for cid in i.evidence_ids if cid not in retrieved]
-    missing = [
-        f"{_label(i)}：有檢索到證據卻沒有引用"
-        for i in output.items
-        if i.kind is NarrationKind.INTERACTION and i.ingredient_code in available and not i.evidence_ids
-    ]
-    return unknown + missing
+    own: dict[IngredientCode, set[str]] = {}
+    for e in evidence:
+        own.setdefault(e.for_ingredient, set()).add(e.chunk_id)
+    violations: list[str] = []
+    for item in output.items:
+        is_interaction = item.kind is NarrationKind.INTERACTION
+        allowed = own.get(item.ingredient_code, set()) if is_interaction else retrieved
+        for cid in item.evidence_ids:
+            if cid not in retrieved:
+                violations.append(f"{_label(item)}：引用了沒檢索到的 {cid}")
+            elif cid not in allowed:
+                violations.append(f"{_label(item)}：引用了其他成分的證據 {cid}")
+        if is_interaction and item.ingredient_code in own and not item.evidence_ids:
+            violations.append(f"{_label(item)}：有檢索到證據卻沒有引用")
+    return violations

@@ -376,3 +376,16 @@ def test_narrate_falls_back_to_template_when_citations_never_valid(assessment, n
     output = narrate(narrator, assessment, names, conditions, [], _evidence(assessment))
     assert output.model == TEMPLATE_MODEL
     assert narrator.calls == MAX_RETRIES + 1
+
+
+def test_check_flags_citing_another_ingredients_evidence(assessment):
+    first, second = assessment.interactions[0].ingredient_code, assessment.interactions[1].ingredient_code
+    output = _cited_output(assessment, lambda code: [f"{(second if code is first else first).value}:c1"])
+    result = check_narration(output, assessment, _evidence(assessment))
+    assert not result.passed
+    assert any("其他成分" in v for v in result.evidence_violations)
+
+
+def test_check_passes_when_citing_own_ingredients_evidence(assessment):
+    output = _cited_output(assessment, lambda code: [f"{code.value}:c2"])
+    assert check_narration(output, assessment, _evidence(assessment)).passed
