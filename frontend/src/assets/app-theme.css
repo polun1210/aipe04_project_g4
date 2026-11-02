@@ -1709,3 +1709,45 @@ body:has(.image-lightbox[open]) {
     overflow-wrap: anywhere;
   }
 }
+
+/* 報告頁：腳註與好讀度（僅新增） */
+.report-content > section.report-footnotes {
+  grid-column: 1 / -1;
+}
+.report-content .report-footnotes ol {
+  padding-left: 1.4em;
+}
+.report-content .report-footnotes li {
+  margin-bottom: 12px;
+}
+.report-content .report-footnotes li > a {
+  margin-left: 8px;
+}
+.report-content .footnote-ref {
+  margin-left: 2px;
+  font-size: 0.75em;
+  font-weight: 700;
+  color: var(--navy);
+}
+.report-content .interaction-review {
+  border-left: 5px solid #b4531c;
+  background: #fff4ec;
+  padding: 8px 12px;
+  border-radius: 6px;
+}
+.report-content .interaction-review > h3 {
+  color: #8a3a0c;
+}
+.report-content section > h3 + p {
+  line-height: 1.7;
+}
+.report-content section > p + p {
+  margin-top: 10px;
+}
+.report-content .disclosure-unassessed {
+  margin: 8px 0;
+  padding: 8px 12px;
+  border-left: 4px solid var(--navy);
+  background: rgba(0, 0, 0, 0.04);
+  line-height: 1.7;
+}

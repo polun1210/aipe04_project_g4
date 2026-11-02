@@ -30,11 +30,22 @@ export interface ReportNutrient {
   ul: { ul_value: number; ratio: number; exceeded: boolean; scope: string; phrasing: string } | null
   narration: string | null
 }
+export interface ReportFootnote {
+  number: number
+  chunk_id: string
+  source: string
+  source_name: string
+  title: string
+  section: string
+  url: string | null
+  excerpt: string
+}
 export interface ReportInteraction {
   ingredient_code: string
   display_name_zh: string
   narration: string | null
   requires_professional_review: boolean
+  footnote_numbers?: number[]
   matched_product_ids: string[]
   triggers: {
     rule_id: string
@@ -75,6 +86,7 @@ export interface Report {
     unresolved_drugs: string[]
     drug_source_not_counted: string[]
   }
+  footnotes?: ReportFootnote[]
 }
 export function createAssessment(drugs: ConfirmedDrug[], productIds: string[]) {
   return apiRequest<{ case_id: string }>('/api/assessments', {
