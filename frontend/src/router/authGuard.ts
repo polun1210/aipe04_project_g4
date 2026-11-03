@@ -43,7 +43,7 @@ export function resolveAuthRedirect(to: GuardTarget, me: Me | null) {
     return { name: 'login', query: { redirect: to.fullPath } }
   }
   if (profileRequired.has(name) && me && !me.profile_completed) {
-    return { name: 'health-profile', query: { redirect: to.fullPath } }
+    return { name: 'health-profile' }
   }
   return null
 }

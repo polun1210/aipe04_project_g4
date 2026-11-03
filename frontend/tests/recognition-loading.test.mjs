@@ -44,6 +44,7 @@ async function createModule(id) {
         : id === 'pinia'
           ? pinia
           : {
+              useRoute: () => ({ query: {} }),
               useRouter: () => ({
                 push: async (path) => {
                   navigation.push(path)
