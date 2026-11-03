@@ -5,9 +5,11 @@
 ```
 /login（Google 按鈕）
    │ 登入成功
-   ├─ profile_completed = false ──→ /health-profile ──儲存成功──→ redirect 或 /medicine-upload
+   ├─ profile_completed = false ──→ /health-profile ──儲存成功──→ /medicine-upload（固定）
    └─ profile_completed = true  ──→ redirect 或 /medicine-upload
 ```
+
+首次填寫完成固定從處方箋上傳開始，不回原頁（#79）；`/settings` 儲存或取消後回 `/member-center`。只有登入頁會讀 `redirect`。
 
 ## API 約定
 
@@ -30,11 +32,11 @@
 - `src/stores/session.ts`（Pinia）：`me`、`loaded`、`load()`、`login()`、`logout()`、`markProfileCompleted()`。
 - `src/router/authGuard.ts`：純函式 `resolveAuthRedirect(to, me)` 與 `safeRedirect()`；`router.beforeEach` 先 `session.load()` 再呼叫。
   - 需登入：會員中心、設定、健康資料、藥品／保健食品流程、報告。沒登入 → `/login?redirect=…`。
-  - 需填過健康資料：藥品／保健食品上傳與核對。沒填 → `/health-profile?redirect=…`。
+  - 需填過健康資料：藥品／保健食品上傳與核對。沒填 → `/health-profile`（不帶 redirect）。
   - 已登入進 `/login` → `/medicine-upload`。
   - `redirect` 只接受 `/` 開頭、非 `//` 開頭的站內路徑。
 - `src/services/healthProfileApi.ts`：`HealthProfileGateway` 的真實作，由 `main.ts` provide。首次填寫與日後修改都用 `saveProfile`（`saveInitialConditions` 已移除）。
-- `SupplementReviewView.vue`：送出評估收到 409 `profile_incomplete` → 導到 `/health-profile`（帶 redirect），資料留在 store。
+- `SupplementReviewView.vue`：送出評估收到 409 `profile_incomplete` → 導到 `/health-profile`，填完到 `/medicine-upload`，已核對的資料留在 store。
 - `/register` 轉址到 `/login`；`RegisterView.vue` 與設定頁的密碼介面已移除。
 
 ## Client ID

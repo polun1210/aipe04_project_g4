@@ -149,9 +149,9 @@ async function submit() {
     flow.resetFlow()
   } catch (reason) {
     if (reason instanceof ApiError && reason.body.error.code === 'profile_incomplete') {
-      // 健康資料還沒填：導去填寫，完成後回到這頁（資料暫存在 store，不會消失）。
+      // 健康資料還沒填：導去填寫；填完會到藥品上傳頁，已核對的資料仍留在 store。
       busy.value = false
-      await router.push({ name: 'health-profile', query: { redirect: '/supplement-review' } })
+      await router.push({ name: 'health-profile' })
       return
     }
     error.value = errorMessage(reason)
