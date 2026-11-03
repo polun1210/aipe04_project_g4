@@ -310,3 +310,41 @@ def test_name_only_mentioning_assessed_nutrient_in_parentheses_is_still_disclose
     rows = [row("calcium", 300), _extra_row("x1", "天然海藻粉(含鈣)"), _extra_row("x2", "高效 鈣 配方")]
     a = run(make_case([_labelled_product(*rows)]))
     assert a.disclosures.out_of_scope_ingredients == ["天然海藻粉(含鈣)", "高效 鈣 配方"]
+
+
+def test_breakdown_row_naming_assessed_nutrient_in_top_level_parentheses_is_not_disclosed():
+    rows = [
+        row("vitamin_e", 20, unit="mg_ate"),
+        row("vitamin_b12", 100, unit="ug"),
+        _extra_row("x1", "乙酸dl-α-生育醇酯(維生素E)(維生素E、辛烯基丁二酸鈉澱粉、二氧化矽)"),
+        _extra_row("x2", "氰鈷胺明(維生素B12)(檸檬酸鈉、維生素B12)"),
+        # 只在巢狀括號裡提到維生素E（抗氧化劑），葉黃素本身沒評估：照舊揭露
+        _extra_row("x3", "葉黃素(明膠、蔗糖、生育醇(維生素E)(抗氧化劑))"),
+    ]
+    a = run(make_case([_labelled_product(*rows)]))
+    assert a.disclosures.out_of_scope_ingredients == ["葉黃素(明膠、蔗糖、生育醇(維生素E)(抗氧化劑))"]
+
+
+def test_breakdown_row_of_assessed_allowed_ingredient_is_not_disclosed():
+    rows = [row("red_yeast_rice"), _extra_row("x1", "紅麴粉 (red mold dioscorea powder，菌種名:Monascus purpureus NTU 568)")]
+    a = run(make_case([_labelled_product(*rows)]))
+    assert a.disclosures.out_of_scope_ingredients == []
+
+
+def test_nutrition_label_boilerplate_fields_are_not_disclosed():
+    names = ["熱量", "蛋白質", "脂肪", "飽和脂肪", "反式脂肪", "碳水化合物", "糖", "鈉", "硬脂酸鎂"]
+    rows = [row("zinc", 10), *[_extra_row(f"x{i}", n) for i, n in enumerate(names)]]
+    a = run(make_case([_labelled_product(*rows)]))
+    assert a.disclosures.out_of_scope_ingredients == ["硬脂酸鎂"]
+
+
+def test_out_of_scope_names_are_deduplicated_after_normalization():
+    rows = [
+        row("zinc", 10),
+        _extra_row("x1", "生物素"),
+        _extra_row("x2", "生物素(磷酸氫鈣(無水)、生物素)"),
+        _extra_row("x3", "硝酸硫胺明(維生素B1，硝酸噻胺)"),
+        _extra_row("x4", "硝酸硫胺明(維生素B1,硝酸噻胺)"),
+    ]
+    a = run(make_case([_labelled_product(*rows)]))
+    assert a.disclosures.out_of_scope_ingredients == ["生物素", "硝酸硫胺明(維生素B1，硝酸噻胺)"]

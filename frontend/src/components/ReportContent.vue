@@ -3,20 +3,12 @@ import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { getCatalog, type Ingredient } from '../api/catalog'
 import type { Report, ReportNutrient } from '../api/reports'
 import { taipeiDateTime } from '../api/reports'
-import type { Unit } from '../api/supplements'
+import { unitLabel } from '../api/supplements'
 const props = defineProps<{ report: Report }>()
-const unitLabels: Record<Unit, string> = {
-  mg: '毫克',
-  ug: '微克',
-  g: '公克',
-  kcal: '大卡',
-  iu: '國際單位（IU）',
-  mg_ate: '毫克 α-TE',
-  mg_ne: '毫克 NE',
-  other: '其他單位',
-}
-function unitLabel(unit: string) {
-  return Object.hasOwn(unitLabels, unit) ? unitLabels[unit as Unit] : unit
+// 完整編號是 UUID，太長；畫面與 PDF 只顯示前 8 碼，方便口頭或紙本對照（完整編號仍在網址與資料裡）
+const REPORT_ID_LENGTH = 8
+function shortReportId(id: string) {
+  return id.replace(/-/g, '').slice(0, REPORT_ID_LENGTH).toUpperCase()
 }
 // 範圍外成分清單預設收合；列印／另存 PDF 前強制展開，列印後還原
 const outOfScopeDetails = ref<HTMLDetailsElement | null>(null)
@@ -101,8 +93,11 @@ function sourceUrl(url: string | null) {
 <template>
   <article class="report-content">
     <h1>我的營養補充評估報告</h1>
-    <p>產生時間：{{ taipeiDateTime(report.generated_at) }}（台灣時間）</p>
-    <p>報告編號：{{ report.report_id }}</p>
+    <p>
+      報告編號：{{ shortReportId(report.report_id) }}｜產生時間：{{
+        taipeiDateTime(report.generated_at)
+      }}（台灣時間）
+    </p>
     <p>{{ report.summary }}</p>
     <section aria-labelledby="report-profile">
       <h2 id="report-profile">

@@ -135,3 +135,9 @@ test('無法確認的成分維持警示段落、不收合', async () => {
   )
   assert.match(html, /disclosure-unassessed[^>]*>\s*無法確認的成分：X、Y，請諮詢藥師。/)
 })
+
+test('報告編號只顯示前 8 碼大寫，不顯示完整 UUID', async () => {
+  const html = await render(report({ report_id: '892fe767-f933-4388-a7f5-d858add6374c' }))
+  assert.match(html, /報告編號：892FE767｜產生時間/)
+  assert.doesNotMatch(html, /892fe767-f933/)
+})
