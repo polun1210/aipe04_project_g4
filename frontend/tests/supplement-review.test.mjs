@@ -50,7 +50,7 @@ async function load(id) {
       const body = ast.statements.filter((statement) => !ts.isImportDeclaration(statement))
       const bindings = `submit, ingredients, error, canSubmit, busy, catalogBusy,
          flow, medicine, previews, selectedImageId, confirmedCount, reviewRows, outOfScopeRows,
-         isTestExtraction, loadCatalog, doseLabels, doseAmounts, unitOptions, chooseNutrient,
+         isTestExtraction, loadCatalog, doseLabels, doseAmounts, unitLabel, unitOptions, chooseNutrient,
          nameFor, isReviewFrequency, stage, productLockedCount, doseOptions`
       source = `${imports.map((s) => s.getText(ast)).join('\n')}
         export function setup() {
@@ -590,4 +590,29 @@ test('saving an unresolved row as out-of-scope moves it without deleting the ori
   flow.lockAllRows(ingredients)
   assert.equal(review.canSubmit.value, true)
   assert.equal(submissionFor(a).nutrients[1].scope_status, 'out_of_scope')
+})
+
+test('locked rows show unit labels instead of unit codes', async () => {
+  addProduct('A', [
+    {
+      row_id: 'row-e',
+      raw_name: '維生素E',
+      standard_code: 'vitamin_e',
+      scope_status: 'in_scope',
+      source_image_id: null,
+      per_serving: 20.1,
+      unit: 'mg_ate',
+      nutrient_form_code: null,
+      stated_elemental_amount: null,
+    },
+  ])
+  const review = setupReview()
+  review.ingredients.value = [
+    ...ingredients,
+    { code: 'vitamin_e', category: 'target_nutrient', accepted_units: ['mg_ate'] },
+  ]
+  const html = await renderReview(review)
+  assert.match(html, /100\s+毫克/)
+  assert.match(html, /20\.1\s+毫克 α-TE/)
+  assert.doesNotMatch(html, /mg_ate/)
 })

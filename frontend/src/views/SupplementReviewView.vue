@@ -9,6 +9,7 @@ import {
   doseAmounts,
   doseLabels,
   isTestExtraction,
+  unitLabel,
   unitOptions,
 } from '../api/supplements'
 import { createAssessment } from '../api/reports'
@@ -339,7 +340,7 @@ onBeforeRouteLeave(() => {
                         <select :id="`unit-${row.id}`" v-model="row.edit.unit">
                           <option value="">未標示</option>
                           <option v-for="unit in unitOptions" :key="unit" :value="unit">
-                            {{ unit }}
+                            {{ unitLabel(unit) }}
                           </option>
                         </select>
                       </p>
@@ -363,7 +364,7 @@ onBeforeRouteLeave(() => {
                     <div v-else class="review-row-content">
                       <strong class="review-row-value"
                         >{{ nameFor(row.value.choice) }}：{{ row.value.amount ?? '未標示' }}
-                        {{ row.value.unit }}</strong
+                        {{ unitLabel(row.value.unit) }}</strong
                       >
                       <div class="review-row-actions">
                         <button type="button" :disabled="row.locked" @click="flow.editRow(row)">

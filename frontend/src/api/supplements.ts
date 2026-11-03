@@ -124,3 +124,20 @@ export const doseAmounts: Record<DoseUnit, number[]> = {
   g: [1, 2, 3, 5, 10, 15, 20],
 }
 export const unitOptions: Unit[] = ['mg', 'ug', 'g', 'iu', 'mg_ate', 'mg_ne', 'kcal', 'other']
+
+export const unitLabels: Record<Unit, string> = {
+  mg: '毫克',
+  ug: '微克',
+  g: '公克',
+  kcal: '大卡',
+  iu: '國際單位（IU）',
+  mg_ate: '毫克 α-TE',
+  mg_ne: '毫克 NE',
+  other: '其他單位',
+}
+
+// 單位代碼轉中文；不認得的代碼原樣顯示
+export function unitLabel(unit: string | null | undefined): string {
+  if (!unit) return ''
+  return Object.hasOwn(unitLabels, unit) ? unitLabels[unit as Unit] : unit
+}

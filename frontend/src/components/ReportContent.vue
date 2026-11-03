@@ -3,21 +3,8 @@ import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { getCatalog, type Ingredient } from '../api/catalog'
 import type { Report, ReportNutrient } from '../api/reports'
 import { taipeiDateTime } from '../api/reports'
-import type { Unit } from '../api/supplements'
+import { unitLabel } from '../api/supplements'
 const props = defineProps<{ report: Report }>()
-const unitLabels: Record<Unit, string> = {
-  mg: '毫克',
-  ug: '微克',
-  g: '公克',
-  kcal: '大卡',
-  iu: '國際單位（IU）',
-  mg_ate: '毫克 α-TE',
-  mg_ne: '毫克 NE',
-  other: '其他單位',
-}
-function unitLabel(unit: string) {
-  return Object.hasOwn(unitLabels, unit) ? unitLabels[unit as Unit] : unit
-}
 // 範圍外成分清單預設收合；列印／另存 PDF 前強制展開，列印後還原
 const outOfScopeDetails = ref<HTMLDetailsElement | null>(null)
 let openedBeforePrint = false
