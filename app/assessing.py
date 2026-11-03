@@ -14,7 +14,7 @@ from dataclasses import dataclass, field
 from fractions import Fraction
 from uuid import UUID
 
-from app.extraction.rules import exact_ingredient_code, synonym_index
+from app.extraction.rules import exact_ingredient_code, name_key, synonym_index, top_level_parens
 from app.schemas.assessment import (
     Assessment,
     Disclosures,
@@ -323,16 +323,30 @@ def _names(rows, status: ScopeStatus) -> list[str]:
     return list(dict.fromkeys(n.raw_name for n, _ in rows if n.scope_status is status and n.raw_name))
 
 
-def _out_of_scope_names(rows, assessed: set, ref: ReferenceData) -> list[str]:
-    """範圍外名稱，但略過「已評估目標營養素的原料組成列」。
+# 台灣營養標示的必備欄位：每張營養標示都有，不是產品另外添加的成分，列進「不在評估範圍」只是雜訊
+_LABEL_BOILERPLATE = frozenset(
+    name_key(n) for n in ("熱量", "蛋白質", "脂肪", "飽和脂肪", "反式脂肪", "碳水化合物", "糖", "鈉")
+)
 
-    成分欄或另一張圖裡的「維生素D3(木薯澱粉、阿拉伯膠…)」會被判成範圍外（營養標示方框那列才代表該營養素），
-    它的營養素本身已在報告裡評估，再列一次只會讓清單灌水。只有去括號後名稱完全等於
-    某個「同一份草稿已評估」的目標營養素的同義詞才略過；認不得、只是括號內提到的，一律照舊揭露。"""
-    synonyms = synonym_index(i for i in ref.catalog.ingredients if i.code in TARGET_NUTRIENTS)
-    kept = [
-        (n, p)
-        for n, p in rows
-        if not (n.raw_name and exact_ingredient_code(n.raw_name, synonyms) in assessed)
-    ]
-    return _names(kept, ScopeStatus.OUT_OF_SCOPE)
+
+def _out_of_scope_names(rows, assessed: set, ref: ReferenceData) -> list[str]:
+    """範圍外名稱，略過三種雜訊後依正規化名稱去重（保留第一次出現的原文）。
+
+    1. 已評估成分的原料組成列：成分欄或另一張圖裡的「維生素C(維生素C、玉米澱粉)」「乙酸dl-α-生育醇酯(維生素E)」
+       會被判成範圍外（營養標示方框那列才代表該成分），但它的成分已在報告裡評估。去括號後整串、或任一段
+       「最外層」括號內容完全等於本案已評估成分（目標營養素或紅麴等允許成分）的同義詞，才略過。
+       「天然海藻粉(含鈣)」「高效 鈣 配方」、只在巢狀括號提到（葉黃素(…生育醇(維生素E)…)）的，照舊揭露。
+    2. 營養標示必備欄位（熱量、蛋白質…鈉）。
+    3. 同一成分的重複寫法：「生物素」與「生物素(磷酸氫鈣、生物素)」、全形與半形逗號。"""
+    synonyms = synonym_index(i for i in ref.catalog.ingredients if i.code in assessed)
+
+    def is_noise(raw: str) -> bool:
+        if name_key(raw) in _LABEL_BOILERPLATE:
+            return True
+        return any(exact_ingredient_code(name, synonyms) for name in (raw, *top_level_parens(raw)))
+
+    names: dict[str, str] = {}
+    for n, _ in rows:
+        if n.scope_status is ScopeStatus.OUT_OF_SCOPE and n.raw_name and not is_noise(n.raw_name):
+            names.setdefault(name_key(n.raw_name), n.raw_name)
+    return list(names.values())

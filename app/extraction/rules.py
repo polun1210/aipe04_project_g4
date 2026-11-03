@@ -103,6 +103,27 @@ def _strip_parens(text: str) -> str:
     return text
 
 
+def name_key(text: str) -> str:
+    """去括號、去空白、NFKC、小寫後的名稱，用來判斷兩個原文是不是同一個成分（揭露去重）。"""
+    return _key(_strip_parens(_norm(text)))
+
+
+def top_level_parens(text: str) -> list[str]:
+    """最外層括號裡的整段文字（巢狀括號原樣保留）。
+    「葉黃素(明膠、生育醇(維生素E))」只回傳「明膠、生育醇(維生素E)」，不會把巢狀的「維生素E」單獨拿出來。"""
+    segments, depth, start = [], 0, 0
+    for i, ch in enumerate(_norm(text)):
+        if ch in "(（[【":
+            if depth == 0:
+                start = i + 1
+            depth += 1
+        elif ch in ")）]】" and depth:
+            depth -= 1
+            if depth == 0:
+                segments.append(_norm(text)[start:i])
+    return segments
+
+
 def _parens(text: str) -> list[str]:
     return re.findall(r"[(（\[【]([^()（）\[\]【】]*)[)）\]】]", text)
 
