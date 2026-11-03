@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, reactive, ref, watch } from 'vue'
+import { computed, nextTick, onMounted, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import ConditionSelector from '../components/ConditionSelector.vue'
 import {
@@ -27,10 +27,6 @@ const loading = ref(false)
 const loaded = ref(false)
 const saving = ref(false)
 const error = ref('')
-const saved = ref(false)
-watch(form, () => {
-  saved.value = false
-})
 const errorSummary = ref<HTMLElement | null>(null)
 const errors = computed(() => profileErrors(form))
 const canSave = computed(() => gateway.available && loaded.value && !loading.value && !saving.value)
@@ -67,7 +63,6 @@ function handleCancel() {
 async function handleSubmit() {
   if (saving.value || loading.value) return
   attempted.value = true
-  saved.value = false
   error.value = ''
   if (Object.values(errors.value).some(Boolean)) {
     await nextTick()
@@ -84,7 +79,6 @@ async function handleSubmit() {
   try {
     await gateway.saveProfile(profilePayload(form))
     session.markProfileCompleted()
-    saved.value = true
     await router.push({ path: '/member-center', query: { profileSaved: '1' } })
   } catch (reason) {
     error.value = errorMessage(reason)
@@ -123,7 +117,6 @@ onMounted(loadProfile)
         </ul>
       </div>
       <p v-if="error" role="alert">{{ error }}</p>
-      <p v-if="saved" role="status">個人資料已儲存。</p>
       <button v-if="gateway.available && !loaded && !loading" type="button" @click="loadProfile">
         重新載入會員資料
       </button>

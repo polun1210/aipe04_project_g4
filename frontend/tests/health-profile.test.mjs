@@ -19,7 +19,7 @@ const pendingModules = new Map()
 const exposures = {
   HealthProfileView: 'form, handleSubmit, canSave, error, saving',
   SettingsView:
-    'form, handleSubmit, handleCancel, loadProfile, canSave, error, saved, loaded, loading',
+    'form, handleSubmit, handleCancel, loadProfile, canSave, error, loaded, loading',
   MemberCenterView: 'handleLogout, error, loggingOut',
 }
 const RouterLink = {
@@ -405,7 +405,6 @@ test('settings contains birth fields and single-choice sex radios and blocks una
   Object.assign(view.exposed.form, { birthYear: '1954', birthMonth: '3' })
   await check(view, 'none')
   await view.exposed.handleSubmit()
-  assert.equal(view.exposed.saved, false)
   assert.equal(view.exposed.canSave, false)
   assert.match(view.exposed.error, /尚未開放/)
   view.exposed.handleCancel()
@@ -438,7 +437,6 @@ test('settings loads profile, validates and serializes existing contract', async
   assert.equal(calls.length, 0)
   view.exposed.form.birthMonth = '3'
   const saving = view.exposed.handleSubmit()
-  assert.equal(view.exposed.saved, false)
   assert.deepEqual(calls, [profile])
   await view.exposed.handleSubmit()
   view.exposed.handleCancel()
@@ -446,10 +444,6 @@ test('settings loads profile, validates and serializes existing contract', async
   assert.deepEqual(navigation, [])
   pending.resolve()
   await saving
-  assert.equal(view.exposed.saved, true)
-  view.exposed.form.birthYear = '1955'
-  await vue.nextTick()
-  assert.equal(view.exposed.saved, false)
   assert.deepEqual(json(navigation), [{ path: '/member-center', query: { profileSaved: '1' } }])
   assert.deepEqual(sessionCalls, ['markProfileCompleted'])
   view.unmount()
@@ -472,7 +466,6 @@ test('settings service read/write failures do not claim success or navigate and 
     throw new ApiError(503, { error: { code: 'unavailable', message: '儲存失敗，請稍後重試。' } })
   }
   await view.exposed.handleSubmit()
-  assert.equal(view.exposed.saved, false)
   assert.equal(view.exposed.error, '儲存失敗，請稍後重試。')
   assert.equal(view.exposed.form.birthYear, '1954')
   assert.deepEqual(navigation, [])

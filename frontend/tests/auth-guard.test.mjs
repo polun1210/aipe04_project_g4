@@ -29,7 +29,7 @@ test('沒登入：首頁與登入頁放行', () => {
   assert.equal(resolveAuthRedirect(to('login'), null), null)
 })
 
-test('登入但沒填健康資料：評估流程導去 health-profile 並帶 redirect', () => {
+test('登入但沒填健康資料：評估流程導去 health-profile', () => {
   for (const name of [
     'medicine-upload',
     'medicine-review',
@@ -38,7 +38,6 @@ test('登入但沒填健康資料：評估流程導去 health-profile 並帶 red
   ])
     assert.deepEqual(resolveAuthRedirect(to(name), fresh), {
       name: 'health-profile',
-      query: { redirect: `/${name}` },
     })
 })
 
