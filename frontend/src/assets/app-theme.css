@@ -17,7 +17,6 @@ body:has(.image-lightbox[open]) {
   --line: #dce2e4;
   --error: #943e24;
   --exceeded-red: #d32f2f;
-  --within-blue: #2f6fb0;
   --attention: #fff5d9;
   --radius: 24px;
   color: var(--navy);
@@ -1801,7 +1800,7 @@ body:has(.image-lightbox[open]) {
   -webkit-print-color-adjust: exact;
 }
 .report-content .nutrient-bar--within {
-  background: var(--within-blue);
+  background: var(--navy);
 }
 .report-content .nutrient-bar--exceeded {
   background: var(--exceeded-red);
