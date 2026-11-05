@@ -240,3 +240,15 @@ test('提醒不帶間隔時不顯示小時；沒有交互作用時不出現提�
   const none = await render(report({ interactions: [] }))
   assert.doesNotMatch(none, /告知醫師或藥師|錯開服用|trigger-advice/)
 })
+
+test('未超過卻接近 100%：標籤無條件捨去到一位小數，不顯示成 100%', async () => {
+  const html = block(await render(report({ nutrients: [nutrient('C', ul(0.996, false))] })), 'C')
+  assert.match(html, /99\.6%/)
+  assert.doesNotMatch(html, /100%/)
+  assert.doesNotMatch(html, /超過上限/)
+})
+
+test('對話與交互作用無關：比例 0 的條寬為 0', async () => {
+  const html = block(await render(report({ nutrients: [nutrient('D', ul(0, false))] })), 'D')
+  assert.match(html, /width:\s*0%/)
+})

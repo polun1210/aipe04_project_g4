@@ -22,6 +22,9 @@ _NUMBER = re.compile(r"(?<![A-Za-z0-9.\-－])\d+(?:\.\d+)?")
 _DOSE = re.compile(r"(?<![A-Za-z0-9.\-－])(\d+(?:\.\d+)?)\s*(?:mg|毫克|ug|mcg|μg|µg|微克|IU|國際單位|公克|g)(?![A-Za-z])")
 _DOSAGE_ADVICE = ("停用", "停藥", "停止服用", "減量", "減少劑量", "降低劑量", "不要再吃", "改吃", "換成")
 _STRONG_WORDS = ("立即", "立刻", "馬上", "緊急", "危險", "嚴重")
+# 自由問答才會出現、報告敘述不會寫的停用說法；只給對話用，不改報告敘述原有的檢查
+_CHAT_EXTRA_ADVICE = ("暫停服用", "不要吃", "別吃", "不建議服用", "避免服用", "調整劑量", "增加劑量")
+_LIST_MARKER =re.compile(r"(?m)^[ \t]*\d{1,2}\s*[.、)）]\s*")
 _TOLERANCE = 1e-6
 
 
@@ -51,10 +54,13 @@ def check_narration(
 
 def text_violations(text: str, allowed: set[float]) -> list[str]:
     """自由文字（問答）用的同一組規則；不含「每條交互作用都要寫到」「引用」這類報告敘述專屬的檢查。"""
+    # 條列編號（1. 2、）不是報告數字，否則任何條列回答都會被擋；
+    # 數字範圍的連字號換成空白，後半段才會被檢查（「35-1000 mg」的 1000）。名稱裡的 COX-2、Omega-3 前面是字母，不受影響
+    body = re.sub(r"(?<=\d)[\-－~～至](?=\d)", " ", _LIST_MARKER.sub("", text))
     return (
-        [f"數字：{n}" for n in _NUMBER.findall(text) if not _is_allowed(n, allowed)]
-        + [f"劑量：{m.group(0)}" for m in _DOSE.finditer(text) if not _is_allowed(m.group(1), allowed)]
-        + [f"建議：{w}" for w in _DOSAGE_ADVICE if w in text]
+        [f"數字：{n}" for n in _NUMBER.findall(body) if not _is_allowed(n, allowed)]
+        + [f"劑量：{m.group(0)}" for m in _DOSE.finditer(body) if not _is_allowed(m.group(1), allowed)]
+        + [f"建議：{w}" for w in _DOSAGE_ADVICE + _CHAT_EXTRA_ADVICE if w in text]
         + [f"禁用詞：{p}" for p in BANNED_PHRASES if p in text]
         + [f"強烈字眼：{w}" for w in _STRONG_WORDS if w in text]
     )
