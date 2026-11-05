@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends, Query, Response
 from pydantic import BaseModel, Field, field_validator
 
 from app.errors import ApiError
-from app.report_chat import ReportChat, ReportChatError, get_report_chat
+from app.report_chat import MAX_HISTORY_TURNS, ChatTurn, ReportChat, ReportChatError, get_report_chat
 from app.reporting import Reporter, get_reporter
 from app.schemas.api import ErrorResponse
 from app.schemas.enums import ErrorCode
@@ -107,6 +107,7 @@ def get_report(
 
 class ChatRequest(BaseModel):
     question: str = Field(max_length=500)
+    history: list[ChatTurn] = Field(default_factory=list, max_length=MAX_HISTORY_TURNS)
 
     @field_validator("question")
     @classmethod
@@ -126,7 +127,7 @@ class ChatResponse(BaseModel):
     response_model=ChatResponse,
     summary="問這份報告",
     description=(
-        "報告頁對話面板呼叫。只依這一份報告回答，不存對話。"
+        "報告頁對話面板呼叫。只依這一份報告回答，不存對話；history 是前端保留的最近幾則問答（最多 10 則，每則 1000 字）。"
         "NARRATOR 不是 openrouter 時回 503（chat_disabled）；LLM 失敗回 502（chat_failed）。"
     ),
     responses={
@@ -148,7 +149,7 @@ def chat_about_report(
     if chat is None:
         raise ApiError(503, ErrorCode.CHAT_DISABLED, "對話功能未啟用")
     try:
-        answer = chat.answer(report, body.question)
+        answer = chat.answer(report, body.question, body.history)
     except ReportChatError as e:
         raise ApiError(502, ErrorCode.CHAT_FAILED, "暫時無法回答，請稍後再試") from e
     return ChatResponse(answer=answer)

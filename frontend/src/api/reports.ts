@@ -118,9 +118,13 @@ export function taipeiDateTime(value: string) {
     timeStyle: 'short',
   }).format(new Date(value))
 }
-export function askReport(reportId: string, question: string) {
+export interface ChatTurn {
+  role: 'user' | 'assistant'
+  content: string
+}
+export function askReport(reportId: string, question: string, history: ChatTurn[] = []) {
   return apiRequest<{ answer: string }>(`/api/reports/${encodeURIComponent(reportId)}/chat`, {
     method: 'POST',
-    body: JSON.stringify({ question }),
+    body: JSON.stringify({ question, history }),
   })
 }
