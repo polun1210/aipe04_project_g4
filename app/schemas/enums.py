@@ -298,4 +298,6 @@ class ErrorCode(StrEnum):
     PRODUCT_NOT_FOUND = "product_not_found"  # 送評估的 product_id 後端查不到（資料失效或編號錯誤）
     PROFILE_INCOMPLETE = "profile_incomplete"  # 帳號還沒填出生年月、性別、慢性病，不能評估
     EXTRACTION_FAILED = "extraction_failed"  # 辨識服務逾時或失敗
+    CHAT_DISABLED = "chat_disabled"  # 報告對話功能沒開（NARRATOR 不是 openrouter）
+    CHAT_FAILED = "chat_failed"  # 對話用的 LLM 逾時或失敗
     INTERNAL_ERROR = "internal_error"  # 伺服器沒預期到的錯誤；message 固定，不洩漏內部細節
