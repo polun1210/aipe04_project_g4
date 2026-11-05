@@ -95,3 +95,14 @@ def test_strong_words_are_blocked(word):
 
 def test_calm_wording_is_allowed():
     assert text_violations("這項需要請你詢問醫師或藥師。", ALLOWED) == []
+
+
+def test_decimal_at_line_start_is_not_a_list_marker():
+    # 報告允許 35，但 1.35 不在報告裡；行首小數不能被當成編號而把 1. 吃掉
+    assert "劑量" in _kinds("1.35 mg 可以服用")
+    assert "數字" in _kinds("1.35 可以服用")
+
+
+@pytest.mark.parametrize("word", ["停止用藥", "停止服藥", "暫停用藥", "暫停服藥", "不要服藥", "不要用藥", "不要吃藥", "停吃"])
+def test_more_stop_medication_wording_is_blocked(word):
+    assert "建議" in _kinds(f"請{word}並詢問醫師")
