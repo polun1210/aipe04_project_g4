@@ -2,8 +2,10 @@ from datetime import UTC, date, datetime
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, Query, Response
+from pydantic import BaseModel, Field, field_validator
 
 from app.errors import ApiError
+from app.report_chat import ReportChat, ReportChatError, get_report_chat
 from app.reporting import Reporter, get_reporter
 from app.schemas.api import ErrorResponse
 from app.schemas.enums import ErrorCode
@@ -101,3 +103,53 @@ def get_report(
     if report is None:
         raise ApiError(404, ErrorCode.NOT_FOUND, "找不到要求的資料")
     return report
+
+
+class ChatRequest(BaseModel):
+    question: str = Field(max_length=500)
+
+    @field_validator("question")
+    @classmethod
+    def _not_blank(cls, value: str) -> str:
+        value = value.strip()
+        if not value:
+            raise ValueError("問題不可為空白")
+        return value
+
+
+class ChatResponse(BaseModel):
+    answer: str
+
+
+@router.post(
+    "/api/reports/{report_id}/chat",
+    response_model=ChatResponse,
+    summary="問這份報告",
+    description=(
+        "報告頁對話面板呼叫。只依這一份報告回答，不存對話。"
+        "NARRATOR 不是 openrouter 時回 503（chat_disabled）；LLM 失敗回 502（chat_failed）。"
+    ),
+    responses={
+        **_NOT_FOUND,
+        503: {"model": ErrorResponse, "description": "對話功能未啟用"},
+        502: {"model": ErrorResponse, "description": "LLM 逾時或失敗"},
+    },
+)
+def chat_about_report(
+    report_id: UUID,
+    body: ChatRequest,
+    chat: ReportChat | None = Depends(get_report_chat),
+    store: Store = Depends(get_store),
+    user_id: UUID = Depends(get_current_user_id),
+) -> ChatResponse:
+    report = store.get_report(user_id, report_id)
+    if report is None:
+        raise ApiError(404, ErrorCode.NOT_FOUND, "找不到要求的資料")
+    if chat is None:
+        raise ApiError(503, ErrorCode.CHAT_DISABLED, "對話功能未啟用")
+    try:
+        answer = chat.answer(report.model_dump_json(), body.question)
+    except ReportChatError as e:
+        raise ApiError(502, ErrorCode.CHAT_FAILED, "暫時無法回答，請稍後再試") from e
+    # 回答檢查（ticket 04）接在這裡：檢查 answer，不合格就改回固定訊息
+    return ChatResponse(answer=answer)

@@ -118,3 +118,9 @@ export function taipeiDateTime(value: string) {
     timeStyle: 'short',
   }).format(new Date(value))
 }
+export function askReport(reportId: string, question: string) {
+  return apiRequest<{ answer: string }>(`/api/reports/${encodeURIComponent(reportId)}/chat`, {
+    method: 'POST',
+    body: JSON.stringify({ question }),
+  })
+}
