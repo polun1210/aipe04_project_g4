@@ -59,6 +59,10 @@ const advice: Record<string, string> = {
   inform_provider: '告知醫師或藥師',
   consult_before_combining: '併用前先與醫師或藥師討論',
 }
+function adviceText(trigger: { advice_code: string; separation_hours: number | null }) {
+  const text = advice[trigger.advice_code] ?? trigger.advice_code
+  return trigger.separation_hours === null ? text : `${text}（間隔 ${trigger.separation_hours} 小時）`
+}
 const citations = computed(() =>
   Array.from(
     new Map(
@@ -223,25 +227,13 @@ function sourceUrl(url: string | null) {
         <p v-if="interaction.requires_professional_review">請與醫師或藥師討論。</p>
         <ul>
           <li v-for="trigger in interaction.triggers" :key="trigger.rule_id">
-            {{ trigger.condition_display_name_zh }}：{{ withPeriod(trigger.reason_zh) }}
+            {{ trigger.condition_display_name_zh }}：{{ withPeriod(trigger.reason_zh)
+            }}<span class="trigger-advice"
+              >{{ adviceText(trigger) }}</span
+            >
           </li>
         </ul>
       </section>
-    </section>
-    <section aria-labelledby="report-advice">
-      <h2 id="report-advice"><span class="section-index" aria-hidden="true">04</span>改善建議</h2>
-      <p v-if="!report.interactions.length">本份報告未提供特定交互作用建議。</p>
-      <ul>
-        <template v-for="interaction in report.interactions" :key="interaction.ingredient_code">
-          <li v-for="trigger in interaction.triggers" :key="trigger.rule_id">
-            {{ interaction.display_name_zh }}／{{ trigger.condition_display_name_zh }}：
-            {{ advice[trigger.advice_code] ?? trigger.advice_code }}
-            <span v-if="trigger.separation_hours !== null"
-              >（間隔 {{ trigger.separation_hours }} 小時）</span
-            >
-          </li>
-        </template>
-      </ul>
     </section>
     <section v-if="footnotes.length" aria-labelledby="report-footnotes" class="report-footnotes">
       <h2 id="report-footnotes">參考資料</h2>
@@ -268,7 +260,7 @@ function sourceUrl(url: string | null) {
     </section>
     <section aria-labelledby="report-disclosures">
       <h2 id="report-disclosures">
-        <span class="section-index" aria-hidden="true">05</span>評估範圍與資料來源
+        <span class="section-index" aria-hidden="true">04</span>評估範圍與資料來源
       </h2>
       <p>
         涵蓋 {{ report.disclosures.covered_known_conditions.length }} 種慢性病、{{

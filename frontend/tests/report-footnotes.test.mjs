@@ -219,3 +219,24 @@ test('平均、建議總攝取量與藥品來源收進營養素可展開區塊�
   assert.match(m[1], /另列藥品來源：3 /)
   assert.doesNotMatch(html.replace(m[0], ''), /建議總攝取量/)
 })
+
+test('沒有「改善建議」一節，章節編號連續，提醒併入交互作用', async () => {
+  const r = report({})
+  r.interactions[0].triggers = [
+    { ...trigger, reason_zh: '已有句號。', advice_code: 'separate_timing', separation_hours: 4 },
+  ]
+  const html = await render(r)
+  assert.doesNotMatch(html, /改善建議|report-advice/)
+  assert.match(html, />04<\/span>評估範圍與資料來源/)
+  assert.doesNotMatch(html, />05</)
+  const inter = html.split('aria-labelledby="report-interactions"')[1].split('<section aria-labelledby=')[0]
+  assert.match(inter, /降血脂藥：已有句號。<span[^>]*>錯開服用（間隔 4 小時）<\/span>/)
+})
+
+test('提醒不帶間隔時不顯示小時；沒有交互作用時不出現提醒', async () => {
+  const html = await render(report({}))
+  assert.match(html, /告知醫師或藥師/)
+  assert.doesNotMatch(html, /間隔/)
+  const none = await render(report({ interactions: [] }))
+  assert.doesNotMatch(none, /告知醫師或藥師|錯開服用|trigger-advice/)
+})
