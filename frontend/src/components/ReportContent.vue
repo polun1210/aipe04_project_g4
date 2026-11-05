@@ -10,17 +10,20 @@ const REPORT_ID_LENGTH = 8
 function shortReportId(id: string) {
   return id.replace(/-/g, '').slice(0, REPORT_ID_LENGTH).toUpperCase()
 }
-// 範圍外成分清單預設收合；列印／另存 PDF 前強制展開，列印後還原
-const outOfScopeDetails = ref<HTMLDetailsElement | null>(null)
-let openedBeforePrint = false
+// 營養素細節與範圍外成分清單預設收合；列印／另存 PDF 前強制展開，列印後還原。
+// 單位說明與原文節錄不展開。
+const root = ref<HTMLElement | null>(null)
+let openedBeforePrint: HTMLDetailsElement[] = []
 function expandForPrint() {
-  const el = outOfScopeDetails.value
-  openedBeforePrint = !!el && !el.open
-  if (el) el.open = true
+  const all = root.value?.querySelectorAll<HTMLDetailsElement>(
+    'details.nutrient-details, details.out-of-scope-details',
+  )
+  openedBeforePrint = Array.from(all ?? []).filter((el) => !el.open)
+  openedBeforePrint.forEach((el) => (el.open = true))
 }
 function restoreAfterPrint() {
-  if (outOfScopeDetails.value && openedBeforePrint) outOfScopeDetails.value.open = false
-  openedBeforePrint = false
+  openedBeforePrint.forEach((el) => (el.open = false))
+  openedBeforePrint = []
 }
 onMounted(() => {
   window.addEventListener('beforeprint', expandForPrint)
@@ -81,6 +84,16 @@ function ulText(nutrient: ReportNutrient) {
   }
   return templates[ul.phrasing] ?? '請依上限數據與醫師或藥師討論。'
 }
+// 橫條滿格 = 上限的 150%，上限虛線在 100%（三分之二處）
+const BAR_FULL_RATIO = 1.5
+const percentFormat = new Intl.NumberFormat('zh-TW', { maximumFractionDigits: 0 })
+function barWidth(ratio: number) {
+  return `${Math.min(ratio / BAR_FULL_RATIO, 1) * 100}%`
+}
+function barLabel(ul: NonNullable<ReportNutrient['ul']>) {
+  const percent = `${percentFormat.format(ul.ratio * 100)}%`
+  return ul.exceeded ? `${percent} 超過上限` : percent
+}
 const footnotes = computed(() => props.report.footnotes ?? [])
 function withPeriod(text: string) {
   return text.endsWith('。') ? text : `${text}。`
@@ -91,7 +104,7 @@ function sourceUrl(url: string | null) {
 </script>
 
 <template>
-  <article class="report-content">
+  <article ref="root" class="report-content">
     <h1>我的營養補充評估報告</h1>
     <p>
       報告編號：{{ shortReportId(report.report_id) }}｜產生時間：{{
@@ -147,22 +160,43 @@ function sourceUrl(url: string | null) {
         </h3>
         <p>
           補充劑單日峰值：{{ nutrient.peak_intake_from_supplements }}
-          {{ unitLabel(nutrient.unit) }}；平均每日：{{ nutrient.average_intake_from_supplements }}
           {{ unitLabel(nutrient.unit) }}
-        </p>
-        <p>
-          建議總攝取量（含飲食，{{
-            nutrient.recommended_total_intake.reference_type.toUpperCase()
-          }}）：{{ nutrient.recommended_total_intake.value }} {{ unitLabel(nutrient.unit) }}
         </p>
         <p v-if="nutrient.ul">
           上限：{{ nutrient.ul.ul_value }} {{ unitLabel(nutrient.unit) }}。{{ ulText(nutrient) }}
         </p>
         <p v-else>{{ ulText(nutrient) }}</p>
-        <p v-if="nutrient.intake_from_drugs !== null">
-          另列藥品來源：{{ nutrient.intake_from_drugs }}
-          {{ unitLabel(nutrient.unit) }}，不納入上述補充劑上限比例。
-        </p>
+        <div v-if="nutrient.ul" class="nutrient-bar-row">
+          <div class="nutrient-bar-track" aria-hidden="true">
+            <div
+              class="nutrient-bar"
+              :class="nutrient.ul.exceeded ? 'nutrient-bar--exceeded' : 'nutrient-bar--within'"
+              :style="{ width: barWidth(nutrient.ul.ratio) }"
+            ></div>
+            <div class="nutrient-bar-ul"></div>
+          </div>
+          <span
+            class="nutrient-bar-label"
+            :class="{ 'nutrient-bar-label--exceeded': nutrient.ul.exceeded }"
+            >{{ barLabel(nutrient.ul) }}</span
+          >
+        </div>
+        <details class="nutrient-details">
+          <summary>攝取量細節</summary>
+          <p>
+            平均每日：{{ nutrient.average_intake_from_supplements }}
+            {{ unitLabel(nutrient.unit) }}
+          </p>
+          <p>
+            建議總攝取量（含飲食，{{
+              nutrient.recommended_total_intake.reference_type.toUpperCase()
+            }}）：{{ nutrient.recommended_total_intake.value }} {{ unitLabel(nutrient.unit) }}
+          </p>
+          <p v-if="nutrient.intake_from_drugs !== null">
+            另列藥品來源：{{ nutrient.intake_from_drugs }}
+            {{ unitLabel(nutrient.unit) }}，不納入上述補充劑上限比例。
+          </p>
+        </details>
         <p v-if="nutrient.narration">{{ nutrient.narration }}</p>
       </section>
     </section>
@@ -260,7 +294,6 @@ function sourceUrl(url: string | null) {
       </p>
       <details
         v-if="report.disclosures.out_of_scope_ingredients.length"
-        ref="outOfScopeDetails"
         class="out-of-scope-details"
       >
         <summary>

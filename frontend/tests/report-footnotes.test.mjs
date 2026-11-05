@@ -16,6 +16,7 @@ code = ts.transpileModule(code, {
 code = code
   .replace(/import \{ getCatalog[^\n]*\n/, 'const getCatalog = async () => ({ ingredients: [] })\n')
   .replace(/import \{ taipeiDateTime[^\n]*\n/, 'const taipeiDateTime = (v) => v\n')
+  .replace(/import \{ unitLabel[^\n]*\n/, 'const unitLabel = (u) => u\n')
   .replace(/import [^\n]*['"]\.\.\/api\/[^\n]*\n/g, '')
 const tmp = new URL('./.report-content.tmp.mjs', import.meta.url)
 await writeFile(tmp, code)
@@ -140,4 +141,81 @@ test('報告編號只顯示前 8 碼大寫，不顯示完整 UUID', async () => 
   const html = await render(report({ report_id: '892fe767-f933-4388-a7f5-d858add6374c' }))
   assert.match(html, /報告編號：892FE767｜產生時間/)
   assert.doesNotMatch(html, /892fe767-f933/)
+})
+
+const nutrient = (code, ul, extra = {}) => ({
+  nutrient_code: code,
+  display_name_zh: `營養${code}`,
+  peak_intake_from_supplements: 10,
+  average_intake_from_supplements: 7,
+  intake_from_drugs: null,
+  unit: 'mg',
+  basis: 'measured',
+  recommended_total_intake: { reference_type: 'rda', value: 99 },
+  ul,
+  narration: null,
+  ...extra,
+})
+const ul = (ratio, exceeded) => ({
+  ul_value: 100,
+  ratio,
+  exceeded,
+  scope: 'supplement_only',
+  phrasing: exceeded ? 'exceeded_supplement_only' : 'percent_supplement_only',
+})
+// 取出某個營養素的區塊 HTML
+const block = (html, code) => html.split('<section').find((s) => s.includes(`營養${code}`)) ?? ''
+
+test('超過上限：紅色橫條與「超過上限」標籤，標籤顯示實際百分比', async () => {
+  const html = block(
+    await render(report({ nutrients: [nutrient('A', ul(1.49, true))] })),
+    'A',
+  )
+  assert.match(html, /nutrient-bar--exceeded/)
+  assert.doesNotMatch(html, /nutrient-bar--within/)
+  assert.match(html, /149% 超過上限/)
+  assert.match(html, /nutrient-bar-ul/)
+})
+
+test('未超過上限：藍色橫條，長度為比例除以 150%', async () => {
+  const html = block(await render(report({ nutrients: [nutrient('B', ul(0.75, false))] })), 'B')
+  assert.match(html, /nutrient-bar--within/)
+  assert.doesNotMatch(html, /nutrient-bar--exceeded/)
+  assert.match(html, /width:\s*50%/)
+  assert.match(html, /75%/)
+  assert.doesNotMatch(html, /75% 超過上限/)
+})
+
+test('剛好 100% 且後端標為超過時視為超過上限', async () => {
+  const html = block(await render(report({ nutrients: [nutrient('C', ul(1, true))] })), 'C')
+  assert.match(html, /nutrient-bar--exceeded/)
+  assert.match(html, /100% 超過上限/)
+})
+
+test('超過滿格（150%）時橫條畫滿，標籤仍顯示實際百分比', async () => {
+  const html = block(await render(report({ nutrients: [nutrient('D', ul(2.2, true))] })), 'D')
+  assert.match(html, /width:\s*100%/)
+  assert.match(html, /220% 超過上限/)
+})
+
+test('沒有上限：不畫橫條，只列文字', async () => {
+  const html = block(await render(report({ nutrients: [nutrient('E', null)] })), 'E')
+  assert.doesNotMatch(html, /nutrient-bar/)
+  assert.match(html, /未訂定可比較的上限/)
+})
+
+test('平均、建議總攝取量與藥品來源收進營養素可展開區塊，且不在橫條上', async () => {
+  const html = block(
+    await render(
+      report({ nutrients: [nutrient('F', ul(0.5, false), { intake_from_drugs: 3 })] }),
+    ),
+    'F',
+  )
+  const m = html.match(/<details[^>]*class="nutrient-details"[^>]*>([\s\S]*?)<\/details>/)
+  assert.ok(m, '應有 nutrient-details')
+  assert.doesNotMatch(m[0], / open/)
+  assert.match(m[1], /平均每日：7 /)
+  assert.match(m[1], /建議總攝取量（含飲食，RDA）：99 /)
+  assert.match(m[1], /另列藥品來源：3 /)
+  assert.doesNotMatch(html.replace(m[0], ''), /建議總攝取量/)
 })
