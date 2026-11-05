@@ -1220,11 +1220,12 @@ body:has(.image-lightbox[open]) {
   min-width: 0;
   overflow-wrap: anywhere;
 }
-.report-content > section:first-of-type,
-.report-content > section:nth-of-type(4) {
+.report-content > section:first-of-type {
   background: var(--lime);
 }
+.report-content > section:first-of-type,
 .report-content > section:nth-of-type(2),
+.report-content > section:nth-of-type(3),
 .report-content > section:last-of-type {
   grid-column: 1 / -1;
 }
@@ -1730,6 +1731,10 @@ body:has(.image-lightbox[open]) {
   font-size: 0.75em;
   font-weight: 700;
   color: var(--navy);
+}
+.report-content .trigger-advice {
+  margin-left: 0.5em;
+  font-weight: 700;
 }
 .report-content .interaction-review {
   border-left: 5px solid #b4531c;
