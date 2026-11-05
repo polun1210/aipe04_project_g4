@@ -271,3 +271,10 @@ def test_chat_answer_at_length_limit_is_kept_and_usable_as_history(client):
     assert answer == reply
     history = [{"role": "user", "content": "哪些項目超過上限？"}, {"role": "assistant", "content": answer}]
     assert client.post(f"/api/reports/{report_id}/chat", json={"question": "再說一次", "history": history}).status_code == 200
+
+
+def test_chat_prompt_tells_model_not_to_use_markdown(client, transport):
+    # 前端用純文字顯示，模型若回 **粗體** 使用者會看到星號
+    report_id = _report_id(client)
+    client.post(f"/api/reports/{report_id}/chat", json={"question": "哪些項目超過上限？"})
+    assert "不要用 Markdown" in transport.bodies[0]["messages"][0]["content"]
