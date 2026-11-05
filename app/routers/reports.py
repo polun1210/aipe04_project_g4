@@ -148,8 +148,7 @@ def chat_about_report(
     if chat is None:
         raise ApiError(503, ErrorCode.CHAT_DISABLED, "對話功能未啟用")
     try:
-        answer = chat.answer(report.model_dump_json(), body.question)
+        answer = chat.answer(report, body.question)
     except ReportChatError as e:
         raise ApiError(502, ErrorCode.CHAT_FAILED, "暫時無法回答，請稍後再試") from e
-    # 回答檢查（ticket 04）接在這裡：檢查 answer，不合格就改回固定訊息
     return ChatResponse(answer=answer)

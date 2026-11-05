@@ -116,3 +116,63 @@ def test_chat_llm_failure_is_502_without_detail(client, transport):
     response = client.post(f"/api/reports/{report_id}/chat", json={"question": "哪些項目超過上限？"})
     assert response.status_code == 502
     assert "secret" not in response.text
+
+
+class SequenceTransport:
+    def __init__(self, *replies: str) -> None:
+        self.replies = list(replies)
+        self.calls = 0
+
+    def __call__(self, body: dict, timeout: float) -> dict:
+        reply = self.replies[min(self.calls, len(self.replies) - 1)]
+        self.calls += 1
+        return {"choices": [{"message": {"content": reply}}]}
+
+
+def _chat_with(client, transport) -> None:
+    client.app.dependency_overrides[get_report_chat] = lambda: ReportChat(transport, Route("m", "anthropic"))
+
+
+def _ask(client, report_id: str):
+    return client.post(f"/api/reports/{report_id}/chat", json={"question": "哪些項目超過上限？"})
+
+
+FALLBACK = "這個問題請詢問醫師或藥師。"
+
+
+def test_chat_answer_quoting_report_numbers_is_not_blocked(client):
+    # 鎂的上限 350、維生素 D 的 B12 與 D3 名稱裡的數字都不該被擋
+    transport = SequenceTransport("鎂的上限是 350 mg，維生素 D3 與 B12 都在報告裡。")
+    _chat_with(client, transport)
+    response = _ask(client, _report_id(client))
+    assert response.json() == {"answer": "鎂的上限是 350 mg，維生素 D3 與 B12 都在報告裡。"}
+    assert transport.calls == 1
+
+
+def test_chat_retries_once_then_returns_second_answer(client):
+    transport = SequenceTransport("你每天吃 9999 mg", "魚油超過上限。")
+    _chat_with(client, transport)
+    response = _ask(client, _report_id(client))
+    assert response.json() == {"answer": "魚油超過上限。"}
+    assert transport.calls == 2
+
+
+def test_chat_returns_fixed_sentence_without_model_text_after_two_failures(client, caplog):
+    bad = "請立即停藥，每天吃 9999 mg"
+    transport = SequenceTransport(bad)
+    _chat_with(client, transport)
+    with caplog.at_level("WARNING"):
+        response = _ask(client, _report_id(client))
+    assert response.status_code == 200
+    assert response.json() == {"answer": FALLBACK}
+    assert transport.calls == 2
+    assert "9999" not in response.text and "停藥" not in response.text
+    assert "強烈字眼" in caplog.text  # 原因只進後端日誌
+
+
+def test_chat_transport_failure_stays_502(client):
+    def boom(body, timeout):
+        raise TimeoutError("slow")
+
+    _chat_with(client, boom)
+    assert _ask(client, _report_id(client)).status_code == 502
