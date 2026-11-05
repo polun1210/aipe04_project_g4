@@ -4,6 +4,7 @@ import { useRoute } from 'vue-router'
 import { createReport, getReport, type Report } from '../api/reports'
 import { errorMessage } from '../api/client'
 import ReportContent from '../components/ReportContent.vue'
+import ReportChat from '../components/ReportChat.vue'
 const route = useRoute()
 const report = ref<Report | null>(null)
 const error = ref('')
@@ -42,6 +43,7 @@ watch(() => route.fullPath, load, { immediate: true })
     <p v-if="error" role="alert">{{ error }}</p>
     <button v-if="error" class="no-print" type="button" @click="load">重試</button>
     <ReportContent v-if="report" :report="report" />
+    <ReportChat v-if="report" :report-id="report.report_id" :key="report.report_id" />
     <p v-if="report" class="no-print">在瀏覽器列印視窗選擇「另存為 PDF」。</p>
     <p class="no-print"><RouterLink to="/reports">查看報告記錄</RouterLink></p>
   </main>
