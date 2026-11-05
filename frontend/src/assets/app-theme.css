@@ -16,6 +16,8 @@ body:has(.image-lightbox[open]) {
   --muted: #536370;
   --line: #dce2e4;
   --error: #943e24;
+  --exceeded-red: #d32f2f;
+  --within-blue: #2f6fb0;
   --attention: #fff5d9;
   --radius: 24px;
   color: var(--navy);
@@ -1771,6 +1773,47 @@ body:has(.image-lightbox[open]) {
   border-radius: 6px;
   overflow-wrap: anywhere;
   font-size: 0.92em;
+}
+
+/* 報告頁：營養素橫條（僅新增）。滿格 = 上限的 150%，虛線在三分之二處 */
+.report-content .nutrient-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 8px 0;
+}
+.report-content .nutrient-bar-track {
+  position: relative;
+  flex: 1;
+  height: 14px;
+  background: var(--line);
+  border-radius: 7px;
+}
+.report-content .nutrient-bar {
+  height: 100%;
+  border-radius: 7px;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+.report-content .nutrient-bar--within {
+  background: var(--within-blue);
+}
+.report-content .nutrient-bar--exceeded {
+  background: var(--exceeded-red);
+}
+.report-content .nutrient-bar-ul {
+  position: absolute;
+  left: 66.667%;
+  top: -4px;
+  bottom: -4px;
+  border-left: 2px dashed var(--navy);
+}
+.report-content .nutrient-bar-label {
+  min-width: 8em;
+  font-weight: 700;
+}
+.report-content .nutrient-bar-label--exceeded {
+  color: var(--exceeded-red);
 }
 
 /* 手機版（窄螢幕）補強：只新增規則，不改桌面版與列印樣式 */
