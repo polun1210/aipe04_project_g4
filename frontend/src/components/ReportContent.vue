@@ -95,7 +95,13 @@ function barWidth(ratio: number) {
   return `${Math.min(ratio / BAR_FULL_RATIO, 1) * 100}%`
 }
 function barLabel(ul: NonNullable<ReportNutrient['ul']>) {
-  const percent = `${percentFormat.format(ul.ratio * 100)}%`
+  const raw = ul.ratio * 100
+  // 未超過卻四捨五入成 100% 會與「達 100% 才算超過」矛盾，改無條件捨去到一位小數
+  const text =
+    !ul.exceeded && Math.round(raw) >= 100
+      ? String(Math.floor(raw * 10) / 10)
+      : percentFormat.format(raw)
+  const percent = `${text}%`
   return ul.exceeded ? `${percent} 超過上限` : percent
 }
 const footnotes = computed(() => props.report.footnotes ?? [])

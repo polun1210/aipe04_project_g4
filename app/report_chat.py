@@ -18,7 +18,7 @@ from pydantic import BaseModel, Field
 
 from app.schemas.report import Report
 
-PROMPT_VERSION = "report-chat-v2"  # 改提示詞就要加版本
+PROMPT_VERSION = "report-chat-v3"  # 改提示詞就要加版本
 TEMPERATURE = 0.2
 TIMEOUT_SECONDS = 30
 FALLBACK_ANSWER = "這個問題請詢問醫師或藥師。"
@@ -42,6 +42,8 @@ PROMPT = """你是幫長輩看懂「用藥與保健食品檢查報告」的助�
 3. 不可以叫人停藥、減量或改吃別的產品；需要處理時，只能說「請詢問醫師或藥師」。
 4. 報告沒有寫到的事，只回答「報告沒有提到，請詢問醫師或藥師」。
 5. 用台灣繁體中文，句子簡短，稱呼使用者為「你」。
+6. 要條列時用「-」，不要用數字編號。
+7. 回答中不要出現「停藥」「減量」「改吃」這幾個詞，即使是提醒也不要；需要時只說「請詢問醫師或藥師」。
 
 報告：
 {report}

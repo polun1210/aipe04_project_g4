@@ -65,7 +65,8 @@ async function ask(raw: string) {
         :key="i"
         :class="turn.role === 'user' ? 'report-chat-question' : 'report-chat-answer'"
       >
-        {{ turn.content }}
+        <span class="shell-sr-only">{{ turn.role === 'user' ? '你：' : 'AI：' }}</span
+        >{{ turn.content }}
       </li>
     </ol>
     <p v-if="busy" role="status">正在回答…</p>

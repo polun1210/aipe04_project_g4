@@ -25,6 +25,33 @@ def test_digits_inside_names_are_not_numbers(text):
     assert text_violations(text, ALLOWED) == []
 
 
+def test_list_numbering_at_line_start_is_not_a_number():
+    assert text_violations("1. 鎂超過上限\n2、鈣未超過\n3) 請詢問藥師", ALLOWED) == []
+
+
+def test_real_number_inside_a_list_item_is_still_blocked():
+    assert "數字" in _kinds("1. 你每天吃 500 顆")
+    assert "數字" in _kinds("共有 3 項需要注意")  # 不在行首，不是編號
+
+
+def test_second_number_of_a_range_is_checked():
+    assert "劑量" in _kinds("每天可吃 35-1000 mg")  # 35 在報告裡，1000 不在
+    assert "劑量" in _kinds("每天 35～1000 mg")
+
+
+def test_hyphen_in_names_still_not_a_number():
+    assert text_violations("COX-2 與 Omega-3", ALLOWED) == []
+
+
+@pytest.mark.parametrize("word", ["暫停服用", "不要吃魚油", "別吃", "不建議服用", "避免服用", "調整劑量", "增加劑量"])
+def test_other_stop_or_dose_wording_is_blocked(word):
+    assert "建議" in _kinds(f"你可以{word}")
+
+
+def test_unrelated_not_wording_is_allowed():
+    assert text_violations("不要擔心，請詢問醫師或藥師", ALLOWED) == []
+
+
 # 劑量
 def test_dose_not_in_report_is_blocked():
     assert "劑量" in _kinds("可以吃 500 mg")

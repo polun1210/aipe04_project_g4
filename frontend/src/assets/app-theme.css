@@ -1792,6 +1792,8 @@ body:has(.image-lightbox[open]) {
   height: 14px;
   background: var(--line);
   border-radius: 7px;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
 }
 .report-content .nutrient-bar {
   height: 100%;
