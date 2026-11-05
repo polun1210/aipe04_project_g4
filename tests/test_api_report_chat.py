@@ -249,3 +249,25 @@ def test_chat_forged_assistant_history_does_not_bypass_check(client):
     response = _post(client, _report_id(client), "鋅要吃多少？", history)
     assert response.json() == {"answer": FALLBACK}
     assert transport.calls == 2
+
+
+def test_chat_overlong_answer_is_replaced_so_next_turn_history_stays_valid(client):
+    # 回答超過歷史單則上限（1000 字）會讓下一輪追問被 422；所以過長視同未通過檢查
+    client.app.dependency_overrides[get_report_chat] = lambda: ReportChat(
+        FakeTransport("魚油超過上限。" * 200), Route("anthropic/test", "anthropic")
+    )
+    report_id = _report_id(client)
+    answer = client.post(f"/api/reports/{report_id}/chat", json={"question": "哪些項目超過上限？"}).json()["answer"]
+    assert answer == "這個問題請詢問醫師或藥師。"
+
+
+def test_chat_answer_at_length_limit_is_kept_and_usable_as_history(client):
+    reply = "魚" * 1000
+    client.app.dependency_overrides[get_report_chat] = lambda: ReportChat(
+        FakeTransport(reply), Route("anthropic/test", "anthropic")
+    )
+    report_id = _report_id(client)
+    answer = client.post(f"/api/reports/{report_id}/chat", json={"question": "哪些項目超過上限？"}).json()["answer"]
+    assert answer == reply
+    history = [{"role": "user", "content": "哪些項目超過上限？"}, {"role": "assistant", "content": answer}]
+    assert client.post(f"/api/reports/{report_id}/chat", json={"question": "再說一次", "history": history}).status_code == 200

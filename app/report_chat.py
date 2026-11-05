@@ -73,6 +73,8 @@ class ReportChat:
         for attempt in (1, 2):
             text = self._ask_model(report_json, history_json, question)
             violations = text_violations(text, allowed)
+            if len(text) > MAX_TURN_CHARS:  # 過長的回答下一輪放進歷史會被拒絕（422）
+                violations.append(f"過長：{len(text)} 字")
             if not violations:
                 return text
             logger.warning("對話回答未通過檢查（第 %d 次）：%s", attempt, "；".join(violations))

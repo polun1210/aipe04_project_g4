@@ -103,6 +103,11 @@ def test_decimal_at_line_start_is_not_a_list_marker():
     assert "數字" in _kinds("1.35 可以服用")
 
 
-@pytest.mark.parametrize("word", ["停止用藥", "停止服藥", "暫停用藥", "暫停服藥", "不要服藥", "不要用藥", "不要吃藥", "停吃"])
+@pytest.mark.parametrize("word", ["停止用藥", "停止服藥", "暫停用藥", "暫停服藥", "不要服藥", "不要用藥", "不要吃藥", "停吃", "不要再服用", "調整用量"])
 def test_more_stop_medication_wording_is_blocked(word):
     assert "建議" in _kinds(f"請{word}並詢問醫師")
+
+
+def test_near_miss_wording_is_allowed():
+    # 含「用量」「服用」但不是停藥／改量建議
+    assert text_violations("報告列出各產品的每日用量與服用時間，請詢問醫師或藥師", ALLOWED) == []
