@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { askReport } from '../api/reports'
-import { ApiError, errorMessage } from '../api/client'
+import { ApiError } from '../api/client'
 
 const props = defineProps<{ reportId: string }>()
 const presets = ['哪些項目超過上限？', '哪些項目需要問醫師或藥師？']
@@ -25,7 +25,7 @@ async function ask(question: string) {
       error.value =
         reason instanceof ApiError && reason.body.error.code === 'chat_disabled'
           ? '對話功能未啟用'
-          : errorMessage(reason)
+          : '目前無法回答'
   } finally {
     if (current === request) busy.value = false
   }

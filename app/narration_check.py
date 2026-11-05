@@ -13,7 +13,7 @@ import re
 from collections.abc import Sequence
 
 from app.narration_template import percent
-from app.schemas.assessment import Assessment
+from app.schemas.assessment import Assessment, InteractionFinding, RelevantNutrient
 from app.schemas.enums import IngredientCode, NarrationKind
 from app.schemas.narration import BANNED_PHRASES, NarrationEvidence, NarrationItem, NarrationOutput, OutputCheckResult
 
@@ -28,7 +28,7 @@ _TOLERANCE = 1e-6
 def check_narration(
     output: NarrationOutput, assessment: Assessment, evidence: Sequence[NarrationEvidence] = ()
 ) -> OutputCheckResult:
-    allowed = _allowed_numbers(assessment)
+    allowed = allowed_numbers(assessment.relevant_nutrients, assessment.interactions)
     texts = [(_label(i), i.text) for i in output.items]
     numbers = [f"{label}：{n}" for label, text in texts for n in _NUMBER.findall(text) if not _is_allowed(n, allowed)]
     banned = [f"{label}：{p}" for label, text in texts for p in BANNED_PHRASES if p in text]
@@ -49,17 +49,28 @@ def check_narration(
     )
 
 
-def _allowed_numbers(assessment: Assessment) -> set[float]:
+def text_violations(text: str, allowed: set[float]) -> list[str]:
+    """自由文字（問答）用的同一組規則；不含「每條交互作用都要寫到」「引用」這類報告敘述專屬的檢查。"""
+    return (
+        [f"數字：{n}" for n in _NUMBER.findall(text) if not _is_allowed(n, allowed)]
+        + [f"劑量：{m.group(0)}" for m in _DOSE.finditer(text) if not _is_allowed(m.group(1), allowed)]
+        + [f"建議：{w}" for w in _DOSAGE_ADVICE if w in text]
+        + [f"禁用詞：{p}" for p in BANNED_PHRASES if p in text]
+        + [f"強烈字眼：{w}" for w in _STRONG_WORDS if w in text]
+    )
+
+
+def allowed_numbers(nutrients: Sequence[RelevantNutrient], interactions: Sequence[InteractionFinding]) -> set[float]:
     values: set[float] = set()
-    for n in assessment.relevant_nutrients:
+    for n in nutrients:
         values |= {n.peak_intake_from_supplements, n.average_intake_from_supplements, n.recommended_total_intake.value}
         if n.intake_from_drugs is not None:
             values.add(n.intake_from_drugs)
         if n.ul is not None:
             values |= {n.ul.ul_value, percent(n.ul.ratio), round(n.ul.ratio * 100, 1)}
-    for f in assessment.interactions:
+    for f in interactions:
         values |= {t.separation_hours for t in f.triggers if t.separation_hours is not None}
-    values.add(len(assessment.interactions))
+    values.add(len(interactions))
     return values | {round(v, 1) for v in values}
 
 
