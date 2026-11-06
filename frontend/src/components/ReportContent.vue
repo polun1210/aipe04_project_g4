@@ -12,15 +12,25 @@ function shortReportId(id: string) {
 }
 // 範圍外成分清單預設收合；列印／另存 PDF 前強制展開，列印後還原
 const outOfScopeDetails = ref<HTMLDetailsElement | null>(null)
+const nutrientDetails = ref<HTMLDetailsElement[]>([])
+let nutrientDetailsOpenedForPrint: HTMLDetailsElement[] = []
 let openedBeforePrint = false
 function expandForPrint() {
   const el = outOfScopeDetails.value
   openedBeforePrint = !!el && !el.open
   if (el) el.open = true
+  nutrientDetailsOpenedForPrint = nutrientDetails.value.filter((detail) => !detail.open)
+  nutrientDetailsOpenedForPrint.forEach((detail) => {
+    detail.open = true
+  })
 }
 function restoreAfterPrint() {
   if (outOfScopeDetails.value && openedBeforePrint) outOfScopeDetails.value.open = false
   openedBeforePrint = false
+  nutrientDetailsOpenedForPrint.forEach((detail) => {
+    detail.open = false
+  })
+  nutrientDetailsOpenedForPrint = []
 }
 onMounted(() => {
   window.addEventListener('beforeprint', expandForPrint)
@@ -74,12 +84,33 @@ function ulText(nutrient: ReportNutrient) {
     ul.ratio * 100,
   )
   const templates: Record<string, string> = {
-    exceeded_supplement_only: '已超過上限攝取量',
-    percent_supplement_only: `已達上限攝取量的 ${percent}%`,
-    exceeded_total_intake: '補充劑來源已超過上限攝取量',
-    percent_total_intake: `補充劑來源已達上限的 ${percent}%（未含飲食）`,
+    exceeded_supplement_only: '已超過補充劑來源上限攝取量',
+    percent_supplement_only: `已達補充劑來源上限的 ${percent}%`,
+    exceeded_total_intake: '補充劑來源已超過總攝取上限（未含飲食）',
+    percent_total_intake: `補充劑已達總攝取上限的 ${percent}%（未含飲食）`,
   }
   return templates[ul.phrasing] ?? '請依上限數據與醫師或藥師討論。'
+}
+// 每項營養素獨立縮放，保留右側空間，讓建議量與 UL 刻度都落在圖內。
+const nutrientCharts = computed(() =>
+  props.report.nutrients.map((nutrient) => {
+    const peak = nutrient.peak_intake_from_supplements
+    const recommended = nutrient.recommended_total_intake.value
+    const ul = nutrient.ul?.ul_value
+    const maximum = Math.max(peak, recommended, ul ?? 0, 1) * 1.15
+    const percent = (value: number) => `${(value / maximum) * 100}%`
+    return {
+      nutrient,
+      greenWidth: percent(ul === undefined ? peak : Math.min(peak, ul)),
+      redWidth: percent(ul === undefined ? 0 : Math.max(peak - ul, 0)),
+      recommendedPosition: percent(recommended),
+      ulPosition: ul === undefined ? undefined : percent(ul),
+      stackedLabels: ul !== undefined && Math.abs(recommended - ul) / maximum < 0.38,
+    }
+  }),
+)
+function ulScopeLabel(nutrient: ReportNutrient) {
+  return nutrient.ul?.scope === 'supplement_only' ? '僅補充劑' : '含飲食'
 }
 const footnotes = computed(() => props.report.footnotes ?? [])
 function withPeriod(text: string) {
@@ -139,31 +170,101 @@ function sourceUrl(url: string | null) {
           <li>「其他單位」表示後端以 other 標示的單位；未認識的單位代碼會保留原文。</li>
         </ul>
       </details>
-      <p>補充劑來源與含飲食的建議總攝取量口徑不同，不能直接相減當作缺口。</p>
+      <p>僅計算補充劑攝取量；建議量包含飲食，因此無法據此判定不足。</p>
+      <div v-if="report.nutrients.length" class="nutrient-chart-legend">
+        <span><i class="nutrient-legend-green" aria-hidden="true"></i>補充劑單日峰值</span>
+        <span><i class="nutrient-legend-red" aria-hidden="true"></i>超過上限部分</span>
+        <span
+          ><i class="nutrient-legend-recommended" aria-hidden="true"></i
+          >建議總攝取量（含飲食）</span
+        >
+        <span><i class="nutrient-legend-ul" aria-hidden="true"></i>上限 UL</span>
+      </div>
+      <details v-if="report.nutrients.length" class="nutrient-chart-help">
+        <summary>圖表說明</summary>
+        <p class="nutrient-chart-note">
+          灰色背景不代表需要補足的缺口，綠色不代表足夠或安全。
+          各營養素獨立縮放，長條長度不可跨營養素比較。建議量與上限可能涵蓋不同來源，請依刻度標示閱讀。
+        </p>
+      </details>
       <p v-if="!report.nutrients.length">本份報告沒有列出相關營養素。</p>
-      <section v-for="nutrient in report.nutrients" :key="nutrient.nutrient_code">
-        <h3>
-          {{ nutrient.display_name_zh }}{{ nutrient.basis === 'estimated' ? '（推估）' : '' }}
-        </h3>
-        <p>
-          補充劑單日峰值：{{ nutrient.peak_intake_from_supplements }}
-          {{ unitLabel(nutrient.unit) }}；平均每日：{{ nutrient.average_intake_from_supplements }}
-          {{ unitLabel(nutrient.unit) }}
+      <section
+        v-for="{ nutrient, ...chart } in nutrientCharts"
+        :key="nutrient.nutrient_code"
+        class="nutrient-chart-card"
+      >
+        <div class="nutrient-chart-heading">
+          <h3>
+            {{ nutrient.display_name_zh }}{{ nutrient.basis === 'estimated' ? '（推估）' : '' }}
+          </h3>
+          <span
+            >補充劑單日峰值 {{ nutrient.peak_intake_from_supplements }}
+            {{ unitLabel(nutrient.unit) }}</span
+          >
+        </div>
+        <p
+          v-if="nutrient.average_intake_from_supplements !== nutrient.peak_intake_from_supplements"
+          class="nutrient-chart-note"
+        >
+          平均每日 {{ nutrient.average_intake_from_supplements }}
+          {{ unitLabel(nutrient.unit) }}；本圖以上述單日峰值比對上限。
         </p>
-        <p>
-          建議總攝取量（含飲食，{{
-            nutrient.recommended_total_intake.reference_type.toUpperCase()
-          }}）：{{ nutrient.recommended_total_intake.value }} {{ unitLabel(nutrient.unit) }}
-        </p>
-        <p v-if="nutrient.ul">
-          上限：{{ nutrient.ul.ul_value }} {{ unitLabel(nutrient.unit) }}。{{ ulText(nutrient) }}
-        </p>
-        <p v-else>{{ ulText(nutrient) }}</p>
+        <div class="nutrient-chart">
+          <div
+            class="nutrient-chart-labels"
+            :class="{ 'has-ul': nutrient.ul, 'stacked-labels': chart.stackedLabels }"
+          >
+            <span
+              class="nutrient-chart-label nutrient-label-recommended"
+              :style="{ '--position': chart.recommendedPosition }"
+            >
+              建議量 {{ nutrient.recommended_total_intake.value }} {{ unitLabel(nutrient.unit) }}
+              <small>含飲食</small>
+            </span>
+            <span
+              v-if="nutrient.ul"
+              class="nutrient-chart-label nutrient-label-ul"
+              :style="{ '--position': chart.ulPosition }"
+            >
+              上限 {{ nutrient.ul.ul_value }} {{ unitLabel(nutrient.unit) }}
+              <small>{{ ulScopeLabel(nutrient) }}</small>
+            </span>
+          </div>
+          <div class="nutrient-chart-visual" aria-hidden="true">
+            <div class="nutrient-chart-track">
+              <span class="nutrient-chart-green" :style="{ width: chart.greenWidth }"></span>
+              <span class="nutrient-chart-red" :style="{ width: chart.redWidth }"></span>
+              <span
+                class="nutrient-chart-marker nutrient-chart-recommended"
+                :style="{ left: chart.recommendedPosition }"
+              ></span>
+              <span
+                v-if="nutrient.ul"
+                class="nutrient-chart-marker nutrient-chart-ul"
+                :style="{ left: chart.ulPosition }"
+              ></span>
+            </div>
+          </div>
+        </div>
+        <p :class="{ 'nutrient-ul-alert': nutrient.ul?.exceeded }">{{ ulText(nutrient) }}</p>
+        <details ref="nutrientDetails" class="nutrient-chart-details">
+          <summary>查看詳細資料</summary>
+          <p>
+            平均每日補充劑攝取量：{{ nutrient.average_intake_from_supplements }}
+            {{ unitLabel(nutrient.unit) }}
+          </p>
+          <p>
+            建議總攝取量（含飲食，{{
+              nutrient.recommended_total_intake.reference_type.toUpperCase()
+            }}）：{{ nutrient.recommended_total_intake.value }} {{ unitLabel(nutrient.unit) }}
+          </p>
+          <p v-if="nutrient.ul">上限適用來源：{{ ulScopeLabel(nutrient) }}。</p>
+          <p v-if="nutrient.narration">{{ nutrient.narration }}</p>
+        </details>
         <p v-if="nutrient.intake_from_drugs !== null">
           另列藥品來源：{{ nutrient.intake_from_drugs }}
           {{ unitLabel(nutrient.unit) }}，不納入上述補充劑上限比例。
         </p>
-        <p v-if="nutrient.narration">{{ nutrient.narration }}</p>
       </section>
     </section>
     <section aria-labelledby="report-interactions">
@@ -306,3 +407,151 @@ function sourceUrl(url: string | null) {
     </section>
   </article>
 </template>
+
+<style scoped>
+.nutrient-chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  margin: 20px 0 12px;
+  font-size: 0.875rem;
+}
+.nutrient-chart-legend > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.nutrient-chart-legend i {
+  display: inline-block;
+  width: 18px;
+  height: 14px;
+}
+.nutrient-legend-green,
+.nutrient-chart-green {
+  background: #d4e887;
+}
+.nutrient-legend-red,
+.nutrient-chart-red {
+  background: #c95045;
+}
+.nutrient-legend-recommended {
+  border-left: 2px dashed #142332;
+}
+.nutrient-legend-ul {
+  border-left: 3px solid #142332;
+}
+.nutrient-chart-note {
+  color: #536370;
+  font-size: 0.875rem;
+  line-height: 1.7;
+}
+.nutrient-chart-card {
+  break-inside: avoid;
+}
+.nutrient-chart {
+  margin: 16px 0 20px;
+}
+.nutrient-chart-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+}
+.nutrient-chart-heading h3 {
+  margin: 0;
+}
+.nutrient-chart-heading > span {
+  font-size: 0.95rem;
+}
+.nutrient-chart-labels {
+  position: relative;
+  height: 50px;
+}
+.nutrient-chart-labels.stacked-labels {
+  height: 96px;
+}
+.nutrient-chart-label {
+  position: absolute;
+  left: clamp(90px, var(--position), calc(100% - 90px));
+  transform: translateX(-50%);
+  width: 180px;
+  text-align: center;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+.nutrient-chart-label small {
+  display: block;
+  color: #536370;
+  font-size: inherit;
+}
+.nutrient-label-recommended {
+  top: 0;
+}
+.nutrient-label-ul {
+  top: 0;
+  font-weight: 600;
+}
+.stacked-labels .nutrient-label-ul {
+  top: 46px;
+}
+.nutrient-label-recommended::before {
+  content: '';
+  display: inline-block;
+  height: 12px;
+  border-left: 2px dashed #142332;
+  margin-right: 6px;
+}
+.nutrient-label-ul::before {
+  content: '';
+  display: inline-block;
+  height: 12px;
+  border-left: 3px solid #142332;
+  margin-right: 6px;
+}
+.nutrient-chart-track {
+  position: relative;
+  display: flex;
+  height: 24px;
+  background: #e8eced;
+  border-radius: 4px;
+}
+.nutrient-chart-green,
+.nutrient-chart-red {
+  display: block;
+  height: 100%;
+  flex-shrink: 0;
+}
+.nutrient-chart-marker {
+  position: absolute;
+  top: -7px;
+  bottom: -7px;
+  width: 0;
+}
+.nutrient-chart-recommended {
+  border-left: 2px dashed #142332;
+  z-index: 1;
+}
+.nutrient-chart-ul {
+  border-left: 3px solid #142332;
+}
+.nutrient-ul-alert {
+  color: #943e24;
+  font-weight: 600;
+}
+@media (max-width: 600px) {
+  .nutrient-chart-labels.has-ul {
+    height: 96px;
+  }
+  .has-ul .nutrient-label-ul {
+    top: 46px;
+  }
+}
+@media print {
+  .nutrient-chart,
+  .nutrient-chart-legend {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+}
+</style>

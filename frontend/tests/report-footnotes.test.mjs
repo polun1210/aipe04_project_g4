@@ -16,6 +16,7 @@ code = ts.transpileModule(code, {
 code = code
   .replace(/import \{ getCatalog[^\n]*\n/, 'const getCatalog = async () => ({ ingredients: [] })\n')
   .replace(/import \{ taipeiDateTime[^\n]*\n/, 'const taipeiDateTime = (v) => v\n')
+  .replace(/import \{ unitLabel[^\n]*\n/, 'const unitLabel = (v) => v\n')
   .replace(/import [^\n]*['"]\.\.\/api\/[^\n]*\n/g, '')
 const tmp = new URL('./.report-content.tmp.mjs', import.meta.url)
 await writeFile(tmp, code)
@@ -72,6 +73,90 @@ function report(extra, footnoteNumbers) {
   }
 }
 const render = (r) => renderToString(createSSRApp(ReportContent, { report: r }))
+
+test('營養素長條僅將超過 UL 的部分標紅，建議量不作為紅色門檻', async () => {
+  const nutrient = (peak, ul = 2000) => ({
+    nutrient_code: 'calcium',
+    display_name_zh: '鈣',
+    unit: 'mg',
+    basis: 'confirmed',
+    peak_intake_from_supplements: peak,
+    average_intake_from_supplements: peak,
+    intake_from_drugs: null,
+    recommended_total_intake: { reference_type: 'rda', value: 1000 },
+    ul:
+      ul === null
+        ? null
+        : {
+            ul_value: ul,
+            ratio: peak / ul,
+            exceeded: peak >= ul,
+            scope: 'total_intake',
+            phrasing: peak >= ul ? 'exceeded_total_intake' : 'percent_total_intake',
+          },
+    narration: null,
+  })
+  for (const peak of [0, 300, 1300, 2000]) {
+    const html = await render(report({ nutrients: [nutrient(peak)] }))
+    assert.match(html, /class="nutrient-chart-red" style="width:0%;"/)
+    assert.match(html, /nutrient-chart-recommended/)
+    assert.match(html, /灰色背景不代表需要補足的缺口/)
+  }
+  const excess = await render(report({ nutrients: [nutrient(2300)] }))
+  const red = Number(excess.match(/class="nutrient-chart-red" style="width:([\d.]+)%;"/)[1])
+  const green = Number(excess.match(/class="nutrient-chart-green" style="width:([\d.]+)%;"/)[1])
+  assert.ok(Math.abs(red / green - 300 / 2000) < 1e-10)
+  assert.match(excess, /class="nutrient-ul-alert"/)
+  const noUl = await render(report({ nutrients: [nutrient(2300, null)] }))
+  assert.doesNotMatch(noUl, /class="nutrient-chart-marker nutrient-chart-ul"/)
+  assert.match(noUl, /未訂定可比較的上限，不進行數值比對/)
+  assert.match(noUl, /class="nutrient-chart-red" style="width:0%;"/)
+})
+
+test('上限來源文案分開顯示，詳細資料預設收合，移除繪圖用端點數字', async () => {
+  const nutrient = {
+    nutrient_code: 'magnesium',
+    display_name_zh: '鎂',
+    unit: 'mg',
+    basis: 'confirmed',
+    peak_intake_from_supplements: 300,
+    average_intake_from_supplements: 150,
+    intake_from_drugs: null,
+    recommended_total_intake: { reference_type: 'rda', value: 360 },
+    ul: {
+      ul_value: 350,
+      ratio: 300 / 350,
+      exceeded: false,
+      scope: 'supplement_only',
+      phrasing: 'percent_supplement_only',
+    },
+    narration: '原始補充說明',
+  }
+  const html = await render(report({ nutrients: [nutrient] }))
+  assert.match(html, /已達補充劑來源上限的 85.7%/)
+  assert.match(html, /<small>僅補充劑<\/small>/)
+  assert.match(html, /stacked-labels/)
+  assert.match(html, /平均每日 150 mg；本圖以上述單日峰值比對上限/)
+  assert.match(
+    html,
+    /<details[^>]*class="nutrient-chart-details"[^>]*><summary>查看詳細資料<\/summary>/,
+  )
+  assert.doesNotMatch(html, /nutrient-chart-details"[^>]* open/)
+  assert.match(html, /原始補充說明<\/p><\/details>/)
+  assert.doesNotMatch(html, /414 mg|nutrient-chart-axis/)
+  const total = await render(
+    report({
+      nutrients: [
+        {
+          ...nutrient,
+          ul: { ...nutrient.ul, scope: 'total_intake', phrasing: 'percent_total_intake' },
+        },
+      ],
+    }),
+  )
+  assert.match(total, /補充劑已達總攝取上限的 85.7%（未含飲食）/)
+  assert.doesNotMatch(total, /<small>僅補充劑<\/small>/)
+})
 
 test('有腳註時顯示上標編號與參考資料清單', async () => {
   const html = await render(
