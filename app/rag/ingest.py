@@ -19,7 +19,15 @@ from pathlib import Path
 import psycopg
 
 from app.catalog_source import CsvCatalogSource
-from app.rag.chunking import NUL, REPLACEMENT_CHAR, Chunk, chunk_markdown, strip_base64_images
+from app.rag.chunking import (
+    NUL,
+    REPLACEMENT_CHAR,
+    Chunk,
+    chunk_markdown,
+    is_residue_chunk,
+    strip_base64_images,
+    strip_boilerplate,
+)
 from app.rag.corpus import SOURCES_DIR, SourceFile, discover_documents, ingredients_mentioned
 from app.rag.embedder import Embedder
 from app.schemas.catalog import CatalogResponse
@@ -104,11 +112,12 @@ def _remove_vanished_documents(conn: psycopg.Connection, document_ids: list[str]
 
 
 def _prepare(document: SourceFile, catalog: CatalogResponse) -> list[_PreparedChunk]:
-    text = strip_base64_images(document.path.read_text(encoding="utf-8").replace(NUL, REPLACEMENT_CHAR))
+    raw = document.path.read_text(encoding="utf-8").replace(NUL, REPLACEMENT_CHAR)
+    text = strip_boilerplate(strip_base64_images(raw))
     seen: set[str] = set()
     prepared: list[_PreparedChunk] = []
     for chunk in chunk_markdown(text):
-        if chunk.section.split(" > ")[0].strip().lower() in _NOISE_SECTIONS:
+        if chunk.section.split(" > ")[0].strip().lower() in _NOISE_SECTIONS or is_residue_chunk(chunk):
             continue
         cid = chunk_id(document.document_id, chunk.section, chunk.text)
         if cid in seen:  # 同文件內完全相同的段落只留一份

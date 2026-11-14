@@ -10,6 +10,20 @@ NUL = chr(0)  # PostgreSQL text 欄位不接受 NUL
 REPLACEMENT_CHAR = "�"
 
 _BASE64_IMAGE = re.compile(r"!\[[^\]]*\]\(\s*data:[^)]*\)|data:image/[a-zA-Z+.-]+;base64,[A-Za-z0-9+/=]+")
+# 檔頭出處註解（TFDA 仿單、NCCIH）：出處資訊由 corpus.describe_document 直接讀原檔，不靠切塊。
+_SOURCE_HEADER = re.compile(r"\A\s*<!--\s*來源.*?-->", re.DOTALL)
+# NIH ODS 網頁導覽殘留：必須「整行」只有這些內容才算，行內夾著正文的不動。
+_NAV_LINE = re.compile(
+    r"^[ \t]*(?:\[Skip navigation links\]\([^)]*\)"
+    r"|(?:Fact Sheet for Health Professionals|Expand All|Collapse All)"
+    r"|_This is a fact sheet intended for health professionals\.[^\n]*)[ \t]*$",
+    re.MULTILINE,
+)
+_DISCLAIMER_MARK = re.compile(r"exit_disclaimer|link disclaimer", re.IGNORECASE)
+_DISCLAIMER_FRAGMENT = re.compile(
+    r"https?://\S+|\S*exit_disclaimer\.aspx|\S*externallink\.png|\w*\s*link disclaimer|External Website",
+    re.IGNORECASE,
+)
 _MD_HEADING = re.compile(r"^(#{1,6})\s+(\S.*?)\s*#*\s*$")
 _BRACKET_HEADING = re.compile(r"^[【\[]\s*([^】\]\n]{1,30}?)\s*[】\]]\s*$")
 _PARAGRAPH_BREAK = re.compile(r"\n\s*\n")
@@ -28,6 +42,23 @@ class Chunk:
 def strip_base64_images(text: str) -> str:
     """移除 base64 圖片資料；只在行內刪除，不動換行，所以行號與原檔一致。"""
     return _BASE64_IMAGE.sub("", text)
+
+
+def strip_boilerplate(text: str) -> str:
+    """移除沒有內容的雜訊（檔頭出處註解、NIH 導覽列行）；只刪字、保留換行，所以行號與原檔一致。"""
+    text = _SOURCE_HEADER.sub(_drop_keeping_newlines, text)
+    return _NAV_LINE.sub(_drop_keeping_newlines, text)
+
+
+def _drop_keeping_newlines(match: re.Match[str]) -> str:
+    return "\n" * match.group().count("\n")
+
+
+def is_residue_chunk(chunk: Chunk) -> bool:
+    """外部連結免責的殘留：長行被硬切後只剩連結碎片，拿掉連結與符號後沒有任何字母。"""
+    if not _DISCLAIMER_MARK.search(chunk.text):
+        return False
+    return not any(ch.isalpha() for ch in _DISCLAIMER_FRAGMENT.sub("", chunk.text))
 
 
 def chunk_markdown(text: str, max_chars: int = DEFAULT_MAX_CHARS) -> list[Chunk]:
